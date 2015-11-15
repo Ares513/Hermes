@@ -1,30 +1,22 @@
 package com.team1ofus.hermes;
 
-import java.awt.EventQueue;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
-import java.awt.Component;
 import java.awt.Dimension;
-import javax.imageio.ImageIO;
 import javax.swing.BorderFactory;
-import javax.swing.Box;
+
 import javax.swing.ImageIcon;
-import java.awt.GridLayout;
-import java.awt.Image;
+
 import java.awt.Point;
 
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 import java.awt.Color;
-import javax.swing.UIManager;
 import javax.swing.border.BevelBorder;
 import java.awt.Toolkit;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
-import java.awt.event.MouseMotionAdapter;
 import java.awt.image.BufferedImage;
-import java.io.File;
-import java.io.IOException;
 import javax.swing.JButton;
 import java.awt.Font;
 import java.awt.Graphics;
@@ -35,7 +27,7 @@ public class HermesUI extends JPanel{
 	private JTextField DestinationField;
 	private Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
 	private BufferedImage map;
-	//private ImageIcon map2 = new ImageIcon("images/map.jpg");
+	private ImageIcon map2 = new ImageIcon(ClassLoader.getSystemResource("map.jpg")); //This is a reference to the "map.jpg" within the the SRC. Don't think this will be a long term solution, but it does load in an image.
 	private Point mousePosition;
 	
 	public HermesUI() {
@@ -87,12 +79,12 @@ public class HermesUI extends JPanel{
 		
 		JPanel MapPanel = new JPanel();
 		MapPanel.setBounds(0, 0, screenSize.width, screenSize.height);
-		//JLabel mapPlacer = new JLabel("",map2,JLabel.CENTER);
+		JLabel mapPlacer = new JLabel("",map2,JLabel.CENTER);
 		
-		//To inport an image you need to do a janky thing.
+		//To import an image you need to do a janky thing.
 		//Basically you place an image inside a JLabel, override the paintComponent method, and place it in the panel
 		
-		//MapPanel.add(mapPlacer);
+		MapPanel.add(mapPlacer);
 		//MapPanel is where the map is displayed
 		
 		
