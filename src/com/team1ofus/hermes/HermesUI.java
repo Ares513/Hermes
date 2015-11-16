@@ -8,20 +8,32 @@ import javax.swing.BorderFactory;
 import javax.swing.ImageIcon;
 
 import java.awt.Point;
+import java.awt.Stroke;
 
 import javax.swing.JPanel;
 import javax.swing.JTextField;
+
+import java.awt.BasicStroke;
+import java.awt.BorderLayout;
 import java.awt.Color;
+import java.awt.Component;
+
 import javax.swing.border.BevelBorder;
 import java.awt.Toolkit;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.image.BufferedImage;
+import java.util.ArrayList;
+
 import javax.swing.JButton;
 import java.awt.Font;
 import java.awt.Graphics;
+import java.awt.Graphics2D;
 
 public class HermesUI extends JPanel{
+	
 	private JFrame frameHermes;
 	private JTextField StartField;
 	private JTextField DestinationField;
@@ -36,7 +48,7 @@ public class HermesUI extends JPanel{
 	}
 
 	/*
-	 * initialize the Heremes UI
+	 * initialize the Hermes UI
 	*/
 	
 	private void initialize() {
@@ -75,6 +87,7 @@ public class HermesUI extends JPanel{
 		addDestination.setFont(new Font("Lucida Grande", Font.PLAIN, 10));
 		addDestination.setBorder(BorderFactory.createEmptyBorder());   
 		DestinationPanel.add(addDestination);
+				
 		//Not complete yet, but will end up adding another field for more destinations
 		
 		JPanel MapPanel = new JPanel();
@@ -91,6 +104,11 @@ public class HermesUI extends JPanel{
 		JPanel MousePanel = new JPanel();
 		JLabel mouseOut = new JLabel("#mouse#");
 		MousePanel.add(mouseOut);
+		
+		//my stuff
+		MyDrawPanel pathPanel = new MyDrawPanel();
+		frameHermes.getContentPane().add(pathPanel);
+		pathPanel.setBounds(0, 0, screenSize.width, screenSize.height);
 		
 		/*
 		MapPanel.addMouseMotionListener(new MouseMotionAdapter() {
@@ -111,14 +129,12 @@ public class HermesUI extends JPanel{
 		
 		//These are the listeners
 		
-		frameHermes.getContentPane().add(MapPanel);
+		frameHermes.getContentPane().add(BorderLayout.WEST, MapPanel);
 		frameHermes.setVisible(true);
-		
-		
 	}
-	
+
 	@Override
-	protected void paintComponent(Graphics g){
+	public void paintComponent(Graphics g){
 		super.paintComponent(g);
 		g.drawImage(map, 0, 0, null);
 	//Allows us to paint the image within the JLabel	
