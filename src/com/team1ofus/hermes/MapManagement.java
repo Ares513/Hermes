@@ -25,12 +25,16 @@ public class MapManagement {
 	 */
 	public class AStarPathCompleteEvent extends EventObject {
 		private DirectionSet[] path;
+		//list of registered listeners
 		AStarPathCompleteEvent(source, id, aPath) {
 			super(source, id);
 			path = aPath;
 		}
 		public DirectionSet[] getDirectionSet() {
 			return path;
+		}
+		public void fire() {
+			
 		}
 	}
 	
@@ -39,6 +43,7 @@ public class MapManagement {
 	 */
 	public class RequesteCellEvent extends EventObject {
 		private String cellName;
+		//list of registered listeners
 		RequesteCellEvent(source, id, aCellName) {
 			super(source, id);
 			cellName = aCellName;
@@ -46,5 +51,9 @@ public class MapManagement {
 		public String getCellName() {
 			return cellName;
 		}
+		public void fire() {
+			
+		}
+		
 	}
 }
