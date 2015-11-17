@@ -4,20 +4,15 @@ import javax.swing.JFrame;
 import javax.swing.JLabel;
 import java.awt.Dimension;
 import javax.swing.BorderFactory;
-
 import javax.swing.ImageIcon;
-
 import java.awt.Point;
 import java.awt.Stroke;
-
 import javax.swing.JPanel;
 import javax.swing.JTextField;
-
 import java.awt.BasicStroke;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Component;
-
 import javax.swing.border.BevelBorder;
 import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
@@ -26,7 +21,6 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.image.BufferedImage;
 import java.util.ArrayList;
-
 import javax.swing.JButton;
 import java.awt.Font;
 import java.awt.Graphics;
@@ -42,6 +36,7 @@ public class HermesUI extends JPanel{
 	private BufferedImage map;
 	private ImageIcon map2 = new ImageIcon(ClassLoader.getSystemResource("map.jpg")); //This is a reference to the "map.jpg" within the the SRC. Don't think this will be a long term solution, but it does load in an image.
 	private Point mousePosition;
+	private DrawMap gridMap;
 	
 	public HermesUI() {
 		initialize();
@@ -53,6 +48,10 @@ public class HermesUI extends JPanel{
 	*/
 	
 	private void initialize() {
+		
+		
+		
+		
 		
 		frameHermes = new JFrame();
 		frameHermes.setTitle("Hermes");
@@ -88,17 +87,6 @@ public class HermesUI extends JPanel{
 		addDestination.setFont(new Font("Lucida Grande", Font.PLAIN, 10));
 		addDestination.setBorder(BorderFactory.createEmptyBorder());   
 		DestinationPanel.add(addDestination);
-				
-		//Not complete yet, but will end up adding another field for more destinations
-		
-		JPanel MapPanel = new JPanel();
-		MapPanel.setBounds(0, 0, screenSize.width, screenSize.height);
-		JLabel mapPlacer = new JLabel("",map2,JLabel.CENTER);
-		
-		//To import an image you need to do a janky thing.
-		//Basically you place an image inside a JLabel, override the paintComponent method, and place it in the panel
-		
-		MapPanel.add(mapPlacer);
 		//MapPanel is where the map is displayed
 		
 		
@@ -110,27 +98,9 @@ public class HermesUI extends JPanel{
 		MyDrawPanel pathPanel = new MyDrawPanel();
 		frameHermes.getContentPane().add(pathPanel);
 		pathPanel.setBounds(0, 0, screenSize.width, screenSize.height);
-		
-		/*
-		MapPanel.addMouseMotionListener(new MouseMotionAdapter() {
-			@Override
-			public void mouseMoved(MouseEvent e) {
-				mousePosition = new Point(e.getX(), e.getY());
-				mouseOut.setText(mousePosition.toString()); 
-			}
-		});
-		*/
-		
-		MapPanel.addMouseListener(new MouseAdapter() {
-			@Override
-			public void mouseClicked(MouseEvent arg0) {
-				
-			}
-		});
-		
-		//These are the listeners
-		
-		frameHermes.getContentPane().add(BorderLayout.WEST, MapPanel);
+		gridMap = new DrawMap();
+		gridMap.setBounds(0, 0, screenSize.width, screenSize.height);
+		frameHermes.getContentPane().add(gridMap);
 		frameHermes.setVisible(true);
 	}
 	/*
