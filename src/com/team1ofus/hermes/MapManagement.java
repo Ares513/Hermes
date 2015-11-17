@@ -1,4 +1,4 @@
-package com.team1ofus.hermes;
+ package com.team1ofus.hermes;
 
 /*
  * Description:    	Holds the list of the different cells(maps), as well as the path that the A* algorithm has generated.
