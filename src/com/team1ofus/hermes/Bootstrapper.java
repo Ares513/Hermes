@@ -14,11 +14,19 @@ public class Bootstrapper {
 				try {
 					UIManagement UI;
 					UI = new UIManagement();
-				
+					
+					DataManagement DMGR;
+					DMGR = new DataManagement();
+					
+					MapManagement MapManager;
+					MapManager = new MapManagement();
+					MapManager.getAStarPathCompletedEvent().registerListener(UI);
+					MapManager.getRequestCellEvent().registerListener(DMGR);
 				} catch (Exception e) {
 					e.printStackTrace();
 				}
 			}
 		});
 	}
+	
 }

@@ -36,7 +36,7 @@ public class HermesUI extends JPanel{
 	}
 
 	/*
-	 * initialize the Heremes UI
+	 * initialize the Hermes UI
 	*/
 	
 	private void initialize() {

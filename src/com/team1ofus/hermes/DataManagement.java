@@ -11,6 +11,11 @@ loadInstructionDictionary                       Will load the instructions of ge
 InstructionDictionary                              Stores the path directions based on algorithm output
  */
 
-public class DataManagement{
-	
+public class DataManagement implements RequestCellListener{
+	public DataManagement() {
+		
+	}
+	public void onRequestCellEvent(String cellName) {
+		
+	}
 }

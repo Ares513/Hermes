@@ -1,13 +1,16 @@
 package com.team1ofus.hermes;
 
-public class UIManagement {
+public class UIManagement implements AStarPathCompleteListener{
 	HermesUI window;
-	public UIManagement(){
+	public UIManagement() {
 		initialize();
 	}
 	
-	void initialize(){
+	void initialize() {
 		window = new HermesUI();
 	}
-
+	
+	public void onAStarPathCompleteEvent(DirectionSet directions) {
+		
+	}
 }
