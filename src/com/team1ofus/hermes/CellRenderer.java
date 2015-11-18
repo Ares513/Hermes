@@ -49,7 +49,7 @@ public class CellRenderer {
 		 
 		 for (int i = 0; i < rows; i++){
 			    for (int j = 0; j < cols; j++){
-			    	spriteImages[(i * cols) + j] = spriteSheet.getSubimage(j * width,i * height,width,height);
+			    	spriteImages[(i * cols) + j] = spriteSheet.getSubimage(j * (width + 8),i * (height + 8),width,height);
 			    }
 			}
 		 }
