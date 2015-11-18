@@ -65,8 +65,9 @@ public class HermesUI extends JPanel{
 	*/
 	
 	public void initialize(PathCell viewCell) {		
-		buildControl();
 		currentCell = viewCell;
+		buildControl();
+	
 		gridMap.addKeyListener(new KeyAdapter() {
 			@Override
 			public void keyPressed(KeyEvent e) {
