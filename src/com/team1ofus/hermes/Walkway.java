@@ -1,13 +1,13 @@
 package com.team1ofus.hermes;
 
-import java.util.ArrayList;
 import java.awt.Point;
-
 
 public class Walkway extends Tile implements TileInterface {
 
-	public Walkway(byte cellNum,Point tilePoint){
-		Tile.cellNum = cellNum;
+	private static final long serialVersionUID = 1L;
+
+	public Walkway(String cellName,Point tilePoint){
+		Tile.cellName = cellName;
 		Tile.tilePoint = tilePoint;
 		Tile.tileType = 0; // 0 means walkway
 	}
