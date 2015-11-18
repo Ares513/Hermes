@@ -7,11 +7,11 @@ public abstract class Tile implements TileInterface{
 	
 	public static byte cellNum = 0;
 	
-	public static Point tilePoint = null;
+	public Point tilePoint = null;
 
-	public static byte tileType = 0; // 0 = walkway, 1 = wall
+	public byte tileType = 0; // 0 = walkway, 1 = wall
 
-	public static String cellName;
+	public String cellName;
 	
 	public Tile parent = null;
 	
@@ -31,20 +31,31 @@ public abstract class Tile implements TileInterface{
 	}
 
 	public int getCSF(){
-		
-		return costSoFar;
+		return this.costSoFar;
 	}
 	
 	public int getETC(){
-		return estimatedTotalCost;
+		return this.estimatedTotalCost;
 	}
 	
 	public Tile getParent(){
-		return parent;
+		return this.parent;
 	}
 	
 	public int getTileType() {
-		return tileType;
+		return this.tileType;
+	}
+	
+	public Point getPoint() {
+		return this.tilePoint;
+	}
+	
+	public String getCellName(){
+		return this.cellName;
+	}
+	public CellPoint getCellPoint() {
+		CellPoint curCellPoint = new CellPoint(this.getCellName(),this.getPoint());
+		return curCellPoint;
 	}
 
 // Setters:
@@ -61,6 +72,7 @@ public abstract class Tile implements TileInterface{
 	public void setETC(int ETC){
 		estimatedTotalCost = ETC;
 	}
+
 
 
 }

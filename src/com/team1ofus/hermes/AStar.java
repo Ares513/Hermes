@@ -56,7 +56,7 @@ public class AStar{
 		 * end Cell and point.
 		 * Returns the fastest path between two points as an ordered list of Tiles
 		 */
-		public ArrayList<Tile> getPath(String startCellName, Point startIndex, String endCellName, Point endIndex){
+		public ArrayList<CellPoint> getPath(String startCellName, Point startIndex, String endCellName, Point endIndex){
 			ASRCE.fire(startCellName);
 			PathCell currentCell = accessedCells.get(0); //What cell do we start in
 			ASRCE.fire(endCellName);
@@ -117,17 +117,20 @@ public class AStar{
 			return 0;
 		}
 
-		private ArrayList<Tile> buildPath(Tile endTile) {
+		private ArrayList<CellPoint> buildPath(Tile endTile) {
 			//maps which tiles have been added
-			ArrayList<Tile> path = new ArrayList<Tile>(); 
+			ArrayList<Tile> path = new ArrayList<Tile>();
+			ArrayList<CellPoint> pointPath = new ArrayList<CellPoint>();
 			
 			Tile currentTile = endTile;
+			CellPoint currentPoint = null;
 			
 			while(currentTile.getParent() != null){
-				path.add(0, currentTile);
+				currentPoint = currentTile.getCellPoint();
+				pointPath.add(currentPoint);
 				currentTile = currentTile.getParent();
 			}
-			return path;
+			return pointPath;
 		}
 
 		private Tile getTile(PathCell aCell, Point aIndex) {
