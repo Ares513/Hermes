@@ -1,3 +1,8 @@
+package com.team1ofus.hermes;
+
+import java.awt.Point;
+
+import com.team1ofus.hermes.Tile;
 
 public class wall extends Tile implements TileInterface {
 	

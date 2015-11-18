@@ -1,3 +1,8 @@
+package com.team1ofus.hermes;
+
+import java.util.ArrayList;
+import java.awt.Point;
+
 
 public class walkway extends Tile implements TileInterface {
 

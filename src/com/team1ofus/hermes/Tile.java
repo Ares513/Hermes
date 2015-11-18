@@ -1,4 +1,7 @@
+package com.team1ofus.hermes;
+
 import java.util.ArrayList;
+import java.awt.Point;
 
 public abstract class Tile implements TileInterface{
 	

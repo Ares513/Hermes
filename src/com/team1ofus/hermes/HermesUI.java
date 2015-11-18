@@ -41,7 +41,6 @@ import java.awt.Graphics2D;
 public class HermesUI extends JPanel{
 	
 	ArrayList<Point> pointsList = new ArrayList<Point>();
-    private Point p1 = new Point(10, 10);
 	private JFrame frameHermes;
 	private JTextField StartField;
 	private JTextField DestinationField;
@@ -112,12 +111,13 @@ public class HermesUI extends JPanel{
 		MyDrawPanel pathPanel = new MyDrawPanel();
 		frameHermes.getContentPane().add(pathPanel);
 		pathPanel.setBounds(0, 0, screenSize.width, screenSize.height);
+		
 		gridMap = new DrawMap();
 		gridMap.setBounds(0, 0, screenSize.width, screenSize.height);
 		frameHermes.getContentPane().add(gridMap);
 		
 		JPanel controlBoard = new ControlPanel();
-		controlBoard.setBackground(Color.WHITE);
+		controlBoard.setBackground(Color.GRAY);
 		controlBoard.setBorder(new BevelBorder(BevelBorder.RAISED, null, null, null, null));
 		controlBoard.setBounds(frameHermes.getSize().width/2 -100, frameHermes.getSize().height - 100, 300, 100);
         frameHermes.getContentPane().add(controlBoard);
@@ -142,7 +142,7 @@ public class HermesUI extends JPanel{
 	@Override
 	public void paintComponent(Graphics g){
 		super.paintComponent(g);
-		g.drawImage(map, p1.x, p1.y, null);
+		//g.drawImage(map, p1.x, p1.y, null);
 	//Allows us to paint the image within the JLabel	
 	}
 	
@@ -180,45 +180,4 @@ public class HermesUI extends JPanel{
 		    }
 		}
 
-    private class ControlPanel extends JPanel {
-
-        private static final int DELTA = 10;
-
-        public ControlPanel() {
-            this.add(new MoveButton("\u2190", KeyEvent.VK_LEFT, -DELTA, 0));
-            this.add(new MoveButton("\u2191", KeyEvent.VK_UP, 0, -DELTA));
-            this.add(new MoveButton("\u2192", KeyEvent.VK_RIGHT, DELTA, 0));
-            this.add(new MoveButton("\u2193", KeyEvent.VK_DOWN, 0, DELTA));
-        }
-
-        private class MoveButton extends JButton {
-
-            KeyStroke k;
-            int dx, dy;
-
-            public MoveButton(String name, int code, final int dx, final int dy) {
-                super(name);
-                this.k = KeyStroke.getKeyStroke(code, 0);
-                this.dx = dx;
-                this.dy = dy;
-                this.setAction(new AbstractAction(this.getText()) {
-
-                    @Override
-                    public void actionPerformed(ActionEvent e) {
-                    	HermesUI.this.p1.translate(dx, dy);
-                        HermesUI.this.repaint();
-                    }
-                });
-                ControlPanel.this.getInputMap(
-                    WHEN_IN_FOCUSED_WINDOW).put(k, k.toString());
-                ControlPanel.this.getActionMap().put(k.toString(), new AbstractAction() {
-
-                    @Override
-                    public void actionPerformed(ActionEvent e) {
-                        MoveButton.this.doClick();
-                    }
-                });
-            }
-        }
-    }	
 }
