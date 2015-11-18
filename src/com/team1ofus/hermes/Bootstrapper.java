@@ -3,6 +3,7 @@ package com.team1ofus.hermes;
 import java.awt.EventQueue;
 import java.util.ArrayList;
 
+import com.team1ofus.apollo.DataManagement;
 import com.team1ofus.hermes.UIManagement;
 
 public class Bootstrapper {
