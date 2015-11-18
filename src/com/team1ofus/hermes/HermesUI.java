@@ -116,6 +116,8 @@ MapgridMap.addMouseMotionListener(new MouseMotionAdapter() {
 		});
 		frameHermes.getContentPane().add(MapgridMap); 
         frameHermes.setVisible(true);
+        CellPoint[] array = {new CellPoint("Map", new Point(200, 600)), new CellPoint("Map", new Point(800, 750)), new CellPoint("Map", new Point(1000, 750)), new CellPoint("Map", new Point(1000, 500))};
+        drawPath(array);
 	}
 	//Would just skip this and go straight to MyPanel's drawPath, but I'm afraid that it will break and I don't have time to fix it
 	 void drawPath(CellPoint[] path){
@@ -192,6 +194,7 @@ MapgridMap.addMouseMotionListener(new MouseMotionAdapter() {
 	}
 	
 	class MyDrawPanel extends JPanel{
+		Point offset = new Point(0, 0);
 
 		public MyDrawPanel() {
 			setOpaque(false);
@@ -213,7 +216,7 @@ MapgridMap.addMouseMotionListener(new MouseMotionAdapter() {
 			float[] dashingPattern1 = {8f, 8f};
 			Stroke stroke1 = new BasicStroke(6f, BasicStroke.CAP_BUTT, BasicStroke.JOIN_MITER, 1.0f, dashingPattern1, 2.0f);
 			g2d.setStroke(stroke1);
-			System.out.println(pointsList);
+			//System.out.println(pointsList);
 
 			for(int i = 0; i < pointsList.size()-1; i++){
 				g2d.drawLine(pointsList.get(i).x, pointsList.get(i).y, pointsList.get(i+1).x,pointsList.get(i+1).y);
@@ -225,6 +228,28 @@ MapgridMap.addMouseMotionListener(new MouseMotionAdapter() {
 			drawLineSets(g);
 
 		}
+		
+		public void incrementOffset(int dx, int dy) {
+			offset = new Point(gridMap.render.getOffset().x + dx, gridMap.render.getOffset().y + dy);
+			System.out.println(gridMap.render.getOffset().y);
+			if(offset.x < 0) {
+				offset.x = 0;
+				dx = 0;
+			} else if(offset.x > gridMap.render.drawnCell.tiles.length * gridMap.render.width - gridMap.getWidth()) {
+				offset.x = gridMap.render.drawnCell.tiles.length * gridMap.render.width - gridMap.getWidth();
+				dx = 0;
+			}
+			if(offset.y < 0) {
+				offset.y = 0;
+				dy = 0;
+			} else if(offset.y > gridMap.render.drawnCell.tiles[1].length * gridMap.render.height - gridMap.getHeight()) {
+				offset.y = gridMap.render.drawnCell.tiles[1].length * gridMap.render.height - gridMap.getHeight();
+				dy = 0;
+			}
+			System.out.println(dx + "," + dy);
+			for(Point p : pointsList)
+				p.translate(-dx, -dy);
+		}
 	}
 
 	private void doOffsetCalc(KeyEvent e) {
@@ -232,20 +257,26 @@ MapgridMap.addMouseMotionListener(new MouseMotionAdapter() {
 		//some optimizations to be made here
 		case KeyEvent.VK_LEFT:
 			gridMap.render.incrementOffset(-1*scrollSpeed, 0, gridMap.getWidth(), gridMap.getHeight());
+			pathPanel.incrementOffset(-1*scrollSpeed, 0);
 			break;
 		case KeyEvent.VK_RIGHT:
 			gridMap.render.incrementOffset(scrollSpeed, 0, gridMap.getWidth(), gridMap.getHeight());
+			pathPanel.incrementOffset(scrollSpeed, 0);
 			break;
 		case KeyEvent.VK_DOWN:
 			gridMap.render.incrementOffset(0, scrollSpeed, gridMap.getWidth(), gridMap.getHeight());
+			pathPanel.incrementOffset(0, scrollSpeed);
 			break;
 		case KeyEvent.VK_UP:
 			gridMap.render.incrementOffset(0, -1*scrollSpeed, gridMap.getWidth(), gridMap.getHeight());
+			pathPanel.incrementOffset(0, -1*scrollSpeed);
 			break;
 		default:
 			break;
 		}
-		
+		pathPanel.validate();
+		pathPanel.repaint();
 		gridMap.repaint(0, 0, gridMap.getWidth() + 100, gridMap.getHeight() + 100);
+		
 	}
 }
