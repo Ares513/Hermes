@@ -1,27 +1,46 @@
 package com.team1ofus.hermes;
 
+import javax.swing.AbstractAction;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
-import java.awt.Dimension;
-import javax.swing.BorderFactory;
+import javax.swing.KeyStroke;
 
+import java.awt.Dimension;
+
+import javax.swing.BorderFactory;
 import javax.swing.ImageIcon;
 
 import java.awt.Point;
+import java.awt.Stroke;
 
 import javax.swing.JPanel;
 import javax.swing.JTextField;
+
+import java.awt.BasicStroke;
+import java.awt.BorderLayout;
 import java.awt.Color;
+import java.awt.Component;
+
 import javax.swing.border.BevelBorder;
+
 import java.awt.Toolkit;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.awt.event.KeyEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.image.BufferedImage;
+import java.util.ArrayList;
+
 import javax.swing.JButton;
+
 import java.awt.Font;
 import java.awt.Graphics;
+import java.awt.Graphics2D;
 
 public class HermesUI extends JPanel{
+	
+	ArrayList<Point> pointsList = new ArrayList<Point>();
 	private JFrame frameHermes;
 	private JTextField StartField;
 	private JTextField DestinationField;
@@ -29,20 +48,20 @@ public class HermesUI extends JPanel{
 	private BufferedImage map;
 	private ImageIcon map2 = new ImageIcon(ClassLoader.getSystemResource("map.jpg")); //This is a reference to the "map.jpg" within the the SRC. Don't think this will be a long term solution, but it does load in an image.
 	private Point mousePosition;
+	private DrawMap gridMap;
 	public HermesHumanInteractiveEvent humanInteractive; 
 	
 	public HermesUI() {
 		humanInteractive = new HermesHumanInteractiveEvent(); 
-		
-
 	}
 
+	
 	/*
-	 * initialize the Heremes UI
+	 * initialize the Hermes UI
 	*/
 	
- public void initialize() {
-		
+public void initialize() {		
+//	private void initialize() {
 		frameHermes = new JFrame();
 		frameHermes.setTitle("Hermes");
 		frameHermes.setBounds(0, 0, screenSize.width - 200, screenSize.height - 200);
@@ -77,54 +96,108 @@ public class HermesUI extends JPanel{
 		addDestination.setFont(new Font("Lucida Grande", Font.PLAIN, 10));
 		addDestination.setBorder(BorderFactory.createEmptyBorder());   
 		DestinationPanel.add(addDestination);
-		//Not complete yet, but will end up adding another field for more destinations
-		
-		JPanel MapPanel = new JPanel();
-		MapPanel.setBounds(0, 0, screenSize.width, screenSize.height);
-		JLabel mapPlacer = new JLabel("",map2,JLabel.CENTER);
-		
-		//To import an image you need to do a janky thing.
-		//Basically you place an image inside a JLabel, override the paintComponent method, and place it in the panel
-		
-		MapPanel.add(mapPlacer);
 		//MapPanel is where the map is displayed
 		
 		
 		JPanel MousePanel = new JPanel();
 		JLabel mouseOut = new JLabel("#mouse#");
 		MousePanel.add(mouseOut);
+			
+		//my stuff
+		MyDrawPanel pathPanel = new MyDrawPanel();
+		frameHermes.getContentPane().add(pathPanel);
+		pathPanel.setBounds(0, 0, screenSize.width, screenSize.height);
 		
-		/*
-		MapPanel.addMouseMotionListener(new MouseMotionAdapter() {
-			@Override
-			public void mouseMoved(MouseEvent e) {
-				mousePosition = new Point(e.getX(), e.getY());
-				mouseOut.setText(mousePosition.toString()); 
-			}
-		});
-		*/
+		gridMap = new DrawMap();
+		gridMap.setBounds(0, 0, screenSize.width, screenSize.height);
+		frameHermes.getContentPane().add(gridMap);
 		
-		MapPanel.addMouseListener(new MouseAdapter() {
-			@Override
-			public void mouseClicked(MouseEvent arg0) {
-				humanInteractive.doClick();
-				//System.out.println("clicked");
-			}
-		});
-		
-		//These are the listeners
-		
-		frameHermes.getContentPane().add(MapPanel);
-		frameHermes.setVisible(true);
-		
-		
-	}
-	
+		JPanel controlBoard = new ControlPanel();
+		controlBoard.setBackground(Color.GRAY);
+		controlBoard.setBorder(new BevelBorder(BevelBorder.RAISED, null, null, null, null));
+		controlBoard.setBounds(frameHermes.getSize().width/2 -100, frameHermes.getSize().height - 100, 300, 100);
+        frameHermes.getContentPane().add(controlBoard);
+        frameHermes.setVisible(true);
+
+        /*
+MapPanel.addMouseMotionListener(new MouseMotionAdapter() {
 	@Override
-	protected void paintComponent(Graphics g){
+	public void mouseMoved(MouseEvent e) {
+		mousePosition = new Point(e.getX(), e.getY());
+		mouseOut.setText(mousePosition.toString()); 
+	}
+});
+*/
+        /*
+         * The following few lines were originally in HermesUI and then were taken out 
+         * I'm (Aaron) pretty sure that they are needed for the mouse click events. 
+         * So i put them back in
+         */
+		JPanel MapPanel = new JPanel();
+		MapPanel.setBounds(0, 0, screenSize.width, screenSize.height);
+		JLabel mapPlacer = new JLabel("",map2,JLabel.CENTER);
+		MapPanel.addMouseListener(new MouseAdapter() {
+		
+		@Override
+		public void mouseClicked(MouseEvent arg0) {
+			humanInteractive.doClick();
+			//System.out.println("clicked");
+			}
+		});
+		frameHermes.getContentPane().add(MapPanel); //frameHermes.getContentPane().add(MapPanel);
+}
+	
+	 void drawPath(CellPoint[] path){
+		 //Re-instantiate ArrayList of points to draw
+		 //Iterate through direction set and add its points to an the ArrayList of points
+		 repaint();
+	    }
+
+	@Override
+	public void paintComponent(Graphics g){
 		super.paintComponent(g);
-		g.drawImage(map, 0, 0, null);
+		//g.drawImage(map, p1.x, p1.y, null);
 	//Allows us to paint the image within the JLabel	
 	}
 	
+	class MyDrawPanel extends JPanel{
+		//ArrayList<Point> pointsList = new ArrayList<Point>();
+			
+		    public MyDrawPanel() {
+		    	//Will have to change pointsList to be whatever was passed in through the constructor
+		        setOpaque(false);
+		        
+		    }
+		    
+		    //This function draws lines between the points specified in the ArrayList points list, which has been generated from A* algorithm
+		    void drawLineSets(Graphics g){ //ArrayList<Point> p ){
+		    	//Should drawLineSets be called in UI Management as a part of the chain of events?
+		    	//I dont think this will work because it needs the graphic?
+		    	Graphics2D g2d = (Graphics2D) g;
+		    	/*
+		    	pointsList.add(new Point(200,200));
+		     	pointsList.add(new Point(500,100));
+		     	pointsList.add(new Point(800,500));
+		     	pointsList.add(new Point(900,800));
+		     	*/
+		     	g2d.setColor(Color.BLUE);
+		     	float[] dashingPattern1 = {8f, 8f};
+		     	Stroke stroke1 = new BasicStroke(6f, BasicStroke.CAP_BUTT, BasicStroke.JOIN_MITER, 1.0f, dashingPattern1, 2.0f);
+		     	g2d.setStroke(stroke1);
+		     	
+		    	for(int i = 0; i < pointsList.size()-1; i++){
+		            g2d.drawLine(pointsList.get(i).x, pointsList.get(i).y, pointsList.get(i+1).x,pointsList.get(i+1).y);
+		    	} 
+		    }
+		 
+		    //Need to make a function that does the repaint that can be called on by UIManagement
+		    //
+		   
+		    public void paint(Graphics g) {
+		        super.paint(g);
+		    	drawLineSets(g); //pointsList);
+
+		    }
+		}
+
 }
