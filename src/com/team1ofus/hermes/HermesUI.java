@@ -182,7 +182,7 @@ MapgridMap.addMouseMotionListener(new MouseMotionAdapter() {
 		frameHermes.setLocation(screenSize.width/2-frameHermes.getSize().width/2, screenSize.height/2-frameHermes.getSize().height/2);
 		//Sets the frame to start in the center of the screen
 		
-		JPanel DestinationgridMap = new JPanel();
+		/*JPanel DestinationgridMap = new JPanel();
 		DestinationgridMap.setBorder(new BevelBorder(BevelBorder.RAISED, null, null, null, null));
 		DestinationgridMap.setBackground(Color.LIGHT_GRAY);
 		DestinationgridMap.setBounds(6, 6, screenSize.width - (screenSize.width - 134), screenSize.height - (screenSize.height - 100));
@@ -205,7 +205,7 @@ MapgridMap.addMouseMotionListener(new MouseMotionAdapter() {
 		addDestination.setFont(new Font("Lucida Grande", Font.PLAIN, 10));
 		addDestination.setBorder(BorderFactory.createEmptyBorder());   
 		DestinationgridMap.add(addDestination);
-		//MapgridMap is where the map is displayed
+		//MapgridMap is where the map is displayed*/
 		
 		
 		JPanel MousegridMap = new JPanel();
