@@ -69,13 +69,9 @@ public class CellRenderer {
 		offset.translate(dx, dy);
 		if (offset.x < 0){
 			offset.x = 0;
-		} else if(offset.x > tiles[0].length * width/2 - windowWidth) {
-			offset.x = tiles[0].length * width/2 - windowWidth;
 		}
 		if (offset.y < 0){
 			offset.y = 0;
-		} else if(offset.y > tiles[1].length * height/2 - windowHeight) {
-			offset.y = tiles[1].length * height/2 - windowHeight; 
 		}
 	}
 }
