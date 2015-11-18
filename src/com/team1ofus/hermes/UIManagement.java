@@ -29,4 +29,10 @@ public class UIManagement implements IHumanInteractionListener, IAStarInteractio
 		// TODO Auto-generated method stub
 		
 	}
+
+	@Override
+	public void onAStarRequestCellEvent(String cellName) {
+		// TODO Auto-generated method stub
+		
+	}
 }

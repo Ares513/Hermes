@@ -9,10 +9,10 @@ public class MapManagementInteractionEventObject {
 	public void addListener(IMapManagementInteractionListener toAdd){
 		listeners.add(toAdd);
 		}
-	public void pathComplete(ArrayList<CellPoint> arrayList) {
+	public void pathComplete(CellPoint[] directions) {
 		
 		for(IMapManagementInteractionListener UL : listeners){
-			UL.onAStarPathCompleteEvent(arrayList);
+			UL.onAStarPathCompleteEvent(directions);
 			
 		}
 	
