@@ -116,8 +116,8 @@ MapgridMap.addMouseMotionListener(new MouseMotionAdapter() {
 		});
 		frameHermes.getContentPane().add(MapgridMap); 
         frameHermes.setVisible(true);
-        CellPoint[] array = {new CellPoint("Map", new Point(200, 600)), new CellPoint("Map", new Point(800, 750)), new CellPoint("Map", new Point(1000, 750)), new CellPoint("Map", new Point(1000, 500))};
-        drawPath(array);
+        //CellPoint[] array = {new CellPoint("Map", new Point(200, 600)), new CellPoint("Map", new Point(800, 750)), new CellPoint("Map", new Point(1000, 750)), new CellPoint("Map", new Point(1000, 500))};
+        //drawPath(array);
 	}
 	//Would just skip this and go straight to MyPanel's drawPath, but I'm afraid that it will break and I don't have time to fix it
 	 void drawPath(CellPoint[] path){
