@@ -112,17 +112,14 @@ MapgridMap.addMouseMotionListener(new MouseMotionAdapter() {
 		public void mouseClicked(MouseEvent e) {
 			Point picked = gridMap.render.pickTile(e.getX(), e.getY());
 			humanInteractive.doClick(e.getX(), e.getY());
-			//System.out.println("clicked");
 			}
 		});
-		frameHermes.getContentPane().add(MapgridMap); //frameHermes.getContentPane().add(MapgridMap);
+		frameHermes.getContentPane().add(MapgridMap); 
         frameHermes.setVisible(true);
 	}
-	
+	//Would just skip this and go straight to MyPanel's drawPath, but I'm afraid that it will break and I don't have time to fix it
 	 void drawPath(CellPoint[] path){
 		 pathPanel.drawPath(path);
-		 //Re-instantiate ArrayList of points to draw
-		 //Iterate through direction set and add its points to an the ArrayList of points
 		 repaint();
 	    }
 
@@ -133,42 +130,6 @@ MapgridMap.addMouseMotionListener(new MouseMotionAdapter() {
 	//Allows us to paint the image within the JLabel	
 	}
 	
-	/*
-	class MyDrawgridMap extends JPanel{
-		//ArrayList<Point> pointsList = new ArrayList<Point>();
-			
-		    public MyDrawgridMap() {
-		    	//Will have to change pointsList to be whatever was passed in through the constructor
-		        setOpaque(false);
-		        
-		    }
-		    
-		    //This function draws lines between the points specified in the ArrayList points list, which has been generated from A* algorithm
-		    void drawLineSets(Graphics g){ //ArrayList<Point> p ){
-		    	//Should drawLineSets be called in UI Management as a part of the chain of events?
-		    	//I dont think this will work because it needs the graphic?
-		    	Graphics2D g2d = (Graphics2D) g;
-		    	
-		     	g2d.setColor(Color.BLUE);
-		     	float[] dashingPattern1 = {8f, 8f};
-		     	Stroke stroke1 = new BasicStroke(6f, BasicStroke.CAP_BUTT, BasicStroke.JOIN_MITER, 1.0f, dashingPattern1, 2.0f);
-		     	g2d.setStroke(stroke1);
-		     	
-		    	for(int i = 0; i < pointsList.size()-1; i++){
-		            g2d.drawLine(pointsList.get(i).x, pointsList.get(i).y, pointsList.get(i+1).x,pointsList.get(i+1).y);
-		    	} 
-		    }
-		 
-		    //Need to make a function that does the repaint that can be called on by UIManagement
-		    //
-		   
-		    public void paint(Graphics g) {
-		        super.paint(g);
-		    	drawLineSets(g); //pointsList);
-
-		    }
-		}
-	*/
 	private void buildControl(){
 		frameHermes = new JFrame();
 		frameHermes.setTitle("Hermes");
@@ -231,10 +192,8 @@ MapgridMap.addMouseMotionListener(new MouseMotionAdapter() {
 	}
 	
 	class MyDrawPanel extends JPanel{
-		//ArrayList<Point> pointsList = new ArrayList<Point>();
 
 		public MyDrawPanel() {
-			//Will have to change pointsList to be whatever was passed in through the constructor
 			setOpaque(false);
 
 		}
@@ -243,14 +202,12 @@ MapgridMap.addMouseMotionListener(new MouseMotionAdapter() {
 			for(CellPoint c : path){
 				pointsList.add(c.getPoint());
 			}
-			System.out.println(pointsList);
 			validate();
 			repaint();
-			System.out.println("drawPath is called");
 		}
 
 		//This function draws lines between the points specified in the ArrayList points list, which has been generated from A* algorithm
-		void drawLineSets(Graphics g){ //ArrayList<Point> p ){
+		void drawLineSets(Graphics g){ 
 			Graphics2D g2d = (Graphics2D) g;
 			g2d.setColor(Color.BLUE);
 			float[] dashingPattern1 = {8f, 8f};
@@ -263,12 +220,9 @@ MapgridMap.addMouseMotionListener(new MouseMotionAdapter() {
 			} 
 		}
 
-		//Need to make a function that does the repaint that can be called on by UIManagement
-		//
-
 		public void paint(Graphics g) {
 			super.paint(g);
-			drawLineSets(g); //pointsList);
+			drawLineSets(g);
 
 		}
 	}
