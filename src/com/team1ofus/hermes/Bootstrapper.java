@@ -28,15 +28,11 @@ public class Bootstrapper {
 //					ArrayList<PathCell> dummyList = new ArrayList<PathCell>();
 //					dummyList.add(new PathCell("Test", 10, 10, 1.0, TILE_TYPE.WALL));
 					MapManagement MapManager;
-					
-				//	UI.managementEvent.addManagementListener(null); // needs an actual listener 
-					
 					data = new DataManagement();
-					
-
 					MapManager = new MapManagement(pathCells);
 					UI = new UIManagement(pathCells);
 					
+					UI.events.managementListeners.add(MapManager);
 				} catch (Exception e) {
 					e.printStackTrace();
 				}

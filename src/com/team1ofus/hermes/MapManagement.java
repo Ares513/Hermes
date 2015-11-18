@@ -4,7 +4,7 @@ import java.awt.Point;
 import java.util.ArrayList;
 
 public class MapManagement implements IUIManagementInteractionListener, IAStarInteractionListener {
-	UIManagement UIManage; 
+	//UIManagement UIManage; 
 	MapManagementInteractionEventObject events = new MapManagementInteractionEventObject();
 	AStar pathfindingSystem;
 	ArrayList<PathCell> cells;
@@ -13,14 +13,8 @@ public class MapManagement implements IUIManagementInteractionListener, IAStarIn
 	public MapManagement(ArrayList<PathCell> dummyList) {
 		pathfindingSystem = new AStar(dummyList);
 		cells = dummyList;
-		UIManage = new UIManagement(cells);
-		begin();
 	}
-	private void begin(){ 
-		UIManage.events.addManagementListener(this);
-		UIManage.begin();
-		//while(true){}
-	}
+	
 	@Override
 	public void onAStarRequestCellEvent(String cellName) {
 		// TODO Auto-generated method stub

@@ -8,7 +8,7 @@ public class UIManagementInteractionEventObject {
 	public UIManagementInteractionEventObject() {
 	}
 	
-private List<IUIManagementInteractionListener> managementListeners = new ArrayList<IUIManagementInteractionListener>();
+public List<IUIManagementInteractionListener> managementListeners = new ArrayList<IUIManagementInteractionListener>();
 
 public void addManagementListener(IUIManagementInteractionListener toAdd){
 	managementListeners.add(toAdd);

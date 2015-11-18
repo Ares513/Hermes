@@ -10,6 +10,7 @@ public class MapManagementInteractionEventObject {
 	public void addListener(IMapManagementInteractionListener toAdd){
 		listeners.add(toAdd);
 		}
+	
 	public void doPathComplete(ArrayList<CellPoint> directions) {
 		
 		for(IMapManagementInteractionListener UL : listeners){
