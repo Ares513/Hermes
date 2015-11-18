@@ -1,5 +1,6 @@
 package com.team1ofus.hermes;
 
+import java.awt.Point;
 import java.util.ArrayList;
 import java.util.EventObject;
 /*
@@ -21,66 +22,27 @@ PathUI
 import java.util.List;
 
 
-public class MapManagement implements IAStarInteractionListener, ICellLoadedListener {
-
-	PathCell[] cells = new PathCell[4];
-	private AStarPathCompleteEvent AStarDone = new AStarPathCompleteEvent(this);
-	private RequestCellEvent RequestCell = new RequestCellEvent(this);
-	
-	public MapManagement() {
-		
+public class MapManagement implements IUIManagementInteractionListener  {
+	private ArrayList<PathCell> cells;
+	AStar pathingSystem;
+	MapManagementInteractionEventObject events = new MapManagementInteractionEventObject();
+	public MapManagement(ArrayList<PathCell> dummyList) {
+		cells = dummyList;
+		pathingSystem = new AStar();
 	}
-	
-	/* This event lets bootstrapper know when A* finishes computing a path and wants the ui to display it. 
-	 * 
-	 */
-	public class AStarPathCompleteEvent extends EventObject {
-		private List<AStarPathCompleteListener> listeners = new ArrayList<AStarPathCompleteListener>(); //list of registered listeners
-		AStarPathCompleteEvent(Object source) {
-			super(source);
-		}
-		public synchronized void fire(CellPoint[] path) {
-			for (AStarPathCompleteListener l : listeners) {
-				l.onAStarPathCompleteEvent(path);
-			}
-		}
-		public synchronized void registerListener(AStarPathCompleteListener aListener) {
-			listeners.add(aListener);
-		}
-	}
-	
-	/* This event lets bootstrapper know when mapManagement wants to load a new cell from disk. 
-	 * 
-	 */
-	public class RequestCellEvent extends EventObject {
-		private List<RequestCellListener> listeners = new ArrayList<RequestCellListener>(); //list of registered listeners
-		RequestCellEvent(Object source) {
-			super(source);
-		}
-		public synchronized void fire(String cellName) {
-			for (RequestCellListener l : listeners) {
-				l.onRequestCellEvent(cellName);
-			}
-		}
-		public synchronized void registerListener(RequestCellListener aListener) {
-			listeners.add(aListener);
-		}
-	}
-	
 	//event getters (used by classes that want to register to the listeners)
-	public AStarPathCompleteEvent getAStarPathCompletedEvent() {
-		return AStarDone;
-	}
-	public RequestCellEvent getRequestCellEvent() {
-		return RequestCell;
+	
 
-	}
 	
 	//event handlers
-	public void onAStarRequestCellEvent(String cellName) {
-		RequestCell.fire(cellName);
-	}
+
 	public void onCellLoaded(PathCell cell) {
+		
+	}
+	@Override
+	public void onPathReady(Point first, Point second) {
+		// TODO Auto-generated method stub
+		events.pathComplete(pathingSystem.getPath("default", first, "default", first));
 		
 	}
 }

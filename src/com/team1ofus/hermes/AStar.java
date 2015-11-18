@@ -43,9 +43,9 @@ public class AStar{
 		 * Returns the fastest path between two points as an ordered list of Tiles
 		 */
 		public ArrayList<CellPoint> getPath(String startCellName, Point startIndex, String endCellName, Point endIndex){
-			ASRCE.fire(startCellName);
+			events.onRequestCell(startCellName);
 			PathCell currentCell = accessedCells.get(0); //What cell do we start in
-			ASRCE.fire(endCellName);
+			events.onRequestCell(endCellName);
 			PathCell endCell = selectCell(endCellName);
 			Tile currentTile = getTile(currentCell, startIndex); //The exact tile we start at
 			Tile endTile = getTile(endCell, endIndex); // the tile we want to get to

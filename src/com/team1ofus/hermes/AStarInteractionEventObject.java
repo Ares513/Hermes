@@ -9,7 +9,7 @@ public class AStarInteractionEventObject {
 	public AStarInteractionEventObject() {
 		// TODO Auto-generated constructor stub
 	}
-	public void fire(String cellName) {
+	public void onRequestCell(String cellName) {
 		for (IAStarInteractionListener l : listeners) {
 			l.onAStarRequestCellEvent(cellName);
 		}
