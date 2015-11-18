@@ -7,9 +7,9 @@ public class Walkway extends Tile implements TileInterface {
 	private static final long serialVersionUID = 1L;
 
 	public Walkway(String cellName,Point tilePoint){
-		Tile.cellName = cellName;
-		Tile.tilePoint = tilePoint;
-		Tile.tileType = 0; // 0 means walkway
+		this.cellName = cellName;
+		this.tilePoint = tilePoint;
+		this.tileType = 0; // 0 means walkway
 	}
 
 	public int getTraverseCost() {
