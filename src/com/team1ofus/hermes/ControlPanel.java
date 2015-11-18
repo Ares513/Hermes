@@ -16,10 +16,10 @@ public class ControlPanel extends JPanel {
     public Point p1 = new Point(0, 0);
 
     public ControlPanel() {
-        this.add(new MoveButton("\u2190", KeyEvent.VK_LEFT, -DELTA, 0));
-        this.add(new MoveButton("\u2191", KeyEvent.VK_UP, 0, -DELTA));
-        this.add(new MoveButton("\u2192", KeyEvent.VK_RIGHT, DELTA, 0));
-        this.add(new MoveButton("\u2193", KeyEvent.VK_DOWN, 0, DELTA));
+        //this.add(new MoveButton("\u2190", KeyEvent.VK_LEFT, -DELTA, 0));
+        //this.add(new MoveButton("\u2191", KeyEvent.VK_UP, 0, -DELTA));
+        //this.add(new MoveButton("\u2192", KeyEvent.VK_RIGHT, DELTA, 0));
+        //this.add(new MoveButton("\u2193", KeyEvent.VK_DOWN, 0, DELTA));
     }
 
     public int getX(){

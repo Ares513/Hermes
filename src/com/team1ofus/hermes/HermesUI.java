@@ -26,6 +26,7 @@ import javax.swing.border.BevelBorder;
 import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
@@ -49,6 +50,9 @@ public class HermesUI extends JPanel{
 	private ImageIcon map2 = new ImageIcon(ClassLoader.getSystemResource("map.jpg")); //This is a reference to the "map.jpg" within the the SRC. Don't think this will be a long term solution, but it does load in an image.
 	private Point mousePosition;
 	private DrawMap gridMap;
+	int scrollSpeed = 5;
+	private JLabel lblOffset;
+
 	public HermesHumanInteractiveEvent humanInteractive; 
 	
 	public HermesUI() {
@@ -60,8 +64,8 @@ public class HermesUI extends JPanel{
 	 * initialize the Hermes UI
 	*/
 	
-public void initialize() {		
-//	private void initialize() {
+	public void initialize() {		
+		
 		frameHermes = new JFrame();
 		frameHermes.setTitle("Hermes");
 		frameHermes.setBounds(0, 0, screenSize.width - 200, screenSize.height - 200);
@@ -73,54 +77,69 @@ public void initialize() {
 		frameHermes.setLocation(screenSize.width/2-frameHermes.getSize().width/2, screenSize.height/2-frameHermes.getSize().height/2);
 		//Sets the frame to start in the center of the screen
 		
-		JPanel DestinationPanel = new JPanel();
-		DestinationPanel.setBorder(new BevelBorder(BevelBorder.RAISED, null, null, null, null));
-		DestinationPanel.setBackground(Color.LIGHT_GRAY);
-		DestinationPanel.setBounds(6, 6, screenSize.width - (screenSize.width - 134), screenSize.height - (screenSize.height - 100));
-		frameHermes.getContentPane().add(DestinationPanel);
-		//Destination panel placed in the upper right corner of the frameHermes
+		JPanel DestinationgridMap = new JPanel();
+		DestinationgridMap.setBorder(new BevelBorder(BevelBorder.RAISED, null, null, null, null));
+		DestinationgridMap.setBackground(Color.LIGHT_GRAY);
+		DestinationgridMap.setBounds(6, 6, screenSize.width - (screenSize.width - 134), screenSize.height - (screenSize.height - 100));
+		frameHermes.getContentPane().add(DestinationgridMap);
+		//Destination gridMap placed in the upper right corner of the frameHermes
 		
 		StartField = new JTextField();
 		StartField.setText("Startpoint");
-		DestinationPanel.add(StartField);
+		DestinationgridMap.add(StartField);
 		StartField.setColumns(10);
 		
 		DestinationField = new JTextField();
 		DestinationField.setText("Destination");
-		DestinationPanel.add(DestinationField);
+		DestinationgridMap.add(DestinationField);
 		DestinationField.setColumns(10);
-		//Builds the two input fields and displays them in the DestinationPanel
+		//Builds the two input fields and displays them in the DestinationgridMap
 		
 		
 		JButton addDestination = new JButton("Add Destination");
 		addDestination.setFont(new Font("Lucida Grande", Font.PLAIN, 10));
 		addDestination.setBorder(BorderFactory.createEmptyBorder());   
-		DestinationPanel.add(addDestination);
-		//MapPanel is where the map is displayed
+		DestinationgridMap.add(addDestination);
+		//MapgridMap is where the map is displayed
 		
 		
-		JPanel MousePanel = new JPanel();
+		JPanel MousegridMap = new JPanel();
 		JLabel mouseOut = new JLabel("#mouse#");
-		MousePanel.add(mouseOut);
+		MousegridMap.add(mouseOut);
 			
 		//my stuff
-		MyDrawPanel pathPanel = new MyDrawPanel();
-		frameHermes.getContentPane().add(pathPanel);
-		pathPanel.setBounds(0, 0, screenSize.width, screenSize.height);
+		MyDrawgridMap pathgridMap = new MyDrawgridMap();
+		frameHermes.getContentPane().add(pathgridMap);
+		pathgridMap.setBounds(0, 0, screenSize.width, screenSize.height);
 		
 		gridMap = new DrawMap();
 		gridMap.setBounds(0, 0, screenSize.width, screenSize.height);
 		frameHermes.getContentPane().add(gridMap);
 		
-		JPanel controlBoard = new ControlPanel();
+		gridMap.addKeyListener(new KeyAdapter() {
+			@Override
+			public void keyPressed(KeyEvent e) {
+				doOffsetCalc(e);
+			}
+		});
+		frameHermes.addKeyListener(new KeyAdapter() {
+			@Override
+			public void keyPressed(KeyEvent e) {
+				doOffsetCalc(e);
+			}
+		});
+		
+
+		/*
+		JPanel controlBoard = new ControlgridMap();
 		controlBoard.setBackground(Color.GRAY);
 		controlBoard.setBorder(new BevelBorder(BevelBorder.RAISED, null, null, null, null));
 		controlBoard.setBounds(frameHermes.getSize().width/2 -100, frameHermes.getSize().height - 100, 300, 100);
         frameHermes.getContentPane().add(controlBoard);
-        frameHermes.setVisible(true);
+        */
 
         /*
-MapPanel.addMouseMotionListener(new MouseMotionAdapter() {
+MapgridMap.addMouseMotionListener(new MouseMotionAdapter() {
 	@Override
 	public void mouseMoved(MouseEvent e) {
 		mousePosition = new Point(e.getX(), e.getY());
@@ -133,10 +152,10 @@ MapPanel.addMouseMotionListener(new MouseMotionAdapter() {
          * I'm (Aaron) pretty sure that they are needed for the mouse click events. 
          * So i put them back in
          */
-		JPanel MapPanel = new JPanel();
-		MapPanel.setBounds(0, 0, screenSize.width, screenSize.height);
+		JPanel MapgridMap = new JPanel();
+		MapgridMap.setBounds(0, 0, screenSize.width, screenSize.height);
 		JLabel mapPlacer = new JLabel("",map2,JLabel.CENTER);
-		MapPanel.addMouseListener(new MouseAdapter() {
+		MapgridMap.addMouseListener(new MouseAdapter() {
 		
 		@Override
 		public void mouseClicked(MouseEvent arg0) {
@@ -144,7 +163,9 @@ MapPanel.addMouseMotionListener(new MouseMotionAdapter() {
 			//System.out.println("clicked");
 			}
 		});
-		frameHermes.getContentPane().add(MapPanel); //frameHermes.getContentPane().add(MapPanel);
+		frameHermes.getContentPane().add(MapgridMap); //frameHermes.getContentPane().add(MapgridMap);
+        frameHermes.setVisible(true);
+
 }
 	
 	 void drawPath(CellPoint[] path){
@@ -160,10 +181,10 @@ MapPanel.addMouseMotionListener(new MouseMotionAdapter() {
 	//Allows us to paint the image within the JLabel	
 	}
 	
-	class MyDrawPanel extends JPanel{
+	class MyDrawgridMap extends JPanel{
 		//ArrayList<Point> pointsList = new ArrayList<Point>();
 			
-		    public MyDrawPanel() {
+		    public MyDrawgridMap() {
 		    	//Will have to change pointsList to be whatever was passed in through the constructor
 		        setOpaque(false);
 		        
@@ -199,5 +220,26 @@ MapPanel.addMouseMotionListener(new MouseMotionAdapter() {
 
 		    }
 		}
-
+	
+	private void doOffsetCalc(KeyEvent e) {
+		switch(e.getKeyCode()) {
+		//some optimizations to be made here
+		case KeyEvent.VK_LEFT:
+			gridMap.render.incrementOffset(-1*scrollSpeed, 0, gridMap.getWidth(), gridMap.getHeight());
+			break;
+		case KeyEvent.VK_RIGHT:
+			gridMap.render.incrementOffset(scrollSpeed, 0, gridMap.getWidth(), gridMap.getHeight());
+			break;
+		case KeyEvent.VK_DOWN:
+			gridMap.render.incrementOffset(0, scrollSpeed, gridMap.getWidth(), gridMap.getHeight());
+			break;
+		case KeyEvent.VK_UP:
+			gridMap.render.incrementOffset(0, -1*scrollSpeed, gridMap.getWidth(), gridMap.getHeight());
+			break;
+		default:
+			break;
+		}
+		
+		gridMap.paint(gridMap.getGraphics());
+	}
 }

@@ -18,7 +18,7 @@ public class CellRenderer {
 	final int cols = 3;
 	BufferedImage[] spriteImages = new BufferedImage[rows * cols];
 	TILE_TYPE[][] tiles;
-
+	Point offset = new Point(0, 0);
 	
 	
 	public CellRenderer(TILE_TYPE[][] tiles) {
@@ -27,21 +27,21 @@ public class CellRenderer {
 	}
 	
 	public void renderTiles(Graphics g) {
-		ControlPanel cp = new ControlPanel();
 		for(int i=0; i<tiles[0].length; i++) {
 			for(int j=0; j<tiles[1].length; j++) {
 				switch(tiles[i][j]) {
 				case WALL:
-					g.drawImage(spriteImages[0], i*width + cp.p1.x, j*height + cp.p1.y, width, height, null);
+					g.drawImage(spriteImages[0], i*width - offset.x, j*height - offset.y, width, height, null);
 					break;
 					
 				case PEDESTRIAN_WALKWAY:
-					g.drawImage(spriteImages[1], i*width + cp.p1.x, j*height + cp.p1.y, width, height, null);
+					g.drawImage(spriteImages[1], i*width - offset.x, j*height - offset.y, width, height, null);
 					break;
 				}
 			}
 		}
 	}
+	
 	
 	private void getFromSheet(){
 		try{
@@ -56,5 +56,10 @@ public class CellRenderer {
 		catch (IOException e) {
 	       throw new RuntimeException(e);
 		}	
+	}
+	
+	public void incrementOffset(int dx, int dy, int windowWidth, int windowHeight) {
+		//some optimizations to be made here
+		offset.translate(dx, dy);
 	}
 }
