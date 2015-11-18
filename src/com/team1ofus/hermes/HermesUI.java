@@ -61,11 +61,6 @@ public class HermesUI extends JPanel{
 	*/
 	
 	private void initialize() {
-		
-		
-		
-		
-		
 		frameHermes = new JFrame();
 		frameHermes.setTitle("Hermes");
 		frameHermes.setBounds(0, 0, screenSize.width - 200, screenSize.height - 200);
@@ -124,20 +119,12 @@ public class HermesUI extends JPanel{
         
 		frameHermes.setVisible(true);
 	}
-	/*
-	package com.team1ofus.hermes;
-
-	import java.awt.BasicStroke;
-	import java.awt.Color;
-	import java.awt.Graphics;
-	import java.awt.Graphics2D;
-	import java.awt.Point;
-	import java.awt.Stroke;
-	import java.util.ArrayList;
-
-	import javax.swing.JFrame;
-	import javax.swing.JPanel;
-*/
+	
+	 void drawPath(CellPoint[] path){
+		 //Re-instantiate ArrayList of points to draw
+		 //Iterate through direction set and add its points to an the ArrayList of points
+		 repaint();
+	    }
 
 	@Override
 	public void paintComponent(Graphics g){
@@ -156,12 +143,16 @@ public class HermesUI extends JPanel{
 		    }
 		    
 		    //This function draws lines between the points specified in the ArrayList points list, which has been generated from A* algorithm
-		    void drawLineSets(Graphics g){
+		    void drawLineSets(Graphics g){ //ArrayList<Point> p ){
+		    	//Should drawLineSets be called in UI Management as a part of the chain of events?
+		    	//I dont think this will work because it needs the graphic?
 		    	Graphics2D g2d = (Graphics2D) g;
+		    	/*
 		    	pointsList.add(new Point(200,200));
 		     	pointsList.add(new Point(500,100));
 		     	pointsList.add(new Point(800,500));
 		     	pointsList.add(new Point(900,800));
+		     	*/
 		     	g2d.setColor(Color.BLUE);
 		     	float[] dashingPattern1 = {8f, 8f};
 		     	Stroke stroke1 = new BasicStroke(6f, BasicStroke.CAP_BUTT, BasicStroke.JOIN_MITER, 1.0f, dashingPattern1, 2.0f);
@@ -169,14 +160,16 @@ public class HermesUI extends JPanel{
 		     	
 		    	for(int i = 0; i < pointsList.size()-1; i++){
 		            g2d.drawLine(pointsList.get(i).x, pointsList.get(i).y, pointsList.get(i+1).x,pointsList.get(i+1).y);
-		    	}
-
+		    	} 
 		    }
 		 
+		    //Need to make a function that does the repaint that can be called on by UIManagement
+		    //
+		   
 		    public void paint(Graphics g) {
-		    	//have an if statement in here that will paint when an event that calls it happens
 		        super.paint(g);
-		        drawLineSets(g);
+		    	drawLineSets(g); //pointsList);
+
 		    }
 		}
 

@@ -10,7 +10,7 @@ public class UIManagement implements AStarPathCompleteListener{
 		window = new HermesUI();
 	}
 	
-	public void onAStarPathCompleteEvent(DirectionSet directions) {
-		
+	public void onAStarPathCompleteEvent(CellPoint[] directions) {
+		window.drawPath(directions);
 	}
 }
