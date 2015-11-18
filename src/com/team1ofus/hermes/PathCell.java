@@ -73,8 +73,11 @@ public class PathCell{
      * Not safe for out of bounds calls.
      */
     public Tile getTile(Point tilePoint) {
-        
-        return this.tiles[(int)tilePoint.getX()][(int)tilePoint.getY()];
+        int x = (int)tilePoint.getX();
+        int y = (int)tilePoint.getY();
+        int xConverted = x/32; 
+        int yConverted = y/32; 
+        return this.tiles[xConverted][yConverted];
     }
     
 	public ArrayList<Tile> getPossibleTraversals(Point tilePoint){
