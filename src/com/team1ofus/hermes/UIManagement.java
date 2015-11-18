@@ -5,8 +5,10 @@ import javax.swing.*;
 
 public class UIManagement implements HermesUIInterface{
 	HermesUI window;
+	HermesUIManagementEvent managementEvent; 
 	public UIManagement(){
 		initialize();    
+		managementEvent = new HermesUIManagementEvent(); 
 	}
 	
 	public JFrame frame; 
@@ -38,12 +40,14 @@ public class UIManagement implements HermesUIInterface{
 	@Override
 	public void thereWasAClick(){
 		System.out.println("Holy Shit There Was A Click");
+		managementEvent.doManagementEvent();
 	}
 	
 	void initialize(){
 		window = new HermesUI();
 		window.humanInteractive.addListener(this);
 		window.initialize();
+		
 	}
 
 }
