@@ -35,8 +35,11 @@ public class Bootstrapper {
 					
 
 					MapManager = new MapManagement(pathCells);
-					UI = new UIManagement(pathCells);
 					
+					UI = new UIManagement(pathCells);
+					UI.events.addManagementListener(MapManager);
+					MapManager.events.addListener(UI);
+					UI.begin();
 				} catch (Exception e) {
 					e.printStackTrace();
 				}

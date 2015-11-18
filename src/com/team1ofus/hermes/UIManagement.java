@@ -6,7 +6,7 @@ import java.util.ArrayList;
 import javax.swing.*;
 
 
-public class UIManagement implements IHumanInteractionListener, IAStarInteractionListener{
+public class UIManagement implements IHumanInteractionListener, IMapManagementInteractionListener {
 	HermesUI window;
 	Point first;
 	Point second;
@@ -15,13 +15,13 @@ public class UIManagement implements IHumanInteractionListener, IAStarInteractio
 	public UIManagement(ArrayList<PathCell> allCells) {
 		events = new UIManagementInteractionEventObject(); 
 		this.allCells = allCells;
-		begin();    
+		  
 
 	}
 	
 	public JFrame frame; 
 
-	void begin() {
+	public void begin() {
 		window = new HermesUI();
 		window.humanInteractive.addListener(this);
 		window.initialize(allCells.get(0));
@@ -47,9 +47,6 @@ public class UIManagement implements IHumanInteractionListener, IAStarInteractio
 		}
 	}
 
-	@Override
-	public void onAStarRequestCellEvent(String cellName) {
-		// TODO Auto-generated method stub
-		
-	}
+
+
 }
