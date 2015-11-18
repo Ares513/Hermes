@@ -13,10 +13,10 @@ private List<IUIManagementInteractionListener> managementListeners = new ArrayLi
 public void addManagementListener(IUIManagementInteractionListener toAdd){
 	managementListeners.add(toAdd);
 	}
-public void doPathReady(Point first, Point second){
+public void doPathReady(int cellIndex, Point first, Point second){
 	
 	for(IUIManagementInteractionListener UL : managementListeners){
-		UL.onPathReady(first, second);
+		UL.onPathReady(cellIndex, first, second);
 		}	
 
 	}
