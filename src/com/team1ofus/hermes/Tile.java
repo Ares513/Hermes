@@ -10,6 +10,8 @@ public abstract class Tile implements TileInterface{
 	public static Point tilePoint = null;
 
 	public static byte tileType = 0; // 0 = walkway, 1 = wall
+
+	public static String cellName;
 	
 	public Tile parent = null;
 	
