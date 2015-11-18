@@ -212,7 +212,6 @@ MapgridMap.addMouseMotionListener(new MouseMotionAdapter() {
 		JLabel mouseOut = new JLabel("#mouse#");
 		MousegridMap.add(mouseOut);
 			
-		//my stuff
 		MyDrawgridMap pathgridMap = new MyDrawgridMap();
 		frameHermes.getContentPane().add(pathgridMap);
 		pathgridMap.setBounds(0, 0, screenSize.width, screenSize.height);
