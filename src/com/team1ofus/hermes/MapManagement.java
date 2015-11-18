@@ -21,7 +21,7 @@ PathUI
 import java.util.List;
 
 
-public class MapManagement implements IAStarRequestCellListener, ICellLoadedListener {
+public class MapManagement implements IAStarInteractionListener, ICellLoadedListener {
 
 	PathCell[] cells = new PathCell[4];
 	private AStarPathCompleteEvent AStarDone = new AStarPathCompleteEvent(this);

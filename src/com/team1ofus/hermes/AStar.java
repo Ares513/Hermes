@@ -20,26 +20,12 @@ returns the ordered list of nodes that constitute a path from one given location
 
  */
 public class AStar{
-	
+	AStarInteractionEventObject events;
 	public AStar(){
+		events = new AStarInteractionEventObject();
 	}
 	
-	public class AStarRequestCellEvent extends EventObject {
-		private List<IAStarRequestCellListener> listeners = new ArrayList<IAStarRequestCellListener>(); //list of registered listeners
-		public AStarRequestCellEvent(Object source) {
-			super(source);
-		}
-		public synchronized void fire(String cellName) {
-			for (IAStarRequestCellListener l : listeners) {
-				l.onAStarRequestCellEvent(cellName);
-			}
-		}
-		public synchronized void registerListener(IAStarRequestCellListener aListener) {
-			listeners.add(aListener);
-		}
-	}
 	
-	AStarRequestCellEvent ASRCE = new AStarRequestCellEvent(this);
 	
 	//maps which tiles have been added
 		ArrayList<PathCell> accessedCells = new ArrayList<PathCell>(); 

@@ -3,7 +3,7 @@ package com.team1ofus.hermes;
 import javax.swing.*;
 
 
-public class UIManagement implements IHumanInteractionListener,AStarPathCompleteListener{
+public class UIManagement implements IHumanInteractionListener, IAStarInteractionListener{
 	HermesUI window;
 	public UIManagementInteractionEventObject events;
 	public UIManagement(){
