@@ -31,17 +31,17 @@ public class PathCell{
     //minimum required information
     double scaling;
     
-//    public PathCell(String name, int width, int height, double scaling, TILE_TYPE defaultTile) {
-//        this.cellName = name;
-//        tiles = new Tile[width][height];
-//    	for(int i=0; i<width; i++) {
-//    		for(int j=0; j<height; j++) {
-//    			tiles[i][j] = new Wall(name, new Point(i, j));
-//    		}
-//    	}
-//    	this.scaling = scaling;
-//           
-//    }
+    public PathCell(String name, int width, int height, double scaling, TILE_TYPE defaultTile) {
+        this.cellName = name;
+        tiles = new Tile[width][height];
+    	for(int i=0; i<width; i++) {
+    		for(int j=0; j<height; j++) {
+    			tiles[i][j] = new Wall(name, new Point(i, j));
+    		}
+    	}
+    	this.scaling = scaling;
+           
+    }
     public PathCell(String name, int width, int height, double scaling, com.team1ofus.apollo.DataTile[][] dataTiles) {
         this.cellName = name;
         tiles = new Tile[width][height];
