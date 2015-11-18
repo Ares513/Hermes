@@ -23,7 +23,7 @@ public class DataManagement implements RequestCellListener {
 		CellLoadedEvent(Object source) {
 			super(source);
 		}
-		public synchronized void fire(Cell cell) {
+		public synchronized void fire(PathCell cell) {
 			for (ICellLoadedListener l : listeners) {
 				l.onCellLoaded(cell);
 			}

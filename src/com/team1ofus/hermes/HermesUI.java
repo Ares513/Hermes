@@ -49,10 +49,10 @@ public class HermesUI extends JPanel{
 	private ImageIcon map2 = new ImageIcon(ClassLoader.getSystemResource("map.jpg")); //This is a reference to the "map.jpg" within the the SRC. Don't think this will be a long term solution, but it does load in an image.
 	private Point mousePosition;
 	private DrawMap gridMap;
+	public HermesHumanInteractiveEvent humanInteractive; 
 	
 	public HermesUI() {
-		initialize();
-
+		humanInteractive = new HermesHumanInteractiveEvent(); 
 	}
 
 	
@@ -60,7 +60,8 @@ public class HermesUI extends JPanel{
 	 * initialize the Hermes UI
 	*/
 	
-	private void initialize() {
+public void initialize() {		
+//	private void initialize() {
 		frameHermes = new JFrame();
 		frameHermes.setTitle("Hermes");
 		frameHermes.setBounds(0, 0, screenSize.width - 200, screenSize.height - 200);
@@ -101,7 +102,7 @@ public class HermesUI extends JPanel{
 		JPanel MousePanel = new JPanel();
 		JLabel mouseOut = new JLabel("#mouse#");
 		MousePanel.add(mouseOut);
-		
+			
 		//my stuff
 		MyDrawPanel pathPanel = new MyDrawPanel();
 		frameHermes.getContentPane().add(pathPanel);
@@ -116,9 +117,35 @@ public class HermesUI extends JPanel{
 		controlBoard.setBorder(new BevelBorder(BevelBorder.RAISED, null, null, null, null));
 		controlBoard.setBounds(frameHermes.getSize().width/2 -100, frameHermes.getSize().height - 100, 300, 100);
         frameHermes.getContentPane().add(controlBoard);
-        
-		frameHermes.setVisible(true);
+        frameHermes.setVisible(true);
+
+        /*
+MapPanel.addMouseMotionListener(new MouseMotionAdapter() {
+	@Override
+	public void mouseMoved(MouseEvent e) {
+		mousePosition = new Point(e.getX(), e.getY());
+		mouseOut.setText(mousePosition.toString()); 
 	}
+});
+*/
+        /*
+         * The following few lines were originally in HermesUI and then were taken out 
+         * I'm (Aaron) pretty sure that they are needed for the mouse click events. 
+         * So i put them back in
+         */
+		JPanel MapPanel = new JPanel();
+		MapPanel.setBounds(0, 0, screenSize.width, screenSize.height);
+		JLabel mapPlacer = new JLabel("",map2,JLabel.CENTER);
+		MapPanel.addMouseListener(new MouseAdapter() {
+		
+		@Override
+		public void mouseClicked(MouseEvent arg0) {
+			humanInteractive.doClick();
+			//System.out.println("clicked");
+			}
+		});
+		frameHermes.getContentPane().add(MapPanel); //frameHermes.getContentPane().add(MapPanel);
+}
 	
 	 void drawPath(CellPoint[] path){
 		 //Re-instantiate ArrayList of points to draw

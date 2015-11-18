@@ -20,6 +20,7 @@ Interface: Tile 1-to-many A cell is made up of a grid of tiles
 LocationInfo 1-to-many  A cell has many destinations and exits
  */
 
-public class Cell {
-	
+public class PathCell{
+
+
 }

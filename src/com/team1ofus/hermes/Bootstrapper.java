@@ -14,7 +14,7 @@ public class Bootstrapper {
 				try {
 					UIManagement UI;
 					UI = new UIManagement();
-					
+				//	UI.managementEvent.addManagementListener(null); // needs an actual listener 
 					DataManagement DMGR;
 					DMGR = new DataManagement();
 					

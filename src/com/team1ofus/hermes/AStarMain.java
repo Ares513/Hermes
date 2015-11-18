@@ -6,7 +6,7 @@ import java.awt.Point;
 public class AStarMain {
 	
 	//maps which tiles have been added
-	ArrayList<Cell> accessedCells = new ArrayList<Cell>(); 
+	ArrayList<PathCell> accessedCells = new ArrayList<PathCell>(); 
 	
 	// Nodes that need to be explored
 	ArrayList<Tile> frontier = new ArrayList<Tile>(); 
@@ -20,8 +20,8 @@ public class AStarMain {
 	 * end Cell and point.
 	 * Returns the fastest path between two points as an ordered list of Tiles
 	 */
-	public ArrayList<Tile> getPath(Cell startCell, Point startIndex, Cell endCell, Point endIndex){
-		Cell currentCell = startCell; //What cell do we start in
+	public ArrayList<Tile> getPath(PathCell startCell, Point startIndex, PathCell endCell, Point endIndex){
+		PathCell currentCell = startCell; //What cell do we start in
 		Tile currentTile = getTile(currentCell, startIndex); //The exact tile we start at
 		Tile endTile = getTile(endCell, endIndex); // the tile we want to get to
 		int costSoFar = 0; //the cost of the best known path so far (not complete until 
@@ -91,7 +91,7 @@ public class AStarMain {
 		return path;
 	}
 
-	private Tile getTile(Cell aCell, Point aIndex) {
+	private Tile getTile(PathCell aCell, Point aIndex) {
 		return null;
 		
 		//return startCell.2dArray(startIndex);
