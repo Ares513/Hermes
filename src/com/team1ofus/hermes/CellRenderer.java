@@ -66,11 +66,17 @@ public class CellRenderer {
 	public void incrementOffset(int dx, int dy, int windowWidth, int windowHeight) {
 		//some optimizations to be made here
 		offset.translate(dx, dy);
-		if (offset.x < 0){
+		if(offset.x < 0) {
 			offset.x = 0;
+		} else if(offset.x > drawnCell.tiles[0].length * width - windowWidth) {
+			offset.x = drawnCell.tiles[0].length * width - windowWidth;
 		}
-		if (offset.y < 0){
+		if(offset.y < 0) {
 			offset.y = 0;
+		} else if(offset.y > drawnCell.tiles[1].length * height - windowHeight) {
+			offset.y = drawnCell.tiles[1].length * height - windowHeight; 
+		
 		}
+		
 	}
 }

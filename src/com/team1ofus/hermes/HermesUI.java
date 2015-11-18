@@ -182,7 +182,7 @@ MapgridMap.addMouseMotionListener(new MouseMotionAdapter() {
 		
 		
 		gridMap = new DrawMap(currentCell);
-		gridMap.setBounds(0, 0, screenSize.width, screenSize.height);
+		gridMap.setBounds(0, 0, frameHermes.getWidth(), frameHermes.getHeight());
 		frameHermes.getContentPane().add(gridMap);
 
 	}
