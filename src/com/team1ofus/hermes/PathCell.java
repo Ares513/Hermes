@@ -35,8 +35,15 @@ public class PathCell{
         this.cellName = name;
         tiles = new Tile[width][height];
     	for(int i=0; i<width; i++) {
-    		for(int j=0; j<height; j++) {
-    			tiles[i][j] = new Wall(name, new Point(i, j));
+    		if(defaultTile.equals(TILE_TYPE.PEDESTRIAN_WALKWAY)){
+	    		for(int j=0; j<height; j++) {
+	    			tiles[i][j] = new Walkway(name, new Point(i, j));
+	    		}
+    		}
+    		else{
+    			for(int j=0; j<height; j++) {
+	    			tiles[i][j] = new Wall(name, new Point(i, j));
+	    		}
     		}
     	}
     	this.scaling = scaling;
@@ -67,7 +74,7 @@ public class PathCell{
      */
     public Tile getTile(Point tilePoint) {
         
-        return tiles[(int)tilePoint.getX()][(int)tilePoint.getY()];
+        return this.tiles[(int)tilePoint.getX()][(int)tilePoint.getY()];
     }
     
 	public ArrayList<Tile> getPossibleTraversals(Point tilePoint){

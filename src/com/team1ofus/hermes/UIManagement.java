@@ -59,7 +59,7 @@ public class UIManagement implements IHumanInteractionListener, ILoaderInteracti
 		// TODO Auto-generated method stub
 		window = new HermesUI();
 		window.humanInteractive.addListener(this);
-		window.initialize(allCells.get(0));
+		window.initialize(selection);
 
 	}
 
