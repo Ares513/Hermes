@@ -43,6 +43,7 @@ public class HermesUI extends JPanel{
 	
 	ArrayList<Point> pointsList = new ArrayList<Point>();
 	private JFrame frameHermes;
+	private MyDrawPanel pathPanel;
 	private JTextField StartField;
 	private JTextField DestinationField;
 	private Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
@@ -131,6 +132,7 @@ MapgridMap.addMouseMotionListener(new MouseMotionAdapter() {
 	//Allows us to paint the image within the JLabel	
 	}
 	
+	/*
 	class MyDrawgridMap extends JPanel{
 		//ArrayList<Point> pointsList = new ArrayList<Point>();
 			
@@ -145,12 +147,7 @@ MapgridMap.addMouseMotionListener(new MouseMotionAdapter() {
 		    	//Should drawLineSets be called in UI Management as a part of the chain of events?
 		    	//I dont think this will work because it needs the graphic?
 		    	Graphics2D g2d = (Graphics2D) g;
-		    	/*
-		    	pointsList.add(new Point(200,200));
-		     	pointsList.add(new Point(500,100));
-		     	pointsList.add(new Point(800,500));
-		     	pointsList.add(new Point(900,800));
-		     	*/
+		    	
 		     	g2d.setColor(Color.BLUE);
 		     	float[] dashingPattern1 = {8f, 8f};
 		     	Stroke stroke1 = new BasicStroke(6f, BasicStroke.CAP_BUTT, BasicStroke.JOIN_MITER, 1.0f, dashingPattern1, 2.0f);
@@ -170,7 +167,7 @@ MapgridMap.addMouseMotionListener(new MouseMotionAdapter() {
 
 		    }
 		}
-	
+	*/
 	private void buildControl(){
 		frameHermes = new JFrame();
 		frameHermes.setTitle("Hermes");
@@ -212,15 +209,67 @@ MapgridMap.addMouseMotionListener(new MouseMotionAdapter() {
 		JPanel MousegridMap = new JPanel();
 		JLabel mouseOut = new JLabel("#mouse#");
 		MousegridMap.add(mouseOut);
-			
+			/*
 		MyDrawgridMap pathgridMap = new MyDrawgridMap();
 		frameHermes.getContentPane().add(pathgridMap);
 		pathgridMap.setBounds(0, 0, screenSize.width, screenSize.height);
+		*/
+		MyDrawPanel pathPanel = new MyDrawPanel();
+		frameHermes.getContentPane().add(pathPanel);
+		pathPanel.setBounds(0, 0, screenSize.width, screenSize.height);
+		
 		
 		gridMap = new DrawMap();
 		gridMap.setBounds(0, 0, screenSize.width, screenSize.height);
 		frameHermes.getContentPane().add(gridMap);
 
+	}
+	
+	public MyDrawPanel getPathPanel(){
+		return pathPanel;
+	}
+	
+	class MyDrawPanel extends JPanel{
+		//ArrayList<Point> pointsList = new ArrayList<Point>();
+
+		public MyDrawPanel() {
+			//Will have to change pointsList to be whatever was passed in through the constructor
+			setOpaque(false);
+
+		}
+		void drawPath(CellPoint[] path){
+			pointsList = new ArrayList<Point>();
+			for(CellPoint c : path){
+				pointsList.add(c.getPoint());
+			}
+			System.out.println(pointsList);
+			validate();
+			repaint();
+			System.out.println("drawPath is called");
+		}
+
+		//This function draws lines between the points specified in the ArrayList points list, which has been generated from A* algorithm
+		void drawLineSets(Graphics g){ //ArrayList<Point> p ){
+			Graphics2D g2d = (Graphics2D) g;
+			g2d.setColor(Color.BLUE);
+			float[] dashingPattern1 = {8f, 8f};
+			Stroke stroke1 = new BasicStroke(6f, BasicStroke.CAP_BUTT, BasicStroke.JOIN_MITER, 1.0f, dashingPattern1, 2.0f);
+			g2d.setStroke(stroke1);
+			System.out.println(pointsList);
+
+			for(int i = 0; i < pointsList.size()-1; i++){
+				g2d.drawLine(pointsList.get(i).x, pointsList.get(i).y, pointsList.get(i+1).x,pointsList.get(i+1).y);
+			} 
+		}
+
+		//Need to make a function that does the repaint that can be called on by UIManagement
+		//
+
+		public void paint(Graphics g) {
+			super.paint(g);
+			drawLineSets(g); //pointsList);
+
+		}
 	}
 
 	private void doOffsetCalc(KeyEvent e) {
