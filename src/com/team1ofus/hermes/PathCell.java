@@ -37,6 +37,14 @@ public class PathCell{
     	this.scaling = scaling;
            
     }
+    
+    /*
+     * Not safe for out of bounds calls.
+     */
+    public void setTile(Point tilePoint, Tile newTile) {
+    	tiles[(int)tilePoint.getX()][(int)tilePoint.getY()] = newTile;
+    }
+    
     /*
      * Not safe for out of bounds calls.
      */
@@ -57,7 +65,7 @@ public class PathCell{
     			curPoint.setLocation(i,j);
     			curTile = getTile(curPoint);
     			
-    			if(curPoint == tilePoint){
+    			if(curPoint.equals(tilePoint)){
     				continue;
     			}
     			else if(curTile.getTileType() == 0){ // 0 means wall

@@ -23,9 +23,10 @@ import java.util.List;
 
 public class MapManagement implements IAStarRequestCellListener, ICellLoadedListener {
 
-	PathCell[] cells = new PathCell[4];
+	ArrayList<PathCell> cells = new ArrayList<PathCell>();
 	private AStarPathCompleteEvent AStarDone = new AStarPathCompleteEvent(this);
 	private RequestCellEvent RequestCell = new RequestCellEvent(this);
+	private AStar pathfinder = new AStar();
 	
 	public MapManagement() {
 		
@@ -81,6 +82,6 @@ public class MapManagement implements IAStarRequestCellListener, ICellLoadedList
 		RequestCell.fire(cellName);
 	}
 	public void onCellLoaded(PathCell cell) {
-		
+		pathfinder.addCell(cell);
 	}
 }
