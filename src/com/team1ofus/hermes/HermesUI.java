@@ -117,10 +117,10 @@ MapgridMap.addMouseMotionListener(new MouseMotionAdapter() {
 		});
 		frameHermes.getContentPane().add(MapgridMap); //frameHermes.getContentPane().add(MapgridMap);
         frameHermes.setVisible(true);
-
-}
+	}
 	
 	 void drawPath(CellPoint[] path){
+		 pathPanel.drawPath(path);
 		 //Re-instantiate ArrayList of points to draw
 		 //Iterate through direction set and add its points to an the ArrayList of points
 		 repaint();
@@ -215,7 +215,7 @@ MapgridMap.addMouseMotionListener(new MouseMotionAdapter() {
 		frameHermes.getContentPane().add(pathgridMap);
 		pathgridMap.setBounds(0, 0, screenSize.width, screenSize.height);
 		*/
-		MyDrawPanel pathPanel = new MyDrawPanel();
+		pathPanel = new MyDrawPanel();
 		frameHermes.getContentPane().add(pathPanel);
 		pathPanel.setBounds(0, 0, screenSize.width, screenSize.height);
 		
