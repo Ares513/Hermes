@@ -66,7 +66,8 @@ public class AStar{
 			while(!frontier.isEmpty()){ //so long as the frontier is not empty
 				currentTile = frontier.get(0); //the tile we want to explore is the tile with 
 											   //the lowest expected path cost
-											   //For now its BFS so order doesn't matter
+											   //For now its BFS so we just take the first 
+											   //element
 				
 				if(currentTile == endTile){ //if we are at the end: 
 					return buildPath(endTile); //return the path
@@ -105,17 +106,18 @@ public class AStar{
 		}
 
 		private ArrayList<CellPoint> buildPath(Tile endTile) {
-			//maps which tiles have been added
-			ArrayList<Tile> path = new ArrayList<Tile>();
 			ArrayList<CellPoint> pointPath = new ArrayList<CellPoint>();
+			pointPath.add(endTile.getCellPoint());
 			
 			Tile currentTile = endTile;
 			CellPoint currentPoint = null;
 			
 			while(currentTile.getParent() != null){
-				currentPoint = currentTile.getCellPoint();
-				pointPath.add(currentPoint);
-				currentTile = currentTile.getParent();
+				if(!pointPath.contains(currentPoint)){
+					currentPoint = currentTile.getCellPoint();
+					pointPath.add(currentPoint);
+					currentTile = currentTile.getParent();
+				}
 			}
 			return pointPath;
 		}
