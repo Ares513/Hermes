@@ -47,7 +47,7 @@ public class Loader extends JDialog {
 				okButton.addActionListener(new ActionListener() {
 					public void actionPerformed(ActionEvent e) {
 						setVisible(false);
-						//events.selectionMade(allCells.get(mapChooser.getSelectedIndex()), allCells);
+						events.selectionMade(allCells.get(mapChooser.getSelectedIndex()), allCells);
 						
 					}
 				});
