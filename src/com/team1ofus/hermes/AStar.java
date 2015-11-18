@@ -106,17 +106,18 @@ public class AStar{
 		}
 
 		private ArrayList<CellPoint> buildPath(Tile endTile) {
-			//maps which tiles have been added
-			ArrayList<Tile> path = new ArrayList<Tile>();
 			ArrayList<CellPoint> pointPath = new ArrayList<CellPoint>();
+			pointPath.add(endTile.getCellPoint());
 			
 			Tile currentTile = endTile;
 			CellPoint currentPoint = null;
 			
 			while(currentTile.getParent() != null){
-				currentPoint = currentTile.getCellPoint();
-				pointPath.add(currentPoint);
-				currentTile = currentTile.getParent();
+				if(!pointPath.contains(currentPoint)){
+					currentPoint = currentTile.getCellPoint();
+					pointPath.add(currentPoint);
+					currentTile = currentTile.getParent();
+				}
 			}
 			return pointPath;
 		}
