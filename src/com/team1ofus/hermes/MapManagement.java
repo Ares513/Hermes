@@ -1,4 +1,4 @@
- package com.team1ofus.hermes;
+package com.team1ofus.hermes;
 
 import java.util.ArrayList;
 import java.util.EventObject;
@@ -20,7 +20,7 @@ PathUI
  */
 import java.util.List;
 
-public class MapManagement implements IAStarRequestCellListener {
+public class MapManagement implements IAStarRequestCellListener, ICellLoadedListener {
 	Cell[] cells = new Cell[4];
 	private AStarPathCompleteEvent AStarDone = new AStarPathCompleteEvent(this);
 	private RequestCellEvent RequestCell = new RequestCellEvent(this);
@@ -65,6 +65,7 @@ public class MapManagement implements IAStarRequestCellListener {
 		}
 	}
 	
+	//event getters (used by classes that want to register to the listeners)
 	public AStarPathCompleteEvent getAStarPathCompletedEvent() {
 		return AStarDone;
 	}
@@ -72,7 +73,11 @@ public class MapManagement implements IAStarRequestCellListener {
 		return RequestCell;
 	}
 	
+	//event handlers
 	public void onAStarRequestCellEvent(String cellName) {
+		RequestCell.fire(cellName);
+	}
+	public void onCellLoaded(Cell cell) {
 		
 	}
 }
