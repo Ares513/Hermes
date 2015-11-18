@@ -1,4 +1,7 @@
 package com.team1ofus.hermes;
+
+import com.team1ofus.apollo.Cell;
+
 /*
  * converts cells from Apollo to cells for A*
  */
