@@ -26,6 +26,7 @@ public class MapManagement implements IAStarRequestCellListener, ICellLoadedList
 	PathCell[] cells = new PathCell[4];
 	private AStarPathCompleteEvent AStarDone = new AStarPathCompleteEvent(this);
 	private RequestCellEvent RequestCell = new RequestCellEvent(this);
+	private AStar pathfinder;
 	
 	public MapManagement() {
 		
@@ -81,6 +82,6 @@ public class MapManagement implements IAStarRequestCellListener, ICellLoadedList
 		RequestCell.fire(cellName);
 	}
 	public void onCellLoaded(PathCell cell) {
-		
+		pathfinder.addCell(cell);
 	}
 }
