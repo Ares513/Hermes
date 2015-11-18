@@ -9,21 +9,25 @@ public class Cell implements Serializable {
 	 * 
 	 */
 	private String id;
-	private static final long serialVersionUID = 3L;
-	public DataTile[][] tiles;
+	private static final long serialVersionUID = 4L;
+	private DataTile[][] tiles;
 	//minimum required information
 	double scaling  = 1;
+	private int fixedWidth;
+	private int fixedHeight;
 	public Cell(int width, int height, double scaling, TILE_TYPE defaultTile, String name) {
 		id = name;
 		//identifier
 		tiles = new DataTile[width][height];
-		fillTiles(TILE_TYPE.WALL);
-		
+		fillTiles(TILE_TYPE.WALL, width, height);
+		fixedWidth = width;
+		fixedHeight = height;
 	}
-	private void fillTiles(TILE_TYPE fillTile) {
-		for(int i=0; i<tiles[0].length; i++) {
-			for(int j=0; j<tiles[1].length; j++) {
+	private void fillTiles(TILE_TYPE fillTile, int width, int height) {
+		for(int i=0; i< width; i++) {
+			for(int j=0; j< height; j++) {
 				tiles[i][j] = new DataTile(fillTile);
+				
 			}
 		}
 	}
@@ -34,12 +38,36 @@ public class Cell implements Serializable {
 		id = inID;
 	}
 	public int getWidth() {
-		return tiles[0].length;
+		return fixedWidth;
 	}
 	public int getHeight() {
-		return tiles[1].length;
+		return fixedHeight;
 	}
-	public double getScale() { 
-		return scaling; 
+	public void setTile(int x, int y, TILE_TYPE tileToSet) {
+		int xActual = x;
+		int yActual = y;
+		int actualWidth = getWidth() - 1;
+		if(x > actualWidth) {
+			xActual = actualWidth;
+		}
+		int actualHeight = getHeight() - 1;
+		if(y > actualHeight) {
+			yActual = actualHeight;
+		}
+		tiles[xActual][yActual] = new DataTile(tileToSet);
+	}
+	public DataTile getTile(int x, int y) {
+			
+			int xActual = x;
+			int yActual = y;
+			int actualWidth = getWidth() - 1;
+			if(x > actualWidth) {
+				xActual = actualWidth;
+			}
+			int actualHeight = getHeight() - 1;
+			if(y > actualHeight) {
+				yActual = actualHeight;
+			}
+			return tiles[xActual][yActual];
 	}
 }

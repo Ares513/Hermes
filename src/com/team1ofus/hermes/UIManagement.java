@@ -1,10 +1,14 @@
 package com.team1ofus.hermes;
 
+import java.awt.Point;
+
 import javax.swing.*;
 
 
 public class UIManagement implements IHumanInteractionListener, IAStarInteractionListener{
 	HermesUI window;
+	Point first;
+	Point second;
 	public UIManagementInteractionEventObject events;
 	public UIManagement(){
 		begin();    
@@ -27,7 +31,16 @@ public class UIManagement implements IHumanInteractionListener, IAStarInteractio
 	@Override
 	public void onTileClicked(int x, int y) {
 		// TODO Auto-generated method stub
-		
+		if(first == null) {
+			first = new Point(x, y);
+			
+		} else if(second == null) {
+			second = new Point(x,y);
+		} else if (first != null && second != null) {
+			events.doPathReady(first, second);
+			first = null;
+			second = null;
+		}
 	}
 
 	@Override
