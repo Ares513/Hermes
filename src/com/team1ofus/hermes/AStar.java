@@ -52,8 +52,11 @@ public class AStar{
 		 * end Cell and point.
 		 * Returns the fastest path between two points as an ordered list of Tiles
 		 */
-		public ArrayList<Tile> getPath(PathCell startCell, Point startIndex, PathCell endCell, Point endIndex){
-			PathCell currentCell = startCell; //What cell do we start in
+		public ArrayList<Tile> getPath(String startCellName, Point startIndex, String endCellName, Point endIndex){
+			ASRCE.fire(startCellName);
+			PathCell currentCell = accessedCells.get(0); //What cell do we start in
+			ASRCE.fire(endCellName);
+			PathCell endCell = selectCell(endCellName);
 			Tile currentTile = getTile(currentCell, startIndex); //The exact tile we start at
 			Tile endTile = getTile(endCell, endIndex); // the tile we want to get to
 			int costSoFar = 0; //the cost of the best known path so far (not complete until 
@@ -131,5 +134,14 @@ public class AStar{
 			if(!accessedCells.contains(aCell)){
 				accessedCells.add(aCell);
 			}
+		}
+		
+		public PathCell selectCell(String aCellName){
+			for(PathCell aCell:accessedCells){
+				if(aCell.getName() == aCellName){
+					return aCell;
+				}
+			}
+			return null;
 		}
 }
