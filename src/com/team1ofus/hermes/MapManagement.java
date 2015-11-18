@@ -20,7 +20,7 @@ PathUI
  */
 import java.util.List;
 
-public class MapManagement {
+public class MapManagement implements IAStarRequestCellListener {
 	Cell[] cells = new Cell[4];
 	private AStarPathCompleteEvent AStarDone = new AStarPathCompleteEvent(this);
 	private RequestCellEvent RequestCell = new RequestCellEvent(this);
@@ -70,5 +70,9 @@ public class MapManagement {
 	}
 	public RequestCellEvent getRequestCellEvent() {
 		return RequestCell;
+	}
+	
+	public void onAStarRequestCellEvent(String cellName) {
+		
 	}
 }
