@@ -14,7 +14,15 @@ public class AStarInteractionEventObject {
 			l.onAStarRequestCellEvent(cellName);
 		}
 	}
+	public void completePath(ArrayList<CellPoint> aStarPath){
+		for (IAStarInteractionListener l: listeners){
+				l.onAStarPathCompleteEvent(aStarPath);
+		}
+	}
 	public void registerListener(IAStarInteractionListener aListener) {
 		listeners.add(aListener);
 	}
+	
+		
+
 }

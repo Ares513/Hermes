@@ -1,5 +1,6 @@
 package com.team1ofus.hermes;
 import java.util.*;
+//import java.util.ArrayList;
 public class MapManagementInteractionEventObject { 
 	public MapManagementInteractionEventObject() {
 	}
@@ -9,10 +10,10 @@ public class MapManagementInteractionEventObject {
 	public void addListener(IMapManagementInteractionListener toAdd){
 		listeners.add(toAdd);
 		}
-	public void pathComplete(CellPoint[] directions) {
+	public void doPathComplete(ArrayList<CellPoint> directions) {
 		
 		for(IMapManagementInteractionListener UL : listeners){
-			UL.onAStarPathCompleteEvent(directions);
+			UL.onPathComplete(directions);
 			
 		}
 	

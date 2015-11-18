@@ -118,7 +118,7 @@ MapgridMap.addMouseMotionListener(new MouseMotionAdapter() {
         frameHermes.setVisible(true);
 	}
 	//Would just skip this and go straight to MyPanel's drawPath, but I'm afraid that it will break and I don't have time to fix it
-	 void drawPath(CellPoint[] path){
+	 void drawPath(ArrayList<CellPoint> path){
 		 pathPanel.drawPath(path);
 		 repaint();
 	    }
@@ -197,14 +197,26 @@ MapgridMap.addMouseMotionListener(new MouseMotionAdapter() {
 			setOpaque(false);
 
 		}
-		void drawPath(CellPoint[] path){
+		
+		void drawPath(ArrayList<CellPoint> path){
+			int pathSize = path.size();
 			pointsList = new ArrayList<Point>();
-			for(CellPoint c : path){
-				pointsList.add(c.getPoint());
+			for(int i = 0; i < pathSize; i++){
+				CellPoint P = path.get(i);
+				pointsList.add(P.getPoint());
 			}
 			validate();
 			repaint();
 		}
+		
+//		void drawPath(CellPoint[] path){
+//			pointsList = new ArrayList<Point>();
+//			for(CellPoint c : path){
+//				pointsList.add(c.getPoint());
+//			}
+//			validate();
+//			repaint();
+//		}
 
 		//This function draws lines between the points specified in the ArrayList points list, which has been generated from A* algorithm
 		void drawLineSets(Graphics g){ 

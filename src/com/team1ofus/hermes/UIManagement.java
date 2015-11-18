@@ -7,7 +7,7 @@ import javax.swing.*;
 
 
 
-public class UIManagement implements IHumanInteractionListener, IAStarInteractionListener, ILoaderInteractionListener{
+public class UIManagement implements IHumanInteractionListener, ILoaderInteractionListener{
 	HermesUI window;
 	Loader loadUI;
 	Point first;
@@ -29,7 +29,7 @@ public class UIManagement implements IHumanInteractionListener, IAStarInteractio
 		
 	}
 	
-	public void onAStarPathCompleteEvent(CellPoint[] directions) {
+	public void OnpathComplete(ArrayList<CellPoint> directions) {
 		window.drawPath(directions);
 	}
 
@@ -38,22 +38,22 @@ public class UIManagement implements IHumanInteractionListener, IAStarInteractio
 		// TODO Auto-generated method stub
 		if(first == null) {
 			first = new Point(x, y);
-			
 		} else if(second == null) {
 			second = new Point(x,y);
-		} else if (first != null && second != null) {
+		} if (first != null && second != null) {
+			System.out.println("calling first event");
 			events.doPathReady(0, first, second);
 			first = null;
 			second = null;
 		}
 	}
-
+/*
 	@Override
 	public void onAStarRequestCellEvent(String cellName) {
 		// TODO Auto-generated method stub
 		
 	}
-
+*/
 	@Override
 	public void selectionMade(PathCell selection, ArrayList<PathCell> allCells) {
 		// TODO Auto-generated method stub
