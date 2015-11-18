@@ -47,7 +47,6 @@ public class HermesUI extends JPanel{
 	private JTextField DestinationField;
 	private Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
 	private BufferedImage map;
-	private ImageIcon map2 = new ImageIcon(ClassLoader.getSystemResource("map.jpg")); //This is a reference to the "map.jpg" within the the SRC. Don't think this will be a long term solution, but it does load in an image.
 	private Point mousePosition;
 	private DrawMap gridMap;
 	int scrollSpeed = 5;
@@ -65,56 +64,7 @@ public class HermesUI extends JPanel{
 	*/
 	
 	public void initialize() {		
-		
-		frameHermes = new JFrame();
-		frameHermes.setTitle("Hermes");
-		frameHermes.setBounds(0, 0, screenSize.width - 200, screenSize.height - 200);
-		//Set screen size to be the size of the display - 200
-		//kind of arbitrary
-		frameHermes.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		frameHermes.getContentPane().setLayout(null);
-		frameHermes.setMinimumSize(new Dimension(800,600));
-		frameHermes.setLocation(screenSize.width/2-frameHermes.getSize().width/2, screenSize.height/2-frameHermes.getSize().height/2);
-		//Sets the frame to start in the center of the screen
-		
-		JPanel DestinationgridMap = new JPanel();
-		DestinationgridMap.setBorder(new BevelBorder(BevelBorder.RAISED, null, null, null, null));
-		DestinationgridMap.setBackground(Color.LIGHT_GRAY);
-		DestinationgridMap.setBounds(6, 6, screenSize.width - (screenSize.width - 134), screenSize.height - (screenSize.height - 100));
-		frameHermes.getContentPane().add(DestinationgridMap);
-		//Destination gridMap placed in the upper right corner of the frameHermes
-		
-		StartField = new JTextField();
-		StartField.setText("Startpoint");
-		DestinationgridMap.add(StartField);
-		StartField.setColumns(10);
-		
-		DestinationField = new JTextField();
-		DestinationField.setText("Destination");
-		DestinationgridMap.add(DestinationField);
-		DestinationField.setColumns(10);
-		//Builds the two input fields and displays them in the DestinationgridMap
-		
-		
-		JButton addDestination = new JButton("Add Destination");
-		addDestination.setFont(new Font("Lucida Grande", Font.PLAIN, 10));
-		addDestination.setBorder(BorderFactory.createEmptyBorder());   
-		DestinationgridMap.add(addDestination);
-		//MapgridMap is where the map is displayed
-		
-		
-		JPanel MousegridMap = new JPanel();
-		JLabel mouseOut = new JLabel("#mouse#");
-		MousegridMap.add(mouseOut);
-			
-		//my stuff
-		MyDrawgridMap pathgridMap = new MyDrawgridMap();
-		frameHermes.getContentPane().add(pathgridMap);
-		pathgridMap.setBounds(0, 0, screenSize.width, screenSize.height);
-		
-		gridMap = new DrawMap();
-		gridMap.setBounds(0, 0, screenSize.width, screenSize.height);
-		frameHermes.getContentPane().add(gridMap);
+		buildControl();
 		
 		gridMap.addKeyListener(new KeyAdapter() {
 			@Override
@@ -154,7 +104,6 @@ MapgridMap.addMouseMotionListener(new MouseMotionAdapter() {
          */
 		JPanel MapgridMap = new JPanel();
 		MapgridMap.setBounds(0, 0, screenSize.width, screenSize.height);
-		JLabel mapPlacer = new JLabel("",map2,JLabel.CENTER);
 		MapgridMap.addMouseListener(new MouseAdapter() {
 		
 		@Override
@@ -221,6 +170,59 @@ MapgridMap.addMouseMotionListener(new MouseMotionAdapter() {
 		    }
 		}
 	
+	private void buildControl(){
+		frameHermes = new JFrame();
+		frameHermes.setTitle("Hermes");
+		frameHermes.setBounds(0, 0, screenSize.width - 200, screenSize.height - 200);
+		//Set screen size to be the size of the display - 200
+		//kind of arbitrary
+		frameHermes.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		frameHermes.getContentPane().setLayout(null);
+		frameHermes.setMinimumSize(new Dimension(800,600));
+		frameHermes.setLocation(screenSize.width/2-frameHermes.getSize().width/2, screenSize.height/2-frameHermes.getSize().height/2);
+		//Sets the frame to start in the center of the screen
+		
+		JPanel DestinationgridMap = new JPanel();
+		DestinationgridMap.setBorder(new BevelBorder(BevelBorder.RAISED, null, null, null, null));
+		DestinationgridMap.setBackground(Color.LIGHT_GRAY);
+		DestinationgridMap.setBounds(6, 6, screenSize.width - (screenSize.width - 134), screenSize.height - (screenSize.height - 100));
+		frameHermes.getContentPane().add(DestinationgridMap);
+		//Destination gridMap placed in the upper right corner of the frameHermes
+		
+		StartField = new JTextField();
+		StartField.setText("Startpoint");
+		DestinationgridMap.add(StartField);
+		StartField.setColumns(10);
+		
+		DestinationField = new JTextField();
+		DestinationField.setText("Destination");
+		DestinationgridMap.add(DestinationField);
+		DestinationField.setColumns(10);
+		//Builds the two input fields and displays them in the DestinationgridMap
+		
+		
+		JButton addDestination = new JButton("Add Destination");
+		addDestination.setFont(new Font("Lucida Grande", Font.PLAIN, 10));
+		addDestination.setBorder(BorderFactory.createEmptyBorder());   
+		DestinationgridMap.add(addDestination);
+		//MapgridMap is where the map is displayed
+		
+		
+		JPanel MousegridMap = new JPanel();
+		JLabel mouseOut = new JLabel("#mouse#");
+		MousegridMap.add(mouseOut);
+			
+		//my stuff
+		MyDrawgridMap pathgridMap = new MyDrawgridMap();
+		frameHermes.getContentPane().add(pathgridMap);
+		pathgridMap.setBounds(0, 0, screenSize.width, screenSize.height);
+		
+		gridMap = new DrawMap();
+		gridMap.setBounds(0, 0, screenSize.width, screenSize.height);
+		frameHermes.getContentPane().add(gridMap);
+
+	}
+
 	private void doOffsetCalc(KeyEvent e) {
 		switch(e.getKeyCode()) {
 		//some optimizations to be made here
@@ -240,6 +242,6 @@ MapgridMap.addMouseMotionListener(new MouseMotionAdapter() {
 			break;
 		}
 		
-		gridMap.paint(gridMap.getGraphics());
+		gridMap.repaint(0, 0, gridMap.getWidth() + 100, gridMap.getHeight() + 100);
 	}
 }
