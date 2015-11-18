@@ -21,7 +21,7 @@ public class Bootstrapper {
 					MapManagement MapManager;
 					MapManager = new MapManagement();
 					MapManager.getAStarPathCompletedEvent().registerListener(UI);
-					MapManager.getRequestCellEvent().registerListener(DMGR);
+					
 				} catch (Exception e) {
 					e.printStackTrace();
 				}

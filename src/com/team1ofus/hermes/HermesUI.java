@@ -52,10 +52,10 @@ public class HermesUI extends JPanel{
 	int scrollSpeed = 5;
 	private JLabel lblOffset;
 
-	public HermesHumanInteractiveEvent humanInteractive; 
+	public HumanInteractionEventObject humanInteractive; 
 	
 	public HermesUI() {
-		humanInteractive = new HermesHumanInteractiveEvent(); 
+		humanInteractive = new HumanInteractionEventObject(); 
 	}
 
 	
@@ -109,7 +109,7 @@ MapgridMap.addMouseMotionListener(new MouseMotionAdapter() {
 		@Override
 		public void mouseClicked(MouseEvent e) {
 			Point picked = gridMap.render.pickTile(e.getX(), e.getY());
-			humanInteractive.doClick();
+			humanInteractive.doClick(e.getX(), e.getY());
 			//System.out.println("clicked");
 			}
 		});

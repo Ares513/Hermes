@@ -3,24 +3,17 @@ package com.team1ofus.hermes;
 import javax.swing.*;
 
 
-public class UIManagement implements HermesUIInterface,AStarPathCompleteListener{
+public class UIManagement implements IHumanInteractionListener,AStarPathCompleteListener{
 	HermesUI window;
-	HermesUIManagementEvent managementEvent; 
+	public UIManagementInteractionEventObject events;
 	public UIManagement(){
-		initialize();    
-		managementEvent = new HermesUIManagementEvent(); 
+		begin();    
+		events = new UIManagementInteractionEventObject(); 
 	}
 	
 	public JFrame frame; 
 
-	@Override
-	public void thereWasAClick(){
-		System.out.println("Holy Shit There Was A Click");
-		managementEvent.doManagementEvent();
-	}
-
-	
-	void initialize() {
+	void begin() {
 		window = new HermesUI();
 		window.humanInteractive.addListener(this);
 		window.initialize();
@@ -29,5 +22,11 @@ public class UIManagement implements HermesUIInterface,AStarPathCompleteListener
 	
 	public void onAStarPathCompleteEvent(CellPoint[] directions) {
 		window.drawPath(directions);
+	}
+
+	@Override
+	public void onTileClicked(int x, int y) {
+		// TODO Auto-generated method stub
+		
 	}
 }
