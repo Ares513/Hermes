@@ -58,13 +58,18 @@ public class CellRenderer {
 		}	
 	}
 	
+	public Point pickTile(int mouseX, int mouseY) {
+		int x = (int) (Math.floor((mouseX + offset.x)/(width/2)));
+		int y = (int) (Math.floor((mouseY + offset.y)/(height/2)));
+		return new Point(x,y);
+	}
+	
 	public void incrementOffset(int dx, int dy, int windowWidth, int windowHeight) {
 		//some optimizations to be made here
 		offset.translate(dx, dy);
 		if (offset.x < 0){
 			offset.x = 0;
 		}
-		
 		if (offset.y < 0){
 			offset.y = 0;
 		}

@@ -107,7 +107,8 @@ MapgridMap.addMouseMotionListener(new MouseMotionAdapter() {
 		MapgridMap.addMouseListener(new MouseAdapter() {
 		
 		@Override
-		public void mouseClicked(MouseEvent arg0) {
+		public void mouseClicked(MouseEvent e) {
+			Point picked = gridMap.render.pickTile(e.getX(), e.getY());
 			humanInteractive.doClick();
 			//System.out.println("clicked");
 			}
