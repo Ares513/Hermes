@@ -45,8 +45,8 @@ public class AStar{
 		 */
 		public ArrayList<CellPoint> getPath(int startCellIndex, Point startIndex, int endCellIndex, Point endIndex){
 			
-			PathCell currentCell = accessedCells.get(startCellIndex); //What cell do we start in
-	
+			PathCell startCell = accessedCells.get(startCellIndex); //What cell do we start in
+			PathCell currentCell = startCell;
 			PathCell endCell = accessedCells.get(endCellIndex);
 			Tile currentTile = getTile(currentCell, startIndex); //The exact tile we start at
 			Tile endTile = getTile(endCell, endIndex); // the tile we want to get to
@@ -77,34 +77,35 @@ public class AStar{
 					explored.add(currentTile); // add to explored
 				}
 				System.out.println(currentTile.getPoint());
-				System.out.println(currentTile.getTileType());
-				if(!currentTile.getNeighbors().isEmpty()){
-					for(Tile aNeighbor: currentTile.getNeighbors()){
-						System.out.println(aNeighbor.getPoint());
-					}
-				}
-				else{
-					System.out.println("failed to get neighbors");
-
-				}
+//				System.out.println(currentTile.getTileType());
+//				if(!currentTile.getNeighbors(currentCell).isEmpty()){
+//					for(Tile aNeighbor: currentTile.getNeighbors(currentCell)){
+//						System.out.println(aNeighbor.getPoint());
+//					}
+//				}
+//				else{
+//					System.out.println("failed to get neighbors");
+//
+//				}
 				frontier.remove(currentTile); // remove from frontier
 				
 				 
-				for(Tile aNeighbor: currentTile.getNeighbors()){
+				for(Tile aNeighbor: currentTile.getNeighbors(currentCell)){
 					if(explored.contains(aNeighbor)){
 						continue;
 					}
-					tentativeCSF = costSoFar + aNeighbor.getTraverseCost();
+					tentativeCSF = currentTile.getCSF() + aNeighbor.getTraverseCost();
 					if(!frontier.contains(aNeighbor)){
 						frontier.add(aNeighbor);
 					}
 					else if(tentativeCSF >= aNeighbor.getCSF()){
 						continue;
 					}
-				
-				aNeighbor.setParent(currentTile);
-				aNeighbor.setCSF(tentativeCSF);
-				aNeighbor.setETC(tentativeCSF+ getHeuristic(aNeighbor));
+					else{
+						aNeighbor.setParent(currentTile);
+						aNeighbor.setCSF(tentativeCSF);
+						aNeighbor.setETC(tentativeCSF+ getHeuristic(aNeighbor));
+					}
 				}
 			}
 			System.out.println("No Path Found");

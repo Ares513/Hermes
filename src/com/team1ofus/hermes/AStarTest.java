@@ -38,7 +38,8 @@ public class AStarTest {
 		ArrayList<PathCell> testCellList = new ArrayList<PathCell>();
 		testCellList.add(testCell);
 		AStar test = new AStar(testCellList);
-		ArrayList<CellPoint> AStarOut = test.getPath(0, new Point(4,4), 0, new Point(4,5));
+		System.out.println("Path:");
+		ArrayList<CellPoint> AStarOut = test.getPath(0, new Point(4,4), 0, new Point(2,3));
 		for(CellPoint each:AStarOut){
 			System.out.println(each.getPoint());
 		}

@@ -15,7 +15,7 @@ public abstract class Tile implements TileInterface{
 	
 	public Tile parent = null;
 	
-	public int costSoFar = 10000000;
+	public int costSoFar = 0;
 	
 	public int estimatedTotalCost = 0;
 //-------------------------------------------------
