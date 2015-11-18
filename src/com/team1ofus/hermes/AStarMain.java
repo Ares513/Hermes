@@ -94,8 +94,8 @@ public class AStarMain {
 	private Tile getTile(PathCell aCell, Point aIndex) {
 		return aCell.getTile(aIndex);
 	}
-
-
+	
+	
 
 
 }

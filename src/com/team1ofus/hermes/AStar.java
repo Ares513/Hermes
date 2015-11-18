@@ -35,6 +35,8 @@ public class AStar{
 		}
 	}
 	
+	AStarRequestCellEvent ASRCE = new AStarRequestCellEvent(this);
+	
 	//maps which tiles have been added
 		ArrayList<PathCell> accessedCells = new ArrayList<PathCell>(); 
 		
@@ -122,8 +124,12 @@ public class AStar{
 		}
 
 		private Tile getTile(PathCell aCell, Point aIndex) {
-			return null;
-			
-			//return startCell.2dArray(startIndex);
+			return aCell.getTile(aIndex);
+		}
+		
+		public void addCell(PathCell aCell){
+			if(!accessedCells.contains(aCell)){
+				accessedCells.add(aCell);
+			}
 		}
 }
