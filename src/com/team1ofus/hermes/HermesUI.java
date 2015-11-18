@@ -33,7 +33,7 @@ public class HermesUI extends JPanel{
 	
 	public HermesUI() {
 		humanInteractive = new HermesHumanInteractiveEvent(); 
-		initialize();
+		
 
 	}
 
@@ -41,7 +41,7 @@ public class HermesUI extends JPanel{
 	 * initialize the Heremes UI
 	*/
 	
-	private void initialize() {
+ public void initialize() {
 		
 		frameHermes = new JFrame();
 		frameHermes.setTitle("Hermes");

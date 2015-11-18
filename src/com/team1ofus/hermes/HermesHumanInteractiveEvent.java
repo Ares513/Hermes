@@ -12,8 +12,10 @@ public class HermesHumanInteractiveEvent {
 	public void doClick(){
 		System.out.println("clicked");
 		
-		for(HermesUIInterface UL : listeners)
+		for(HermesUIInterface UL : listeners){
 			UL.thereWasAClick();
+			System.out.println("listeners called");
+		}
 	
 	}
 }

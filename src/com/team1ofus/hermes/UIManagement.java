@@ -6,7 +6,7 @@ import javax.swing.*;
 public class UIManagement implements HermesUIInterface{
 	HermesUI window;
 	public UIManagement(){
-		initialize();
+		initialize();    
 	}
 	
 	public JFrame frame; 
@@ -42,6 +42,8 @@ public class UIManagement implements HermesUIInterface{
 	
 	void initialize(){
 		window = new HermesUI();
+		window.humanInteractive.addListener(this);
+		window.initialize();
 	}
 
 }
