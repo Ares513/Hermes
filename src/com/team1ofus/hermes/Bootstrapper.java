@@ -12,9 +12,13 @@ public class Bootstrapper {
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
 				try {
+					// HermesHumanInteractiveEvent init = new HermesHumanInteractiveEvent(); 
 					UIManagement UI;
 					UI = new UIManagement();
-				
+					
+					init.addListener(UI);
+					init.doClick();
+					
 				} catch (Exception e) {
 					e.printStackTrace();
 				}

@@ -29,8 +29,10 @@ public class HermesUI extends JPanel{
 	private BufferedImage map;
 	private ImageIcon map2 = new ImageIcon(ClassLoader.getSystemResource("map.jpg")); //This is a reference to the "map.jpg" within the the SRC. Don't think this will be a long term solution, but it does load in an image.
 	private Point mousePosition;
+	public HermesHumanInteractiveEvent humanInteractive; 
 	
 	public HermesUI() {
+		humanInteractive = new HermesHumanInteractiveEvent(); 
 		initialize();
 
 	}
@@ -105,7 +107,8 @@ public class HermesUI extends JPanel{
 		MapPanel.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent arg0) {
-				
+				humanInteractive.doClick();
+				//System.out.println("clicked");
 			}
 		});
 		

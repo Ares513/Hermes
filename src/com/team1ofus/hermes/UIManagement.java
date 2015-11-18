@@ -3,7 +3,7 @@ package com.team1ofus.hermes;
 import javax.swing.*;
 
 
-public class UIManagement {
+public class UIManagement implements HermesUIInterface{
 	HermesUI window;
 	public UIManagement(){
 		initialize();
@@ -35,8 +35,10 @@ public class UIManagement {
 		}
 	}
 	
-	
-	
+	@Override
+	public void thereWasAClick(){
+		System.out.println("Holy Shit There Was A Click");
+	}
 	
 	void initialize(){
 		window = new HermesUI();
