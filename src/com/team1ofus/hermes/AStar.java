@@ -21,8 +21,9 @@ returns the ordered list of nodes that constitute a path from one given location
  */
 public class AStar{
 	AStarInteractionEventObject events;
-	public AStar(){
+	public AStar(ArrayList<PathCell> cells) {
 		events = new AStarInteractionEventObject();
+		accessedCells = cells;
 	}
 	
 	
@@ -42,11 +43,11 @@ public class AStar{
 		 * end Cell and point.
 		 * Returns the fastest path between two points as an ordered list of Tiles
 		 */
-		public ArrayList<CellPoint> getPath(String startCellName, Point startIndex, String endCellName, Point endIndex){
-			events.onRequestCell(startCellName);
-			PathCell currentCell = accessedCells.get(0); //What cell do we start in
-			events.onRequestCell(endCellName);
-			PathCell endCell = selectCell(endCellName);
+		public ArrayList<CellPoint> getPath(int startCellIndex, Point startIndex, int endCellIndex, Point endIndex){
+			
+			PathCell currentCell = accessedCells.get(startCellIndex); //What cell do we start in
+	
+			PathCell endCell = accessedCells.get(endCellIndex);
 			Tile currentTile = getTile(currentCell, startIndex); //The exact tile we start at
 			Tile endTile = getTile(endCell, endIndex); // the tile we want to get to
 			int costSoFar = 0; //the cost of the best known path so far (not complete until 

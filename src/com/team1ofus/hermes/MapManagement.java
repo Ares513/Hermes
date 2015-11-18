@@ -7,7 +7,7 @@ public class MapManagement implements IAStarInteractionListener {
 	AStar pathfindingSystem;
 	ArrayList<PathCell> cells;
 	public MapManagement(ArrayList<PathCell> dummyList) {
-		pathfindingSystem = new AStar();
+		pathfindingSystem = new AStar(dummyList);
 		cells = dummyList;
 	}
 	@Override
