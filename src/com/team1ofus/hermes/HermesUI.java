@@ -54,7 +54,8 @@ public class HermesUI extends JPanel{
 	private JLabel lblOffset;
 	private PathCell currentCell;
 	public HumanInteractionEventObject humanInteractive; 
-	
+	private Point first; //for showing in the UI which points were clicked.
+	private Point second; 
 	public HermesUI() {
 		humanInteractive = new HumanInteractionEventObject(); 
 	}
@@ -111,8 +112,27 @@ MapgridMap.addMouseMotionListener(new MouseMotionAdapter() {
 		@Override
 		public void mouseClicked(MouseEvent e) {
 			Point picked = gridMap.render.pickTile(e.getX(), e.getY());
-			humanInteractive.doClick(e.getX(), e.getY());
+			if(gridMap.render.getTile(picked.x, picked.y).tileType == TILE_TYPE.PEDESTRIAN_WALKWAY) {
+				//valid.
+				if(first == null) {
+					first = new Point(picked.x, picked.y);
+					gridMap.render.setFirst(first);
+					gridMap.repaint(0, 0, gridMap.getWidth() + 100, gridMap.getHeight() + 100);
+				} else if(second == null) {
+					second = new Point(picked.x,picked.y);
+					gridMap.render.setSecond(first);
+				} else if (first != null && second != null) {
+					first = null;
+					second = null;
+					gridMap.render.setFirst(null);
+					gridMap.render.setSecond(null);
+					gridMap.repaint(0, 0, gridMap.getWidth() + 100, gridMap.getHeight() + 100);
+				}
+				
+				humanInteractive.doClick(picked.x, picked.y);
+				}
 			}
+
 		});
 		frameHermes.getContentPane().add(MapgridMap); 
         frameHermes.setVisible(true);
@@ -126,7 +146,7 @@ MapgridMap.addMouseMotionListener(new MouseMotionAdapter() {
 	@Override
 	public void paintComponent(Graphics g){
 		super.paintComponent(g);
-		//g.drawImage(map, p1.x, p1.y, null);
+		gridMap.paintComponent(g);
 	//Allows us to paint the image within the JLabel	
 	}
 	

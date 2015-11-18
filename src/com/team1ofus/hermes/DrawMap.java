@@ -9,7 +9,7 @@ import com.team1ofus.hermes.CellRenderer;
 
 
 public class DrawMap extends JPanel{
-	CellRenderer render;
+	public CellRenderer render;
 	public DrawMap(PathCell inCell) {
 		render = new CellRenderer(inCell);
 	}
