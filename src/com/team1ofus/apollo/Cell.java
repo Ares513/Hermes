@@ -74,4 +74,7 @@ public class Cell implements Serializable {
 		// TODO Auto-generated method stub
 		return scaling;
 	}
+	public DataTile[][] getTiles() {
+		return tiles;
+	}
 }

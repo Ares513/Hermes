@@ -20,7 +20,8 @@ public class Bootstrapper {
 					ArrayList<PathCell> pathCells = new ArrayList<PathCell>();
 					for(int i=0; i< data.getCells().size(); i++) {
 						com.team1ofus.apollo.Cell current = data.getCells().get(i);
-						PathCell converted = new PathCell(current.getID(),  current.getWidth(), current.getHeight(), current.getScale(), TILE_TYPE.WALL);
+						PathCell converted = new PathCell(current.getID(),  current.getWidth(), current.getHeight(), current.getScale(), current.getTiles());
+						
 						pathCells.add(converted);
 			
 					}
