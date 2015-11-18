@@ -20,6 +20,10 @@ returns the ordered list of nodes that constitute a path from one given location
 
  */
 public class AStar{
+	
+	public AStar(){
+	}
+	
 	public class AStarRequestCellEvent extends EventObject {
 		private List<IAStarRequestCellListener> listeners = new ArrayList<IAStarRequestCellListener>(); //list of registered listeners
 		public AStarRequestCellEvent(Object source) {
