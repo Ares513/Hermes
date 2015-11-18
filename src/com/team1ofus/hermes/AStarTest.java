@@ -30,7 +30,19 @@ public class AStarTest {
 		AStar test = new AStar(testCellList);
 		ArrayList<CellPoint> AStarOut = test.getPath(0, new Point(2,2), 0, new Point(2,3));
 		assertEquals(AStarOut,null);
-		
+	}
+	
+	@Test
+	public void test3() { // should return path not found, all walls
+		PathCell testCell = new PathCell("bag'o'schwifty",10,10,16, TILE_TYPE.PEDESTRIAN_WALKWAY);
+		ArrayList<PathCell> testCellList = new ArrayList<PathCell>();
+		testCellList.add(testCell);
+		AStar test = new AStar(testCellList);
+		ArrayList<CellPoint> AStarOut = test.getPath(0, new Point(4,4), 0, new Point(4,5));
+		for(CellPoint each:AStarOut){
+			System.out.println(each.getPoint());
+		}
+		assertEquals(0,0);
 	}
 
 }

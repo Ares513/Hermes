@@ -4,9 +4,7 @@ import java.util.ArrayList;
 
 public interface TileInterface {
 	
-	public int getTraverseCost();
-	
-	public ArrayList<Tile> getNeighbors(); 
+	public int getTraverseCost(); 
 	
 	public int getCSF();
 	

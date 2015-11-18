@@ -76,6 +76,17 @@ public class AStar{
 				if(!(explored.contains(currentTile))){ //if the currentTile isnt already explored
 					explored.add(currentTile); // add to explored
 				}
+				System.out.println(currentTile.getPoint());
+				System.out.println(currentTile.getTileType());
+				if(!currentTile.getNeighbors().isEmpty()){
+					for(Tile aNeighbor: currentTile.getNeighbors()){
+						System.out.println(aNeighbor.getPoint());
+					}
+				}
+				else{
+					System.out.println("failed to get neighbors");
+
+				}
 				frontier.remove(currentTile); // remove from frontier
 				
 				 
