@@ -26,6 +26,8 @@ loadInstructionDictionary                       Will load the instructions of ge
 InstructionDictionary                              Stores the path directions based on algorithm output
  */
 
+import com.team1ofus.apollo.Cell;
+
 public class DataManagement {
 	ArrayList<Cell> cells;
 	public DataManagement() {
