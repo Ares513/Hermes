@@ -31,8 +31,10 @@ public class PathCell{
     //minimum required information
     double scaling;
     
-    public PathCell(int width, int height, double scaling, Tile defaultTile) {
-        tiles = new Wall[width][height];
+    public PathCell(String name, int width, int height, double scaling, Tile defaultTile) {
+        this.cellName = name;
+    	this.tiles = new Wall[width][height];
+    	this.scaling = scaling;
            
     }
     /*
