@@ -2,7 +2,6 @@ package com.team1ofus.apollo;
 
 import java.io.Serializable;
 
-import com.team1ofus.hermes.TILE_TYPE;
 
 /*
  * We only need a single DataTile class.

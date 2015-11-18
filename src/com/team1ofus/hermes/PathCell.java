@@ -42,6 +42,25 @@ public class PathCell{
     	this.scaling = scaling;
            
     }
+    public PathCell(String name, int width, int height, double scaling, com.team1ofus.apollo.DataTile[][] dataTiles) {
+        this.cellName = name;
+        tiles = new Tile[width][height];
+    	for(int i=0; i<width; i++) {
+    		for(int j=0; j<height; j++) {
+    			switch(dataTiles[i][j].getType()) {
+    			case WALL:
+    				tiles[i][j] = new Wall(name, new Point(i, j));
+    				tiles[i][j].tileType = TILE_TYPE.WALL;
+    			case PEDESTRIAN_WALKWAY:
+    				tiles[i][j] = new Walkway(name, new Point(i, j));
+    				tiles[i][j].tileType = TILE_TYPE.PEDESTRIAN_WALKWAY;
+    			}
+    			
+    		}
+    	}
+    	this.scaling = scaling;
+           
+    }
     /*
      * Not safe for out of bounds calls.
      */

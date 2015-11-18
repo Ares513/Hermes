@@ -51,11 +51,6 @@ public class DataManagement {
 	/*
 	 * Create a temporary map.
 	 */
-	private Cell makePlaceholderMap() {
-		Cell output;
-		return output = new Cell(50, 50, 1, TILE_TYPE.WALL, UUID.randomUUID().toString());
-		
-	}
 	private ArrayList<Cell> loadAllCells() throws ClassNotFoundException, IOException {
 		ArrayList<Cell> output = new ArrayList<Cell>();
 			List<Path> filteredPaths = getAvailableCells(BootstrapperConstants.APP_FILE_DIRECTORY);
@@ -63,15 +58,12 @@ public class DataManagement {
 				output.add(loadCell(p));
 					
 			}
-			if(output.size() == 0) {
-				//there are no maps that can be loaded.
-				output.add(makePlaceholderMap());
-			}
 			return output;	
 			
 		
 		
 	}
+	
 	private Cell loadCell(Path target) throws IOException, ClassNotFoundException {
 			
 			FileInputStream in = new FileInputStream(target.toString());
