@@ -25,7 +25,7 @@ public class CellConverter {
 //				convertTyleType = tileType(newCell.tiles[i][j]);
 //			}
 //		}
-		return new PathCell(name,convertWidth, convertHeight, convertScaling);
+		return new PathCell(name,convertWidth, convertHeight, convertScaling, TILE_TYPE.WALL);
 	}
 	
 }

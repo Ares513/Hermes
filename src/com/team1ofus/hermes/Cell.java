@@ -70,4 +70,8 @@ public class Cell implements Serializable {
 			}
 			return tiles[xActual][yActual];
 	}
+	public double getScale() {
+		// TODO Auto-generated method stub
+		return scaling;
+	}
 }

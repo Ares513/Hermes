@@ -1,6 +1,7 @@
 package com.team1ofus.hermes;
 
 import java.awt.Point;
+import java.util.ArrayList;
 
 import javax.swing.*;
 
@@ -10,9 +11,12 @@ public class UIManagement implements IHumanInteractionListener, IAStarInteractio
 	Point first;
 	Point second;
 	public UIManagementInteractionEventObject events;
-	public UIManagement(){
-		begin();    
+	private ArrayList<PathCell> allCells;
+	public UIManagement(ArrayList<PathCell> allCells) {
 		events = new UIManagementInteractionEventObject(); 
+		this.allCells = allCells;
+		begin();    
+
 	}
 	
 	public JFrame frame; 
@@ -20,7 +24,7 @@ public class UIManagement implements IHumanInteractionListener, IAStarInteractio
 	void begin() {
 		window = new HermesUI();
 		window.humanInteractive.addListener(this);
-		window.initialize();
+		window.initialize(allCells.get(0));
 		
 	}
 	
@@ -37,7 +41,7 @@ public class UIManagement implements IHumanInteractionListener, IAStarInteractio
 		} else if(second == null) {
 			second = new Point(x,y);
 		} else if (first != null && second != null) {
-			events.doPathReady(first, second);
+			events.doPathReady(0, first, second);
 			first = null;
 			second = null;
 		}

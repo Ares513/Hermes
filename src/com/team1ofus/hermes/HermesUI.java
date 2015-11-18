@@ -52,7 +52,7 @@ public class HermesUI extends JPanel{
 	private DrawMap gridMap;
 	int scrollSpeed = 5;
 	private JLabel lblOffset;
-
+	private PathCell currentCell;
 	public HumanInteractionEventObject humanInteractive; 
 	
 	public HermesUI() {
@@ -64,9 +64,9 @@ public class HermesUI extends JPanel{
 	 * initialize the Hermes UI
 	*/
 	
-	public void initialize() {		
+	public void initialize(PathCell viewCell) {		
 		buildControl();
-		
+		currentCell = viewCell;
 		gridMap.addKeyListener(new KeyAdapter() {
 			@Override
 			public void keyPressed(KeyEvent e) {
@@ -219,7 +219,7 @@ MapgridMap.addMouseMotionListener(new MouseMotionAdapter() {
 		pathPanel.setBounds(0, 0, screenSize.width, screenSize.height);
 		
 		
-		gridMap = new DrawMap();
+		gridMap = new DrawMap(currentCell);
 		gridMap.setBounds(0, 0, screenSize.width, screenSize.height);
 		frameHermes.getContentPane().add(gridMap);
 

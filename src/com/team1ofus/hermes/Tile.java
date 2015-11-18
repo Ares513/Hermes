@@ -9,7 +9,7 @@ public abstract class Tile implements TileInterface{
 	
 	public Point tilePoint = null;
 
-	public byte tileType = 0; // 0 = walkway, 1 = wall
+	public TILE_TYPE tileType = TILE_TYPE.WALL; // 0 = walkway, 1 = wall
 
 	public String cellName;
 	
@@ -42,7 +42,7 @@ public abstract class Tile implements TileInterface{
 		return this.parent;
 	}
 	
-	public int getTileType() {
+	public TILE_TYPE getTileType() {
 		return this.tileType;
 	}
 	

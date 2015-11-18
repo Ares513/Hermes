@@ -60,7 +60,7 @@ public class PathCell{
     			if(curPoint == tilePoint){
     				continue;
     			}
-    			else if(curTile.getTileType() == 0){ // 0 means wall
+    			else if(curTile.getTileType() == TILE_TYPE.WALL){ // 0 means wall
     				continue;
     			}
     			else{

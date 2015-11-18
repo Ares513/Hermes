@@ -17,19 +17,18 @@ public class CellRenderer {
 	final int rows = 1;
 	final int cols = 3;
 	BufferedImage[] spriteImages = new BufferedImage[rows * cols];
-	TILE_TYPE[][] tiles;
 	Point offset = new Point(0, 0);
+	PathCell drawnCell;
 	
-	
-	public CellRenderer(TILE_TYPE[][] tiles) {
-		this.tiles = tiles;
+	public CellRenderer(PathCell inCell) {
+		drawnCell = inCell;
 		getFromSheet();
 	}
 	
 	public void renderTiles(Graphics g) {
-		for(int i=0; i<tiles[0].length; i++) {
-			for(int j=0; j<tiles[1].length; j++) {
-				switch(tiles[i][j]) {
+		for(int i=0; i<drawnCell.tiles[0].length; i++) {
+			for(int j=0; j<drawnCell.tiles[1].length; j++) {
+				switch(drawnCell.tiles[i][j].getTileType()) {
 				case WALL:
 					g.drawImage(spriteImages[0], i*width - offset.x, j*height - offset.y, width, height, null);
 					break;

@@ -15,15 +15,16 @@ public class Bootstrapper {
 			public void run() {
 				try {
 					UIManagement UI;
-					DataManagement data;
+					DataManagement data; //data will load all cells, in the meantime dummy data
+					ArrayList<PathCell> dummyList = new ArrayList<PathCell>();
+					dummyList.add(new PathCell("Test", 10, 10, 1.0, TILE_TYPE.WALL));
 					MapManagement MapManager;
-					UI = new UIManagement();
+					UI = new UIManagement(dummyList);
 				//	UI.managementEvent.addManagementListener(null); // needs an actual listener 
 					
 					data = new DataManagement();
 					
-					ArrayList<PathCell> dummyList = new ArrayList<PathCell>();
-					dummyList.add(new PathCell("Test", 10, 10, 1.0, TILE_TYPE.WALL));
+
 					MapManager = new MapManagement(dummyList);
 					
 					

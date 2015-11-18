@@ -9,7 +9,7 @@ public class Wall extends Tile implements TileInterface {
 	public Wall(String cellName,Point tilePoint){
 		this.cellName = cellName;
 		this.tilePoint = tilePoint;
-		this.tileType = 1; // 1 means wall
+		this.tileType = TILE_TYPE.WALL; // 1 means wall
 	}
 	
 	//------------------------------------------------------------------------------
