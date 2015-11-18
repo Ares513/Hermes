@@ -4,8 +4,6 @@ import java.awt.Point;
 import java.io.Serializable;
 import java.util.UUID;
 
-import com.team1ofus.hermes.TILE_TYPE;
-
 public class Cell implements Serializable {
 	/**
 	 * 
