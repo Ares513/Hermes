@@ -92,12 +92,10 @@ public class AStarMain {
 	}
 
 	private Tile getTile(PathCell aCell, Point aIndex) {
-		return null;
-		
-		//return startCell.2dArray(startIndex);
+		return aCell.getTile(aIndex);
 	}
-
-
+	
+	
 
 
 }

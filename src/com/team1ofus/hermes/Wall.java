@@ -4,9 +4,9 @@ import java.awt.Point;
 
 import com.team1ofus.hermes.Tile;
 
-public class wall extends Tile implements TileInterface {
+public class Wall extends Tile implements TileInterface {
 	
-	public wall(byte cellNum, Point tilePoint){
+	public Wall(byte cellNum, Point tilePoint){
 		Tile.cellNum = cellNum;
 		Tile.tilePoint = tilePoint;
 		Tile.tileType = 1; // 1 means wall

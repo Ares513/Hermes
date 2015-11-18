@@ -40,6 +40,10 @@ public abstract class Tile implements TileInterface{
 	public Tile getParent(){
 		return parent;
 	}
+	
+	public int getTileType() {
+		return tileType;
+	}
 
 // Setters:
 	
@@ -55,5 +59,6 @@ public abstract class Tile implements TileInterface{
 	public void setETC(int ETC){
 		estimatedTotalCost = ETC;
 	}
+
 
 }
