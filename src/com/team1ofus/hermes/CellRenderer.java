@@ -26,7 +26,7 @@ public class CellRenderer {
 	}
 	
 	public void renderTiles(Graphics g) {
-		for(int i=0; i<drawnCell.tiles[0].length; i++) {
+		for(int i=0; i<drawnCell.tiles.length; i++) {
 			for(int j=0; j<drawnCell.tiles[1].length; j++) {
 				switch(drawnCell.tiles[i][j].getTileType()) {
 				case WALL:
@@ -68,8 +68,8 @@ public class CellRenderer {
 		offset.translate(dx, dy);
 		if(offset.x < 0) {
 			offset.x = 0;
-		} else if(offset.x > drawnCell.tiles[0].length * width - windowWidth) {
-			offset.x = drawnCell.tiles[0].length * width - windowWidth;
+		} else if(offset.x > drawnCell.tiles.length * width - windowWidth) {
+			offset.x = drawnCell.tiles.length * width - windowWidth;
 		}
 		if(offset.y < 0) {
 			offset.y = 0;
