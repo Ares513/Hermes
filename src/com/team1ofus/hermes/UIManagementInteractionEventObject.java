@@ -20,4 +20,11 @@ public void doPathReady(int cellIndex, Point first, Point second){
 		}	
 
 	}
+public void doWindowReady(int cellIndex, ArrayList<PathCell> allCells){
+	
+	for(IUIManagementInteractionListener UL : managementListeners){
+		 UL.onWindowReady(cellIndex, allCells);
+	}	
+
+}
 }
