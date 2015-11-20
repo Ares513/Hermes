@@ -19,7 +19,6 @@ getPath(Cell, startCell, Point startIndex, Cell endCell, Point endIndex)
 returns the ordered list of nodes that constitute a path from one given location to another.
 
  */
-
 public class AStar { 
 	AStarInteractionEventObject events;
 	public AStar(ArrayList<PathCell> cells) {
@@ -46,8 +45,8 @@ public class AStar {
 		 */
 		public ArrayList<CellPoint> getPath(int startCellIndex, Point startIndex, int endCellIndex, Point endIndex){
 			
-			PathCell startCell = accessedCells.get(startCellIndex); //What cell do we start in
-			PathCell currentCell = startCell;
+			PathCell currentCell = accessedCells.get(startCellIndex); //What cell do we start in
+	
 			PathCell endCell = accessedCells.get(endCellIndex);
 			Tile currentTile = getTile(currentCell, startIndex); //The exact tile we start at
 			Tile endTile = getTile(endCell, endIndex); // the tile we want to get to
@@ -71,43 +70,30 @@ public class AStar {
 											   //element
 				
 				if(currentTile == endTile){ //if we are at the end: 
-
 					return buildPath(endTile); //return the path
 				}
 				
 				if(!(explored.contains(currentTile))){ //if the currentTile isnt already explored
 					explored.add(currentTile); // add to explored
 				}
-				System.out.println(currentTile.getPoint());
-//				System.out.println(currentTile.getTileType());
-//				if(!currentTile.getNeighbors(currentCell).isEmpty()){
-//					for(Tile aNeighbor: currentTile.getNeighbors(currentCell)){
-//						System.out.println(aNeighbor.getPoint());
-//					}
-//				}
-//				else{
-//					System.out.println("failed to get neighbors");
-//
-//				}
 				frontier.remove(currentTile); // remove from frontier
 				
 				 
-				for(Tile aNeighbor: currentTile.getNeighbors(currentCell)){
+				for(Tile aNeighbor: currentTile.getNeighbors()){
 					if(explored.contains(aNeighbor)){
 						continue;
 					}
-					tentativeCSF = currentTile.getCSF() + aNeighbor.getTraverseCost();
+					tentativeCSF = costSoFar + aNeighbor.getTraverseCost();
 					if(!frontier.contains(aNeighbor)){
 						frontier.add(aNeighbor);
 					}
 					else if(tentativeCSF >= aNeighbor.getCSF()){
 						continue;
 					}
-					else{
-						aNeighbor.setParent(currentTile);
-						aNeighbor.setCSF(tentativeCSF);
-						aNeighbor.setETC(tentativeCSF+ getHeuristic(aNeighbor));
-					}
+				
+				aNeighbor.setParent(currentTile);
+				aNeighbor.setCSF(tentativeCSF);
+				aNeighbor.setETC(tentativeCSF+ getHeuristic(aNeighbor));
 				}
 			}
 			System.out.println("No Path Found");
@@ -133,7 +119,6 @@ public class AStar {
 					currentTile = currentTile.getParent();
 				}
 			}
-			events.completePath(pointPath);
 			return pointPath;
 		}
 
