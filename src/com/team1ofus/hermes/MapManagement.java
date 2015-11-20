@@ -23,6 +23,10 @@ public class MapManagement implements IUIManagementInteractionListener, IAStarIn
 	}
 	@Override
 	public void onPathReady(int cellIndex, Point first, Point second) {
+		if(pathfindingSystem == null) {
+			//how does this even happen?
+			assert(false);
+		}
 		// TODO Auto-generated method stub
 		pathfindingSystem.getPath(0, first, 0, second);
 	}
