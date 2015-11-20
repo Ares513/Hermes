@@ -7,10 +7,10 @@ public class MapManagement implements IUIManagementInteractionListener, IAStarIn
 	MapManagementInteractionEventObject events = new MapManagementInteractionEventObject();
 	AStar pathfindingSystem;
 	ArrayList<PathCell> cells;
-	public MapManagement(ArrayList<PathCell> dummyList) {
-		pathfindingSystem = new AStar(dummyList);
-		cells = dummyList;
+	public MapManagement() {
+
 	}
+	
 	@Override
 	public void onAStarRequestCellEvent(String cellName) {
 		// TODO Auto-generated method stub
@@ -19,12 +19,15 @@ public class MapManagement implements IUIManagementInteractionListener, IAStarIn
 	@Override
 	public void onAStarPathCompleteEvent(CellPoint[] directions) {
 		// TODO Auto-generated method stub
-		events.pathComplete(directions);
+		events.onPathComplete(directions);
 	}
 	@Override
 	public void onPathReady(int cellIndex, Point first, Point second) {
 		// TODO Auto-generated method stub
 		pathfindingSystem.getPath(0, first, 0, second);
 	}
-	
+	public void onWindowReady(int cellIndex, ArrayList<PathCell> loaded) {
+		pathfindingSystem = new AStar(loaded);
+		cells = loaded;
+	}
 }

@@ -24,7 +24,7 @@ public class Bootstrapper {
 					data = new DataManagement();
 					
 
-					map = new MapManagement(pathCells);
+					map = new MapManagement();
 					
 					ui = new UIManagement(pathCells);
 					addEventHandlers(data, map, ui);
@@ -33,9 +33,9 @@ public class Bootstrapper {
 					e.printStackTrace();
 				}
 			}
-			private void addEventHandlers(DataManagement data, MapManagement map, UIManagement UI) {
-				UI.events.addManagementListener(map);
-				map.events.addListener(UI);
+			private void addEventHandlers(DataManagement data, MapManagement map, UIManagement ui) {
+				ui.events.addManagementListener(map);
+				map.events.addListener(ui);
 			}
 		});
 	}
