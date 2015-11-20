@@ -6,8 +6,12 @@ import java.util.ArrayList;
 import javax.swing.*;
 
 
+<<<<<<< HEAD
 
 public class UIManagement implements IHumanInteractionListener, ILoaderInteractionListener{
+=======
+public class UIManagement implements IHumanInteractionListener, IMapManagementInteractionListener {
+>>>>>>> refs/heads/HermesDev
 	HermesUI window;
 	Loader loadUI;
 	Point first;
@@ -17,15 +21,22 @@ public class UIManagement implements IHumanInteractionListener, ILoaderInteracti
 	public UIManagement(ArrayList<PathCell> allCells) {
 		events = new UIManagementInteractionEventObject(); 
 		this.allCells = allCells;
-		begin();    
+		  
 
 	}
 	
 	public JFrame frame; 
 
+<<<<<<< HEAD
 	void begin() {
 		loadUI = new Loader(allCells);
 		loadUI.events.addChooseListener(this);
+=======
+	public void begin() {
+		window = new HermesUI();
+		window.humanInteractive.addListener(this);
+		window.initialize(allCells.get(0));
+>>>>>>> refs/heads/HermesDev
 		
 	}
 	
@@ -47,6 +58,7 @@ public class UIManagement implements IHumanInteractionListener, ILoaderInteracti
 			second = null;
 		}
 	}
+<<<<<<< HEAD
 /*
 	@Override
 	public void onAStarRequestCellEvent(String cellName) {
@@ -62,6 +74,9 @@ public class UIManagement implements IHumanInteractionListener, ILoaderInteracti
 		window.initialize(selection);
 
 	}
+=======
+
+>>>>>>> refs/heads/HermesDev
 
 
 }

@@ -19,30 +19,38 @@ public class CellRenderer {
 	BufferedImage[] spriteImages = new BufferedImage[rows * cols];
 	Point offset = new Point(0, 0);
 	PathCell drawnCell;
-	
+	private Point first;
+	private Point second;
 	public CellRenderer(PathCell inCell) {
 		drawnCell = inCell;
 		getFromSheet();
 	}
 	
 	public void renderTiles(Graphics g) {
-		for(int i=0; i<drawnCell.tiles.length; i++) {
+		for(int i=0; i<drawnCell.tiles[0].length; i++) {
 			for(int j=0; j<drawnCell.tiles[1].length; j++) {
 				//System.out.println(i + "," + j);
 				switch(drawnCell.tiles[i][j].getTileType()) {
 				case WALL:
-					g.drawImage(spriteImages[0], i*width - offset.x, j*height - offset.y, width, height, null);
+						g.drawImage(spriteImages[0], i*width - offset.x, j*height - offset.y, width, height, null);
+					
 					break;
 					
 				case PEDESTRIAN_WALKWAY:
-					g.drawImage(spriteImages[1], i*width - offset.x, j*height - offset.y, width, height, null);
+						g.drawImage(spriteImages[1], i*width - offset.x, j*height - offset.y, width, height, null);
+					
 					break;
 				}
 			}
 		}
 	}
 	
-	
+	public void setFirst(Point inPoint) {
+		first = inPoint;
+	}
+	public void setSecond(Point inPoint) {
+		second = inPoint;
+	}
 	private void getFromSheet(){
 		try{
 		 BufferedImage spriteSheet = ImageIO.read(new File("Sprites.png"));
@@ -59,11 +67,24 @@ public class CellRenderer {
 	}
 	
 	public Point pickTile(int mouseX, int mouseY) {
-		int x = (int) (Math.floor((mouseX + offset.x)/(width/2)));
-		int y = (int) (Math.floor((mouseY + offset.y)/(height/2)));
+		int x = (int) (Math.floor((mouseX - offset.x)/(width/2)));
+		int y = (int) (Math.floor((mouseY - offset.y)/(height/2)));
 		return new Point(x,y);
 	}
-	
+	public Tile getTile(int x, int y) {
+		int xActual = x;
+		int yActual = y;
+		int actualWidth = drawnCell.tiles[0].length - 1;
+		if(x > actualWidth) {
+			xActual = actualWidth;
+		}
+		int actualHeight = drawnCell.tiles[1].length - 1;
+		if(y > actualHeight) {
+			yActual = actualHeight;
+		}
+
+		return drawnCell.tiles[xActual][yActual];
+	}
 	public void incrementOffset(int dx, int dy, int windowWidth, int windowHeight) {
 		//some optimizations to be made here
 		offset.translate(dx, dy);

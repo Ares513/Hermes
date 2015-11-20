@@ -19,7 +19,8 @@ getPath(Cell, startCell, Point startIndex, Cell endCell, Point endIndex)
 returns the ordered list of nodes that constitute a path from one given location to another.
 
  */
-public class AStar {
+
+public class AStar { 
 	AStarInteractionEventObject events;
 	public AStar(ArrayList<PathCell> cells) {
 		events = new AStarInteractionEventObject();
