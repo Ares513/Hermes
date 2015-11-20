@@ -6,18 +6,15 @@ import java.util.ArrayList;
 import javax.swing.*;
 
 
-<<<<<<< HEAD
 
-public class UIManagement implements IHumanInteractionListener, ILoaderInteractionListener{
-=======
-public class UIManagement implements IHumanInteractionListener, IMapManagementInteractionListener {
->>>>>>> refs/heads/HermesDev
+public class UIManagement implements IHumanInteractionListener, ILoaderInteractionListener, IMapManagementInteractionListener{
 	HermesUI window;
 	Loader loadUI;
 	Point first;
 	Point second;
 	public UIManagementInteractionEventObject events;
 	private ArrayList<PathCell> allCells;
+	public JFrame frame; 
 	public UIManagement(ArrayList<PathCell> allCells) {
 		events = new UIManagementInteractionEventObject(); 
 		this.allCells = allCells;
@@ -25,20 +22,17 @@ public class UIManagement implements IHumanInteractionListener, IMapManagementIn
 
 	}
 	
-	public JFrame frame; 
-
-<<<<<<< HEAD
-	void begin() {
+	
+	public void begin() {
 		loadUI = new Loader(allCells);
 		loadUI.events.addChooseListener(this);
-=======
-	public void begin() {
+	
 		window = new HermesUI();
 		window.humanInteractive.addListener(this);
 		window.initialize(allCells.get(0));
->>>>>>> refs/heads/HermesDev
-		
 	}
+		
+	
 	
 	public void OnpathComplete(ArrayList<CellPoint> directions) {
 		window.drawPath(directions);
@@ -58,7 +52,7 @@ public class UIManagement implements IHumanInteractionListener, IMapManagementIn
 			second = null;
 		}
 	}
-<<<<<<< HEAD
+
 /*
 	@Override
 	public void onAStarRequestCellEvent(String cellName) {
@@ -74,9 +68,11 @@ public class UIManagement implements IHumanInteractionListener, IMapManagementIn
 		window.initialize(selection);
 
 	}
-=======
-
->>>>>>> refs/heads/HermesDev
 
 
+	@Override
+	public void onPathComplete(ArrayList<CellPoint> directions) {
+		// TODO Auto-generated method stub
+		
+	}
 }
