@@ -15,6 +15,6 @@ public class Wall extends Tile implements TileInterface {
 	//------------------------------------------------------------------------------
 	
 	public int getTraverseCost() {
-		return 1000000;
+		return 1000;
 	}
 }

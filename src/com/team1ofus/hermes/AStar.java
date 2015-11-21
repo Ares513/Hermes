@@ -55,6 +55,11 @@ public class AStar {
 							   //A* returns
 			int tentativeCSF = 0; //combines the cost so far and the cost to enter a tile
 								  //that is being explored
+			
+			int curX = (int) currentTile.getCellPoint().getPoint().getX();
+			int curY = (int) currentTile.getCellPoint().getPoint().getY();
+			int neiX;
+			int neiY;
 //			int estTotalCost = getHeuristic(currentTile);//the expected path cost from start
 														 //to finish based on the best known 
 														 //path so far. Starts as just the 
@@ -96,18 +101,28 @@ public class AStar {
 					if(explored.contains(aNeighbor)){
 						continue;
 					}
+					neiX = (int) aNeighbor.getCellPoint().getPoint().getX();
+					neiY = (int) aNeighbor.getCellPoint().getPoint().getY();
 					tentativeCSF = currentTile.getCSF() + aNeighbor.getTraverseCost();
 					if(!frontier.contains(aNeighbor)){
+						aNeighbor.setParent(currentTile);
+						aNeighbor.setETC(tentativeCSF+ getHeuristic(aNeighbor));
+						if((curX != neiX) && (curY != neiY)){
+							aNeighbor.setCSF(tentativeCSF + (int)(1.41* aNeighbor.getTraverseCost()));
+						}
+						else{
+							aNeighbor.setCSF(tentativeCSF);
+						}
 						frontier.add(aNeighbor);
 					}
 					else if(tentativeCSF >= aNeighbor.getCSF()){
 						continue;
 					}
-					else{
-						aNeighbor.setParent(currentTile);
-						aNeighbor.setCSF(tentativeCSF);
-						aNeighbor.setETC(tentativeCSF+ getHeuristic(aNeighbor));
-					}
+//					else{
+//						aNeighbor.setParent(currentTile);
+//						aNeighbor.setCSF(tentativeCSF);
+//						aNeighbor.setETC(tentativeCSF+ getHeuristic(aNeighbor));
+//					}
 				}
 			}
 			System.out.println("No Path Found");
