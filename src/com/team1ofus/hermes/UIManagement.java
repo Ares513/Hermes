@@ -23,14 +23,14 @@ public class UIManagement implements IHumanInteractionListener, IMapManagementIn
 	public JFrame frame; 
 
 	public void begin(int selectedIndex) {
-		window = new HermesUI();
+		window = new HermesUI(allCells.get(selectedIndex));
 		window.humanInteractive.addListener(this);
-		window.initialize(allCells.get(selectedIndex));
+	
 		
 	}
 	
 	public void onAStarPathCompleteEvent(CellPoint[] directions) {
-		window.drawPath(directions);
+		window.getPathPanel().drawPath(directions);
 	}
 
 	@Override

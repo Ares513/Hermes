@@ -4,6 +4,7 @@ import javax.swing.AbstractAction;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.KeyStroke;
+import javax.swing.SwingUtilities;
 
 import java.awt.Dimension;
 
@@ -38,6 +39,8 @@ import javax.swing.JButton;
 import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
+import java.awt.event.MouseMotionAdapter;
+import javax.swing.JLayeredPane;
 
 public class HermesUI extends JPanel{
 	
@@ -56,8 +59,12 @@ public class HermesUI extends JPanel{
 	public HumanInteractionEventObject humanInteractive; 
 	private Point first; //for showing in the UI which points were clicked.
 	private Point second; 
-	public HermesUI() {
-		humanInteractive = new HumanInteractionEventObject(); 
+	private JLayeredPane layeredPane;
+	private boolean dragging;
+	private Point lastDragLocation;
+	public HermesUI(PathCell viewCell) {
+		humanInteractive = new HumanInteractionEventObject();
+		initialize(viewCell);
 	}
 
 	
@@ -68,13 +75,6 @@ public class HermesUI extends JPanel{
 	public void initialize(PathCell viewCell) {		
 		currentCell = viewCell;
 		buildControl();
-	
-		gridMap.addKeyListener(new KeyAdapter() {
-			@Override
-			public void keyPressed(KeyEvent e) {
-				doOffsetCalc(e);
-			}
-		});
 		frameHermes.addKeyListener(new KeyAdapter() {
 			@Override
 			public void keyPressed(KeyEvent e) {
@@ -83,59 +83,40 @@ public class HermesUI extends JPanel{
 		});
 		
 
-		/*
-		JPanel controlBoard = new ControlgridMap();
-		controlBoard.setBackground(Color.GRAY);
-		controlBoard.setBorder(new BevelBorder(BevelBorder.RAISED, null, null, null, null));
-		controlBoard.setBounds(frameHermes.getSize().width/2 -100, frameHermes.getSize().height - 100, 300, 100);
-        frameHermes.getContentPane().add(controlBoard);
-        */
-
-        /*
-MapgridMap.addMouseMotionListener(new MouseMotionAdapter() {
-	@Override
-	public void mouseMoved(MouseEvent e) {
-		mousePosition = new Point(e.getX(), e.getY());
-		mouseOut.setText(mousePosition.toString()); 
-	}
-});
-*/
-        /*
-         * The following few lines were originally in HermesUI and then were taken out 
-         * I'm (Aaron) pretty sure that they are needed for the mouse click events. 
-         * So i put them back in
-         */
-		JPanel MapgridMap = new JPanel();
-		MapgridMap.setBounds(0, 0, screenSize.width, screenSize.height);
-		MapgridMap.addMouseListener(new MouseAdapter() {
-		
-		@Override
-		public void mouseClicked(MouseEvent e) {
-			Point picked = gridMap.render.pickTile(e.getX(), e.getY());
-			if(gridMap.render.getTile(picked.x, picked.y).tileType == TILE_TYPE.PEDESTRIAN_WALKWAY) {
-				//valid.
-				if(first == null) {
-					first = new Point(picked.x, picked.y);
-					gridMap.render.setFirst(first);
-					gridMap.repaint(0, 0, gridMap.getWidth() + 100, gridMap.getHeight() + 100);
-				} else if(second == null) {
-					second = new Point(picked.x,picked.y);
-					gridMap.render.setSecond(first);
-				} else if (first != null && second != null) {
-					first = null;
-					second = null;
-					gridMap.render.setFirst(null);
-					gridMap.render.setSecond(null);
-					gridMap.repaint(0, 0, gridMap.getWidth() + 100, gridMap.getHeight() + 100);
+			gridMap.addKeyListener(new KeyAdapter() {
+				@Override
+				public void keyPressed(KeyEvent e) {
+					doOffsetCalc(e);
 				}
-				
-				humanInteractive.doClick(picked.x, picked.y);
-				}
-			}
+			});
+			
+			
+			gridMap.setBounds(0, 0, 1720, 880);
+			
 
-		});
-		frameHermes.getContentPane().add(MapgridMap); 
         frameHermes.setVisible(true);
+	}
+	private void processClick(Point picked) {
+		DebugManagement.writeNotificationToLog("Mouse clicked at " + picked.x + " , " + picked.y);
+		if(gridMap.render.getTile(picked.x, picked.y).tileType == TILE_TYPE.PEDESTRIAN_WALKWAY) {
+			//valid.
+			if(first == null) {
+				first = new Point(picked.x, picked.y);
+				gridMap.render.setFirst(first);
+				gridMap.repaint(0, 0, gridMap.getWidth() + 100, gridMap.getHeight() + 100);
+			} else if(second == null) {
+				second = new Point(picked.x,picked.y);
+				gridMap.render.setSecond(first);
+			} else if (first != null && second != null) {
+				first = null;
+				second = null;
+				gridMap.render.setFirst(null);
+				gridMap.render.setSecond(null);
+				gridMap.repaint(0, 0, gridMap.getWidth() + 100, gridMap.getHeight() + 100);
+			}
+			
+			humanInteractive.doClick(picked.x, picked.y);
+		}
 	}
 	//Would just skip this and go straight to MyPanel's drawPath, but I'm afraid that it will break and I don't have time to fix it
 	 void drawPath(CellPoint[] path){
@@ -152,7 +133,15 @@ MapgridMap.addMouseMotionListener(new MouseMotionAdapter() {
 	
 	private void buildControl(){
 		frameHermes = new JFrame();
+		frameHermes.addMouseMotionListener(new MouseMotionAdapter() {
+			@Override
+			public void mouseDragged(MouseEvent e) {
+			}
+		});
+		frameHermes.addMouseListener(new MouseAdapter() {
+		});
 		frameHermes.setTitle("Hermes");
+		frameHermes.setResizable(false);
 		frameHermes.setBounds(0, 0, screenSize.width - 200, screenSize.height - 200);
 		//Set screen size to be the size of the display - 200
 		//kind of arbitrary
@@ -160,51 +149,79 @@ MapgridMap.addMouseMotionListener(new MouseMotionAdapter() {
 		frameHermes.getContentPane().setLayout(null);
 		frameHermes.setMinimumSize(new Dimension(800,600));
 		frameHermes.setLocation(screenSize.width/2-frameHermes.getSize().width/2, screenSize.height/2-frameHermes.getSize().height/2);
-		//Sets the frame to start in the center of the screen
-		
-		/*JPanel DestinationgridMap = new JPanel();
-		DestinationgridMap.setBorder(new BevelBorder(BevelBorder.RAISED, null, null, null, null));
-		DestinationgridMap.setBackground(Color.LIGHT_GRAY);
-		DestinationgridMap.setBounds(6, 6, screenSize.width - (screenSize.width - 134), screenSize.height - (screenSize.height - 100));
-		frameHermes.getContentPane().add(DestinationgridMap);
-		//Destination gridMap placed in the upper right corner of the frameHermes
-		
-		StartField = new JTextField();
-		StartField.setText("Startpoint");
-		DestinationgridMap.add(StartField);
-		StartField.setColumns(10);
-		
-		DestinationField = new JTextField();
-		DestinationField.setText("Destination");
-		DestinationgridMap.add(DestinationField);
-		DestinationField.setColumns(10);
-		//Builds the two input fields and displays them in the DestinationgridMap
-		
-		
-		JButton addDestination = new JButton("Add Destination");
-		addDestination.setFont(new Font("Lucida Grande", Font.PLAIN, 10));
-		addDestination.setBorder(BorderFactory.createEmptyBorder());   
-		DestinationgridMap.add(addDestination);
-		//MapgridMap is where the map is displayed*/
-		
-		
 		JPanel MousegridMap = new JPanel();
 		JLabel mouseOut = new JLabel("#mouse#");
 		MousegridMap.add(mouseOut);
-			/*
-		MyDrawgridMap pathgridMap = new MyDrawgridMap();
-		frameHermes.getContentPane().add(pathgridMap);
-		pathgridMap.setBounds(0, 0, screenSize.width, screenSize.height);
-		*/
-		pathPanel = new MyDrawPanel();
-		frameHermes.getContentPane().add(pathPanel);
-		pathPanel.setBounds(0, 0, screenSize.width, screenSize.height);
-		
-		
-		gridMap = new DrawMap(currentCell);
-		gridMap.setBounds(0, 0, frameHermes.getWidth(), frameHermes.getHeight());
-		frameHermes.getContentPane().add(gridMap);
 
+		gridMap = new DrawMap(currentCell);
+		pathPanel = new MyDrawPanel();
+		//frameHermes.getContentPane().add(pathPanel);
+		pathPanel.setBounds(0, 0, screenSize.width, screenSize.height);
+		layeredPane = new JLayeredPane();
+		layeredPane.setBounds(0, 0, screenSize.width, screenSize.height);
+		layeredPane.add(gridMap);
+		layeredPane.add(pathPanel);
+		layeredPane.setComponentZOrder(gridMap, 0);
+		layeredPane.setComponentZOrder(pathPanel, 1);
+		frameHermes.getContentPane().add(layeredPane);
+		
+		
+		layeredPane.setBounds(0, 0, 1920, 1080);
+
+		layeredPane.addMouseMotionListener(new MouseMotionAdapter() {
+			@Override
+			public void mouseMoved(MouseEvent e) {
+
+			}
+			@Override
+			public void mouseDragged(MouseEvent e) {
+				if(dragging) {
+					//safety check
+					
+					if(lastDragLocation != null) {
+						int x = (int) (-0.1*(e.getX() - lastDragLocation.getX()));
+						int y = (int) (-0.1*(e.getY() - lastDragLocation.getY()));
+						DebugManagement.writeNotificationToLog("Dragging occurred, dx dy " + x + " , " + y);
+						gridMap.render.incrementOffset(x, y, gridMap.getWidth(), gridMap.getHeight());
+						gridMap.repaint();
+					} else {
+						lastDragLocation = new Point(e.getX(), e.getY());
+					}
+				}
+			}
+			}
+		);
+		layeredPane.addMouseListener(new MouseAdapter() {
+
+		@Override
+		public void mouseClicked(MouseEvent e) {
+			Point picked = gridMap.render.pickTile(e.getX(), e.getY());
+			if(SwingUtilities.isLeftMouseButton(e)) {
+				processClick(picked);
+			}  
+
+		}			@Override
+			public void mouseReleased(MouseEvent e) {
+				//do the dragging here
+			DebugManagement.writeNotificationToLog("Dragging disabled");
+				dragging = false;
+				lastDragLocation = null;
+			}
+			@Override
+			public void mousePressed(MouseEvent e) {
+
+					
+				if(SwingUtilities.isRightMouseButton(e)) {
+					//right click, they intend to drag
+					DebugManagement.writeNotificationToLog("Dragging enabled");
+					dragging = true;
+				}
+
+			}
+		});
+		
+		
+		
 	}
 	
 	public MyDrawPanel getPathPanel(){
@@ -212,13 +229,13 @@ MapgridMap.addMouseMotionListener(new MouseMotionAdapter() {
 	}
 	
 	class MyDrawPanel extends JPanel{
-
+		ArrayList<Point> pointsList = new ArrayList<Point>();
 		public MyDrawPanel() {
 			setOpaque(false);
 
 		}
 		void drawPath(CellPoint[] path){
-			pointsList = new ArrayList<Point>();
+			pointsList.clear();
 			for(CellPoint c : path){
 				pointsList.add(c.getPoint());
 			}
@@ -227,14 +244,13 @@ MapgridMap.addMouseMotionListener(new MouseMotionAdapter() {
 		}
 
 		//This function draws lines between the points specified in the ArrayList points list, which has been generated from A* algorithm
-		void drawLineSets(Graphics g){ 
+		void drawLineSets(Graphics g){
+			DebugManagement.writeNotificationToLog("Points for drawing:" + " " + pointsList);
 			Graphics2D g2d = (Graphics2D) g;
 			g2d.setColor(Color.BLUE);
 			float[] dashingPattern1 = {8f, 8f};
 			Stroke stroke1 = new BasicStroke(6f, BasicStroke.CAP_BUTT, BasicStroke.JOIN_MITER, 1.0f, dashingPattern1, 2.0f);
 			g2d.setStroke(stroke1);
-			System.out.println(pointsList);
-
 			for(int i = 0; i < pointsList.size()-1; i++){
 				g2d.drawLine(pointsList.get(i).x, pointsList.get(i).y, pointsList.get(i+1).x,pointsList.get(i+1).y);
 			} 
@@ -268,4 +284,20 @@ MapgridMap.addMouseMotionListener(new MouseMotionAdapter() {
 		
 		gridMap.repaint(0, 0, gridMap.getWidth() + 100, gridMap.getHeight() + 100);
 	}
+	private void repaintPanel() {
+		layeredPane.repaint();
+	}
 }
+
+
+
+
+
+
+
+
+
+
+//CHAFF
+
+

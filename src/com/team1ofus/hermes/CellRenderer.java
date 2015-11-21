@@ -1,7 +1,9 @@
 package com.team1ofus.hermes;
 
 import java.awt.Color;
+import java.awt.Font;
 import java.awt.Graphics;
+import java.awt.Graphics2D;
 import java.awt.Point;
 import java.awt.image.BufferedImage;
 import java.io.File;
@@ -27,7 +29,7 @@ public class CellRenderer {
 	}
 	
 	public void renderTiles(Graphics g) {
-
+		
 		for(int i=0; i<drawnCell.tiles[0].length; i++) {
 			for(int j=0; j<drawnCell.tiles[1].length; j++) {
 				switch(drawnCell.tiles[i][j].getTileType()) {
@@ -43,6 +45,9 @@ public class CellRenderer {
 				}
 			}
 		}
+		
+		g.setFont(new Font("Times New Roman", Font.PLAIN, 24));
+		g.drawString(offset.toString(), 0, 0);
 	}
 	
 	public void setFirst(Point inPoint) {
@@ -87,11 +92,14 @@ public class CellRenderer {
 	}
 	public void incrementOffset(int dx, int dy, int windowWidth, int windowHeight) {
 		//some optimizations to be made here
+		DebugManagement.writeNotificationToLog("Offset is : " + offset.toString());
 		offset.translate(dx, dy);
 		if(offset.x < 0) {
 			offset.x = 0;
-		} else if(offset.x > drawnCell.tiles[0].length * width - windowWidth) {
-			offset.x = drawnCell.tiles[0].length * width - windowWidth;
+		} else if(offset.x > drawnCell.tiles[0].length * width - windowHeight) {
+			int tileCount = drawnCell.tiles[0].length;
+			int maxX = drawnCell.tiles[0].length * width - windowHeight;
+			offset.x = maxX ;
 		}
 		if(offset.y < 0) {
 			offset.y = 0;
