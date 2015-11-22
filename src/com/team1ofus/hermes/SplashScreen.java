@@ -26,21 +26,21 @@ public class SplashScreen extends JWindow {
 
 	    // Set the window's bounds, centering the window
 	    int width = 650;
-	    int height =250;
+	    int height =262;
 	    Dimension screen = Toolkit.getDefaultToolkit().getScreenSize();
 	    int x = (screen.width-width)/2;
 	    int y = (screen.height-height)/2;
 	    setBounds(x,y,width,height);
 
 	    // Build the splash screen
-	    JLabel label = new JLabel(new ImageIcon("oreilly.gif"));
+	    JLabel label = new JLabel(new ImageIcon("DapperMapper.png"));
 	    JLabel copyrt = new JLabel
 	      ("Team 1 of us", JLabel.CENTER);
 	    copyrt.setFont(new Font("Sans-Serif", Font.BOLD, 12));
 	    content.add(label, BorderLayout.CENTER);
 	    content.add(copyrt, BorderLayout.SOUTH);
 	    Color oraRed = new Color(156, 20, 20,  255);
-	    content.setBorder(BorderFactory.createLineBorder(oraRed, 10));
+	    //content.setBorder(BorderFactory.createLineBorder(oraRed, 10));
 
 	    // Display it
 	    setVisible(true);
