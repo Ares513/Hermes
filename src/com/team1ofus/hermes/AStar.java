@@ -51,21 +51,18 @@ public class AStar {
 			PathCell endCell = accessedCells.get(endCellIndex);
 			Tile currentTile = getTile(currentCell, startIndex); //The exact tile we start at
 			Tile endTile = getTile(endCell, endIndex); // the tile we want to get to
-			int costSoFar = 0; //the cost of the best known path so far (not complete until 
-							   //A* returns
 			int tentativeCSF = 0; //combines the cost so far and the cost to enter a tile
 								  //that is being explored
 			
-			int curX = (int) currentTile.getCellPoint().getPoint().getX();
-			int curY = (int) currentTile.getCellPoint().getPoint().getY();
+			int curX;
+			int curY;
 			int neiX;
 			int neiY;
-//			int estTotalCost = getHeuristic(currentTile);//the expected path cost from start
+			int estTotalCost = getHeuristic(currentTile);//the expected path cost from start
 														 //to finish based on the best known 
 														 //path so far. Starts as just the 
 														 //heuristic from start to finish
 		
-			
 			this.frontier.add(currentTile); //the only thing in the frontier to start is the 
 											//start node
 			
@@ -83,46 +80,35 @@ public class AStar {
 				if(!(explored.contains(currentTile))){ //if the currentTile isnt already explored
 					explored.add(currentTile); // add to explored
 				}
-				System.out.println(currentTile.getPoint());
-//				System.out.println(currentTile.getTileType());
-//				if(!currentTile.getNeighbors(currentCell).isEmpty()){
-//					for(Tile aNeighbor: currentTile.getNeighbors(currentCell)){
-//						System.out.println(aNeighbor.getPoint());
-//					}
-//				}
-//				else{
-//					System.out.println("failed to get neighbors");
-//
-//				}
-				frontier.remove(currentTile); // remove from frontier
-				
-				 
+				frontier.remove(currentTile); // remove the curTile from frontier so we dont check 
+											  // it again
+					 
 				for(Tile aNeighbor: currentTile.getNeighbors(currentCell)){
 					if(explored.contains(aNeighbor)){
 						continue;
 					}
+					curX = (int) currentTile.getCellPoint().getPoint().getX();
+					curY = (int) currentTile.getCellPoint().getPoint().getY();
 					neiX = (int) aNeighbor.getCellPoint().getPoint().getX();
 					neiY = (int) aNeighbor.getCellPoint().getPoint().getY();
-					tentativeCSF = currentTile.getCSF() + aNeighbor.getTraverseCost();
+					if((curX != neiX) && (curY != neiY)){ //&& (currentTile.getCellName() == aNeighbor.getCellName())){
+						tentativeCSF = currentTile.getCSF() + (int)(1.41*aNeighbor.getTraverseCost());
+					}
+					else{
+						tentativeCSF = currentTile.getCSF() + aNeighbor.getTraverseCost();
+					}
 					if(!frontier.contains(aNeighbor)){
 						aNeighbor.setParent(currentTile);
+						aNeighbor.setCSF(tentativeCSF);
 						aNeighbor.setETC(tentativeCSF+ getHeuristic(aNeighbor));
-						if((curX != neiX) && (curY != neiY)){
-							aNeighbor.setCSF(tentativeCSF + (int)(1.41* aNeighbor.getTraverseCost()));
-						}
-						else{
-							aNeighbor.setCSF(tentativeCSF);
-						}
 						frontier.add(aNeighbor);
 					}
 					else if(tentativeCSF >= aNeighbor.getCSF()){
 						continue;
 					}
-//					else{
-//						aNeighbor.setParent(currentTile);
-//						aNeighbor.setCSF(tentativeCSF);
-//						aNeighbor.setETC(tentativeCSF+ getHeuristic(aNeighbor));
-//					}
+					aNeighbor.setParent(currentTile);
+					aNeighbor.setCSF(tentativeCSF);
+					aNeighbor.setETC(tentativeCSF+ getHeuristic(aNeighbor));
 				}
 			}
 			System.out.println("No Path Found");
@@ -136,19 +122,17 @@ public class AStar {
 
 		private ArrayList<CellPoint> buildPath(Tile endTile) {
 			ArrayList<CellPoint> pointPath = new ArrayList<CellPoint>();
-			pointPath.add(endTile.getCellPoint());
 			
 			Tile currentTile = endTile;
-			CellPoint currentPoint = null;
+			CellPoint currentPoint = currentTile.getCellPoint();
 			
 			while(currentTile.getParent() != null){
-				if(!pointPath.contains(currentPoint)){
 					currentPoint = currentTile.getCellPoint();
 					pointPath.add(currentPoint);
 					currentTile = currentTile.getParent();
-				}
 			}
 			events.completePath(pointPath);
+			pointPath.add(currentTile.getCellPoint());
 			return pointPath;
 		}
 

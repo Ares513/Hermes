@@ -75,9 +75,7 @@ public class PathCell{
     public Tile getTile(Point tilePoint) {
         int x = (int)tilePoint.getX();
         int y = (int)tilePoint.getY();
-        int xConverted = x/32; 
-        int yConverted = y/32; 
-        return this.tiles[xConverted][yConverted];
+        return this.tiles[x][y];
     }
     
 	public ArrayList<Tile> getPossibleTraversals(Point tilePoint){
