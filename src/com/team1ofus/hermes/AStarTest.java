@@ -9,16 +9,41 @@ import org.junit.Test;
 
 public class AStarTest {
 
-	@Test
-	public void test() {
-		PathCell testCell = new PathCell("bag'o'dicks",5,5,16, TILE_TYPE.WALL);
+	@Test // should return the 1 cell.(start and end are the same)
+	public void test() { 
+		PathCell testCell = new PathCell("bag'o'bags",5,5,16, TILE_TYPE.WALL);
 		ArrayList<PathCell> testCellList = new ArrayList<PathCell>();
 		testCellList.add(testCell);
 		AStar test = new AStar(testCellList);
-		System.out.println(test.getPath(0, new Point(2,2), 0, new Point(2,2)));
-//		ArrayList<PathCell> expected = new ArrayList<PathCell>();
-//		expected.add(
-//		assertEquals(test.getPath(0, new Point(2,2), 0, new Point(2,2)), )
+		ArrayList<CellPoint> AStarOut = test.getPath(0, new Point(2,2), 0, new Point(2,2));
+		for(CellPoint each:AStarOut){
+			System.out.println(each.getPoint());
+		}
+		assertEquals(0,0);
+	}
+	
+	@Test
+	public void test2() { // should return path not found, all walls
+		PathCell testCell = new PathCell("bag'o'schwifty",100,100,0, TILE_TYPE.PEDESTRIAN_WALKWAY);
+		ArrayList<PathCell> testCellList = new ArrayList<PathCell>();
+		testCellList.add(testCell);
+		AStar test = new AStar(testCellList);
+		System.out.println("Path:");
+		ArrayList<CellPoint> AStarOut = test.getPath(0, new Point(50,50), 0, new Point(55,40));
+		for(CellPoint each:AStarOut){
+			System.out.println(each.getPoint());
+		}
+		assertEquals(0,0);
+	}
+	
+	@Test
+	public void test3() { // should return path not found, all walls
+		PathCell testCell = new PathCell("bag'o'schwifty",5,5,0, TILE_TYPE.WALL);
+		ArrayList<PathCell> testCellList = new ArrayList<PathCell>();
+		testCellList.add(testCell);
+		AStar test = new AStar(testCellList);
+		ArrayList<CellPoint> AStarOut = test.getPath(0, new Point(2,2), 0, new Point(2,3));
+		assertEquals(AStarOut,null);
 	}
 
 }

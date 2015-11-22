@@ -2,6 +2,7 @@ package com.team1ofus.hermes;
 
 import java.awt.Point;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.EventObject;
 import java.util.List;
 
@@ -19,6 +20,7 @@ getPath(Cell, startCell, Point startIndex, Cell endCell, Point endIndex)
 returns the ordered list of nodes that constitute a path from one given location to another.
 
  */
+
 public class AStar { 
 	AStarInteractionEventObject events;
 	public AStar(ArrayList<PathCell> cells) {
@@ -45,21 +47,23 @@ public class AStar {
 		 */
 		public ArrayList<CellPoint> getPath(int startCellIndex, Point startIndex, int endCellIndex, Point endIndex){
 			
-			PathCell currentCell = accessedCells.get(startCellIndex); //What cell do we start in
-	
+			PathCell startCell = accessedCells.get(startCellIndex); //What cell do we start in
+			PathCell currentCell = startCell;
 			PathCell endCell = accessedCells.get(endCellIndex);
 			Tile currentTile = getTile(currentCell, startIndex); //The exact tile we start at
 			Tile endTile = getTile(endCell, endIndex); // the tile we want to get to
-			int costSoFar = 0; //the cost of the best known path so far (not complete until 
-							   //A* returns
 			int tentativeCSF = 0; //combines the cost so far and the cost to enter a tile
 								  //that is being explored
-//			int estTotalCost = getHeuristic(currentTile);//the expected path cost from start
+			
+			int curX;
+			int curY;
+			int neiX;
+			int neiY;
+			int estTotalCost = getHeuristic(currentTile);//the expected path cost from start
 														 //to finish based on the best known 
 														 //path so far. Starts as just the 
 														 //heuristic from start to finish
 		
-			
 			this.frontier.add(currentTile); //the only thing in the frontier to start is the 
 											//start node
 			
@@ -70,30 +74,42 @@ public class AStar {
 											   //element
 				
 				if(currentTile == endTile){ //if we are at the end: 
+
 					return buildPath(endTile); //return the path
 				}
 				
 				if(!(explored.contains(currentTile))){ //if the currentTile isnt already explored
 					explored.add(currentTile); // add to explored
 				}
-				frontier.remove(currentTile); // remove from frontier
-				
-				 
-				for(Tile aNeighbor: currentTile.getNeighbors()){
+				frontier.remove(currentTile); // remove the curTile from frontier so we dont check 
+											  // it again
+					 
+				for(Tile aNeighbor: currentTile.getNeighbors(currentCell)){
 					if(explored.contains(aNeighbor)){
 						continue;
 					}
-					tentativeCSF = costSoFar + aNeighbor.getTraverseCost();
+					curX = (int) currentTile.getCellPoint().getPoint().getX();
+					curY = (int) currentTile.getCellPoint().getPoint().getY();
+					neiX = (int) aNeighbor.getCellPoint().getPoint().getX();
+					neiY = (int) aNeighbor.getCellPoint().getPoint().getY();
+					if((curX != neiX) && (curY != neiY)){ //&& (currentTile.getCellName() == aNeighbor.getCellName())){
+						tentativeCSF = currentTile.getCSF() + (int)(1.41*aNeighbor.getTraverseCost());
+					}
+					else{
+						tentativeCSF = currentTile.getCSF() + aNeighbor.getTraverseCost();
+					}
 					if(!frontier.contains(aNeighbor)){
+						aNeighbor.setParent(currentTile);
+						aNeighbor.setCSF(tentativeCSF);
+						aNeighbor.setETC(tentativeCSF+ getHeuristic(aNeighbor));
 						frontier.add(aNeighbor);
 					}
 					else if(tentativeCSF >= aNeighbor.getCSF()){
 						continue;
 					}
-				
-				aNeighbor.setParent(currentTile);
-				aNeighbor.setCSF(tentativeCSF);
-				aNeighbor.setETC(tentativeCSF+ getHeuristic(aNeighbor));
+					aNeighbor.setParent(currentTile);
+					aNeighbor.setCSF(tentativeCSF);
+					aNeighbor.setETC(tentativeCSF+ getHeuristic(aNeighbor));
 				}
 			}
 			System.out.println("No Path Found");
@@ -107,18 +123,19 @@ public class AStar {
 
 		private ArrayList<CellPoint> buildPath(Tile endTile) {
 			ArrayList<CellPoint> pointPath = new ArrayList<CellPoint>();
-			pointPath.add(endTile.getCellPoint());
 			
 			Tile currentTile = endTile;
-			CellPoint currentPoint = null;
+			CellPoint currentPoint = currentTile.getCellPoint();
 			
 			while(currentTile.getParent() != null){
-				if(!pointPath.contains(currentPoint)){
 					currentPoint = currentTile.getCellPoint();
 					pointPath.add(currentPoint);
 					currentTile = currentTile.getParent();
-				}
 			}
+			pointPath.add(currentTile.getCellPoint());
+			Collections.reverse(pointPath);
+			System.out.println("A* ran");
+//			events.completePath(pointPath);
 			return pointPath;
 		}
 

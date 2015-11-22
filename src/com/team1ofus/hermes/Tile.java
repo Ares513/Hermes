@@ -9,24 +9,41 @@ public abstract class Tile implements TileInterface{
 	
 	public Point tilePoint = null;
 
-	public TILE_TYPE tileType = TILE_TYPE.WALL; // 0 = walkway, 1 = wall
+	public TILE_TYPE tileType = TILE_TYPE.WALL;
 
 	public String cellName;
 	
 	public Tile parent = null;
 	
-	public int costSoFar = 10000000;
+	public int costSoFar = 0;
 	
 	public int estimatedTotalCost = 0;
 //-------------------------------------------------
 // Getters:
 	
-	public ArrayList<Tile> getNeighbors(){
+	public ArrayList<Tile> getNeighbors(PathCell curCell){
 		// Nodes that neighbor the current node
 		ArrayList<Tile> neighbors = new ArrayList<Tile>();
+		int tileX = (int)this.getPoint().getX();
+		int tileY = (int)this.getPoint().getY();
+		Point curPoint = new Point();
+		Tile curTile = this;
 		
-		// need to populate neighbors
-		
+		for(int i = tileX-1; i < tileX+2; i++){
+			for(int j = tileY-1; j < tileY+2; j++){
+				curPoint.setLocation(i, j);
+				curTile = curCell.getTile(curPoint);
+				if(this.getPoint().equals(curPoint)){
+					continue;
+				}
+				if(curTile.getTileType().equals(TILE_TYPE.WALL)){
+					continue;
+				}
+				else{
+					neighbors.add(curTile);
+				}
+			}
+		}
 		return neighbors;	
 	}
 
