@@ -9,8 +9,10 @@ import org.junit.Test;
 
 public class AStarTest {
 
+	
 	@Test // should return the 1 cell.(start and end are the same)
-	public void test() { 
+	public void test1() { 
+		System.out.println("Test1: should return a path with 1 tile (2,2)");
 		PathCell testCell = new PathCell("bag'o'bags",5,5,16, TILE_TYPE.WALL);
 		ArrayList<PathCell> testCellList = new ArrayList<PathCell>();
 		testCellList.add(testCell);
@@ -22,9 +24,11 @@ public class AStarTest {
 		assertEquals(0,0);
 	}
 	
+	
 	@Test
 	public void test2() { // should return path not found, all walls
-		PathCell testCell = new PathCell("bag'o'schwifty",100,100,0, TILE_TYPE.PEDESTRIAN_WALKWAY);
+		System.out.println("test2: should return path from (50,50) to (55,40)");
+		PathCell testCell = new PathCell("bag'o'schwifty",100,100,16, TILE_TYPE.PEDESTRIAN_WALKWAY);
 		ArrayList<PathCell> testCellList = new ArrayList<PathCell>();
 		testCellList.add(testCell);
 		AStar test = new AStar(testCellList);
@@ -36,9 +40,11 @@ public class AStarTest {
 		assertEquals(0,0);
 	}
 	
+	
 	@Test
 	public void test3() { // should return path not found, all walls
-		PathCell testCell = new PathCell("bag'o'schwifty",5,5,0, TILE_TYPE.WALL);
+		System.out.println("Test 3: should return no path found");
+		PathCell testCell = new PathCell("bag'o'schwifty",5,5,32, TILE_TYPE.WALL);
 		ArrayList<PathCell> testCellList = new ArrayList<PathCell>();
 		testCellList.add(testCell);
 		AStar test = new AStar(testCellList);
