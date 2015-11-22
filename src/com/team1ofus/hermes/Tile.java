@@ -9,7 +9,7 @@ public abstract class Tile implements TileInterface{
 	
 	public Point tilePoint = null;
 
-	public TILE_TYPE tileType = TILE_TYPE.WALL; // 0 = walkway, 1 = wall
+	public TILE_TYPE tileType = TILE_TYPE.WALL;
 
 	public String cellName;
 	

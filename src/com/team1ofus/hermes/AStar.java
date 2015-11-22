@@ -2,6 +2,7 @@ package com.team1ofus.hermes;
 
 import java.awt.Point;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.EventObject;
 import java.util.List;
 
@@ -131,8 +132,10 @@ public class AStar {
 					pointPath.add(currentPoint);
 					currentTile = currentTile.getParent();
 			}
-			events.completePath(pointPath);
 			pointPath.add(currentTile.getCellPoint());
+			Collections.reverse(pointPath);
+			System.out.println("A* ran");
+			events.completePath(pointPath);
 			return pointPath;
 		}
 
