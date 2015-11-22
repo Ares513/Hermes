@@ -12,10 +12,16 @@ public class Bootstrapper {
 	 * Launch the application.
 	 */
 	public static void main(String[] args) {
-		
+		SplashScreen splash = new SplashScreen(10000);
+		splash.showSplashAndExit();	
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
+
 				try {
+				    
+				    // Normally, we'd call splash.showSplash() and get on with the program.
+				    // But, since this is only a test...
+				   
 					UIManagement ui;
 					DataManagement data = new DataManagement();
 					ArrayList<PathCell> pathCells = CellConverter.convertList(data.getCells());

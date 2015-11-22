@@ -2,6 +2,7 @@ package com.team1ofus.hermes;
 
 import java.awt.BorderLayout;
 import java.awt.FlowLayout;
+import java.awt.Graphics2D;
 import java.util.ArrayList;
 
 import javax.swing.DefaultComboBoxModel;
@@ -55,6 +56,9 @@ public class Loader extends JDialog {
 				
 			setVisible(true);
 			
+	}
+	private void renderSplashScreen(Graphics2D g, int frame) {
+		
 	}
 	private String[] getNames(ArrayList<PathCell> allCells) {
 		String[] result = new String[allCells.size()];

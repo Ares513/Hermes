@@ -30,18 +30,23 @@ public class UIManagement implements IHumanInteractionListener, IMapManagementIn
 	}
 	
 	public void onAStarPathCompleteEvent(CellPoint[] directions) {
+		DebugManagement.writeNotificationToLog("Path received, contents "  + directions);
+
 		window.getPathPanel().drawPath(directions);
 	}
 
 	@Override
 	public void onTileClicked(int x, int y) {
-		// TODO Auto-generated method stub
+		DebugManagement.writeNotificationToLog("Click processed at " + x + " , " + y);
 		if(first == null) {
 			first = new Point(x, y);
+			DebugManagement.writeNotificationToLog("First point processed at " + x + " , " + y);
 			
 		} else if(second == null) {
+			DebugManagement.writeNotificationToLog("Second point processed at " + x + " , " + y);
 			second = new Point(x,y);
-		} else if (first != null && second != null) {
+			DebugManagement.writeNotificationToLog("Two points selected. Sending doPath to listeners.");
+			DebugManagement.writeNotificationToLog("Path points" + first + " , " + second);
 			events.doPathReady(0, first, second);
 			first = null;
 			second = null;

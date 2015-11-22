@@ -46,7 +46,7 @@ public class HermesUI extends JPanel{
 	
 	ArrayList<Point> pointsList = new ArrayList<Point>();
 	private JFrame frameHermes;
-	private MyDrawPanel pathPanel;
+	private PathPane pathPanel;
 	private JTextField StartField;
 	private JTextField DestinationField;
 	private Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
@@ -103,16 +103,15 @@ public class HermesUI extends JPanel{
 			if(first == null) {
 				first = new Point(picked.x, picked.y);
 				gridMap.render.setFirst(first);
-				gridMap.repaint(0, 0, gridMap.getWidth() + 100, gridMap.getHeight() + 100);
+				repaint();
 			} else if(second == null) {
 				second = new Point(picked.x,picked.y);
 				gridMap.render.setSecond(first);
-			} else if (first != null && second != null) {
 				first = null;
 				second = null;
 				gridMap.render.setFirst(null);
 				gridMap.render.setSecond(null);
-				gridMap.repaint(0, 0, gridMap.getWidth() + 100, gridMap.getHeight() + 100);
+				repaint();
 			}
 			
 			humanInteractive.doClick(picked.x, picked.y);
@@ -127,7 +126,7 @@ public class HermesUI extends JPanel{
 	@Override
 	public void paintComponent(Graphics g){
 		super.paintComponent(g);
-		gridMap.paintComponent(g);
+		layeredPane.paintComponents(g);
 	//Allows us to paint the image within the JLabel	
 	}
 	
@@ -154,19 +153,22 @@ public class HermesUI extends JPanel{
 		MousegridMap.add(mouseOut);
 
 		gridMap = new DrawMap(currentCell);
-		pathPanel = new MyDrawPanel();
-		//frameHermes.getContentPane().add(pathPanel);
+		pathPanel = new PathPane();
+	
 		pathPanel.setBounds(0, 0, screenSize.width, screenSize.height);
 		layeredPane = new JLayeredPane();
 		layeredPane.setBounds(0, 0, screenSize.width, screenSize.height);
 		layeredPane.add(gridMap);
 		layeredPane.add(pathPanel);
 		layeredPane.setComponentZOrder(gridMap, 0);
-		layeredPane.setComponentZOrder(pathPanel, 1);
+		layeredPane.setComponentZOrder(pathPanel, 0);
 		frameHermes.getContentPane().add(layeredPane);
 		
 		
 		layeredPane.setBounds(0, 0, 1920, 1080);
+		/*
+		 * Temporary layered
+		 */
 
 		layeredPane.addMouseMotionListener(new MouseMotionAdapter() {
 			@Override
@@ -182,8 +184,8 @@ public class HermesUI extends JPanel{
 						int x = (int) (-0.1*(e.getX() - lastDragLocation.getX()));
 						int y = (int) (-0.1*(e.getY() - lastDragLocation.getY()));
 						DebugManagement.writeNotificationToLog("Dragging occurred, dx dy " + x + " , " + y);
-						gridMap.render.incrementOffset(x, y, gridMap.getWidth(), gridMap.getHeight());
-						gridMap.repaint();
+						repaint();
+						repaintPanel();
 					} else {
 						lastDragLocation = new Point(e.getX(), e.getY());
 					}
@@ -224,44 +226,11 @@ public class HermesUI extends JPanel{
 		
 	}
 	
-	public MyDrawPanel getPathPanel(){
+	public PathPane getPathPanel(){
 		return pathPanel;
 	}
 	
-	class MyDrawPanel extends JPanel{
-		ArrayList<Point> pointsList = new ArrayList<Point>();
-		public MyDrawPanel() {
-			setOpaque(false);
-
-		}
-		void drawPath(CellPoint[] path){
-			pointsList.clear();
-			for(CellPoint c : path){
-				pointsList.add(c.getPoint());
-			}
-			validate();
-			repaint();
-		}
-
-		//This function draws lines between the points specified in the ArrayList points list, which has been generated from A* algorithm
-		void drawLineSets(Graphics g){
-			DebugManagement.writeNotificationToLog("Points for drawing:" + " " + pointsList);
-			Graphics2D g2d = (Graphics2D) g;
-			g2d.setColor(Color.BLUE);
-			float[] dashingPattern1 = {8f, 8f};
-			Stroke stroke1 = new BasicStroke(6f, BasicStroke.CAP_BUTT, BasicStroke.JOIN_MITER, 1.0f, dashingPattern1, 2.0f);
-			g2d.setStroke(stroke1);
-			for(int i = 0; i < pointsList.size()-1; i++){
-				g2d.drawLine(pointsList.get(i).x, pointsList.get(i).y, pointsList.get(i+1).x,pointsList.get(i+1).y);
-			} 
-		}
-
-		public void paint(Graphics g) {
-			super.paint(g);
-			drawLineSets(g);
-
-		}
-	}
+	
 
 	private void doOffsetCalc(KeyEvent e) {
 		switch(e.getKeyCode()) {
@@ -282,7 +251,7 @@ public class HermesUI extends JPanel{
 			break;
 		}
 		
-		gridMap.repaint(0, 0, gridMap.getWidth() + 100, gridMap.getHeight() + 100);
+		repaintPanel();
 	}
 	private void repaintPanel() {
 		layeredPane.repaint();

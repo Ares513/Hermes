@@ -14,8 +14,8 @@ import javax.imageio.ImageIO;
  * Pasted from Apollo
  */
 public class CellRenderer {
-	final int width = 32;
-	final int height = 32;
+	final int width = BootstrapperConstants.TILE_WIDTH;
+	final int height = BootstrapperConstants.TILE_HEIGHT;
 	final int rows = 1;
 	final int cols = 3;
 	BufferedImage[] spriteImages = new BufferedImage[rows * cols];
@@ -45,7 +45,7 @@ public class CellRenderer {
 				}
 			}
 		}
-		
+		g.drawLine(0, 0, 200, 200);
 		g.setFont(new Font("Times New Roman", Font.PLAIN, 24));
 		g.drawString(offset.toString(), 0, 0);
 	}
@@ -72,8 +72,8 @@ public class CellRenderer {
 	}
 	
 	public Point pickTile(int mouseX, int mouseY) {
-		int x = (int) (Math.floor((mouseX - offset.x)/(width/2)));
-		int y = (int) (Math.floor((mouseY - offset.y)/(height/2)));
+		int x = (int) (Math.floor((mouseX + offset.x)/(width/2)));
+		int y = (int) (Math.floor((mouseY + offset.y)/(height/2)));
 		return new Point(x,y);
 	}
 	public Tile getTile(int x, int y) {

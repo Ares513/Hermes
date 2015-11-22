@@ -8,7 +8,7 @@ public class MapManagement implements IUIManagementInteractionListener, IAStarIn
 	AStar pathfindingSystem;
 	ArrayList<PathCell> cells;
 	public MapManagement() {
-
+		
 	}
 	
 	@Override
@@ -22,12 +22,12 @@ public class MapManagement implements IUIManagementInteractionListener, IAStarIn
 		//events.onPathComplete(directions);
 		//skip a* entirely
 		CellPoint[] dummyData;
-		dummyData = new CellPoint[4];
-		dummyData[0] = new CellPoint("test", new Point(30, 15));
-		dummyData[1] = new CellPoint("test", new Point(31, 15));
-		dummyData[2] = new CellPoint("test", new Point(32, 15));
-		dummyData[3] = new CellPoint("test", new Point(32, 14));
-		dummyData[4] = new CellPoint("test", new Point(33, 15));
+		dummyData = new CellPoint[5];
+		dummyData[0] = new CellPoint("test", new Point(1, 1));
+		dummyData[1] = new CellPoint("test", new Point(2, 1));
+		dummyData[2] = new CellPoint("test", new Point(3, 1));
+		dummyData[3] = new CellPoint("test", new Point(4, 1));
+		dummyData[4] = new CellPoint("test", new Point(5, 1));
 		events.onPathComplete(dummyData);
 	}
 	@Override
@@ -36,11 +36,15 @@ public class MapManagement implements IUIManagementInteractionListener, IAStarIn
 			//how does this even happen?
 			assert(false);
 		}
+		onAStarPathCompleteEvent(null); //force fire event
 		// TODO Auto-generated method stub
-		pathfindingSystem.getPath(0, first, 0, second);
+		//pathfindingSystem.getPath(0, first, 0, second);
+		//
 	}
 	public void onWindowReady(int cellIndex, ArrayList<PathCell> loaded) {
 		pathfindingSystem = new AStar(loaded);
+		pathfindingSystem.events.registerListener(this);
+		
 		cells = loaded;
 	}
 }
