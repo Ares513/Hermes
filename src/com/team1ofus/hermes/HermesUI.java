@@ -62,6 +62,7 @@ public class HermesUI extends JPanel{
 	private JLayeredPane layeredPane;
 	private boolean dragging;
 	private Point lastDragLocation;
+	private TextPane textPanel;
 	public HermesUI(PathCell viewCell) {
 		humanInteractive = new HumanInteractionEventObject();
 		initialize(viewCell);
@@ -127,11 +128,11 @@ public class HermesUI extends JPanel{
 	public void paintComponent(Graphics g){
 		super.paintComponent(g);
 		layeredPane.paintComponents(g);
-	//Allows us to paint the image within the JLabel	
 	}
 	
 	private void buildControl(){
 		frameHermes = new JFrame();
+		frameHermes.setIconImage(Toolkit.getDefaultToolkit().getImage(HermesUI.class.getResource("/com/team1ofus/hermes/setup_assistant.png")));
 		frameHermes.addMouseMotionListener(new MouseMotionAdapter() {
 			@Override
 			public void mouseDragged(MouseEvent e) {
@@ -154,14 +155,19 @@ public class HermesUI extends JPanel{
 
 		gridMap = new DrawMap(currentCell);
 		pathPanel = new PathPane();
-	
-		pathPanel.setBounds(0, 0, screenSize.width, screenSize.height);
+		textPanel = new TextPane();
+		pathPanel.setBounds(0, 0, screenSize.width - 200, screenSize.height - 200);
+		textPanel.setBounds(0, 0, frameHermes.getWidth(), frameHermes.getHeight());
+		textPanel.labelAllTiles(currentCell);
 		layeredPane = new JLayeredPane();
 		layeredPane.setBounds(0, 0, screenSize.width, screenSize.height);
 		layeredPane.add(gridMap);
 		layeredPane.add(pathPanel);
+		layeredPane.add(textPanel);
 		layeredPane.setComponentZOrder(gridMap, 0);
 		layeredPane.setComponentZOrder(pathPanel, 0);
+		layeredPane.setComponentZOrder(textPanel, 0);
+	
 		frameHermes.getContentPane().add(layeredPane);
 		
 		
@@ -181,11 +187,12 @@ public class HermesUI extends JPanel{
 					//safety check
 					
 					if(lastDragLocation != null) {
-						int x = (int) (-0.1*(e.getX() - lastDragLocation.getX()));
-						int y = (int) (-0.1*(e.getY() - lastDragLocation.getY()));
+						int x = (int) (-0.5*(e.getX() - lastDragLocation.getX()));
+						int y = (int) (-0.5*(e.getY() - lastDragLocation.getY()));
 						DebugManagement.writeNotificationToLog("Dragging occurred, dx dy " + x + " , " + y);
-						repaint();
+						gridMap.render.incrementOffset(x, y, frameHermes.getWidth(), frameHermes.getHeight());
 						repaintPanel();
+						lastDragLocation = e.getPoint();
 					} else {
 						lastDragLocation = new Point(e.getX(), e.getY());
 					}

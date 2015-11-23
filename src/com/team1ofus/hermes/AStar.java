@@ -134,7 +134,7 @@ public class AStar {
 			}
 			pointPath.add(currentTile.getCellPoint());
 			Collections.reverse(pointPath);
-//			System.out.println("A* ran");
+			System.out.println("A* ran");
 //			events.completePath(pointPath);
 			return pointPath;
 		}
