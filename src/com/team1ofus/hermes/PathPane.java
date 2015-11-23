@@ -22,7 +22,7 @@ class PathPane extends JPanel {
 	void drawPath(CellPoint[] path){
 		pointsList.clear();
 		for(CellPoint c : path){
-			c.getPoint().move(c.getPoint().x*tileWidth-tileWidth/2, c.getPoint().y*tileHeight-tileHeight/2);
+			c.getPoint().move(c.getPoint().x*tileWidth+tileWidth/2, c.getPoint().y*tileHeight+tileHeight/2);
 			pointsList.add(c.getPoint());
 		}
 		validate();
