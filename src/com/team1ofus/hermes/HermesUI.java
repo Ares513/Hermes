@@ -128,7 +128,6 @@ public class HermesUI extends JPanel{
 	public void paintComponent(Graphics g){
 		super.paintComponent(g);
 		layeredPane.paintComponents(g);
-	//Allows us to paint the image within the JLabel	
 	}
 	
 	private void buildControl(){
@@ -165,7 +164,7 @@ public class HermesUI extends JPanel{
 		layeredPane.add(pathPanel);
 		layeredPane.add(textPanel);
 		layeredPane.setComponentZOrder(gridMap, 0);
-		layeredPane.setComponentZOrder(pathPanel, 1);
+		layeredPane.setComponentZOrder(pathPanel, 0);
 		layeredPane.setComponentZOrder(textPanel, 0);
 	
 		frameHermes.getContentPane().add(layeredPane);
@@ -191,7 +190,6 @@ public class HermesUI extends JPanel{
 						int y = (int) (-0.5*(e.getY() - lastDragLocation.getY()));
 						DebugManagement.writeNotificationToLog("Dragging occurred, dx dy " + x + " , " + y);
 						gridMap.render.incrementOffset(x, y, frameHermes.getWidth(), frameHermes.getHeight());
-						repaint();
 						repaintPanel();
 						lastDragLocation = e.getPoint();
 					} else {
