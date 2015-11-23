@@ -25,8 +25,8 @@ public class SplashScreen extends JWindow {
 	    content.setBackground(Color.white);
 
 	    // Set the window's bounds, centering the window
-	    int width = 670;
-	    int height =275;
+	    int width = 650;
+	    int height =262;
 	    Dimension screen = Toolkit.getDefaultToolkit().getScreenSize();
 	    int x = (screen.width-width)/2;
 	    int y = (screen.height-height)/2;
@@ -34,7 +34,6 @@ public class SplashScreen extends JWindow {
 
 	    // Build the splash screen
 	    JLabel label = new JLabel(new ImageIcon("DapperMapper.png"));
-	    label.setLocation(10, 10);
 	    JLabel copyrt = new JLabel
 	      ("Team 1 of us", JLabel.CENTER);
 	    copyrt.setFont(new Font("Sans-Serif", Font.BOLD, 12));
