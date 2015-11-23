@@ -12,7 +12,7 @@ public class Bootstrapper {
 	 * Launch the application.
 	 */
 	public static void main(String[] args) {
-		SplashScreen splash = new SplashScreen(10000);
+		SplashScreen splash = new SplashScreen(1500);
 		splash.showSplashAndExit();	
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
