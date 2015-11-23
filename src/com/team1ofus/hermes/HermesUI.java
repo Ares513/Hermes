@@ -250,7 +250,7 @@ public class HermesUI extends JPanel{
 		default:
 			break;
 		}
-		
+		pathPanel.setOffset(gridMap.render.offset);
 		repaintPanel();
 	}
 	private void repaintPanel() {

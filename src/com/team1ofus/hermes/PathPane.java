@@ -14,6 +14,7 @@ class PathPane extends JPanel {
 	final int tileWidth = BootstrapperConstants.TILE_WIDTH;
 	final int tileHeight = BootstrapperConstants.TILE_HEIGHT;
 	ArrayList<Point> pointsList = new ArrayList<Point>();
+	private Point offset = new Point(0,0);
 	public PathPane() {
 		setOpaque(true);
 
@@ -21,6 +22,7 @@ class PathPane extends JPanel {
 	void drawPath(CellPoint[] path){
 		pointsList.clear();
 		for(CellPoint c : path){
+			c.getPoint().move(c.getPoint().x*tileWidth-tileWidth/2, c.getPoint().y*tileHeight-tileHeight/2);
 			pointsList.add(c.getPoint());
 		}
 		validate();
@@ -37,8 +39,8 @@ class PathPane extends JPanel {
 		g2d.setStroke(stroke1);
 		for(int i = 0; i < pointsList.size()-1; i++){
 			//g.fillRect(100, 100, 200, 200);
-			g.drawLine(pointsList.get(i).x*tileWidth, pointsList.get(i).y*tileHeight, pointsList.get(i+1).x*tileWidth,pointsList.get(i+1).y*tileHeight);
-			g2d.drawLine(pointsList.get(i).x*tileWidth, pointsList.get(i).y*tileHeight, pointsList.get(i+1).x*tileWidth,pointsList.get(i+1).y*tileHeight);
+			g.drawLine(pointsList.get(i).x-offset.x, pointsList.get(i).y-offset.y, pointsList.get(i+1).x-offset.x,pointsList.get(i+1).y-offset.y);
+			g2d.drawLine(pointsList.get(i).x-offset.x, pointsList.get(i).y-offset.y, pointsList.get(i+1).x-offset.x,pointsList.get(i+1).y-offset.y);
 		} 
 	}
 	
@@ -46,5 +48,10 @@ class PathPane extends JPanel {
 	public void paintComponent(Graphics g) {
 		drawLineSets(g);
 
+	}
+	
+	public void setOffset(Point offset) {
+		this.offset = offset;
+		
 	}
 }
