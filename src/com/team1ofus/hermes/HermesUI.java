@@ -132,6 +132,7 @@ public class HermesUI extends JPanel{
 	
 	private void buildControl(){
 		frameHermes = new JFrame();
+		frameHermes.setIconImage(Toolkit.getDefaultToolkit().getImage(HermesUI.class.getResource("/com/team1ofus/hermes/setup_assistant.png")));
 		frameHermes.addMouseMotionListener(new MouseMotionAdapter() {
 			@Override
 			public void mouseDragged(MouseEvent e) {
