@@ -187,11 +187,13 @@ public class HermesUI extends JPanel{
 					//safety check
 					
 					if(lastDragLocation != null) {
-						int x = (int) (-0.1*(e.getX() - lastDragLocation.getX()));
-						int y = (int) (-0.1*(e.getY() - lastDragLocation.getY()));
+						int x = (int) (-0.5*(e.getX() - lastDragLocation.getX()));
+						int y = (int) (-0.5*(e.getY() - lastDragLocation.getY()));
 						DebugManagement.writeNotificationToLog("Dragging occurred, dx dy " + x + " , " + y);
+						gridMap.render.incrementOffset(x, y, frameHermes.getWidth(), frameHermes.getHeight());
 						repaint();
 						repaintPanel();
+						lastDragLocation = e.getPoint();
 					} else {
 						lastDragLocation = new Point(e.getX(), e.getY());
 					}
