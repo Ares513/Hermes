@@ -30,7 +30,7 @@ public class CellRenderer {
 	
 	public void renderTiles(Graphics g) {
 		
-		for(int i=0; i<drawnCell.tiles[0].length; i++) {
+		for(int i=0; i<drawnCell.tiles.length; i++) {
 			for(int j=0; j<drawnCell.tiles[1].length; j++) {
 				switch(drawnCell.tiles[i][j].getTileType()) {
 				case WALL:
@@ -72,14 +72,14 @@ public class CellRenderer {
 	}
 	
 	public Point pickTile(int mouseX, int mouseY) {
-		int x = (int) (Math.floor((mouseX + offset.x)/(width/2)));
-		int y = (int) (Math.floor((mouseY + offset.y)/(height/2)));
+		int x = (int) (Math.floor((mouseX + offset.x)/width));
+		int y = (int) (Math.floor((mouseY + offset.y)/height));
 		return new Point(x,y);
 	}
 	public Tile getTile(int x, int y) {
 		int xActual = x;
 		int yActual = y;
-		int actualWidth = drawnCell.tiles[0].length - 1;
+		int actualWidth = drawnCell.tiles.length - 1;
 		if(x > actualWidth) {
 			xActual = actualWidth;
 		}
@@ -96,9 +96,9 @@ public class CellRenderer {
 		offset.translate(dx, dy);
 		if(offset.x < 0) {
 			offset.x = 0;
-		} else if(offset.x > drawnCell.tiles[0].length * width - windowHeight) {
-			int tileCount = drawnCell.tiles[0].length;
-			int maxX = drawnCell.tiles[0].length * width - windowHeight;
+		} else if(offset.x > drawnCell.tiles.length * width - windowWidth) {
+			int tileCount = drawnCell.tiles.length;
+			int maxX = drawnCell.tiles.length * width - windowWidth;
 			offset.x = maxX ;
 		}
 		if(offset.y < 0) {
