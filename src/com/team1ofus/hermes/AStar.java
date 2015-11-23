@@ -79,7 +79,7 @@ public class AStar {
 				frontier.remove(currentTile); // remove from frontier
 				
 				 
-				for(Tile aNeighbor: currentTile.getNeighbors()){
+				for(Tile aNeighbor: currentTile.getNeighbors(currentCell)){
 					if(explored.contains(aNeighbor)){
 						continue;
 					}

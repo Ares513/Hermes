@@ -62,6 +62,7 @@ public class HermesUI extends JPanel{
 	private JLayeredPane layeredPane;
 	private boolean dragging;
 	private Point lastDragLocation;
+	private TextPane textPanel;
 	public HermesUI(PathCell viewCell) {
 		humanInteractive = new HumanInteractionEventObject();
 		initialize(viewCell);
@@ -154,14 +155,19 @@ public class HermesUI extends JPanel{
 
 		gridMap = new DrawMap(currentCell);
 		pathPanel = new PathPane();
-	
-		pathPanel.setBounds(0, 0, screenSize.width, screenSize.height);
+		textPanel = new TextPane();
+		pathPanel.setBounds(0, 0, screenSize.width - 200, screenSize.height - 200);
+		textPanel.setBounds(0, 0, frameHermes.getWidth(), frameHermes.getHeight());
+		textPanel.labelAllTiles(currentCell);
 		layeredPane = new JLayeredPane();
 		layeredPane.setBounds(0, 0, screenSize.width, screenSize.height);
 		layeredPane.add(gridMap);
 		layeredPane.add(pathPanel);
+		layeredPane.add(textPanel);
 		layeredPane.setComponentZOrder(gridMap, 0);
-		layeredPane.setComponentZOrder(pathPanel, 0);
+		layeredPane.setComponentZOrder(pathPanel, 1);
+		layeredPane.setComponentZOrder(textPanel, 0);
+	
 		frameHermes.getContentPane().add(layeredPane);
 		
 		
