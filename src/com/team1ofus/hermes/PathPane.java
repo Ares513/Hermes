@@ -30,6 +30,7 @@ class PathPane extends JPanel {
 	}
 
 	//This function draws lines between the points specified in the ArrayList points list, which has been generated from A* algorithm
+	//Refactor this so paintComponent
 	void drawLineSets(Graphics g){
 		DebugManagement.writeNotificationToLog("Points for drawing:" + " " + pointsList);
 		Graphics2D g2d = (Graphics2D) g;
@@ -39,7 +40,7 @@ class PathPane extends JPanel {
 		g2d.setStroke(stroke1);
 		for(int i = 0; i < pointsList.size()-1; i++){
 			//g.fillRect(100, 100, 200, 200);
-			g.drawLine(pointsList.get(i).x-offset.x, pointsList.get(i).y-offset.y, pointsList.get(i+1).x-offset.x,pointsList.get(i+1).y-offset.y);
+			//g.drawLine(pointsList.get(i).x-offset.x, pointsList.get(i).y-offset.y, pointsList.get(i+1).x-offset.x,pointsList.get(i+1).y-offset.y);
 			g2d.drawLine(pointsList.get(i).x-offset.x, pointsList.get(i).y-offset.y, pointsList.get(i+1).x-offset.x,pointsList.get(i+1).y-offset.y);
 		} 
 	}

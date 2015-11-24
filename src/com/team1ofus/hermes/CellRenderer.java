@@ -45,9 +45,7 @@ public class CellRenderer {
 				}
 			}
 		}
-		g.drawLine(0, 0, 200, 200);
 		g.setFont(new Font("Times New Roman", Font.PLAIN, 24));
-		g.drawString(offset.toString(), 0, 0);
 	}
 	
 	public void setFirst(Point inPoint) {
