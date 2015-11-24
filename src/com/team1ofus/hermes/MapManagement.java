@@ -17,7 +17,7 @@ public class MapManagement implements IUIManagementInteractionListener, IAStarIn
 		
 	}
 	@Override
-	public void onAStarPathCompleteEvent(CellPoint[] directions) {
+	public void onAStarPathCompleteEvent(ArrayList<CellPoint> directions) {
 		// TODO Auto-generated method stub
 		//events.onPathComplete(directions);
 		//skip a* entirely
@@ -28,7 +28,7 @@ public class MapManagement implements IUIManagementInteractionListener, IAStarIn
 		dummyData[2] = new CellPoint("test", new Point(3, 1));
 		dummyData[3] = new CellPoint("test", new Point(4, 1));
 		dummyData[4] = new CellPoint("test", new Point(5, 1));
-		events.onPathComplete(dummyData);
+		events.onPathComplete(directions);
 	}
 	@Override
 	public void onPathReady(int cellIndex, Point first, Point second) {
@@ -36,7 +36,7 @@ public class MapManagement implements IUIManagementInteractionListener, IAStarIn
 			//how does this even happen?
 			assert(false);
 		}
-		onAStarPathCompleteEvent(null); //force fire event
+		onAStarPathCompleteEvent(pathfindingSystem.getPath(cellIndex, first, cellIndex, second)); //force fire event
 		// TODO Auto-generated method stub
 		//pathfindingSystem.getPath(0, first, 0, second);
 		//

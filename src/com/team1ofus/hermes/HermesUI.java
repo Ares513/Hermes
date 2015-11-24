@@ -118,7 +118,7 @@ public class HermesUI extends JPanel{
 		}
 	}
 	//Would just skip this and go straight to MyPanel's drawPath, but I'm afraid that it will break and I don't have time to fix it
-	 void drawPath(CellPoint[] path){
+	 void drawPath(ArrayList<CellPoint> path){
 		 pathPanel.drawPath(path);
 		 repaint();
 	    }
