@@ -74,8 +74,9 @@ public class AStar {
 											   //element
 				
 				if(currentTile == endTile){ //if we are at the end: 
-
-					return buildPath(endTile); //return the path
+					ArrayList<CellPoint> FinalPath = buildPath(endTile); 
+					events.AStarCompletePath(FinalPath);
+					return FinalPath; // buildPath(endTile); //return the path
 				}
 				
 				if(!(explored.contains(currentTile))){ //if the currentTile isnt already explored

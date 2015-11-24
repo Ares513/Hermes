@@ -13,6 +13,7 @@ public class MapManagementInteractionEventObject {
 		
 		for(IMapManagementInteractionListener UL : listeners){
 			UL.onAStarPathCompleteEvent(directions);
+			DebugManagement.writeNotificationToLog("onAStarPathCompleteEvent Called again");
 			
 		}
 	

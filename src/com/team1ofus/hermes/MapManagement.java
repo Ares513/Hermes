@@ -30,6 +30,9 @@ public class MapManagement implements IUIManagementInteractionListener, IAStarIn
 		dummyData[4] = new CellPoint("test", new Point(5, 1));
 		events.onPathComplete(directions);
 	}
+	//onAStarPathCompleteEvent
+	//onAStarPathCompleteEvent
+	
 	@Override
 	public void onPathReady(int cellIndex, Point first, Point second) {
 		if(pathfindingSystem == null) {
