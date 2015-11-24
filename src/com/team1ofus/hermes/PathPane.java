@@ -21,9 +21,10 @@ class PathPane extends JPanel {
 	}
 	void drawPath(ArrayList<CellPoint> path){
 		pointsList.clear();
-		for(CellPoint c : path){
-			c.getPoint().move(c.getPoint().x*tileWidth+tileWidth/2, c.getPoint().y*tileHeight+tileHeight/2);
-			pointsList.add(c.getPoint());
+		for(int c = 0; c < path.size(); c++){
+			//System.out.println(c);
+			pointsList.add(new Point((int) path.get(c).getPoint().getX(), (int) path.get(c).getPoint().getY()));
+			pointsList.get(c).move(pointsList.get(c).x*tileWidth+tileWidth/2, pointsList.get(c).y*tileHeight+tileHeight/2);
 		}
 		validate();
 		repaint();
