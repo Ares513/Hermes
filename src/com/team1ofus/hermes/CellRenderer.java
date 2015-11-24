@@ -45,7 +45,14 @@ public class CellRenderer {
 				}
 			}
 		}
-		g.setFont(new Font("Times New Roman", Font.PLAIN, 24));
+		first = new Point(0,0);
+		second = new Point(10, 5);
+		if(first != null) {
+			g.drawImage(spriteImages[2], first.x*width, first.y*height, width, height, null);
+		}
+		if(second != null) {
+			g.drawImage(spriteImages[2], second.x*width, second.y*height, width, height, null);
+		}
 	}
 	
 	public void setFirst(Point inPoint) {
@@ -70,8 +77,8 @@ public class CellRenderer {
 	}
 	
 	public Point pickTile(int mouseX, int mouseY) {
-		int x = (int) (Math.floor((mouseX + offset.x)/width));
-		int y = (int) (Math.floor((mouseY + offset.y)/height));
+		int x = (int) (Math.round((mouseX + offset.x)/width));
+		int y = (int) (Math.round((mouseY + offset.y)/height));
 		return new Point(x,y);
 	}
 	public Tile getTile(int x, int y) {
