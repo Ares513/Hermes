@@ -20,4 +20,8 @@ public class CellPoint {
 	public Point getPoint(){
 		return point;
 	}
+	
+	public boolean equals(CellPoint that){
+		return (this.getCellName().equals(that.getCellName()) && this.getPoint().equals(that.getPoint()));
+	}
 }
