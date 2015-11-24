@@ -28,7 +28,7 @@ public class MapManagement implements IUIManagementInteractionListener, IAStarIn
 		dummyData[2] = new CellPoint("test", new Point(3, 1));
 		dummyData[3] = new CellPoint("test", new Point(4, 1));
 		dummyData[4] = new CellPoint("test", new Point(5, 1));
-		events.onPathComplete(directions);
+		events.doPathComplete(directions);
 	}
 	//onAStarPathCompleteEvent
 	//onAStarPathCompleteEvent
@@ -39,8 +39,8 @@ public class MapManagement implements IUIManagementInteractionListener, IAStarIn
 			//how does this even happen?
 			assert(false);
 		}
-		onAStarPathCompleteEvent(pathfindingSystem.getPath(cellIndex, first, cellIndex, second)); //force fire event
-		// TODO Auto-generated method stub
+		pathfindingSystem.getPath(cellIndex, first, cellIndex, second); // not sure if this should be another event. 
+	
 		//pathfindingSystem.getPath(0, first, 0, second);
 		//
 	}
