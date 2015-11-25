@@ -41,39 +41,34 @@ public class AStar {
 		// Nodes that have already been explored
 		explored = new ArrayList<CellPoint>();
 		cellMap = new HashMap<String, TileInfo[][]>();
+		for(PathCell cell: cells){
+			cellMap.put(cell.getName(), makeTileInfoArray(cell));
+		}
 	}
 	private class TileInfo {
 		private TILE_TYPE tileType = TILE_TYPE.WALL; 
 		private CellPoint parent = null;
 		private int costSoFar = 0;
 		private int estimatedTotalCost = 0;
+		private int traverseCost = 1000000;
 		
-		private TileInfo(){
+		
+		private TileInfo(TILE_TYPE newTileType, int newTraverseCost){
 			parent = null;
 			costSoFar = 0;
 			estimatedTotalCost = 0;
+			traverseCost = newTraverseCost;
+			tileType = newTileType;
 		}
-		
-		
-		// makes a 2d array of size x,y filled with blank TileInfos
-		// this is a function right now so that its more flexible if needed.
-		private TileInfo[][] makeTiInArray(PathCell newCell){
-			TileInfo[][] output = new TileInfo[newCell.tiles.length][newCell.tiles[0].length];
-			for(int i = 0; i < newCell.tiles.length; i++){
-				for(int j = 0; j < newCell.tiles[0].length; j++){
-					output[i][j].setTileType(newCell.tiles[i][j].getTileType());
-				}
-			}
-			return output;
+	
+		public boolean canBeEntered(CellPoint from, CellPoint to){
+			return (this.tileType != TILE_TYPE.WALL);
 		}
 		
 		private TILE_TYPE getTileType(){
 			return this.tileType;
 		}
 		
-		private void setTileType(TILE_TYPE aType){
-			this.tileType = aType;
-		}
 		private CellPoint getParent(){
 			return this.parent;
 		}
@@ -93,53 +88,57 @@ public class AStar {
 		private void setEstimatedTotalCost(int newETC){
 			this.estimatedTotalCost = newETC;
 		}
+		private int getTraverseCost(){
+			return this.traverseCost;
+		}
 	}
 	
-	
-	
-//	//maps which tiles have been added
-//		ArrayList<PathCell> accessedCells = new ArrayList<PathCell>(); 
-//		
-//		// Nodes that need to be explored
-//		ArrayList<Tile> frontier = new ArrayList<Tile>(); 
-//		
-//		// Nodes that have already been explored
-//		ArrayList<Tile> explored = new ArrayList<Tile>();
-		
+	// makes a 2d array of size x,y filled with blank TileInfos
+			// this is a function right now so that its more flexible if needed.
+	private TileInfo[][] makeTileInfoArray(PathCell newCell){
+		TileInfo[][] output = new TileInfo[newCell.tiles.length][newCell.tiles[0].length];
+		for(int i = 0; i < newCell.tiles.length; i++){
+			for(int j = 0; j < newCell.tiles[0].length; j++){
+				output[i][j] = new TileInfo(newCell.getTile(new Point(i,j)).getTileType(), 
+											newCell.getTile(new Point(i,j)).getTraverseCost());
+			}
+		}
+		return output;
+	}
+
 		
 		/*
 		 * Takes a start Cell "map", start point (the exact tile within a Cell, and the 
 		 * end Cell and point.
 		 * Returns the fastest path between two points as an ordered list of Tiles
 		 */
-		public ArrayList<CellPoint> getPath(String startCellName, Point startIndex, String endCellName, Point endIndex){
+		public ArrayList<CellPoint> getPath(CellPoint startCellPoint, CellPoint endCellPoint){
 			
-//			PathCell startCell = accessedCells.get(startCellIndex); //What cell do we start in
-//			PathCell currentCell = startCell;
-			
-//			PathCell endCell = accessedCells.get(endCellIndex);
-//			Tile currentTile = getTile(currentCell, startIndex); //The exact tile we start at
-			CellPoint currentPoint = new CellPoint(startCellName,startIndex);
-			CellPoint endPoint = new CellPoint(endCellName, endIndex);
-//			Tile endTile = getTile(endCell, endIndex); // the tile we want to get to
+			CellPoint currentPoint = startCellPoint;
+			TileInfo currentTile = getTileInfo(startCellPoint);
+			if(currentTile.getTileType().equals(TILE_TYPE.WALL)){
+				return null;
+			}
+			CellPoint endPoint = endCellPoint;
 			int tentativeCSF = 0; //combines the cost so far and the cost to enter a tile
 								  //that is being explored
 			
 			int curX;
 			int curY;
-			int neiX;
-			int neiY;
 //			int estTotalCost = getHeuristic(currentTile);
-			int estTotalCost = getHeuristic(startCellName, startIndex, endCellName, endIndex);//the expected path cost from start
+			int estTotalCost = getHeuristic(currentPoint, endPoint);//the expected path cost from start
 														 //to finish based on the best known 
 														 //path so far. Starts as just the 
 														 //heuristic from start to finish
 		
 //			this.frontier.add(currentTile); //the only thing in the frontier to start is the 
 											//start node
-			this.frontier.add(new CellPoint(startCellName, startIndex));
+			this.frontier.add(startCellPoint);
 			
 			while(!frontier.isEmpty()){ //so long as the frontier is not empty
+				System.out.println(currentPoint.getPoint());
+				System.out.println(explored.size());
+				System.out.println(frontier.size());
 				currentPoint = frontier.get(0); //the tile we want to explore is the tile with 
 											   //the lowest expected path cost
 											   //For now its BFS so we just take the first 
@@ -150,38 +149,51 @@ public class AStar {
 					return buildPath(endPoint); //return the path
 				}
 				
+				
 				if(!(explored.contains(currentPoint))){ //if the currentTile isnt already explored
 					explored.add(currentPoint); // add to explored
 				}
 				frontier.remove(currentPoint); // remove the curTile from frontier so we dont check 
 											  // it again
-					 
-				for(Tile aNeighbor: currentTile.getNeighbors(currentCell)){
-					if(explored.contains(aNeighbor)){
-						continue;
+				curX = (int) currentPoint.getPoint().getX(); // just for readability
+				curY = (int) currentPoint.getPoint().getY(); // and convenience
+				
+				TileInfo neighborTile;
+				currentTile = getTileInfo(currentPoint);
+				CellPoint neighborPoint;
+				double moveMultiplier;
+				for(int neiX = curX-1; neiX <= curX+1; neiX++){
+					for(int neiY = curY-1; neiY <= curY+1; neiY++){
+						neighborPoint = new CellPoint(currentPoint.getCellName(), new Point(neiX, neiY));
+						neighborTile = getTileInfo(neighborPoint);
+						if(!neighborTile.canBeEntered(currentPoint, neighborPoint)){
+							continue;
+						}
+						for(CellPoint aPoint: explored){
+							if(neighborPoint.getCellName().equals(aPoint.getCellName()) && 
+							   neighborPoint.getPoint().equals(aPoint.getPoint())){
+								continue;
+							}
+						}
+						moveMultiplier = 1;
+						if((curX != neiX) && (curY != neiY)){ //&& (currentTile.getCellName() == aNeighbor.getCellName())){
+							moveMultiplier = 1.41; // sqrt(2)
+						}
+						tentativeCSF = (int) (currentTile.getCostSoFar() + (moveMultiplier*neighborTile.getTraverseCost()));
+						
+						if(!frontier.contains(neighborPoint)){
+							neighborTile.setParent(currentPoint);
+							neighborTile.setCostSoFar(tentativeCSF);
+							neighborTile.setEstimatedTotalCost(tentativeCSF+ getHeuristic(neighborPoint,endPoint));
+							frontier.add(neighborPoint);
+						}
+						else if(tentativeCSF >= neighborTile.getCostSoFar()){
+							continue;
+						}
+						neighborTile.setParent(currentPoint);
+						neighborTile.setCostSoFar(tentativeCSF);
+						neighborTile.setEstimatedTotalCost(tentativeCSF+ getHeuristic(neighborPoint,endPoint));
 					}
-					curX = (int) currentTile.getCellPoint().getPoint().getX();
-					curY = (int) currentTile.getCellPoint().getPoint().getY();
-					neiX = (int) aNeighbor.getCellPoint().getPoint().getX();
-					neiY = (int) aNeighbor.getCellPoint().getPoint().getY();
-					if((curX != neiX) && (curY != neiY)){ //&& (currentTile.getCellName() == aNeighbor.getCellName())){
-						tentativeCSF = currentTile.getCSF() + (int)(1.41*aNeighbor.getTraverseCost());
-					}
-					else{
-						tentativeCSF = currentTile.getCSF() + aNeighbor.getTraverseCost();
-					}
-					if(!frontier.contains(aNeighbor)){
-						aNeighbor.setParent(currentTile);
-						aNeighbor.setCSF(tentativeCSF);
-						aNeighbor.setETC(tentativeCSF+ getHeuristic(aNeighbor));
-						frontier.add(aNeighbor);
-					}
-					else if(tentativeCSF >= aNeighbor.getCSF()){
-						continue;
-					}
-					aNeighbor.setParent(currentTile);
-					aNeighbor.setCSF(tentativeCSF);
-					aNeighbor.setETC(tentativeCSF+ getHeuristic(aNeighbor));
 				}
 			}
 			System.out.println("No Path Found");
@@ -189,31 +201,31 @@ public class AStar {
 		
 		}
 
-		private int getHeuristic(Tile currentTile) {
-			return 0;
-		}
+//		private int getHeuristic(Tile currentTile) {
+//			return 0;
+//		}
 
 		private ArrayList<CellPoint> buildPath(CellPoint endPoint) {
 			ArrayList<CellPoint> pointPath = new ArrayList<CellPoint>();
 			
-			Tile currentTile = endPoint;
-			CellPoint currentPoint = currentTile.getCellPoint();
+			TileInfo currentTile = getTileInfo(endPoint);
+			CellPoint currentPoint = endPoint;
 			
-			while(currentTile.getParent() != null){
-					currentPoint = currentTile.getCellPoint();
+			while(currentTile.getParent() != null){ //while not start tile	
 					pointPath.add(currentPoint);
-					currentTile = currentTile.getParent();
+					currentPoint = currentTile.getParent();
+					currentTile = getTileInfo(currentPoint);
 			}
-			pointPath.add(currentTile.getCellPoint());
+			pointPath.add(currentPoint);
 			Collections.reverse(pointPath);
 //			System.out.println("A* ran");
 //			events.completePath(pointPath);
 			return pointPath;
 		}
 
-		private Tile getTile(PathCell aCell, Point aIndex) {
-			return aCell.getTile(aIndex);
-		}
+//		private Tile getTile(PathCell aCell, Point aIndex) {
+//			return aCell.getTile(aIndex);
+//		}
 		
 		public void addCell(PathCell aCell){
 			if(!accessedCells.contains(aCell)){
@@ -230,11 +242,11 @@ public class AStar {
 			return null;
 		}
 		
-		private TileInfo getTileInfo(String aCellName, Point aPoint){
-			return cellMap.get(aCellName)[(int) aPoint.getX()][(int) aPoint.getY()];
+		private TileInfo getTileInfo(CellPoint aCellPoint){
+			return cellMap.get(aCellPoint.getCellName())[(int) aCellPoint.getPoint().getX()][(int) aCellPoint.getPoint().getY()];
 		}
 		
-		private int getHeuristic(String curCell, Point curPoint, String endCell, Point endPoint){
+		private int getHeuristic(CellPoint current, CellPoint end){
 			return 0;
 		}
 }
