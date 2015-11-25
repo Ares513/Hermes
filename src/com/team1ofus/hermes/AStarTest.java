@@ -39,8 +39,9 @@ public class AStarTest {
 		AStar test = new AStar(testCellList);
 		System.out.println("Path:");
 		ArrayList<CellPoint> AStarOut = test.getPath(new CellPoint("b",new Point(50,50)), new CellPoint("b", new Point(55,40)));
-		System.out.println("getPath didnt break");
-		if((AStarOut != null) || (AStarOut.size() == 0)){
+		if(AStarOut.size() >= 5){
+			System.out.println(AStarOut.size());
+			System.out.println("getPath didnt break");
 			for(CellPoint each:AStarOut){
 				System.out.println(each.getPoint());
 			}
@@ -54,7 +55,7 @@ public class AStarTest {
 	@Test
 	public void test3() { // should return path not found, all walls
 		System.out.println("Test 3: should return no path found");
-		PathCell testCell = new PathCell("bag'o'schwifty",5,5,32, TILE_TYPE.WALL);
+		PathCell testCell = new PathCell("c",5,5,32, TILE_TYPE.WALL);
 		ArrayList<PathCell> testCellList = new ArrayList<PathCell>();
 		testCellList.add(testCell);
 		AStar test = new AStar(testCellList);

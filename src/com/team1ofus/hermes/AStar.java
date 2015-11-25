@@ -94,7 +94,7 @@ public class AStar {
 	}
 	
 	// makes a 2d array of size x,y filled with blank TileInfos
-			// this is a function right now so that its more flexible if needed.
+	// this is a function right now so that its more flexible if needed.
 	private TileInfo[][] makeTileInfoArray(PathCell newCell){
 		TileInfo[][] output = new TileInfo[newCell.tiles.length][newCell.tiles[0].length];
 		for(int i = 0; i < newCell.tiles.length; i++){
@@ -125,7 +125,6 @@ public class AStar {
 			
 			int curX;
 			int curY;
-//			int estTotalCost = getHeuristic(currentTile);
 			int estTotalCost = getHeuristic(currentPoint, endPoint);//the expected path cost from start
 														 //to finish based on the best known 
 														 //path so far. Starts as just the 
@@ -169,19 +168,17 @@ public class AStar {
 						if(!neighborTile.canBeEntered(currentPoint, neighborPoint)){
 							continue;
 						}
-						for(CellPoint aPoint: explored){
-							if(neighborPoint.getCellName().equals(aPoint.getCellName()) && 
-							   neighborPoint.getPoint().equals(aPoint.getPoint())){
-								continue;
-							}
+						if(neighborPoint.isIn(explored)){
+							continue;
 						}
+					
 						moveMultiplier = 1;
 						if((curX != neiX) && (curY != neiY)){ //&& (currentTile.getCellName() == aNeighbor.getCellName())){
 							moveMultiplier = 1.41; // sqrt(2)
 						}
 						tentativeCSF = (int) (currentTile.getCostSoFar() + (moveMultiplier*neighborTile.getTraverseCost()));
 						
-						if(!frontier.contains(neighborPoint)){
+						if(!neighborPoint.isIn(frontier)){
 							neighborTile.setParent(currentPoint);
 							neighborTile.setCostSoFar(tentativeCSF);
 							neighborTile.setEstimatedTotalCost(tentativeCSF+ getHeuristic(neighborPoint,endPoint));
@@ -201,10 +198,6 @@ public class AStar {
 		
 		}
 
-//		private int getHeuristic(Tile currentTile) {
-//			return 0;
-//		}
-
 		private ArrayList<CellPoint> buildPath(CellPoint endPoint) {
 			ArrayList<CellPoint> pointPath = new ArrayList<CellPoint>();
 			
@@ -218,14 +211,8 @@ public class AStar {
 			}
 			pointPath.add(currentPoint);
 			Collections.reverse(pointPath);
-//			System.out.println("A* ran");
-//			events.completePath(pointPath);
 			return pointPath;
 		}
-
-//		private Tile getTile(PathCell aCell, Point aIndex) {
-//			return aCell.getTile(aIndex);
-//		}
 		
 		public void addCell(PathCell aCell){
 			if(!accessedCells.contains(aCell)){

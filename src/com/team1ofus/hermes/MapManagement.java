@@ -36,7 +36,9 @@ public class MapManagement implements IUIManagementInteractionListener, IAStarIn
 			//how does this even happen?
 			assert(false);
 		}
-		onAStarPathCompleteEvent(pathfindingSystem.getPath(cellIndex, first, cellIndex, second)); //force fire event
+		CellPoint a = new CellPoint(cells.get(cellIndex).getName(), first);
+		CellPoint b = new CellPoint(cells.get(cellIndex).getName(), second);
+		onAStarPathCompleteEvent(pathfindingSystem.getPath(a,b)); //force fire event
 		// TODO Auto-generated method stub
 		//pathfindingSystem.getPath(0, first, 0, second);
 		//
