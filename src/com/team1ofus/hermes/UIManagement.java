@@ -11,6 +11,7 @@ public class UIManagement implements IHumanInteractionListener, IMapManagementIn
 	Loader loader;
 	Point first;
 	Point second;
+	PrintDirections printList; 
 	public UIManagementInteractionEventObject events;
 	private ArrayList<PathCell> allCells;
 	public UIManagement(ArrayList<PathCell> allCells) {
@@ -18,6 +19,7 @@ public class UIManagement implements IHumanInteractionListener, IMapManagementIn
 		this.allCells = allCells;
 		loader = new Loader(allCells);  
 		loader.events.addChooseListener(this);
+		printList = new PrintDirections(); 
 	}
 	
 	public JFrame frame; 
@@ -33,6 +35,7 @@ public class UIManagement implements IHumanInteractionListener, IMapManagementIn
 		DebugManagement.writeNotificationToLog("Path received, contents "  + directions);
 
 		window.getPathPanel().drawPath(directions);
+		printList.parseDirections(directions);
 	}
 
 	@Override
