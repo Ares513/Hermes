@@ -143,9 +143,13 @@ public class AStar {
 											   //For now its BFS so we just take the first 
 											   //element
 				
-				if(currentPoint.equals(endPoint)){ //if we are at the end: 
 
-					return buildPath(endPoint); //return the path
+				if(currentPoint.equals(endPoint)){ //if we are at the end: 
+					ArrayList<CellPoint> FinalPath = buildPath(endPoint); 
+					events.AStarCompletePath(FinalPath);
+					return FinalPath; 
+					//return buildPath(endPoint); //return the path
+
 				}
 				
 				

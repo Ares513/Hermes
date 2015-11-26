@@ -17,4 +17,10 @@ public class AStarInteractionEventObject {
 	public void registerListener(IAStarInteractionListener aListener) {
 		listeners.add(aListener);
 	}
+	public void AStarCompletePath(ArrayList<CellPoint> Path){
+
+		for(IAStarInteractionListener l : listeners){
+			l.onAStarPathCompleteEvent(Path);
+		}
+	}
 }
