@@ -146,9 +146,8 @@ public class AStar {
 
 				if(currentPoint.equals(endPoint)){ //if we are at the end: 
 					ArrayList<CellPoint> FinalPath = buildPath(endPoint); 
-					events.AStarCompletePath(FinalPath);
+					events.AStarCompletePath(FinalPath); // Fires A* event. 
 					return FinalPath; 
-					//return buildPath(endPoint); //return the path
 
 				}
 				

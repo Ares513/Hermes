@@ -44,11 +44,6 @@ public class MapManagement implements IUIManagementInteractionListener, IAStarIn
 		CellPoint b = new CellPoint(cells.get(cellIndex).getName(), second);
 		pathfindingSystem.getPath(a,b);
 		//onAStarPathCompleteEvent(pathfindingSystem.getPath(a,b)); //force fire event
-		// TODO Auto-generated method stub
-		//pathfindingSystem.getPath(cellIndex, first, cellIndex, second); // not sure if this should be another event. 
-
-		//pathfindingSystem.getPath(0, first, 0, second);
-		//
 	}
 	public void onWindowReady(int cellIndex, ArrayList<PathCell> loaded) {
 		pathfindingSystem = new AStar(loaded);
