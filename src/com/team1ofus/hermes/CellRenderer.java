@@ -45,20 +45,23 @@ public class CellRenderer {
 				}
 			}
 		}
-		first = new Point(0,0);
-		second = new Point(10, 5);
+
+		
+		
 		if(first != null) {
-			g.drawImage(spriteImages[2], first.x*width, first.y*height, width, height, null);
+			g.drawImage(spriteImages[2], first.x*width-offset.x, first.y*height-offset.y, width, height, null);
 		}
 		if(second != null) {
-			g.drawImage(spriteImages[2], second.x*width, second.y*height, width, height, null);
+			g.drawImage(spriteImages[2], second.x*width-offset.x, second.y*height-offset.y, width, height, null);
 		}
 	}
 	
 	public void setFirst(Point inPoint) {
+		DebugManagement.writeNotificationToLog("First point in CellRenderer set.");
 		first = inPoint;
 	}
 	public void setSecond(Point inPoint) {
+		DebugManagement.writeNotificationToLog("Second point in CellRenderer set.");
 		second = inPoint;
 	}
 	private void getFromSheet(){

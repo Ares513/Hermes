@@ -41,6 +41,7 @@ import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.event.MouseMotionAdapter;
 import javax.swing.JLayeredPane;
+import javax.swing.border.EtchedBorder;
 
 public class HermesUI extends JPanel{
 	
@@ -102,17 +103,18 @@ public class HermesUI extends JPanel{
 		if(gridMap.render.getTile(picked.x, picked.y).tileType == TILE_TYPE.PEDESTRIAN_WALKWAY) {
 			//valid.
 			if(first == null) {
+				
 				first = new Point(picked.x, picked.y);
 				gridMap.render.setFirst(first);
-				repaint();
+				repaintPanel();;
 			} else if(second == null) {
+				
 				second = new Point(picked.x,picked.y);
-				gridMap.render.setSecond(first);
+				gridMap.render.setSecond(second);
 				first = null;
 				second = null;
-				gridMap.render.setFirst(null);
-				gridMap.render.setSecond(null);
-				repaint();
+
+				repaintPanel();;
 			}
 			
 			humanInteractive.doClick(picked.x, picked.y);
@@ -121,7 +123,7 @@ public class HermesUI extends JPanel{
 	//Would just skip this and go straight to MyPanel's drawPath, but I'm afraid that it will break and I don't have time to fix it
 	 void drawPath(ArrayList<CellPoint> path){
 		 pathPanel.drawPath(path);
-		 repaint();
+		 repaintPanel();;
 	    }
 
 	@Override
@@ -155,6 +157,7 @@ public class HermesUI extends JPanel{
 		MousegridMap.add(mouseOut);
 
 		gridMap = new DrawMap(currentCell);
+		gridMap.setBorder(new EtchedBorder(EtchedBorder.RAISED, null, null));
 		pathPanel = new PathPane();
 		textPanel = new TextPane();
 		pathPanel.setBounds(0, 0, screenSize.width - 200, screenSize.height - 200);
@@ -263,7 +266,7 @@ public class HermesUI extends JPanel{
 		repaintPanel();
 	}
 	private void repaintPanel() {
-		layeredPane.repaint();
+		frameHermes.repaint();;
 	}
 }
 
