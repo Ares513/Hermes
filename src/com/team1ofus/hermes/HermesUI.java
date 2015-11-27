@@ -47,10 +47,8 @@ public class HermesUI extends JPanel{
 	ArrayList<Point> pointsList = new ArrayList<Point>();
 	private JFrame frameHermes;
 	private PathPane pathPanel;
-	private JTextField StartField;
-	private JTextField DestinationField;
+	private PointPane pointPane;
 	private Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
-	private BufferedImage map;
 	private Point mousePosition;
 	private DrawMap gridMap;
 	int scrollSpeed = 5;
@@ -104,14 +102,18 @@ public class HermesUI extends JPanel{
 			if(first == null) {
 				first = new Point(picked.x, picked.y);
 				gridMap.render.setFirst(first);
+				pointPane.setFirst(first);
 				repaint();
 			} else if(second == null) {
 				second = new Point(picked.x,picked.y);
 				gridMap.render.setSecond(first);
+				pointPane.setSecond(first);
 				first = null;
 				second = null;
 				gridMap.render.setFirst(null);
 				gridMap.render.setSecond(null);
+				pointPane.setFirst(null);
+				pointPane.setSecond(null);
 				repaint();
 			}
 			
@@ -238,7 +240,9 @@ public class HermesUI extends JPanel{
 	public PathPane getPathPanel(){
 		return pathPanel;
 	}
-	
+	public PointPane getPointPane(){
+		return pointPane;
+	}
 	
 
 	private void doOffsetCalc(KeyEvent e) {
