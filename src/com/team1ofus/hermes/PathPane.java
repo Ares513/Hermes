@@ -37,7 +37,7 @@ class PathPane extends JPanel {
 	//This function draws lines between the points specified in the ArrayList points list, which has been generated from A* algorithm
 	//Refactor this so paintComponent
 	void drawLineSets(Graphics g){
-		DebugManagement.writeNotificationToLog("Points for drawing:" + " " + pointsList);
+		//DebugManagement.writeNotificationToLog("Points for drawing:" + " " + pointsList);
 		Graphics2D g2d = (Graphics2D) g;
 		g2d.setColor(Color.RED);
 		float[] dashingPattern1 = {8f, 8f};

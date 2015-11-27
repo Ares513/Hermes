@@ -17,6 +17,7 @@ public void doPathReady(int cellIndex, Point first, Point second){
 	
 	for(IUIManagementInteractionListener UL : managementListeners){
 		UL.onPathReady(cellIndex, first, second);
+		DebugManagement.writeNotificationToLog("both_Have_Been_Clicked");
 		}	
 
 	}

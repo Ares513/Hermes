@@ -29,7 +29,7 @@ public class UIManagement implements IHumanInteractionListener, IMapManagementIn
 		
 	}
 	
-	public void onAStarPathCompleteEvent(ArrayList<CellPoint> directions) {
+	public void doPathComplete(ArrayList<CellPoint> directions) {
 		DebugManagement.writeNotificationToLog("Path received, contents "  + directions);
 
 		window.getPathPanel().drawPath(directions);
