@@ -113,8 +113,6 @@ public class HermesUI extends JPanel{
 				second = null;
 				gridMap.render.setFirst(null);
 				gridMap.render.setSecond(null);
-				pointPane.setFirst(null);
-				pointPane.setSecond(null);
 				repaint();
 			}
 			
