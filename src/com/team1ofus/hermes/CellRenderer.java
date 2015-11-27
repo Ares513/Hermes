@@ -23,6 +23,7 @@ public class CellRenderer {
 	PathCell drawnCell;
 	private Point first;
 	private Point second;
+	private int panelSize = 230;
 	public CellRenderer(PathCell inCell) {
 		drawnCell = inCell;
 		getFromSheet();
@@ -45,8 +46,6 @@ public class CellRenderer {
 				}
 			}
 		}
-
-		
 		
 		if(first != null) {
 			g.drawImage(spriteImages[2], first.x*width-offset.x, first.y*height-offset.y, width, height, null);
@@ -104,11 +103,12 @@ public class CellRenderer {
 		offset.translate(dx, dy);
 		if(offset.x < 0) {
 			offset.x = 0;
-		} else if(offset.x > drawnCell.tiles.length * width - windowWidth) {
+		} else if(offset.x > drawnCell.tiles.length * width - (windowWidth -panelSize)) {
 			int tileCount = drawnCell.tiles.length;
-			int maxX = drawnCell.tiles.length * width - windowWidth;
+			int maxX = drawnCell.tiles.length * width - (windowWidth - panelSize);
 			offset.x = maxX ;
 		}
+		//the panelSizae is the size of the side panel. If we need to change that, alter that variable.
 		if(offset.y < 0) {
 			offset.y = 0;
 		} else if(offset.y > drawnCell.tiles[1].length * height - windowHeight) {
