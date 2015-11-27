@@ -32,6 +32,7 @@ import java.awt.event.KeyEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.image.BufferedImage;
+import java.io.IOException;
 import java.util.ArrayList;
 
 import javax.swing.JButton;
@@ -106,8 +107,8 @@ public class HermesUI extends JPanel{
 				repaint();
 			} else if(second == null) {
 				second = new Point(picked.x,picked.y);
-				gridMap.render.setSecond(first);
-				pointPane.setSecond(first);
+				gridMap.render.setSecond(second);
+				pointPane.setSecond(second);
 				first = null;
 				second = null;
 				gridMap.render.setFirst(null);
@@ -159,22 +160,29 @@ public class HermesUI extends JPanel{
 		gridMap = new DrawMap(currentCell);
 		pathPanel = new PathPane();
 		textPanel = new TextPane();
+		try {
+			pointPane = new PointPane();
+		} catch (IOException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
 		pathPanel.setBounds(0, 0, screenSize.width - 200, screenSize.height - 200);
 		textPanel.setBounds(0, 0, frameHermes.getWidth(), frameHermes.getHeight());
 		textPanel.labelAllTiles(currentCell);
 		pathPanel.setBounds(0, 0, screenSize.width, screenSize.height);
+		pointPane.setBounds(0, 0, screenSize.width, screenSize.height);
 		layeredPane = new JLayeredPane();
 		layeredPane.setBounds(0, 0, screenSize.width, screenSize.height);
 		layeredPane.add(gridMap);
 		layeredPane.add(pathPanel);
 		layeredPane.add(textPanel);
+		layeredPane.add(pointPane);
 		layeredPane.setComponentZOrder(gridMap, 0);
 		layeredPane.setComponentZOrder(pathPanel, 0);
 		layeredPane.setComponentZOrder(textPanel, 0);
+		layeredPane.setComponentZOrder(pointPane, 0);
 		frameHermes.getContentPane().add(layeredPane);
-		
-		
-		layeredPane.setBounds(0, 0, 1920, 1080);
+		//layeredPane.setBounds(0, 0, 1920, 1080);
 		/*
 		 * Temporary layered
 		 */
@@ -195,6 +203,7 @@ public class HermesUI extends JPanel{
 						DebugManagement.writeNotificationToLog("Dragging occurred, dx dy " + x + " , " + y);
 						gridMap.render.incrementOffset(x, y, frameHermes.getWidth(), frameHermes.getHeight());
 						pathPanel.setOffset(gridMap.render.offset);
+						pointPane.setOffset(gridMap.render.offset);
 						repaintPanel();
 						lastDragLocation = e.getPoint();
 					} else {
@@ -264,9 +273,11 @@ public class HermesUI extends JPanel{
 			break;
 		}
 		pathPanel.setOffset(gridMap.render.offset);
+		pointPane.setOffset(gridMap.render.offset);
 		repaintPanel();
 	}
 	private void repaintPanel() {
+		System.out.println("I got called for some reason in repaintPane;");
 		layeredPane.repaint();
 	}
 }
