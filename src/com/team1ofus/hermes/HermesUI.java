@@ -33,6 +33,14 @@ import java.awt.Graphics2D;
 import java.awt.event.MouseMotionAdapter;
 import javax.swing.JLayeredPane;
 import javax.swing.border.EtchedBorder;
+import javax.swing.Box;
+import javax.swing.JSeparator;
+import javax.swing.SwingConstants;
+import java.awt.Rectangle;
+import javax.swing.JTextArea;
+import javax.swing.border.LineBorder;
+import javax.swing.JScrollBar;
+import javax.swing.JScrollPane;
 
 public class HermesUI extends JPanel{
 	
@@ -56,6 +64,18 @@ public class HermesUI extends JPanel{
 	private Point lastDragLocation;
 	private TextPane textPanel;
 	private int panelSize = 230;
+	private Box verticalBox;
+	private JTextField startPoint;
+	private JTextField destination;
+	private JSeparator separator;
+	private JLabel lblDirectionReadout;
+	private Component verticalStrut;
+	private JTextArea directionsTextPane;
+	private Component verticalStrut_1;
+	private Component verticalStrut_2;
+	private JButton searchButton;
+	private Component verticalStrut_3;
+	private JScrollPane scrollPane;
 	public HermesUI(PathCell viewCell) {
 		humanInteractive = new HumanInteractionEventObject();
 		initialize(viewCell);
@@ -148,9 +168,62 @@ public class HermesUI extends JPanel{
 		textPanel.setBounds(230, 0, screenSize.width-230, screenSize.height);
 		textPanel.labelAllTiles(currentCell);
 		
-		JPanel panel = new JPanel();
-		panel.setBounds(0, 0, panelSize, screenSize.height);
-		frameHermes.getContentPane().add(panel);
+		JPanel interacactionpanel = new JPanel();
+		interacactionpanel.setBounds(0, 0, panelSize, screenSize.height);
+		frameHermes.getContentPane().add(interacactionpanel);
+		
+		verticalBox = Box.createVerticalBox();
+		interacactionpanel.add(verticalBox);
+		
+		verticalStrut_1 = Box.createVerticalStrut(20);
+		verticalStrut_1.setPreferredSize(new Dimension(0, 30));
+		verticalBox.add(verticalStrut_1);
+		
+		startPoint = new JTextField();
+		verticalBox.add(startPoint);
+		startPoint.setText("Startpoint");
+		startPoint.setColumns(18);
+		
+		verticalStrut_2 = Box.createVerticalStrut(20);
+		verticalStrut_2.setPreferredSize(new Dimension(0, 15));
+		verticalBox.add(verticalStrut_2);
+		
+		destination = new JTextField();
+		destination.setText("Destination");
+		verticalBox.add(destination);
+		destination.setColumns(18);
+		
+		verticalStrut_3 = Box.createVerticalStrut(20);
+		verticalStrut_3.setPreferredSize(new Dimension(0, 5));
+		verticalBox.add(verticalStrut_3);
+		
+		searchButton = new JButton("Search");
+		searchButton.setDoubleBuffered(true);
+		verticalBox.add(searchButton);
+		
+		separator = new JSeparator();
+		verticalBox.add(separator);
+		
+		verticalStrut = Box.createVerticalStrut(20);
+		verticalStrut.setPreferredSize(new Dimension(0, 650));
+		verticalBox.add(verticalStrut);
+		
+		lblDirectionReadout = new JLabel("Direction Readout");
+		lblDirectionReadout.setAlignmentX(CENTER_ALIGNMENT);
+
+		verticalBox.add(lblDirectionReadout);
+		
+		scrollPane = new JScrollPane();
+		verticalBox.add(scrollPane);
+		
+		directionsTextPane = new JTextArea();
+		scrollPane.setViewportView(directionsTextPane);
+		directionsTextPane.setLineWrap(true);
+		directionsTextPane.setBorder(new LineBorder(new Color(0, 0, 0)));
+		directionsTextPane.setText("This will have directions\nLorem ipsum dolor sit amet, consectetur adipiscing elit. Etiam commodo eget diam egestas ullamcorper. Aliquam erat volutpat. Nunc gravida, dolor congue vehicula efficitur, erat lorem pulvinar nibh, hendrerit tincidunt risus arcu id tortor. Aenean tempor nisi et vulputate gravida. Suspendisse blandit mi dui, a fringilla purus suscipit sit amet. Duis ac sollicitudin odio. Praesent mollis elementum dolor, vel iaculis nisi eleifend nec. Morbi dapibus elit sapien, non suscipit lacus tristique vitae. Pellentesque faucibus tempus mauris ut egestas. Phasellus tincidunt lacus massa, vitae hendrerit orci accumsan quis.\n\nAenean ac convallis mi. Duis scelerisque sapien tortor, eu vulputate ipsum maximus vulputate. Nulla pharetra facilisis blandit. Nulla maximus justo dapibus gravida aliquet. Cras et volutpat lectus. Praesent nec lacus in ligula aliquet tristique quis quis lectus. Fusce lacinia dui metus, maximus dictum ipsum porttitor et. Nullam nulla eros, fermentum et dolor at, molestie pharetra odio. Nam nec mi et dolor efficitur viverra. Donec suscipit erat sit amet eros euismod semper. Maecenas at lacus lectus. Suspendisse sed scelerisque ligula, lobortis aliquet leo. Duis scelerisque varius nibh, ultrices porttitor lorem molestie sed. Morbi blandit eget orci et vehicula. Aenean vehicula semper quam vitae gravida. Mauris lacinia sit amet erat ut lacinia.");
+		directionsTextPane.setEditable(false);
+		directionsTextPane.setRows(20);
+		directionsTextPane.setColumns(18);
 		layeredPane = new JLayeredPane();
 		layeredPane.setBounds(0, 0, screenSize.width, screenSize.height);
 		layeredPane.add(gridMap);
