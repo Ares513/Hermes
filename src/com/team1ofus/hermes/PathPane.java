@@ -21,6 +21,10 @@ class PathPane extends JPanel {
 	}
 	void drawPath(ArrayList<CellPoint> path){
 		pointsList.clear();
+		if(path == null) {
+			DebugManagement.writeLineToLog(SEVERITY_LEVEL.CRITICAL, "CellPoint path is empty! Not drawing path.");
+			return;
+		}
 		for(int c = 0; c < path.size(); c++){
 			//System.out.println(c);
 			pointsList.add(new Point((int) path.get(c).getPoint().getX(), (int) path.get(c).getPoint().getY()));

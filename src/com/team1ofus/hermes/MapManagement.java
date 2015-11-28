@@ -39,10 +39,11 @@ public class MapManagement implements IUIManagementInteractionListener, IAStarIn
 			//how does this even happen?
 			assert(false);
 		}
-		pathfindingSystem.getPath(cellIndex, first, cellIndex, second); // not sure if this should be another event. 
-	
-		//pathfindingSystem.getPath(0, first, 0, second);
-		//
+
+		CellPoint a = new CellPoint(cells.get(cellIndex).getName(), first);
+		CellPoint b = new CellPoint(cells.get(cellIndex).getName(), second);
+		pathfindingSystem.getPath(a,b);
+		//onAStarPathCompleteEvent(pathfindingSystem.getPath(a,b)); //force fire event
 	}
 	public void onWindowReady(int cellIndex, ArrayList<PathCell> loaded) {
 		pathfindingSystem = new AStar(loaded);

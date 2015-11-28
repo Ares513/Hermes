@@ -13,9 +13,10 @@ import javax.imageio.ImageIO;
 /*
  * Pasted from Apollo
  */
-public class CellRenderer {
-	final int width = BootstrapperConstants.TILE_WIDTH;
-	final int height = BootstrapperConstants.TILE_HEIGHT;
+public class CellRenderer implements IZoomCellRenderListener {
+	//I changed this from a final int, to a private double
+	private int width = BootstrapperConstants.TILE_WIDTH;
+	private int height = BootstrapperConstants.TILE_HEIGHT;
 	final int rows = 1;
 	final int cols = 3;
 	BufferedImage[] spriteImages = new BufferedImage[rows * cols];
@@ -23,9 +24,20 @@ public class CellRenderer {
 	PathCell drawnCell;
 	private Point first;
 	private Point second;
+	private int panelSize = 230;
 	public CellRenderer(PathCell inCell) {
 		drawnCell = inCell;
 		getFromSheet();
+	}
+	
+	public void onZoomPass(double scale){
+		width =  (int)(BootstrapperConstants.TILE_WIDTH * scale);
+		height = (int)(BootstrapperConstants.TILE_HEIGHT * scale);
+	}
+	
+	public void zoom(double scale){
+		width =  (int)(BootstrapperConstants.TILE_WIDTH * scale);
+		height = (int)(BootstrapperConstants.TILE_HEIGHT * scale);
 	}
 	
 	public void renderTiles(Graphics g) {
@@ -45,13 +57,21 @@ public class CellRenderer {
 				}
 			}
 		}
-		g.setFont(new Font("Times New Roman", Font.PLAIN, 24));
+		
+		if(first != null) {
+			g.drawImage(spriteImages[2], first.x*width-offset.x, first.y*height-offset.y, width, height, null);
+		}
+		if(second != null) {
+			g.drawImage(spriteImages[2], second.x*width-offset.x, second.y*height-offset.y, width, height, null);
+		}
 	}
 	
 	public void setFirst(Point inPoint) {
+		DebugManagement.writeNotificationToLog("First point in CellRenderer set.");
 		first = inPoint;
 	}
 	public void setSecond(Point inPoint) {
+		DebugManagement.writeNotificationToLog("Second point in CellRenderer set.");
 		second = inPoint;
 	}
 	private void getFromSheet(){
@@ -70,8 +90,8 @@ public class CellRenderer {
 	}
 	
 	public Point pickTile(int mouseX, int mouseY) {
-		int x = (int) (Math.floor((mouseX + offset.x)/width));
-		int y = (int) (Math.floor((mouseY + offset.y)/height));
+		int x = (int) (Math.round((mouseX + offset.x)/width));
+		int y = (int) (Math.round((mouseY + offset.y)/height));
 		return new Point(x,y);
 	}
 	public Tile getTile(int x, int y) {
@@ -94,17 +114,17 @@ public class CellRenderer {
 		offset.translate(dx, dy);
 		if(offset.x < 0) {
 			offset.x = 0;
-		} else if(offset.x > drawnCell.tiles.length * width - windowWidth) {
+		} else if(offset.x > drawnCell.tiles.length * width - (windowWidth -panelSize)) {
 			int tileCount = drawnCell.tiles.length;
-			int maxX = drawnCell.tiles.length * width - windowWidth;
+			int maxX = drawnCell.tiles.length * width - (windowWidth - panelSize);
 			offset.x = maxX ;
 		}
+		//the panelSizae is the size of the side panel. If we need to change that, alter that variable.
 		if(offset.y < 0) {
 			offset.y = 0;
 		} else if(offset.y > drawnCell.tiles[1].length * height - windowHeight) {
 			offset.y = drawnCell.tiles[1].length * height - windowHeight; 
 		
-		}
-		
+		}	
 	}
 }
