@@ -27,6 +27,8 @@ import java.awt.event.MouseEvent;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Random;
+
 import javax.swing.JButton;
 import java.awt.Font;
 import java.awt.Graphics;
@@ -44,6 +46,7 @@ import javax.swing.JTextArea;
 import javax.swing.border.LineBorder;
 import javax.swing.JScrollBar;
 import javax.swing.JScrollPane;
+import javax.swing.ScrollPaneConstants;
 
 public class HermesUI extends JPanel{
 	
@@ -78,10 +81,13 @@ public class HermesUI extends JPanel{
 	private JTextArea directionsTextPane;
 	private Component verticalStrut_1;
 	private Component verticalStrut_2;
-	private JButton searchButton;
 	private Component verticalStrut_3;
 	private JScrollPane scrollPane;
 	private double zoomScale;
+	private JButton searchButton;
+	private JPanel zoomPanel;
+	private JButton btnPlus;
+	private JButton btnMinus;
 	public HermesUI(PathCell viewCell) {
 		humanInteractive = new HumanInteractionEventObject();
 		initialize(viewCell);
@@ -182,6 +188,20 @@ public class HermesUI extends JPanel{
 		textPanel.setBounds(230, 0, screenSize.width-230, screenSize.height);
 		pointPanel.setBounds(230, 0, screenSize.width-230, screenSize.height);
 		textPanel.labelAllTiles(currentCell);
+		
+		zoomPanel = new JPanel();
+		zoomPanel.setBounds(66, 134, 134, -113);
+		frameHermes.getContentPane().add(zoomPanel);
+		zoomPanel.setLayout(new BorderLayout(0, 0));
+		
+		Box verticalBox_1 = Box.createVerticalBox();
+		zoomPanel.add(verticalBox_1);
+		
+		btnPlus = new JButton("Plus");
+		verticalBox_1.add(btnPlus);
+		
+		btnMinus = new JButton("Minus");
+		verticalBox_1.add(btnMinus);
 		JPanel interacactionpanel = new JPanel();
 		interacactionpanel.setBounds(0, 0, panelSize, screenSize.height);
 		frameHermes.getContentPane().add(interacactionpanel);
@@ -212,6 +232,7 @@ public class HermesUI extends JPanel{
 		verticalBox.add(verticalStrut_3);
 		
 		searchButton = new JButton("Search");
+		searchButton.setAlignmentX(Component.CENTER_ALIGNMENT);
 		searchButton.setDoubleBuffered(true);
 		verticalBox.add(searchButton);
 		
@@ -228,16 +249,19 @@ public class HermesUI extends JPanel{
 		verticalBox.add(lblDirectionReadout);
 		
 		scrollPane = new JScrollPane();
+		scrollPane.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
 		verticalBox.add(scrollPane);
 		
 		directionsTextPane = new JTextArea();
 		scrollPane.setViewportView(directionsTextPane);
 		directionsTextPane.setLineWrap(true);
 		directionsTextPane.setBorder(new LineBorder(new Color(0, 0, 0)));
-		directionsTextPane.setText("This will have directions\nLorem ipsum dolor sit amet, consectetur adipiscing elit. Etiam commodo eget diam egestas ullamcorper. Aliquam erat volutpat. Nunc gravida, dolor congue vehicula efficitur, erat lorem pulvinar nibh, hendrerit tincidunt risus arcu id tortor. Aenean tempor nisi et vulputate gravida. Suspendisse blandit mi dui, a fringilla purus suscipit sit amet. Duis ac sollicitudin odio. Praesent mollis elementum dolor, vel iaculis nisi eleifend nec. Morbi dapibus elit sapien, non suscipit lacus tristique vitae. Pellentesque faucibus tempus mauris ut egestas. Phasellus tincidunt lacus massa, vitae hendrerit orci accumsan quis.\n\nAenean ac convallis mi. Duis scelerisque sapien tortor, eu vulputate ipsum maximus vulputate. Nulla pharetra facilisis blandit. Nulla maximus justo dapibus gravida aliquet. Cras et volutpat lectus. Praesent nec lacus in ligula aliquet tristique quis quis lectus. Fusce lacinia dui metus, maximus dictum ipsum porttitor et. Nullam nulla eros, fermentum et dolor at, molestie pharetra odio. Nam nec mi et dolor efficitur viverra. Donec suscipit erat sit amet eros euismod semper. Maecenas at lacus lectus. Suspendisse sed scelerisque ligula, lobortis aliquet leo. Duis scelerisque varius nibh, ultrices porttitor lorem molestie sed. Morbi blandit eget orci et vehicula. Aenean vehicula semper quam vitae gravida. Mauris lacinia sit amet erat ut lacinia.");
+		directionsTextPane.setText(createText());
 		directionsTextPane.setEditable(false);
 		directionsTextPane.setRows(20);
 		directionsTextPane.setColumns(18);
+	
+		
 		layeredPane = new JLayeredPane();
 		layeredPane.setBounds(0, 0, screenSize.width, screenSize.height);
 		layeredPane.add(gridMap);
@@ -249,6 +273,7 @@ public class HermesUI extends JPanel{
 		layeredPane.setComponentZOrder(textPanel, 0);
 		layeredPane.setComponentZOrder(pointPanel, 0);
 		frameHermes.getContentPane().add(layeredPane);
+		frameHermes.getContentPane().add(zoomPanel);
 
 		//layeredPane.setBounds(0, 0, 1920, 1080);
 		/*
@@ -331,6 +356,14 @@ public class HermesUI extends JPanel{
 		
 		repaintPanel();
 		
+	}
+	//This is a dummy method to check and make sure directions will be able to load well.
+	//Can get rid of once we have directions.
+	public String createText(){
+		String text = null;
+		Random randomGenerator = new Random();
+		text = Integer.toString(randomGenerator.nextInt(10));
+		return text;
 	}
 	
 	public PathPane getPathPanel(){
