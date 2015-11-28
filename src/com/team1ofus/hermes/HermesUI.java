@@ -254,27 +254,22 @@ public class HermesUI extends JPanel{
 		/*
 		 * Temporary layered
 		 */
+		//This handles map zooming by causing the Cell to re-render
 		layeredPane.addMouseWheelListener(new MouseAdapter() {
-
             @Override
             public void mouseWheelMoved(MouseWheelEvent e) {
-                double delta = -0.05f * e.getPreciseWheelRotation();
-                //System.out.println(delta);
+                double delta = -0.01f * e.getPreciseWheelRotation();
                 if(zoomScale + delta < 1){
                 	zoomScale =1;
                 }
                 else{
                     zoomScale += delta;
-                    DebugManagement.writeNotificationToLog("zoomScale is");
-                    System.out.println(zoomScale);
-                    zoomEvent.addListener(gridMap);
-                    zoomEvent.doZoom(zoomScale);
+                    gridMap.render.zoom(zoomScale);
+                    //zoomEvent.addListener(gridMap); TODO Get this event handling stuff to work or get rid of it
+                    //zoomEvent.doZoom(zoomScale);
                 }
-                revalidate();
-                repaint();
-             
-                //Event object should fire here adding the appropriate listeners to the list
-                //Need to make ZoomEventObject
+                frameHermes.revalidate();
+        		frameHermes.repaint();
             }
         });
     
