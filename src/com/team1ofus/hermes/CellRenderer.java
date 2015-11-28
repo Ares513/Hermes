@@ -13,9 +13,10 @@ import javax.imageio.ImageIO;
 /*
  * Pasted from Apollo
  */
-public class CellRenderer {
-	final int width = BootstrapperConstants.TILE_WIDTH;
-	final int height = BootstrapperConstants.TILE_HEIGHT;
+public class CellRenderer implements IZoomCellRenderListener {
+	//I changed this from a final int, to a private double
+	private int width = BootstrapperConstants.TILE_WIDTH;
+	private int height = BootstrapperConstants.TILE_HEIGHT;
 	final int rows = 1;
 	final int cols = 3;
 	BufferedImage[] spriteImages = new BufferedImage[rows * cols];
@@ -27,6 +28,12 @@ public class CellRenderer {
 	public CellRenderer(PathCell inCell) {
 		drawnCell = inCell;
 		getFromSheet();
+	}
+	
+	public void onZoomPass(double scale){
+		width =  width * (int)scale;
+		height = height * (int)scale;
+		//DO i have to do fancy repaint stuff here?
 	}
 	
 	public void renderTiles(Graphics g) {

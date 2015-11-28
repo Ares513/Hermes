@@ -61,6 +61,7 @@ public class HermesUI extends JPanel{
 	private JLabel lblOffset;
 	private PathCell currentCell;
 	public HumanInteractionEventObject humanInteractive; 
+	public ZoomEventObject zoomEvent;
 	private Point first; //for showing in the UI which points were clicked.
 	private Point second; 
 	private JLayeredPane layeredPane;
@@ -264,11 +265,16 @@ public class HermesUI extends JPanel{
                 }
                 else{
                     zoomScale += delta;
+                    DebugManagement.writeNotificationToLog("zoomScale is");
+                    System.out.println(zoomScale);
+                    zoomEvent.addListener(gridMap);
+                    zoomEvent.doZoom(zoomScale);
                 }
                 revalidate();
                 repaint();
-                DebugManagement.writeNotificationToLog("zoomScale is");
-                System.out.println(zoomScale);
+             
+                //Event object should fire here adding the appropriate listeners to the list
+                //Need to make ZoomEventObject
             }
         });
     
