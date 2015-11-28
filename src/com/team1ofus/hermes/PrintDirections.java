@@ -101,6 +101,7 @@ public class PrintDirections {
 				else{ 
 					dList.add(newDirection(previousState, currentDistance)); 
 					currentDistance = 0; 
+					currentDistance = getDistance(currentState); 
 				}
 			}
 			else{ 
