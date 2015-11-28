@@ -114,7 +114,6 @@ public class CellRenderer {
 		} else if(offset.y > drawnCell.tiles[1].length * height - windowHeight) {
 			offset.y = drawnCell.tiles[1].length * height - windowHeight; 
 		
-		}
-		
+		}	
 	}
 }

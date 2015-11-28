@@ -25,6 +25,7 @@ import java.awt.event.KeyEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.image.BufferedImage;
+import java.io.IOException;
 import java.util.ArrayList;
 import javax.swing.JButton;
 import java.awt.Font;
@@ -39,10 +40,8 @@ public class HermesUI extends JPanel{
 	ArrayList<Point> pointsList = new ArrayList<Point>();
 	private JFrame frameHermes;
 	private PathPane pathPanel;
-	private JTextField StartField;
-	private JTextField DestinationField;
+	private PointPane pointPanel;
 	private Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
-	private BufferedImage map;
 	private Point mousePosition;
 	private DrawMap gridMap;
 	int scrollSpeed = 5;
@@ -91,15 +90,17 @@ public class HermesUI extends JPanel{
 				
 				first = new Point(picked.x, picked.y);
 				gridMap.render.setFirst(first);
-				repaintPanel();;
+				pointPanel.setFirst(first);
+				repaintPanel();
 			} else if(second == null) {
 				
 				second = new Point(picked.x,picked.y);
 				gridMap.render.setSecond(second);
+				pointPanel.setSecond(second);
 				first = null;
 				second = null;
 
-				repaintPanel();;
+				repaintPanel();
 			}
 			
 			humanInteractive.doClick(picked.x, picked.y);
@@ -144,10 +145,16 @@ public class HermesUI extends JPanel{
 		gridMap.setBounds(230, 0, screenSize.width-230, screenSize.height);;
 		pathPanel = new PathPane();
 		textPanel = new TextPane();
+		try {
+			pointPanel = new PointPane();
+		} catch (IOException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
 		pathPanel.setBounds(230, 0, screenSize.width-230, screenSize.height);
 		textPanel.setBounds(230, 0, screenSize.width-230, screenSize.height);
+		pointPanel.setBounds(230, 0, screenSize.width-230, screenSize.height);
 		textPanel.labelAllTiles(currentCell);
-		
 		JPanel panel = new JPanel();
 		panel.setBounds(0, 0, panelSize, screenSize.height);
 		frameHermes.getContentPane().add(panel);
@@ -156,12 +163,13 @@ public class HermesUI extends JPanel{
 		layeredPane.add(gridMap);
 		layeredPane.add(pathPanel);
 		layeredPane.add(textPanel);
+		layeredPane.add(pointPanel);
 		layeredPane.setComponentZOrder(gridMap, 0);
 		layeredPane.setComponentZOrder(pathPanel, 0);
 		layeredPane.setComponentZOrder(textPanel, 0);
+		layeredPane.setComponentZOrder(pointPanel, 0);
 		frameHermes.getContentPane().add(layeredPane);
-		
-		
+
 		//layeredPane.setBounds(0, 0, 1920, 1080);
 		/*
 		 * Temporary layered
@@ -183,6 +191,7 @@ public class HermesUI extends JPanel{
 						DebugManagement.writeNotificationToLog("Dragging occurred, dx dy " + x + " , " + y);
 						gridMap.render.incrementOffset(x, y, frameHermes.getWidth(), frameHermes.getHeight());
 						pathPanel.setOffset(gridMap.render.offset);
+						pointPanel.setOffset(gridMap.render.offset);
 						repaintPanel();
 						lastDragLocation = e.getPoint();
 					} else {
@@ -228,7 +237,9 @@ public class HermesUI extends JPanel{
 	public PathPane getPathPanel(){
 		return pathPanel;
 	}
-	
+	public PointPane getPointPane(){
+		return pointPanel;
+	}
 	
 
 	private void doOffsetCalc(KeyEvent e) {
@@ -250,10 +261,11 @@ public class HermesUI extends JPanel{
 			break;
 		}
 		pathPanel.setOffset(gridMap.render.offset);
+		pointPanel.setOffset(gridMap.render.offset);
 		repaintPanel();
 	}
 	private void repaintPanel() {
-		frameHermes.repaint();;
+		frameHermes.repaint();
 	}
 }
 
