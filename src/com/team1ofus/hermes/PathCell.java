@@ -30,6 +30,8 @@ public class PathCell{
     public Tile[][] tiles;
     //minimum required information
     double scaling;
+    private ArrayList<EntryPoint> entryPoints;
+    private ArrayList<LocationNameInfo> namedPoints;
     
     public PathCell(String name, int width, int height, double scaling, TILE_TYPE defaultTile) {
         this.cellName = name;
@@ -108,5 +110,19 @@ public class PathCell{
 	
 	public String getName(){
 		return cellName;
+	}
+	
+	public ArrayList<EntryPoint> getEntryPoints(){
+		return entryPoints;
+	}
+	public void addEntryPoint(EntryPoint anEntryPoint){
+		entryPoints.add(anEntryPoint);
+	}
+	
+	public ArrayList<LocationNameInfo> getLocationNameInfo(){
+		return namedPoints;
+	}
+	public void addLocationNameInfo(LocationNameInfo aLocationNameInfo){
+		namedPoints.add(aLocationNameInfo);
 	}
 }
