@@ -32,6 +32,8 @@ import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.event.MouseMotionAdapter;
+import java.awt.event.MouseWheelEvent;
+
 import javax.swing.JLayeredPane;
 import javax.swing.border.EtchedBorder;
 import javax.swing.Box;
@@ -78,6 +80,7 @@ public class HermesUI extends JPanel{
 	private JButton searchButton;
 	private Component verticalStrut_3;
 	private JScrollPane scrollPane;
+	private double zoomScale;
 	public HermesUI(PathCell viewCell) {
 		humanInteractive = new HumanInteractionEventObject();
 		initialize(viewCell);
@@ -250,6 +253,25 @@ public class HermesUI extends JPanel{
 		/*
 		 * Temporary layered
 		 */
+		layeredPane.addMouseWheelListener(new MouseAdapter() {
+
+            @Override
+            public void mouseWheelMoved(MouseWheelEvent e) {
+                double delta = -0.05f * e.getPreciseWheelRotation();
+                //System.out.println(delta);
+                if(zoomScale + delta < 1){
+                	zoomScale =1;
+                }
+                else{
+                    zoomScale += delta;
+                }
+                revalidate();
+                repaint();
+                DebugManagement.writeNotificationToLog("zoomScale is");
+                System.out.println(zoomScale);
+            }
+        });
+    
 
 		layeredPane.addMouseMotionListener(new MouseMotionAdapter() {
 			@Override
