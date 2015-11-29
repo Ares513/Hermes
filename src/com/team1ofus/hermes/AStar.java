@@ -52,6 +52,7 @@ public class AStar {
 		private int costSoFar = 0;
 		private int estimatedTotalCost = 0;
 		private int traverseCost = 1000000;
+		private CellPoint offPageNeighbor = null;
 		
 		
 		private TileInfo(TILE_TYPE newTileType, int newTraverseCost){
@@ -92,6 +93,17 @@ public class AStar {
 		private int getTraverseCost(){
 			return this.traverseCost;
 		}
+		
+		private void setOffPageNeighbor(CellPoint newOPN){
+			this.offPageNeighbor = newOPN;
+		}
+		private CellPoint getOffPageNeighbor(){
+			return this.offPageNeighbor;
+		}
+	}
+	
+	private TileInfo getTileInfo(CellPoint aCellPoint){
+		return cellMap.get(aCellPoint.getCellName())[(int) aCellPoint.getPoint().getX()][(int) aCellPoint.getPoint().getY()];
 	}
 	
 	// makes a 2d array of size x,y filled with blank TileInfos
@@ -102,6 +114,20 @@ public class AStar {
 			for(int j = 0; j < newCell.tiles[0].length; j++){
 				output[i][j] = new TileInfo(newCell.getTile(new Point(i,j)).getTileType(), 
 											newCell.getTile(new Point(i,j)).getTraverseCost());
+			}
+		}
+		//find the tiles who have references to an entry point in another cell, 
+		//and then give them a cell point which is the point they reference.
+		//This won't work with incremental cell loading, if we implement that.
+		for(EntryPointReference erf : newCell.getEntryPointReferences()){
+			for (PathCell pc: accessedCells){
+				if (pc.getName().equals(erf.getTargetCell())){
+					for (EntryPoint ep : pc.getEntryPoints()){
+						if (ep.getId().equals(erf.getId())){
+							output[(int) erf.getLoc().getX()][(int) erf.getLoc().getY()].setOffPageNeighbor(new CellPoint(pc.getName(), ep.getLoc()));
+						}
+					}
+				}
 			}
 		}
 		return output;
@@ -168,38 +194,34 @@ public class AStar {
 				
 				TileInfo neighborTile;
 				currentTile = getTileInfo(currentPoint);
-				CellPoint neighborPoint;
 				double moveMultiplier;
-				for(int neiX = curX-1; neiX <= curX+1; neiX++){
-					for(int neiY = curY-1; neiY <= curY+1; neiY++){
-						neighborPoint = new CellPoint(currentPoint.getCellName(), new Point(neiX, neiY));
-						neighborTile = getTileInfo(neighborPoint);
-						if(!neighborTile.canBeEntered(currentPoint, neighborPoint)){
-							continue;
-						}
-						if(neighborPoint.isIn(explored)){
-							continue;
-						}
+				for(CellPoint neighborPoint: getNeighbors(currentPoint)){
+					neighborTile = getTileInfo(neighborPoint);
+					if(!neighborTile.canBeEntered(currentPoint, neighborPoint)){
+						continue;
+					}
+					if(neighborPoint.isIn(explored)){
+						continue;
+					}
+				
+					moveMultiplier = 1;
+					if((curX != (int)neighborPoint.getPoint().getX()) && (curY != neighborPoint.getPoint().getY())){ //&& (currentTile.getCellName() == aNeighbor.getCellName())){
+						moveMultiplier = 1.41; // sqrt(2)
+					}
+					tentativeCSF = (int) (currentTile.getCostSoFar() + (moveMultiplier*neighborTile.getTraverseCost()));
 					
-						moveMultiplier = 1;
-						if((curX != neiX) && (curY != neiY)){ //&& (currentTile.getCellName() == aNeighbor.getCellName())){
-							moveMultiplier = 1.41; // sqrt(2)
-						}
-						tentativeCSF = (int) (currentTile.getCostSoFar() + (moveMultiplier*neighborTile.getTraverseCost()));
-						
-						if(!neighborPoint.isIn(frontier)){
-							neighborTile.setParent(currentPoint);
-							neighborTile.setCostSoFar(tentativeCSF);
-							neighborTile.setEstimatedTotalCost(tentativeCSF+ getHeuristic(neighborPoint,endPoint));
-							frontier.add(neighborPoint);
-						}
-						else if(tentativeCSF >= neighborTile.getCostSoFar()){
-							continue;
-						}
+					if(!neighborPoint.isIn(frontier)){
 						neighborTile.setParent(currentPoint);
 						neighborTile.setCostSoFar(tentativeCSF);
 						neighborTile.setEstimatedTotalCost(tentativeCSF+ getHeuristic(neighborPoint,endPoint));
+						frontier.add(neighborPoint);
 					}
+					else if(tentativeCSF >= neighborTile.getCostSoFar()){
+						continue;
+					}
+					neighborTile.setParent(currentPoint);
+					neighborTile.setCostSoFar(tentativeCSF);
+					neighborTile.setEstimatedTotalCost(tentativeCSF+ getHeuristic(neighborPoint,endPoint));
 				}
 			}
 			System.out.println("No Path Found");
@@ -238,17 +260,24 @@ public class AStar {
 			return null;
 		}
 		
-		private TileInfo getTileInfo(CellPoint aCellPoint){
-			return cellMap.get(aCellPoint.getCellName())[(int) aCellPoint.getPoint().getX()][(int) aCellPoint.getPoint().getY()];
-		}
-		
 		private int getHeuristic(CellPoint current, CellPoint end){
 			return 0;
 		}
 		
-		private ArrayList<CellPoint> getNeighbors(CellPoint current){
+		private ArrayList<CellPoint> getNeighbors(CellPoint currentPoint){
+			ArrayList<CellPoint> output = new ArrayList<CellPoint>();
+			int curX = (int) currentPoint.getPoint().getX();
+			int curY = (int) currentPoint.getPoint().getY();
+			for(int neiX = curX-1; neiX <= curX+1; neiX++){
+				for(int neiY = curY-1; neiY <= curY+1; neiY++){
+					output.add(new CellPoint(currentPoint.getCellName(), new Point(neiX, neiY)));
+				}
+			}
+			if(getTileInfo(currentPoint).getOffPageNeighbor() != null){
+				output.add(getTileInfo(currentPoint).getOffPageNeighbor());
+			}
 			
-			return explored;
+			return output;
 		}
 }
 
