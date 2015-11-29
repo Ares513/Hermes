@@ -22,8 +22,8 @@ class PathPane extends JPanel {
 	}
 	public void zoom(double scale){
 		zoom = scale;
-		tileWidth =  (int)(BootstrapperConstants.TILE_WIDTH * scale);
-		tileHeight = (int)(BootstrapperConstants.TILE_HEIGHT * scale);
+		tileWidth =  BootstrapperConstants.TILE_WIDTH;
+		tileHeight = BootstrapperConstants.TILE_HEIGHT;
 		repaint();
 	}
 

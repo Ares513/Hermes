@@ -283,11 +283,12 @@ public class HermesUI extends JPanel{
 		layeredPane.addMouseWheelListener(new MouseAdapter() {
             @Override
             public void mouseWheelMoved(MouseWheelEvent e) {
-                double delta = -0.01f * e.getPreciseWheelRotation();
+                double delta = -0.05f * e.getPreciseWheelRotation();
                 if(zoomScale + delta < 1){
                 	zoomScale =1;
                 }
                 else{
+                	System.out.println(zoomScale);
                     zoomScale += delta;
                     gridMap.render.zoom(zoomScale);
                     pathPanel.zoom(zoomScale);

@@ -31,8 +31,8 @@ public class PointPane extends JPanel{
 	 
 	 public void zoom(double scale){
 		 	zoomScale = scale;
-			width =  (int)(BootstrapperConstants.TILE_WIDTH * scale);
-			height = (int)(BootstrapperConstants.TILE_HEIGHT * scale);
+			width =  BootstrapperConstants.TILE_WIDTH;
+			height = BootstrapperConstants.TILE_HEIGHT;
 			repaint();
 		}
 	
