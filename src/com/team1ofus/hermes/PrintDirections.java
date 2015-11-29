@@ -77,7 +77,7 @@ public class PrintDirections {
 				prevDegree = toDegrees(currentState); 
 				}
 			
-			System.out.println(currentInstruction.turnInstruction);
+		//	System.out.println(currentInstruction.turnInstruction);
 			}
 			return dList;
 		}	
