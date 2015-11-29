@@ -38,6 +38,7 @@ public class PrintDirections {
 			else{
 				String newInstruction = toTurns(toDegrees(currentState),prevDegree); 
 				currentInstruction.turnInstruction = newInstruction; 
+				prevDegree = toDegrees(currentState); 
 			}
 			System.out.print(currentInstruction.heading);
 			System.out.print(",");
@@ -189,23 +190,29 @@ public class PrintDirections {
 	private String toTurns(int currentDegree, int prevDegree){ 
 		String turn = new String(); 
 		int diff = currentDegree - prevDegree; 
+		System.out.print(currentDegree);
+		System.out.print(",");
+		System.out.print(prevDegree);
+		System.out.print(",");
+		System.out.print(diff);
+		System.out.print(",");
 		if(diff == 45 || diff == -315){ 
-			turn = "Slight Left"; 
-		}
-		else if(diff == 90 || diff == -270){ 
-			turn = "Left"; 
-		}
-		else if(diff == 135 || diff == -225){ 
-			turn = "Sharp Left"; 
-		}
-		if(diff == -45 || diff == 315){ 
 			turn = "Slight Right"; 
 		}
-		else if(diff == -90 || diff == 270){ 
+		else if(diff == 90 || diff == -270){ 
 			turn = "Right"; 
 		}
-		else if(diff == -135 || diff == 225){ 
+		else if(diff == 135 || diff == -225){ 
 			turn = "Sharp Right"; 
+		}
+		else if(diff == -45 || diff == 315){ 
+			turn = "Slight Left"; 
+		}
+		else if(diff == -90 || diff == 270){ 
+			turn = "Left"; 
+		}
+		else if(diff == -135 || diff == 225){ 
+			turn = "Sharp Left"; 
 		}
 		return turn; 
 	}
