@@ -15,20 +15,18 @@ class PathPane extends JPanel {
 	private int tileHeight = BootstrapperConstants.TILE_HEIGHT;
 	ArrayList<Point> pointsList = new ArrayList<Point>();
 	private Point offset = new Point(0,0);
-	public double zoom = 1;
+	public double zoomScale = 1;
 	public PathPane() {
 		setOpaque(true);
 
 	}
+	//This updates the zoomScale, which will be used when placing the drawing the path.
 	public void zoom(double scale){
-		zoom = scale;
-		tileWidth =  BootstrapperConstants.TILE_WIDTH;
-		tileHeight = BootstrapperConstants.TILE_HEIGHT;
+		zoomScale = scale;
 		repaint();
 	}
 
-	
-	
+	//Creates the list of points that will be used to draw the path
 	void drawPath(ArrayList<CellPoint> path){
 		pointsList.clear();
 		if(path == null) {
@@ -36,7 +34,6 @@ class PathPane extends JPanel {
 			return;
 		}
 		for(int c = 0; c < path.size(); c++){
-			//System.out.println(c);
 			pointsList.add(new Point((int) path.get(c).getPoint().getX(), (int) path.get(c).getPoint().getY()));
 			pointsList.get(c).move(pointsList.get(c).x*tileWidth+tileWidth/2, pointsList.get(c).y*tileHeight+tileHeight/2);
 		}
@@ -45,7 +42,6 @@ class PathPane extends JPanel {
 	}
 
 	//This function draws lines between the points specified in the ArrayList points list, which has been generated from A* algorithm
-	//Refactor this so paintComponent
 	void drawLineSets(Graphics g){
 		//DebugManagement.writeNotificationToLog("Points for drawing:" + " " + pointsList);
 		Graphics2D g2d = (Graphics2D) g;
@@ -54,10 +50,7 @@ class PathPane extends JPanel {
 		Stroke stroke1 = new BasicStroke(6f, BasicStroke.CAP_BUTT, BasicStroke.JOIN_MITER, 1.0f, dashingPattern1, 2.0f);
 		g2d.setStroke(stroke1);
 		for(int i = 0; i < pointsList.size()-1; i++){
-			//g.fillRect(100, 100, 200, 200);
-			//g.drawLine(pointsList.get(i).x-offset.x, pointsList.get(i).y-offset.y, pointsList.get(i+1).x-offset.x,pointsList.get(i+1).y-offset.y);
-			//g2d.drawLine(pointsList.get(i).x-offset.x, pointsList.get(i).y-offset.y, pointsList.get(i+1).x-offset.x,pointsList.get(i+1).y-offset.y);
-			g2d.drawLine( (int)(pointsList.get(i).x * zoom) - offset.x ,  (int)(pointsList.get(i).y * zoom)- offset.y , (int)(pointsList.get(i+1).x * zoom) - offset.x, (int)(pointsList.get(i+1).y * zoom) -offset.y);
+			g2d.drawLine( (int)(pointsList.get(i).x * zoomScale) - offset.x ,  (int)(pointsList.get(i).y * zoomScale)- offset.y , (int)(pointsList.get(i+1).x * zoomScale) - offset.x, (int)(pointsList.get(i+1).y * zoomScale) -offset.y);
 		} 
 	}
 	

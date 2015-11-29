@@ -35,6 +35,7 @@ public class CellRenderer implements IZoomCellRenderListener {
 		//height = (int)(BootstrapperConstants.TILE_HEIGHT * scale);
 	}
 	
+	//Changes the width and height of tiles to correspong to changes in the scale of zooming
 	public void zoom(double scale){
 		width =  (int)(BootstrapperConstants.TILE_WIDTH * scale);
 		height = (int)(BootstrapperConstants.TILE_HEIGHT * scale);
