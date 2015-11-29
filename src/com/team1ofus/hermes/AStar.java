@@ -30,6 +30,7 @@ public class AStar {
 	ArrayList<CellPoint> frontier;
 	// Nodes that have already been explored
 	ArrayList<CellPoint> explored;
+	private boolean alreadyRan = false;
 
 	public AStar(ArrayList<PathCell> cells) {
 		events = new AStarInteractionEventObject();
@@ -113,7 +114,12 @@ public class AStar {
 		 * Returns the fastest path between two points as an ordered list of Tiles
 		 */
 		public ArrayList<CellPoint> getPath(CellPoint startCellPoint, CellPoint endCellPoint){
-			
+			if(alreadyRan == true){ // A* needs to be reinitialized each time it runs. this checks that
+				System.out.println("You done Broke shit, A* already ran");
+				DebugManagement.writeLineToLog(SEVERITY_LEVEL.FATAL, "you done broke shit, A* already ran."
+						+ "\n A* will try to continue but it wont do anything");
+			}
+			alreadyRan = true;
 			CellPoint currentPoint = startCellPoint;
 			TileInfo currentTile = getTileInfo(startCellPoint);
 			if(currentTile.getTileType().equals(TILE_TYPE.WALL)){
@@ -238,6 +244,11 @@ public class AStar {
 		
 		private int getHeuristic(CellPoint current, CellPoint end){
 			return 0;
+		}
+		
+		private ArrayList<CellPoint> getNeighbors(CellPoint current){
+			
+			return explored;
 		}
 }
 
