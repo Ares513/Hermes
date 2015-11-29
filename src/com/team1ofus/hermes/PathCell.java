@@ -33,9 +33,9 @@ public class PathCell{
     
     double scaling;
     
-    private ArrayList<EntryPoint> entryPoints; //places which you can enter into this cell at. 
-    private ArrayList<LocationNameInfo> namedPoints;
-    private ArrayList<EntryPointReference> entryPointRefs; //places from which you can leave this cell.
+    private ArrayList<EntryPoint> entryPoints = new ArrayList<EntryPoint>(); //places which you can enter into this cell at. 
+    private ArrayList<LocationNameInfo> namedPoints = new ArrayList<LocationNameInfo>();
+    private ArrayList<EntryPointReference> entryPointRefs = new ArrayList<EntryPointReference>(); //places from which you can leave this cell.
     
     public PathCell(String name, int width, int height, double scaling, TILE_TYPE defaultTile) {
         this.cellName = name;
