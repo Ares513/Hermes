@@ -28,10 +28,14 @@ public class PathCell{
 	public String cellName = null;
     private static final long serialVersionUID = 1L;
     public Tile[][] tiles;
-    //minimum required information
+    
+    //end minimum required information
+    
     double scaling;
-    private ArrayList<EntryPoint> entryPoints;
+    
+    private ArrayList<EntryPoint> entryPoints; //places which you can enter into this cell at. 
     private ArrayList<LocationNameInfo> namedPoints;
+    private ArrayList<EntryPointReference> entryPointRefs; //places from which you can leave this cell.
     
     public PathCell(String name, int width, int height, double scaling, TILE_TYPE defaultTile) {
         this.cellName = name;
@@ -118,11 +122,33 @@ public class PathCell{
 	public void addEntryPoint(EntryPoint anEntryPoint){
 		entryPoints.add(anEntryPoint);
 	}
+	public void addEntryPoints(ArrayList<EntryPoint> entryPoints){
+		for (EntryPoint ep : entryPoints) {
+			entryPoints.add(ep);
+		}
+	}
 	
 	public ArrayList<LocationNameInfo> getLocationNameInfo(){
 		return namedPoints;
 	}
 	public void addLocationNameInfo(LocationNameInfo aLocationNameInfo){
 		namedPoints.add(aLocationNameInfo);
+	}
+	public void addLocationNameInfos(ArrayList<LocationNameInfo> locationNameInfos){
+		for (LocationNameInfo lni : locationNameInfos){
+			namedPoints.add(lni);
+		}
+	}
+	
+	public ArrayList<EntryPointReference> getEntryPointReferences(){
+		return entryPointRefs;
+	}
+	public void addEntryPointReference(EntryPointReference anEntryPointRef){
+		entryPointRefs.add(anEntryPointRef);
+	}
+	public void addEntryPointReferences(ArrayList<EntryPointReference> entryPointRefs){
+		for (EntryPointReference epf : entryPointRefs){
+			entryPointRefs.add(epf);
+		}
 	}
 }
