@@ -6,7 +6,7 @@ import java.util.ArrayList;
 public class MapManagement implements IUIManagementInteractionListener, IAStarInteractionListener {
 	MapManagementInteractionEventObject events = new MapManagementInteractionEventObject();
 	AStar pathfindingSystem;
-	ArrayList<PathCell> cells;
+	ArrayList<PathCell> cells = new ArrayList<PathCell>();
 	public MapManagement() {
 		
 	}
@@ -39,6 +39,8 @@ public class MapManagement implements IUIManagementInteractionListener, IAStarIn
 			//how does this even happen?
 			assert(false);
 		}
+		pathfindingSystem = new AStar(cells);
+		pathfindingSystem.events.registerListener(this);
 
 		CellPoint a = new CellPoint(cells.get(cellIndex).getName(), first);
 		CellPoint b = new CellPoint(cells.get(cellIndex).getName(), second);
@@ -49,6 +51,6 @@ public class MapManagement implements IUIManagementInteractionListener, IAStarIn
 		pathfindingSystem = new AStar(loaded);
 		pathfindingSystem.events.registerListener(this);
 		
-		cells = loaded;
+		cells.addAll(loaded);
 	}
 }
