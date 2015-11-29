@@ -117,15 +117,11 @@ public class AStar {
 		//find the tiles who have references to an entry point in another cell, 
 		//and then give them a cell point which is the point they reference.
 		//This won't work with incremental cell loading, if we implement that.
-		System.out.println(newCell.getEntryPointReferences().size());
-		System.out.println(newCell.getEntryPoints().size());
 		for(EntryPointReference erf : newCell.getEntryPointReferences()){
 			for (PathCell pc: accessedCells){
 				if ((pc.getName()).equals(erf.getTargetCell())){
-					System.out.println("found target Cell");
 					for (EntryPoint ep : pc.getEntryPoints()){
 						if ((ep.getId()).equals(erf.getId())){
-							System.out.println("found target entry point");
 							output[(int) erf.getLoc().getX()][(int) erf.getLoc().getY()].setOffPageNeighbor(new CellPoint(pc.getName(), ep.getLoc()));
 						}
 					}
@@ -169,9 +165,6 @@ public class AStar {
 			this.frontier.add(startCellPoint);
 			
 			while(!frontier.isEmpty()){ //so long as the frontier is not empty
-//				System.out.println(currentPoint.getCellName() + currentPoint.getPoint());
-//				System.out.println(explored.size());
-//				System.out.println(frontier.size());
 				currentPoint = frontier.get(0); //the tile we want to explore is the tile with 
 											   //the lowest expected path cost
 											   //For now its BFS so we just take the first 

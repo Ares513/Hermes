@@ -66,7 +66,7 @@ public class AStarTest {
 	
 	@Test
 	public void test4() { // should return path not found, all walls
-		System.out.println("test4: should return path across the two maps");
+		System.out.println("test4: should return path across the two maps connected at (45,45)");
 		PathCell testCell = new PathCell("a",100,100,16, TILE_TYPE.PEDESTRIAN_WALKWAY);
 		PathCell testCell2 = new PathCell("b", 100, 100, 16, TILE_TYPE.PEDESTRIAN_WALKWAY);
 		testCell2.addEntryPoint(new EntryPoint("someDoor", new Point(45,45)));
