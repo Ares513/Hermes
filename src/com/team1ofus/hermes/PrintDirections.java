@@ -2,14 +2,19 @@ package com.team1ofus.hermes;
 
 import java.awt.Point;
 import java.util.ArrayList;
+
+import javafx.scene.Parent;
+
 import java.lang.String;
+import java.math.RoundingMode;
+import java.text.DecimalFormat;
+import java.lang.Double;
 //import javax.swing.*;
 
 public class PrintDirections { 
 	public PrintDirections() { 
-	}	
-	 
 	
+	}	 
 	public void parseDirections(ArrayList<CellPoint> AStarDirections){
 		ArrayList<String> statesList = stateList(AStarDirections); 
 		ArrayList<Directions> directionsList = route(statesList);
@@ -39,46 +44,43 @@ public class PrintDirections {
 	 * Adds in colloquial turn instructions to list of directions 
 	 */
 	private ArrayList<Directions> routePrintOut(ArrayList<Directions> dList){ 
+		DecimalFormat df = new DecimalFormat("#.00");  
+		df.setRoundingMode(RoundingMode.CEILING);
 		int dListSize = dList.size(); 
 		int prevDegree = 0;  
+		double totalDistance = 0; 
 		for(int i = 0; i < dListSize; i++){ 
 			Directions currentInstruction = dList.get(i); 
 			double currentDistance = currentInstruction.getDistance(); 
+			totalDistance += currentDistance; 
 			String currentState = currentInstruction.getHeading();
-			
-			/*
-			 * First instruction. provides user with initial instruction 
-			 */
-			if(i==0){ 
-				/*               */ 
+			/* First instruction. provides user with initial instruction */
+			if(i==0){  
 				String startInstruction = "Head "; 
 				startInstruction += toFullWord(currentState);
 				startInstruction += " Walk for ";
-				startInstruction += Double.toString(currentDistance);		
+				startInstruction += df.format(currentDistance);		
 				startInstruction += " feet";
-				/*               */
 				currentInstruction.turnInstruction = startInstruction; 
 				prevDegree = toDegrees(currentState); 
 				dList.set(i, currentInstruction); 
 			}
-			
-			/* 
-			 * Format for all instructions that are not the first /special instruction. 
-			 */
+			/*  Format for all instructions that are not the first /special instruction. */
 			else {
 				String newInstruction = "Take a ";  
 				newInstruction += toTurns(toDegrees(currentState),prevDegree); 
 				newInstruction += " to Head "; 
 				newInstruction += toFullWord(currentState);;
 				newInstruction += " and Walk for "; 
-				newInstruction += Double.toString(currentDistance); 
+				newInstruction += df.format(currentDistance); 
 				newInstruction += " Feet";
 				currentInstruction.turnInstruction = newInstruction; 
 				prevDegree = toDegrees(currentState); 
 				}
-			
-		//	System.out.println(currentInstruction.turnInstruction);
+				
+			//System.out.println(currentInstruction.turnInstruction);
 			}
+		  //	System.out.println(estimatedTime(totalDistance));  
 			return dList;
 		}	
 	
@@ -274,6 +276,20 @@ public class PrintDirections {
 			break; 	
 		}
 		return degree; 
+	}
+	
+	private String estimatedTime(double distance){ 
+		DecimalFormat df = new DecimalFormat("#.00");  
+		df.setRoundingMode(RoundingMode.CEILING);
+		double toMile = distance/5280; // Feet per mile 
+		double perHour = .33;          // Approximate average walking speed is 3 miles/hour
+		int minutes = 60; 
+		double eTime = (toMile*perHour*minutes);
+		String timeToString = df.format(eTime);
+		String ETA = "Your route will take approximately "; 
+		ETA += timeToString; 
+		ETA += " minutes"; 
+		return ETA; 
 	}
 }
 
