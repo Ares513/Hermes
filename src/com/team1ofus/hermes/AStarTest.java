@@ -63,4 +63,28 @@ public class AStarTest {
 		assertEquals(AStarOut,null);
 	}
 
+	
+	@Test
+	public void test4() { // should return path not found, all walls
+		System.out.println("test4: should return path across the two maps");
+		PathCell testCell = new PathCell("a",100,100,16, TILE_TYPE.PEDESTRIAN_WALKWAY);
+		PathCell testCell2 = new PathCell("b", 100, 100, 16, TILE_TYPE.PEDESTRIAN_WALKWAY);
+		testCell2.addEntryPoint(new EntryPoint("someDoor", new Point(45,45)));
+		testCell.addEntryPointReference(new EntryPointReference("someDoor", "b", new Point(45,45)));
+		ArrayList<PathCell> testCellList = new ArrayList<PathCell>();
+		testCellList.add(testCell);
+		testCellList.add(testCell2);
+		AStar test = new AStar(testCellList);
+		System.out.println("Path:");
+		ArrayList<CellPoint> AStarOut = test.getPath(new CellPoint("a",new Point(50,50)), new CellPoint("b", new Point(55,40)));
+		if(AStarOut.size() >= 5){
+			System.out.println("getPath didnt break");
+			for(CellPoint each:AStarOut){
+				System.out.println(each.getCellName() + each.getPoint());
+			}
+		}
+		else{
+			fail("A* returned null when it should not have");
+		}
+	}
 }
