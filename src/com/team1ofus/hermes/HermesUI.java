@@ -290,6 +290,14 @@ public class HermesUI extends JPanel{
                 else{
                     zoomScale += delta;
                     gridMap.render.zoom(zoomScale);
+                    pathPanel.zoom(zoomScale);
+                    //textPanel.zoom(zoomScale);
+                    //pointPanel.zoom(zoomScale);
+                    
+                    //pathPanel.repaint();
+                    //pathPanel.drawPath(path);
+                    //Here add stuff that actually redraws the path
+                    
                     //zoomEvent.addListener(gridMap); TODO Get this event handling stuff to work or get rid of it
                     //zoomEvent.doZoom(zoomScale);
                 }

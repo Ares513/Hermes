@@ -11,14 +11,24 @@ import java.util.ArrayList;
 import javax.swing.JPanel;
 
 class PathPane extends JPanel {
-	final int tileWidth = BootstrapperConstants.TILE_WIDTH;
-	final int tileHeight = BootstrapperConstants.TILE_HEIGHT;
+	private int tileWidth = BootstrapperConstants.TILE_WIDTH;
+	private int tileHeight = BootstrapperConstants.TILE_HEIGHT;
 	ArrayList<Point> pointsList = new ArrayList<Point>();
 	private Point offset = new Point(0,0);
+	public double zoom = 1;
 	public PathPane() {
 		setOpaque(true);
 
 	}
+	public void zoom(double scale){
+		zoom=scale;
+		tileWidth =  (int)(BootstrapperConstants.TILE_WIDTH * scale);
+		tileHeight = (int)(BootstrapperConstants.TILE_HEIGHT * scale);
+		repaint();
+	}
+
+	
+	
 	void drawPath(ArrayList<CellPoint> path){
 		pointsList.clear();
 		if(path == null) {
@@ -46,7 +56,8 @@ class PathPane extends JPanel {
 		for(int i = 0; i < pointsList.size()-1; i++){
 			//g.fillRect(100, 100, 200, 200);
 			//g.drawLine(pointsList.get(i).x-offset.x, pointsList.get(i).y-offset.y, pointsList.get(i+1).x-offset.x,pointsList.get(i+1).y-offset.y);
-			g2d.drawLine(pointsList.get(i).x-offset.x, pointsList.get(i).y-offset.y, pointsList.get(i+1).x-offset.x,pointsList.get(i+1).y-offset.y);
+			//g2d.drawLine(pointsList.get(i).x-offset.x, pointsList.get(i).y-offset.y, pointsList.get(i+1).x-offset.x,pointsList.get(i+1).y-offset.y);
+			g2d.drawLine( (int)(pointsList.get(i).x * zoom) - offset.x ,  (int)(pointsList.get(i).y * zoom)- offset.y , (int)(pointsList.get(i+1).x * zoom) - offset.x, (int)(pointsList.get(i+1).y * zoom) -offset.y);
 		} 
 	}
 	

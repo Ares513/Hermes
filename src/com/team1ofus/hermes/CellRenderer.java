@@ -31,8 +31,8 @@ public class CellRenderer implements IZoomCellRenderListener {
 	}
 	
 	public void onZoomPass(double scale){
-		width =  (int)(BootstrapperConstants.TILE_WIDTH * scale);
-		height = (int)(BootstrapperConstants.TILE_HEIGHT * scale);
+		//width =  (int)(BootstrapperConstants.TILE_WIDTH * scale);
+		//height = (int)(BootstrapperConstants.TILE_HEIGHT * scale);
 	}
 	
 	public void zoom(double scale){
