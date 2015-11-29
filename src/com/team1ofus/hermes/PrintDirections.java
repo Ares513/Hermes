@@ -34,6 +34,10 @@ public class PrintDirections {
 		return stateList; 
 	}
 	
+	/* 
+	 * Takes a list of directions that have a heading, and distances
+	 * Adds in colloquial turn instructions to list of directions 
+	 */
 	private ArrayList<Directions> routePrintOut(ArrayList<Directions> dList){ 
 		int dListSize = dList.size(); 
 		int prevDegree = 0;  
@@ -41,28 +45,42 @@ public class PrintDirections {
 			Directions currentInstruction = dList.get(i); 
 			double currentDistance = currentInstruction.getDistance(); 
 			String currentState = currentInstruction.getHeading();
+			
+			/*
+			 * First instruction. provides user with initial instruction 
+			 */
 			if(i==0){ 
-				String startInstruction = "Walk "; 
+				/*               */ 
+				String startInstruction = "Head "; 
 				startInstruction += toFullWord(currentState);
+				startInstruction += " Walk for ";
+				startInstruction += Double.toString(currentDistance);		
+				startInstruction += " feet";
+				/*               */
 				currentInstruction.turnInstruction = startInstruction; 
 				prevDegree = toDegrees(currentState); 
 				dList.set(i, currentInstruction); 
 			}
-			else{
-				String newInstruction = toTurns(toDegrees(currentState),prevDegree); 
+			
+			/* 
+			 * Format for all instructions that are not the first /special instruction. 
+			 */
+			else {
+				String newInstruction = "Take a ";  
+				newInstruction += toTurns(toDegrees(currentState),prevDegree); 
+				newInstruction += " to Head "; 
+				newInstruction += toFullWord(currentState);;
+				newInstruction += " and Walk for "; 
+				newInstruction += Double.toString(currentDistance); 
+				newInstruction += " Feet";
 				currentInstruction.turnInstruction = newInstruction; 
 				prevDegree = toDegrees(currentState); 
 				}
-			System.out.print(currentInstruction.heading);
-			System.out.print(",");
-			System.out.print(currentInstruction.turnInstruction);
-			System.out.print(",");
-			System.out.println(currentInstruction.distance);
+			
+			System.out.println(currentInstruction.turnInstruction);
 			}
 			return dList;
 		}	
-	
-	
 	
 	
 	/* 
