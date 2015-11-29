@@ -11,21 +11,34 @@ public class PrintDirections {
 	 
 	
 	public void parseDirections(ArrayList<CellPoint> AStarDirections){
-		int numberOfSteps = AStarDirections.size(); 
+		ArrayList<String> statesList = stateList(AStarDirections); 
+		ArrayList<Directions> directionsList = route(statesList);
+		ArrayList<Directions> finalList = routePrintOut(directionsList); 
+	}
+	
+	/* 
+	 * takes a* path, 
+	 * Returns ArrayList of string that represents the direction that each tile is heading  
+	 */
+	private ArrayList<String> stateList(ArrayList<CellPoint> aStarPath){ 
+		int numberOfSteps = aStarPath.size(); 
 		ArrayList<String> stateList = new ArrayList<String>(); 
 		for(int i = 1; i < numberOfSteps; i++){ 
-			CellPoint iterationI = AStarDirections.get(i);
-			CellPoint prevIteration = AStarDirections.get(i-1); 
+			CellPoint iterationI = aStarPath.get(i);
+			CellPoint prevIteration = aStarPath.get(i-1); 
 			double xDiff = getXDifference(iterationI,prevIteration);
 			double yDiff = getYDifference(iterationI,prevIteration); 
 			String state = getState(xDiff, yDiff); 
 			stateList.add(state); 
 		}
-		ArrayList<Directions> directionsList = route(stateList);
-		int dListSize = directionsList.size(); 
+		return stateList; 
+	}
+	
+	private ArrayList<Directions> routePrintOut(ArrayList<Directions> dList){ 
+		int dListSize = dList.size(); 
 		int prevDegree = 0;  
 		for(int i = 0; i < dListSize; i++){ 
-			Directions currentInstruction = directionsList.get(i); 
+			Directions currentInstruction = dList.get(i); 
 			double currentDistance = currentInstruction.getDistance(); 
 			String currentState = currentInstruction.getHeading();
 			if(i==0){ 
@@ -33,20 +46,24 @@ public class PrintDirections {
 				startInstruction += toFullWord(currentState);
 				currentInstruction.turnInstruction = startInstruction; 
 				prevDegree = toDegrees(currentState); 
-				directionsList.set(i, currentInstruction); 
+				dList.set(i, currentInstruction); 
 			}
 			else{
 				String newInstruction = toTurns(toDegrees(currentState),prevDegree); 
 				currentInstruction.turnInstruction = newInstruction; 
 				prevDegree = toDegrees(currentState); 
-			}
+				}
 			System.out.print(currentInstruction.heading);
 			System.out.print(",");
 			System.out.print(currentInstruction.turnInstruction);
 			System.out.print(",");
 			System.out.println(currentInstruction.distance);
-		}
-	}
+			}
+			return dList;
+		}	
+	
+	
+	
 	
 	/* 
 	 * finds the change in X between two coordinates 
@@ -161,6 +178,7 @@ public class PrintDirections {
 	 */
 	
 	/*
+	 * Takes Cardinal direction and converts to degrees. 
 	 * Degrees with respect to +Y Axis This way North is 0... 
 	 */
 	private int toDegrees(String state){ 
@@ -186,16 +204,13 @@ public class PrintDirections {
 		return degree; 
 	}
 	
-	
+	/*
+	 * Takes 2 different headings, determines difference in angle 
+	 * Returns a colloquial term for what type of turn to make. 
+	 */
 	private String toTurns(int currentDegree, int prevDegree){ 
 		String turn = new String(); 
 		int diff = currentDegree - prevDegree; 
-		System.out.print(currentDegree);
-		System.out.print(",");
-		System.out.print(prevDegree);
-		System.out.print(",");
-		System.out.print(diff);
-		System.out.print(",");
 		if(diff == 45 || diff == -315){ 
 			turn = "Slight Right"; 
 		}
@@ -217,6 +232,9 @@ public class PrintDirections {
 		return turn; 
 	}
 	
+	/*
+	 * turn 1 or 2 letter heading into a word
+	 */
 	private String toFullWord(String state){ 
 		String degree = null; 
 		switch (state){ 
