@@ -292,7 +292,7 @@ public class HermesUI extends JPanel{
                     gridMap.render.zoom(zoomScale);
                     pathPanel.zoom(zoomScale);
                     //textPanel.zoom(zoomScale);
-                    //pointPanel.zoom(zoomScale);
+                    pointPanel.zoom(zoomScale);
                     
                     //pathPanel.repaint();
                     //pathPanel.drawPath(path);
