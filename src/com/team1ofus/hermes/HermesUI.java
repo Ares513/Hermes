@@ -124,6 +124,7 @@ public class HermesUI extends JPanel{
 				first = new Point(picked.x, picked.y);
 				gridMap.render.setFirst(first);
 				pointPanel.setFirst(first);
+				pathPanel.clearPath();
 				repaintPanel();
 			} else if(second == null) {
 				

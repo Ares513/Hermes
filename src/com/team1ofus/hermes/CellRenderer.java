@@ -58,13 +58,6 @@ public class CellRenderer implements IZoomCellRenderListener {
 				}
 			}
 		}
-		
-		if(first != null) {
-			g.drawImage(spriteImages[2], first.x*width-offset.x, first.y*height-offset.y, width, height, null);
-		}
-		if(second != null) {
-			g.drawImage(spriteImages[2], second.x*width-offset.x, second.y*height-offset.y, width, height, null);
-		}
 	}
 	
 	public void setFirst(Point inPoint) {

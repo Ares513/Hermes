@@ -52,6 +52,7 @@ public class PointPane extends JPanel{
 			first = null;
 		else
 			first = new Point((int) inPoint.getX()* width,(int) inPoint.getY()*height);
+		second = null;
 		System.out.println("First point:" + inPoint );
 		repaint();
 	}

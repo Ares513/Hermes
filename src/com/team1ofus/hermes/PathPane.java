@@ -64,4 +64,8 @@ class PathPane extends JPanel {
 		this.offset = offset;
 		
 	}
+	
+	public void clearPath() {
+		pointsList.clear();
+	}
 }
