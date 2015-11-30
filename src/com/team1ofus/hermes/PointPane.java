@@ -68,7 +68,7 @@ public class PointPane extends JPanel{
 	
 	@Override
 	public void paintComponent(Graphics g) {
-		System.out.println("paintComponent got called in PointPane");
+		DebugManagement.writeNotificationToLog("paintComponent got called in PointPane");
 		Graphics2D g2d = (Graphics2D) g.create();
 		drawPoint(g2d);
 
