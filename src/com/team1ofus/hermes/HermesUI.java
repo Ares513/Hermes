@@ -88,6 +88,9 @@ public class HermesUI extends JPanel{
 	private JPanel zoomPanel;
 	private JButton btnPlus;
 	private JButton btnMinus;
+	private JButton zoomInButton;
+	private JButton zoomOutBtn;
+	private Box horizontalBox;
 	public HermesUI(PathCell viewCell) {
 		humanInteractive = new HumanInteractionEventObject();
 		initialize(viewCell);
@@ -207,8 +210,10 @@ public class HermesUI extends JPanel{
 		JPanel interacactionpanel = new JPanel();
 		interacactionpanel.setBounds(0, 0, panelSize, screenSize.height);
 		frameHermes.getContentPane().add(interacactionpanel);
+		interacactionpanel.setLayout(null);
 		
 		verticalBox = Box.createVerticalBox();
+		verticalBox.setBounds(13, 5, 203, 1155);
 		interacactionpanel.add(verticalBox);
 		
 		verticalStrut_1 = Box.createVerticalStrut(20);
@@ -262,6 +267,17 @@ public class HermesUI extends JPanel{
 		directionsTextPane.setEditable(false);
 		directionsTextPane.setRows(20);
 		directionsTextPane.setColumns(18);
+		
+		horizontalBox = Box.createHorizontalBox();
+		verticalBox.add(horizontalBox);
+		
+		zoomInButton = new JButton("");
+		horizontalBox.add(zoomInButton);
+		zoomInButton.setIcon(new ImageIcon(HermesUI.class.getResource("/com/team1ofus/hermes/zoomin25.png")));
+		
+		zoomOutBtn = new JButton("");
+		horizontalBox.add(zoomOutBtn);
+		zoomOutBtn.setIcon(new ImageIcon(HermesUI.class.getResource("/com/team1ofus/hermes/zoomout25.png")));
 	
 		
 		layeredPane = new JLayeredPane();
