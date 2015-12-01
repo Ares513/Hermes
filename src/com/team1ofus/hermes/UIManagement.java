@@ -23,17 +23,22 @@ public class UIManagement implements IHumanInteractionListener, IMapManagementIn
 		loader = new Loader(allCells);  
 		loader.events.addChooseListener(this);
 		printList = new PrintDirections(); 
-		
+		locationNameInfoRecords = new ArrayList<Record>();
 		allLocationNameInfos = new ArrayList<LocationNameInfo>();
 		for (PathCell aCell : allCells){
 			allLocationNameInfos.addAll(aCell.getLocationNameInfo());
+			for (LocationNameInfo lni : aCell.getLocationNameInfo()){
+				for(String s : lni.getNames()) {
+					locationNameInfoRecords.add(new Record(s, aCell.getName()));
+					
+				}
+			}
 		}
-		locationNameInfoRecords = new ArrayList<Record>();
-		String cellName;
+		
 		for (LocationNameInfo lni : allLocationNameInfos){
-			cellName = lni.getCellName();
+		
 			for (String str : lni.getNames()){
-				locationNameInfoRecords.add(new Record(str, cellName));
+				
 			}
 		}
 	}
