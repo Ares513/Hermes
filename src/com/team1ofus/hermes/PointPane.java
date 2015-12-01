@@ -11,6 +11,7 @@ import java.io.IOException;
 import javax.imageio.ImageIO;
 import javax.swing.JPanel;
 
+//This panel paints the start and end points on the map
 public class PointPane extends JPanel{
 
 	private Point first;

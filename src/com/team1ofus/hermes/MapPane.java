@@ -7,7 +7,7 @@ import com.team1ofus.hermes.Tile;
 import com.team1ofus.hermes.TILE_TYPE;
 import com.team1ofus.hermes.CellRenderer;
 
-
+//JPanel that holds the rendered map
 public class MapPane extends JPanel{
 	public CellRenderer render;
 	
