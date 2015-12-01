@@ -53,22 +53,22 @@ public class HermesUI extends JPanel{
 	
 	ArrayList<Point> pointsList = new ArrayList<Point>();
 	private JFrame frameHermes;
-	private PathPane pathPanel;
-	private PointPane pointPanel;
+	//private PathPane pathPanel;
+	//private PointPane pointPanel;
 	private Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
 	private int frameWidth = screenSize.width-200;
 	private int frameHeight = screenSize.height-200;
-	private MapPane gridMap;
+	//private MapPane gridMap;
 	int scrollSpeed = 5;
 	private PathCell currentCell;
 	public HumanInteractionEventObject humanInteractive; 
 	public ZoomEventObject zoomEvent;
 	private Point first; //for showing in the UI which points were clicked.
 	private Point second; 
-	private JLayeredPane layeredPane;
+	//private JLayeredPane layeredPane;
 	private boolean dragging;
 	private Point lastDragLocation;
-	private TextPane textPanel;
+	//private TextPane textPanel;
 	private int panelSize = 230;
 	private Box verticalBox;
 	private JTextField startPoint;
@@ -88,7 +88,7 @@ public class HermesUI extends JPanel{
 	private JButton zoomInButton;
 	private JButton zoomOutBtn;
 	private Box horizontalBox;
-	private JTabbedPane tabbedPane;
+	private MapTabbedPane<MapTabbedPane<MapTabPane>> tabbedPane;
 	public HermesUI(PathCell viewCell) {
 		humanInteractive = new HumanInteractionEventObject();
 		initialize(viewCell);
@@ -107,7 +107,7 @@ public class HermesUI extends JPanel{
 				doOffsetCalc(e);
 			}
 		});
-			gridMap.addKeyListener(new KeyAdapter() {
+			tabbedPane.getSelectedTabPane().getSelectedTabPane().getMapPane().addKeyListener(new KeyAdapter() {
 				@Override
 				public void keyPressed(KeyEvent e) {
 					doOffsetCalc(e);
@@ -118,21 +118,21 @@ public class HermesUI extends JPanel{
 	
 	private void processClick(Point picked) {
 		DebugManagement.writeNotificationToLog("Mouse clicked at " + picked.x + " , " + picked.y);
-		if(gridMap.render.getTile(picked.x, picked.y).tileType == TILE_TYPE.PEDESTRIAN_WALKWAY) {
+		if(tabbedPane.getSelectedTabPane().getSelectedTabPane().getMapPane().render.getTile(picked.x, picked.y).tileType == TILE_TYPE.PEDESTRIAN_WALKWAY) {
 			//valid.
 			if(first == null) {
 				
 				first = new Point(picked.x, picked.y);
-				gridMap.render.setFirst(first);
-				pointPanel.setFirst(first);
-				pointPanel.setSecond(null);
-				pathPanel.clearPath();
+				tabbedPane.getSelectedTabPane().getSelectedTabPane().getMapPane().render.setFirst(first);
+				tabbedPane.getSelectedTabPane().getSelectedTabPane().getPointPane().setFirst(first);
+				tabbedPane.getSelectedTabPane().getSelectedTabPane().getPointPane().setSecond(null);
+				tabbedPane.getSelectedTabPane().getSelectedTabPane().getPathPane().clearPath();
 				repaintPanel();
 			} else if(second == null) {
 				
 				second = new Point(picked.x,picked.y);
-				gridMap.render.setSecond(second);
-				pointPanel.setSecond(second);
+				tabbedPane.getSelectedTabPane().getSelectedTabPane().getMapPane().render.setSecond(second);
+				tabbedPane.getSelectedTabPane().getSelectedTabPane().getPointPane().setSecond(second);
 				first = null;
 				second = null;
 
@@ -144,14 +144,14 @@ public class HermesUI extends JPanel{
 	}
 	//Would just skip this and go straight to MyPanel's drawPath, but I'm afraid that it will break and I don't have time to fix it
 	 void drawPath(ArrayList<CellPoint> path){
-		 pathPanel.drawPath(path);
+		 tabbedPane.getSelectedTabPane().getSelectedTabPane().getPathPane().drawPath(path);
 		 repaintPanel();;
 	    }
 
 	@Override
 	public void paintComponent(Graphics g){
 		super.paintComponent(g);
-		layeredPane.paintComponents(g);
+		tabbedPane.getSelectedTabPane().getSelectedTabPane().paintComponents(g);
 	//Allows us to paint the image within the JLabel	
 	}
 	
@@ -256,37 +256,31 @@ public class HermesUI extends JPanel{
 		horizontalBox.add(zoomOutBtn);
 		zoomOutBtn.setIcon(new ImageIcon(HermesUI.class.getResource("/com/team1ofus/hermes/zoomout25.png")));
 		
-		tabbedPane = new JTabbedPane(JTabbedPane.TOP);
-		tabbedPane.setBounds(230, 0, BootstrapperConstants.FRAME_WIDTH-BootstrapperConstants.PANEL_SIZE, BootstrapperConstants.FRAME_HEIGHT);
+		tabbedPane = new MapTabbedPane<MapTabbedPane<MapTabPane>>(JTabbedPane.TOP);
+		tabbedPane.setBounds(BootstrapperConstants.PANEL_SIZE, 0, BootstrapperConstants.FRAME_WIDTH-BootstrapperConstants.PANEL_SIZE-10, BootstrapperConstants.FRAME_HEIGHT-30);
 		frameHermes.getContentPane().add(tabbedPane);
 		
-				gridMap = new MapPane(currentCell);
-				gridMap.setBorder(new EtchedBorder(EtchedBorder.RAISED, null, null));
-				gridMap.setBounds(0, 0, frameWidth-panelSize, frameHeight);
-				pathPanel = new PathPane();
-				textPanel = new TextPane();
-				
-				pointPanel = new PointPane();
-
-				
-				pathPanel.setBounds(0, 0, frameWidth-panelSize, frameHeight);
-				textPanel.setBounds(0, 0, frameWidth-panelSize, frameHeight);
-				pointPanel.setBounds(0, 0, frameWidth-panelSize, frameHeight);
-				textPanel.labelAllTiles(currentCell);
-	
 		
-		layeredPane = new JLayeredPane();
-		tabbedPane.addTab("New tab", null, layeredPane, null);
-		layeredPane.add(gridMap);
-		layeredPane.add(pathPanel);
-		layeredPane.add(textPanel);
-		layeredPane.add(pointPanel);
-		layeredPane.setComponentZOrder(gridMap, 0);
-		layeredPane.setComponentZOrder(pathPanel, 0);
-		layeredPane.setComponentZOrder(textPanel, 0);
-		layeredPane.setComponentZOrder(pointPanel, 0);
+		
+		//TODO Make display the name of the cell, i.e. currentCell.getName()
+		tabbedPane.addNewTab("New tab", null, new MapTabbedPane<MapTabPane>(JTabbedPane.BOTTOM), null);
+		tabbedPane.getSelectedTabPane().addNewTab("Tab in tab", null, new MapTabPane(currentCell), null);
+		
+		tabbedPane.addNewTab("tab 2", null, new MapTabbedPane<MapTabPane>(JTabbedPane.BOTTOM), null);
+		tabbedPane.setSelectedIndex(1);
+		tabbedPane.getSelectedTabPane().addNewTab("1", null, new MapTabPane(currentCell), null);
+		tabbedPane.getSelectedTabPane().addNewTab("2", null, new MapTabPane(currentCell), null);
+		
+		tabbedPane.addNewTab("super tab 3", null, new MapTabbedPane<MapTabPane>(JTabbedPane.BOTTOM), null);
+		tabbedPane.setSelectedIndex(2);
+		tabbedPane.getSelectedTabPane().addNewTab("poop", null, new MapTabPane(currentCell), null);
+		tabbedPane.getSelectedTabPane().addNewTab("shit", null, new MapTabPane(currentCell), null);
+		tabbedPane.getSelectedTabPane().addNewTab("scat", null, new MapTabPane(currentCell), null);
+		tabbedPane.getSelectedTabPane().setSelectedIndex(2);
+		
+/*
 		//This handles map zooming by causing the Cell to re-render
-		layeredPane.addMouseWheelListener(new MouseAdapter() {
+		tabbedPane.getSelectedTabPane().getSelectedTabPane().addMouseWheelListener(new MouseAdapter() {
             @Override
             public void mouseWheelMoved(MouseWheelEvent e) {
             	int scalingNum = 2;//Increasing this number increases the amount of zoom one mousewheel "scroll" will zoom in for
@@ -303,10 +297,10 @@ public class HermesUI extends JPanel{
                 else{
                 	System.out.println(zoomScale);
                     zoomScale += delta;
-                    gridMap.render.zoom(zoomScale);
-                    pathPanel.zoom(zoomScale);
+                    tabbedPane.getSelectedTabPane().getSelectedTabPane().getMapPane().render.zoom(zoomScale);
+                    tabbedPane.getSelectedTabPane().getSelectedTabPane().getPathPane().zoom(zoomScale);
                     //textPanel.zoom(zoomScale); TODO scale with text
-                    pointPanel.zoom(zoomScale);
+                    tabbedPane.getSelectedTabPane().getSelectedTabPane().getPointPane().zoom(zoomScale);
                     //zoomEvent.addListener(gridMap); TODO Get this event handling stuff to work or get rid of it
                     //zoomEvent.doZoom(zoomScale);
                 }
@@ -316,7 +310,7 @@ public class HermesUI extends JPanel{
         });
 		
 
-		layeredPane.addMouseMotionListener(new MouseMotionAdapter() {
+		tabbedPane.getSelectedTabPane().getSelectedTabPane().addMouseMotionListener(new MouseMotionAdapter() {
 			@Override
 			public void mouseMoved(MouseEvent e) {
 
@@ -330,9 +324,9 @@ public class HermesUI extends JPanel{
 						int x = (int) (-0.5*(e.getX() - lastDragLocation.getX()));
 						int y = (int) (-0.5*(e.getY() - lastDragLocation.getY()));
 						DebugManagement.writeNotificationToLog("Dragging occurred, dx dy " + x + " , " + y);
-						gridMap.render.incrementOffset(x, y, frameWidth, frameHeight);
-						pathPanel.setOffset(gridMap.render.offset);
-						pointPanel.setOffset(gridMap.render.offset);
+						tabbedPane.getSelectedTabPane().getSelectedTabPane().getMapPane().render.incrementOffset(x, y, frameWidth, frameHeight);
+						tabbedPane.getSelectedTabPane().getSelectedTabPane().getPathPane().setOffset(tabbedPane.getSelectedTabPane().getSelectedTabPane().getMapPane().render.offset);
+						tabbedPane.getSelectedTabPane().getSelectedTabPane().getPointPane().setOffset(tabbedPane.getSelectedTabPane().getSelectedTabPane().getMapPane().render.offset);
 						repaintPanel();
 						lastDragLocation = e.getPoint();
 					} else {
@@ -342,11 +336,11 @@ public class HermesUI extends JPanel{
 			}
 			}
 		);
-		layeredPane.addMouseListener(new MouseAdapter() {
+		tabbedPane.getSelectedTabPane().getSelectedTabPane().addMouseListener(new MouseAdapter() {
 
 		@Override
 		public void mouseClicked(MouseEvent e) {
-			Point picked = gridMap.render.pickTile(e.getX() , e.getY());
+			Point picked = tabbedPane.getSelectedTabPane().getSelectedTabPane().getMapPane().render.pickTile(e.getX() , e.getY());
 			if(SwingUtilities.isLeftMouseButton(e)) {
 				processClick(picked);
 			}  
@@ -370,6 +364,16 @@ public class HermesUI extends JPanel{
 
 			}
 		});
+		
+		tabbedPane.getSelectedTabPane().addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseClicked(MouseEvent e) {
+				if(SwingUtilities.isLeftMouseButton(e)) {
+					System.out.println("Selected Index: " + tabbedPane.getSelectedTabPane().getSelectedIndex());
+				}  
+			}	
+		});*/
+		
 		frameHermes.getContentPane().add(zoomPanel);
 		
 		/*
@@ -389,10 +393,10 @@ public class HermesUI extends JPanel{
 	}
 	
 	public PathPane getPathPanel(){
-		return pathPanel;
+		return tabbedPane.getSelectedTabPane().getSelectedTabPane().getPathPane();
 	}
 	public PointPane getPointPane(){
-		return pointPanel;
+		return tabbedPane.getSelectedTabPane().getSelectedTabPane().getPointPane();
 	}
 	
 
@@ -400,22 +404,22 @@ public class HermesUI extends JPanel{
 		switch(e.getKeyCode()) {
 		//some optimizations to be made here
 		case KeyEvent.VK_LEFT:
-			gridMap.render.incrementOffset(-1*scrollSpeed, 0, gridMap.getWidth(), gridMap.getHeight());
+			tabbedPane.getSelectedTabPane().getSelectedTabPane().getMapPane().render.incrementOffset(-1*scrollSpeed, 0, tabbedPane.getSelectedTabPane().getSelectedTabPane().getMapPane().getWidth(), tabbedPane.getSelectedTabPane().getSelectedTabPane().getMapPane().getHeight());
 			break;
 		case KeyEvent.VK_RIGHT:
-			gridMap.render.incrementOffset(scrollSpeed, 0, gridMap.getWidth(), gridMap.getHeight());
+			tabbedPane.getSelectedTabPane().getSelectedTabPane().getMapPane().render.incrementOffset(scrollSpeed, 0, tabbedPane.getSelectedTabPane().getSelectedTabPane().getMapPane().getWidth(), tabbedPane.getSelectedTabPane().getSelectedTabPane().getMapPane().getHeight());
 			break;
 		case KeyEvent.VK_DOWN:
-			gridMap.render.incrementOffset(0, scrollSpeed, gridMap.getWidth(), gridMap.getHeight());
+			tabbedPane.getSelectedTabPane().getSelectedTabPane().getMapPane().render.incrementOffset(0, scrollSpeed, tabbedPane.getSelectedTabPane().getSelectedTabPane().getMapPane().getWidth(), tabbedPane.getSelectedTabPane().getSelectedTabPane().getMapPane().getHeight());
 			break;
 		case KeyEvent.VK_UP:
-			gridMap.render.incrementOffset(0, -1*scrollSpeed, gridMap.getWidth(), gridMap.getHeight());
+			tabbedPane.getSelectedTabPane().getSelectedTabPane().getMapPane().render.incrementOffset(0, -1*scrollSpeed, tabbedPane.getSelectedTabPane().getSelectedTabPane().getMapPane().getWidth(), tabbedPane.getSelectedTabPane().getSelectedTabPane().getMapPane().getHeight());
 			break;
 		default:
 			break;
 		}
-		pathPanel.setOffset(gridMap.render.offset);
-		pointPanel.setOffset(gridMap.render.offset);
+		tabbedPane.getSelectedTabPane().getSelectedTabPane().getPathPane().setOffset(tabbedPane.getSelectedTabPane().getSelectedTabPane().getMapPane().render.offset);
+		tabbedPane.getSelectedTabPane().getSelectedTabPane().getPointPane().setOffset(tabbedPane.getSelectedTabPane().getSelectedTabPane().getMapPane().render.offset);
 		repaintPanel();
 	}
 	private void repaintPanel() {
