@@ -47,7 +47,8 @@ class PathPane extends JPanel {
 	void drawLineSets(Graphics g){
 		//DebugManagement.writeNotificationToLog("Points for drawing:" + " " + pointsList);
 		Graphics2D g2d = (Graphics2D) g;
-		g2d.setColor(Color.BLUE);
+		Color lineColor = new Color(120,221,255);
+		g2d.setColor(lineColor);
 		//GradientPaint redtowhite = new GradientPaint(0,0,Color.RED,100, 0,Color.WHITE);
 		//g2d.setPaint(redtowhite);
 		

@@ -295,8 +295,8 @@ public class HermesUI extends JPanel{
             	int scalingNum = 2;//Increasing this number increases the amount of zoom one mousewheel "scroll" will zoom in for
             	double zoomIncreaseFactor = (scalingNum/(double)BootstrapperConstants.TILE_WIDTH);
                 double delta = -zoomIncreaseFactor * e.getPreciseWheelRotation();
-                if(zoomScale + delta <= 1){
-                	zoomScale =1;
+                if(zoomScale + delta < 0.8){
+                	zoomScale = 0.8;
                 }
                 else if(zoomScale >  1.75 ){
                 	zoomScale = 1.75;
