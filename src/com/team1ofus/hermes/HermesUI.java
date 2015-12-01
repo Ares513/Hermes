@@ -208,11 +208,11 @@ public class HermesUI extends JPanel implements IHumanInteractionListener{
 		verticalStrut_1.setPreferredSize(new Dimension(0, 30));
 		verticalBox.add(verticalStrut_1);
 
-		JComboBox<String> startPoint = new JComboBox();
 	    DefaultComboBoxModel<String> modelForStart = new DefaultComboBoxModel<>(  );
 	    for (Record r:locationNameInfoRecords){
 	    	modelForStart.addElement(r.getVal());
 	    }
+	    startPoint = new JComboBox<String>();
 	    startPoint.setModel(modelForStart);
 		startPoint.setEditable(true);
 		AutoCompleteDecorator.decorate( startPoint );
@@ -231,8 +231,7 @@ public class HermesUI extends JPanel implements IHumanInteractionListener{
 	    for (Record r:locationNameInfoRecords){
 	    	modelForDestination.addElement(r.getVal());
 	    }
-
-		JComboBox<String> destination = new JComboBox();
+	    destination = new JComboBox<String>();
 		destination.setModel(modelForDestination);
 		destination.setEditable(true);
 		AutoCompleteDecorator.decorate( destination );
@@ -517,6 +516,20 @@ public class HermesUI extends JPanel implements IHumanInteractionListener{
 
 		@Override
 		public void actionPerformed(ActionEvent e) {
+			String startLocation = (String) startPoint.getSelectedItem();
+			DebugManagement.writeNotificationToLog("start location is : " + startLocation);
+			String destLocation = (String) destination.getSelectedItem();
+			searchStartRecord = locationNameInfoRecords.get(0);
+			searchEndRecord = locationNameInfoRecords.get(0);
+		    for (Record r:locationNameInfoRecords){
+		    	if (r.getVal().equals(startLocation)){
+		    		searchStartRecord = r;
+		    	}
+		    	if (r.getVal().equals(destLocation)){
+		    		searchEndRecord = r;
+		    	}
+		    }
+
 			searchEvents.doSearchReady(searchStartRecord, searchEndRecord);
 		}
 		
