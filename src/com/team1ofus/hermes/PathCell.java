@@ -38,6 +38,7 @@ public class PathCell{
     private ArrayList<EntryPointReference> entryPointRefs = new ArrayList<EntryPointReference>(); //places from which you can leave this cell.
     
     public PathCell(String name, int width, int height, double scaling, TILE_TYPE defaultTile) {
+    	DebugManagement.writeLineToLog(SEVERITY_LEVEL.WARNING, "A map was generated with a default tile format! Maps should be loaded from memory.");
         this.cellName = name;
         tiles = new Tile[width][height];
     	for(int i=0; i<width; i++) {
@@ -55,7 +56,10 @@ public class PathCell{
     	this.scaling = scaling;
            
     }
-    public PathCell(String name, int width, int height, double scaling, com.team1ofus.apollo.DataTile[][] dataTiles) {
+    
+    //an unpleasantly long one for 
+	public PathCell(String name, int width, int height, com.team1ofus.apollo.DataTile[][] dataTiles, ArrayList<EntryPoint> entryPoints,
+			ArrayList<LocationNameInfo> namedPoints, ArrayList<EntryPointReference> entryPointRefs) {
         this.cellName = name;
         tiles = new Tile[width][height];
     	for(int i=0; i<width; i++) {
@@ -73,7 +77,9 @@ public class PathCell{
     		}
     	}
     	this.scaling = scaling;
-           
+		this.entryPoints = entryPoints;
+		this.namedPoints = namedPoints;
+		this.entryPointRefs = entryPointRefs;
     }
     /*
      * Not safe for out of bounds calls.

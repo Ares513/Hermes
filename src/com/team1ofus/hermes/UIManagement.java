@@ -5,7 +5,7 @@ import java.util.ArrayList;
 
 import javax.swing.*;
 
-
+//This class creates the UI and passes on events that will trigger changes in the UI
 public class UIManagement implements IHumanInteractionListener, IMapManagementInteractionListener, ILoaderInteractionListener {
 	HermesUI window;
 	Loader loader;
@@ -44,19 +44,17 @@ public class UIManagement implements IHumanInteractionListener, IMapManagementIn
 	}
 	
 	public JFrame frame; 
-
 	public void begin(int selectedIndex) {
 		window = new HermesUI(allCells.get(selectedIndex));
 		window.humanInteractive.addListener(this);
-	
-		
 	}
 	
 	public void doPathComplete(ArrayList<CellPoint> directions) {
 		DebugManagement.writeNotificationToLog("Path received, contents "  + directions);
-
 		window.getPathPanel().drawPath(directions);
-		printList.parseDirections(directions);
+		ArrayList<String> listOfDirections = printList.parseDirections(directions);
+		//window.ListOfDirections = listOfDirections; 
+		window.directionText(listOfDirections);
 	}
 
 	@Override
@@ -80,12 +78,8 @@ public class UIManagement implements IHumanInteractionListener, IMapManagementIn
 	@Override
 	public void selectionMade(int selection, ArrayList<PathCell> allCells) {
 		// TODO Auto-generated method stub
-		
 		events.doWindowReady(selection, allCells);
 		begin(selection);
 		
 	}
-
-	
-
 }

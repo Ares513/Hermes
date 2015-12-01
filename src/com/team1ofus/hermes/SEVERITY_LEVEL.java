@@ -1,5 +1,6 @@
 package com.team1ofus.hermes;
 
+//Severity level for DebugManagment logs
 public enum SEVERITY_LEVEL {
 	/*
 	 * Indicates a problematic edge case that may affect program function. Similar to compiler warnings.

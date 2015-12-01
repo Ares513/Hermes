@@ -3,6 +3,7 @@ package com.team1ofus.hermes;
 import java.awt.Graphics;
 import java.util.ArrayList;
 
+//Used for debugging purposes
 public class DebugConsole {
 	private static ArrayList<String> entries = new ArrayList<String>();
 	
