@@ -7,6 +7,8 @@ import java.awt.Graphics2D;
 import java.awt.Point;
 import java.awt.Stroke;
 import java.util.ArrayList;
+import java.awt.GradientPaint;
+
 
 import javax.swing.JPanel;
 
@@ -45,9 +47,13 @@ class PathPane extends JPanel {
 	void drawLineSets(Graphics g){
 		//DebugManagement.writeNotificationToLog("Points for drawing:" + " " + pointsList);
 		Graphics2D g2d = (Graphics2D) g;
-		g2d.setColor(Color.RED);
+		g2d.setColor(Color.BLUE);
+		//GradientPaint redtowhite = new GradientPaint(0,0,Color.RED,100, 0,Color.WHITE);
+		//g2d.setPaint(redtowhite);
+		
 		float[] dashingPattern1 = {8f, 8f};
-		Stroke stroke1 = new BasicStroke(6f, BasicStroke.CAP_BUTT, BasicStroke.JOIN_MITER, 1.0f, dashingPattern1, 2.0f);
+		
+		Stroke stroke1 = new BasicStroke(6f, BasicStroke.CAP_ROUND, BasicStroke.JOIN_ROUND, 4f);//, dashingPattern1, 2.0f);
 		g2d.setStroke(stroke1);
 		for(int i = 0; i < pointsList.size()-1; i++){
 			g2d.drawLine( (int)(pointsList.get(i).x * zoomScale) - offset.x ,  (int)(pointsList.get(i).y * zoomScale)- offset.y , (int)(pointsList.get(i+1).x * zoomScale) - offset.x, (int)(pointsList.get(i+1).y * zoomScale) -offset.y);
