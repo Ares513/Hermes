@@ -23,7 +23,7 @@ public class CellRenderer {
 	int newTotalHeight;
 	int difWidth;
 	int difHeight;	
-	final int rows = 4;
+	final int rows = 2;
 	final int cols = 14;
 	BufferedImage[] spriteImages = new BufferedImage[rows * cols];
 	Point offset = new Point(0, 0);
@@ -77,14 +77,10 @@ public class CellRenderer {
 				switch(drawnCell.tiles[i][j].getTileType()) {
 				case WALL:
 					g.drawImage(spriteImages[0], i*width - offset.x, j*height - offset.y, width, height, null);
-
 					break;
-
 				case PEDESTRIAN_WALKWAY:
 					g.drawImage(spriteImages[1], i*width - offset.x, j*height - offset.y, width, height, null);
-
 					break;
-
 				case DOOR:
 					g.drawImage(spriteImages[2], i*width - offset.x, j*height - offset.y, width, height, null);
 					break;
@@ -109,8 +105,10 @@ public class CellRenderer {
 				case IMPASSABLE:
 					//9 is Steep, which is now deprecated
 					g.drawImage(spriteImages[10], i*width - offset.x, j*height - offset.y, width, height, null);
+					break;
 				case MALE_BATHROOM:
 					g.drawImage(spriteImages[11], i*width - offset.x, j*height - offset.y, width, height, null);
+					break;
 				case FEMALE_BATHROOM:
 					g.drawImage(spriteImages[12], i*width - offset.x, j*height - offset.y, width, height, null);
 					break;
@@ -119,6 +117,9 @@ public class CellRenderer {
 					break;
 				case BENCH:
 					g.drawImage(spriteImages[14], i*width - offset.x, j*height - offset.y, width, height, null);
+					break;
+				case BUSH:
+					g.drawImage(spriteImages[17], i*width - offset.x, j*height - offset.y, width, height, null);
 					break;
 				case TREE:
 					g.drawImage(spriteImages[18], i*width - offset.x, j*height - offset.y, width, height, null);
