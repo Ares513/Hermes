@@ -256,9 +256,30 @@ public class AStar {
 		}
 		
 		private int getHeuristic(CellPoint current, CellPoint end){
+//			Point currentWorldCoords = getWorldCoords(current);
+//			Point endWorldCoords = getWorldCoords(end);
+//			double deltaX = endWorldCoords.getX() - currentWorldCoords.getX();
+//			double deltaY = endWorldCoords.getY() - currentWorldCoords.getY();
+//			return (int)Math.sqrt((deltaX*deltaX)+(deltaY*deltaY));
 			return 0;
 		}
 		
+		private Point getWorldCoords(CellPoint current) {
+			Point currentCoords = null;
+			if(current.getCellName().equals("CampusMap")){
+				currentCoords = current.getPoint();
+			}
+			else{
+				currentCoords = approxCoords(current.getCellName());
+			}
+			return currentCoords;
+		}
+
+		private Point approxCoords(String cellName) {
+			
+			return null;
+		}
+
 		private ArrayList<CellPoint> getNeighbors(CellPoint currentPoint){
 			ArrayList<CellPoint> output = new ArrayList<CellPoint>();
 			int curX = (int) currentPoint.getPoint().getX();
