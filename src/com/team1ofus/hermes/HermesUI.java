@@ -50,6 +50,7 @@ import javax.swing.JScrollPane;
 import javax.swing.ScrollPaneConstants;
 import javax.swing.JTabbedPane;
 
+
 //Holds all of the UI elements for the project
 public class HermesUI extends JPanel{
 
@@ -393,7 +394,7 @@ public class HermesUI extends JPanel{
 			String direction = directions.get(i); 
 			directionsTextPane.append(direction);
 			directionsTextPane.append("\n");
-		//	directionsTextPane.line
+			
 		} 
 	}
 
