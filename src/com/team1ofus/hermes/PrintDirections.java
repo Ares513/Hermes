@@ -63,9 +63,10 @@ public class PrintDirections {
 			if(i==0){  
 				String startInstruction = "Head "; 
 				startInstruction += toFullWord(currentState);
-				startInstruction += " Walk for ";
+				startInstruction += "\nwalk for ";
 				startInstruction += df.format(currentDistance);		
 				startInstruction += " feet";
+				startInstruction += "\n-------------";
 				currentInstruction.turnInstruction = startInstruction; 
 				prevDegree = toDegrees(currentState); 
 				dList.set(i, currentInstruction); 
@@ -74,11 +75,12 @@ public class PrintDirections {
 			else {
 				String newInstruction = "Take a ";  
 				newInstruction += toTurns(toDegrees(currentState),prevDegree); 
-				newInstruction += " to Head "; 
+				newInstruction += " to head "; 
 				newInstruction += toFullWord(currentState);;
-				newInstruction += " and Walk for "; 
+				newInstruction += "\nWalk "; 
 				newInstruction += df.format(currentDistance); 
-				newInstruction += " Feet";
+				newInstruction += " feet";
+				newInstruction += "\n-------------";
 				currentInstruction.turnInstruction = newInstruction; 
 				prevDegree = toDegrees(currentState); 
 				}
@@ -228,22 +230,22 @@ public class PrintDirections {
 		String turn = new String(); 
 		int diff = currentDegree - prevDegree; 
 		if(diff == 45 || diff == -315){ 
-			turn = "Slight Right"; 
+			turn = "slight right"; 
 		}
 		else if(diff == 90 || diff == -270){ 
-			turn = "Right"; 
+			turn = "right"; 
 		}
 		else if(diff == 135 || diff == -225){ 
-			turn = "Sharp Right"; 
+			turn = "sharp right"; 
 		}
 		else if(diff == -45 || diff == 315){ 
-			turn = "Slight Left"; 
+			turn = "slight left"; 
 		}
 		else if(diff == -90 || diff == 270){ 
-			turn = "Left"; 
+			turn = "left"; 
 		}
 		else if(diff == -135 || diff == 225){ 
-			turn = "Sharp Left"; 
+			turn = "sharp left"; 
 		}
 		return turn; 
 	}
@@ -256,19 +258,19 @@ public class PrintDirections {
 		switch (state){ 
 			case "N": degree = "North"; 
 			break;
-			case "NE": degree = "NorthEast"; 
+			case "NE": degree = "Northeast"; 
 			break;
 			case "E": degree = "East"; 
 			break;
-			case "SE": degree = "SouthEast"; 
+			case "SE": degree = "Southeast"; 
 			break;
 			case "S": degree = "South";
 			break;
-			case "SW": degree = "SouthWest"; 
+			case "SW": degree = "Southwest"; 
 			break;
 			case "W": degree = "West";
 			break;
-			case "NW": degree = "NorthWest"; 
+			case "NW": degree = "Northwest"; 
 			break; 	
 		}
 		return degree; 
