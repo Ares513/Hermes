@@ -8,11 +8,11 @@ import com.team1ofus.hermes.TILE_TYPE;
 import com.team1ofus.hermes.CellRenderer;
 
 
-public class DrawMap extends JPanel implements IZoomInteractionListener{
+public class MapPane extends JPanel implements IZoomInteractionListener{
 	public CellRenderer render;
 	private ZoomDrawMapEventObject zoomPass;
 	
-	public DrawMap(PathCell inCell) {
+	public MapPane(PathCell inCell) {
 		render = new CellRenderer(inCell);
 	}
 	public void onZoomEvent(double scale){

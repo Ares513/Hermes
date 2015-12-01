@@ -58,7 +58,7 @@ public class HermesUI extends JPanel{
 	private Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
 	private int frameWidth = screenSize.width-200;
 	private int frameHeight = screenSize.height-200;
-	private DrawMap gridMap;
+	private MapPane gridMap;
 	int scrollSpeed = 5;
 	private PathCell currentCell;
 	public HumanInteractionEventObject humanInteractive; 
@@ -260,7 +260,7 @@ public class HermesUI extends JPanel{
 		tabbedPane.setBounds(230, 0, 1490, 1000);
 		frameHermes.getContentPane().add(tabbedPane);
 		
-				gridMap = new DrawMap(currentCell);
+				gridMap = new MapPane(currentCell);
 				gridMap.setBorder(new EtchedBorder(EtchedBorder.RAISED, null, null));
 				gridMap.setBounds(0, 0, frameWidth-panelSize, frameHeight);
 				pathPanel = new PathPane();
