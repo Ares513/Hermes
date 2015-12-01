@@ -1,5 +1,13 @@
 package com.team1ofus.hermes;
 
+import org.jdesktop.swingx.autocomplete.AutoCompleteDecorator;
+
+import javax.swing.DefaultComboBoxModel;
+import javax.swing.JButton;
+import javax.swing.JComboBox;
+import javax.swing.JFrame;
+import javax.swing.WindowConstants;
+
 import javax.swing.AbstractAction;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
@@ -201,7 +209,14 @@ public class HermesUI extends JPanel implements IHumanInteractionListener{
 		verticalBox.add(verticalStrut_1);
 
 		JComboBox<String> startPoint = new JComboBox();
+	    DefaultComboBoxModel<String> model = new DefaultComboBoxModel<>(  );
+	    for (Record r:locationNameInfoRecords){
+	    	model.addElement(r.getVal());
+	    }
+	    startPoint.setModel(model);
 		startPoint.setEditable(true);
+		AutoCompleteDecorator.decorate( startPoint );
+
 		verticalBox.add(startPoint);
 		//startPoint.setText("Startpoint");
 		startPoint.addKeyListener(new KeyListenerForStart());
@@ -212,7 +227,10 @@ public class HermesUI extends JPanel implements IHumanInteractionListener{
 
 		//String[] destinations = new String[] {"AK", "FL", "SL"};
 		JComboBox<String> destination = new JComboBox();
+		destination.setModel(model);
 		destination.setEditable(true);
+		AutoCompleteDecorator.decorate( destination );
+
 		
 		//destination.setText("Destination");
 		verticalBox.add(destination);
