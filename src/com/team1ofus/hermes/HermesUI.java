@@ -29,6 +29,7 @@ import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Random;
+import java.util.List;
 
 import javax.swing.JButton;
 import javax.swing.JComboBox;
@@ -48,6 +49,8 @@ import java.awt.Rectangle;
 import javax.swing.JTextArea;
 import javax.swing.border.LineBorder;
 import completely.AutocompleteEngine;
+
+import com.sun.xml.internal.ws.api.pipe.Engine;
 import com.team1ofus.apollo.TILE_TYPE;
 
 import javax.swing.JScrollBar;
@@ -77,8 +80,8 @@ public class HermesUI extends JPanel{
 	private TextPane textPanel;
 	private int panelSize = 230;
 	private Box verticalBox;
-	private JTextField startPoint;
-	private JTextField destination;
+	private JComboBox<String> startPoint;
+	private JComboBox<String> destination;
 	private JSeparator separator;
 	private JLabel lblDirectionReadout;
 	public JTextArea directionsTextPane;
@@ -97,14 +100,14 @@ public class HermesUI extends JPanel{
 	private JTabbedPane tabbedPane;
 	
 	private ArrayList<Record> locationNameInfoRecords;
-	
+	private AutocompleteEngine<Record> engine = new AutocompleteEngine.Builder<Record>()
+            .setIndex(new ACAdapter())
+            .setAnalyzer(new ACAnalyzer())
+            .build();
+
 	public HermesUI(PathCell viewCell, ArrayList<Record> locationNameInfoRecords) {
 		this.locationNameInfoRecords = locationNameInfoRecords;
 		
-		AutocompleteEngine<Record> engine = new AutocompleteEngine.Builder<Record>()
-	            .setIndex(new ACAdapter())
-	            .setAnalyzer(new ACAnalyzer())
-	            .build();
 		humanInteractive = new HumanInteractionEventObject();
 		initialize(viewCell);
 	}
@@ -215,21 +218,23 @@ public class HermesUI extends JPanel{
 		verticalStrut_1.setPreferredSize(new Dimension(0, 30));
 		verticalBox.add(verticalStrut_1);
 
-		startPoint = new JTextField();
+		JComboBox<String> startPoint = new JComboBox();
+		startPoint.setEditable(true);
 		verticalBox.add(startPoint);
 		//startPoint.setText("Startpoint");
-		startPoint.setColumns(18);
-		startPoint.addKeyListener(new CustomKeyListener());
+		startPoint.addKeyListener(new KeyListenerForStart());
 		
 		verticalStrut_2 = Box.createVerticalStrut(20);
 		verticalStrut_2.setPreferredSize(new Dimension(0, 15));
 		verticalBox.add(verticalStrut_2);
 
-		String[] destinations = new String[] {"AK", "FL", "SL"};
-		JComboBox<String> destination = new JComboBox<String>(destinations);
+		//String[] destinations = new String[] {"AK", "FL", "SL"};
+		JComboBox<String> destination = new JComboBox();
+		destination.setEditable(true);
 		
 		//destination.setText("Destination");
 		verticalBox.add(destination);
+		destination.addKeyListener(new KeyListenerForDestination());
 		//destination.setColumns(18);
 
 		verticalStrut_3 = Box.createVerticalStrut(20);
@@ -450,18 +455,39 @@ public class HermesUI extends JPanel{
 	/* CustomKeyListener for the Startpoint, each time a key is pressed return a list of matching from the database
 	 * 
 	 */
-	class CustomKeyListener implements KeyListener{
+	abstract class CustomKeyListener implements KeyListener{
 	      public void keyTyped(KeyEvent e) {
 	      }
 
 	      public void keyPressed(KeyEvent e) {
 	      }
+	      
+	      public abstract void updateResultPoint(String[] possibleDestinations);
 
 	      public void keyReleased(KeyEvent e) {
-	    	  String input = startPoint.getText();
+	    	  JComboBox cb = (JComboBox) e.getSource();
 	    	  
+	    	  String input = (String) cb.getSelectedItem();
+	    	  
+	    	  List<Record> result = engine.search(input);
+	    	  String[] possibleDestinations = new String[result.size()];
+	    	  for (int i = 0; i < result.size(); i++){
+	    		  possibleDestinations[i] = result.get(i).getVal();
+	    	  }
+	    	  updateResultPoint(possibleDestinations);
 	      }   
 	   }
+	
+	class KeyListenerForStart extends CustomKeyListener{
+		public void updateResultPoint(String[] possibleDestinations){
+			startPoint = new JComboBox<String>(possibleDestinations);
+		}
+	}
+	class KeyListenerForDestination extends CustomKeyListener{
+		public void updateResultPoint(String[] possibleDestinations){
+			destination = new JComboBox<String>(possibleDestinations);
+		}
+	}
 }
 
 //CHAFF
