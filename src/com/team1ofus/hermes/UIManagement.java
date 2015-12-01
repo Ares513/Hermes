@@ -62,6 +62,7 @@ public class UIManagement implements IHumanInteractionListener, IMapManagementIn
 		DebugManagement.writeNotificationToLog("Click processed at " + x + " , " + y);
 		if(first == null) {
 			first = new Point(x, y);
+			window.directionsTextPane.setText(""); // clears directions pane after first click. 
 			DebugManagement.writeNotificationToLog("First point processed at " + x + " , " + y);
 			
 		} else if(second == null) {

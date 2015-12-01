@@ -56,6 +56,7 @@ import javax.swing.JViewport;
 import javax.swing.ScrollPaneConstants;
 import javax.swing.JTabbedPane;
 
+
 //Holds all of the UI elements for the project
 public class HermesUI extends JPanel{
 
@@ -410,11 +411,9 @@ public class HermesUI extends JPanel{
 		for(int i =0; i < size; i++){ 
 			String direction = directions.get(i); 
 			directionsTextPane.append(direction);
-			directionsTextPane.append("\n");
-		}
-		
-	//scrollPane.getVerticalScrollBar().setValue(0);  
-
+			directionsTextPane.append("\n");		
+		} 
+	
 	}
 	public PathPane getPathPanel(){
 		return pathPanel;
