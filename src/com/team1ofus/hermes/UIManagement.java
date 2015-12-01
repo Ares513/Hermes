@@ -45,7 +45,7 @@ public class UIManagement implements IHumanInteractionListener, IMapManagementIn
 	
 	public JFrame frame; 
 	public void begin(int selectedIndex) {
-		window = new HermesUI(allCells.get(selectedIndex));
+		window = new HermesUI(allCells.get(selectedIndex), locationNameInfoRecords);
 		window.humanInteractive.addListener(this);
 	}
 	

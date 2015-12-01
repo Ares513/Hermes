@@ -31,6 +31,8 @@ import java.util.ArrayList;
 import java.util.Random;
 
 import javax.swing.JButton;
+import javax.swing.JComboBox;
+
 import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
@@ -45,7 +47,7 @@ import javax.swing.SwingConstants;
 import java.awt.Rectangle;
 import javax.swing.JTextArea;
 import javax.swing.border.LineBorder;
-
+import completely.AutocompleteEngine;
 import com.team1ofus.apollo.TILE_TYPE;
 
 import javax.swing.JScrollBar;
@@ -94,7 +96,16 @@ public class HermesUI extends JPanel{
 	private JButton zoomOutBtn;
 	private Box horizontalBox;
 	private JTabbedPane tabbedPane;
-	public HermesUI(PathCell viewCell) {
+	
+	private ArrayList<Record> locationNameInfoRecords;
+	
+	public HermesUI(PathCell viewCell, ArrayList<Record> locationNameInfoRecords) {
+		this.locationNameInfoRecords = locationNameInfoRecords;
+		
+		AutocompleteEngine<Record> engine = new AutocompleteEngine.Builder<Record>()
+	            .setIndex(new ACAdapter())
+	            .setAnalyzer(new ACAnalyzer())
+	            .build();
 		humanInteractive = new HumanInteractionEventObject();
 		initialize(viewCell);
 	}
@@ -215,10 +226,12 @@ public class HermesUI extends JPanel{
 		verticalStrut_2.setPreferredSize(new Dimension(0, 15));
 		verticalBox.add(verticalStrut_2);
 
-		destination = new JTextField();
+		String[] destinations = new String[] {"AK", "FL", "SL"};
+		JComboBox<String> destination = new JComboBox<String>(destinations);
+		
 		//destination.setText("Destination");
 		verticalBox.add(destination);
-		destination.setColumns(18);
+		//destination.setColumns(18);
 
 		verticalStrut_3 = Box.createVerticalStrut(20);
 		verticalStrut_3.setPreferredSize(new Dimension(0, 5));
@@ -448,7 +461,8 @@ public class HermesUI extends JPanel{
 	      }
 
 	      public void keyReleased(KeyEvent e) {
-	    	  destination.setText(startPoint.getText());
+	    	  String input = startPoint.getText();
+	    	  
 	      }   
 	   }
 }
