@@ -56,7 +56,7 @@ public class PrintToPrinter implements Printable, ActionListener {
  
         /* Now we perform our rendering */
         String intro = "Welcome to Dapper Mapper";
-        String intro2 = "Here are you instructions:"; 
+        String intro2 = "Here are your instructions:"; 
         g.drawString(intro, 100, 100);
         g.drawString(intro2, 100, 116);
         int printSize = this.printInstructions.size();
