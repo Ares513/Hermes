@@ -97,6 +97,7 @@ public class HermesUI extends JPanel implements IHumanInteractionListener{
 	private JButton zoomInButton;
 	private JButton zoomOutBtn;
 	private Box horizontalBox;
+	private JButton removeButton;
 	private MapTabbedPane<MapTabbedPane<MapTabPane>> tabbedPane;
 	private ArrayList<Record> locationNameInfoRecords;
 	private AutocompleteEngine<Record> engine = new AutocompleteEngine.Builder<Record>()
@@ -220,6 +221,11 @@ public class HermesUI extends JPanel implements IHumanInteractionListener{
 
 		separator = new JSeparator();
 		verticalBox.add(separator);
+		
+		removeButton = new JButton("Close this building");
+		removeButton.setAlignmentX(Component.CENTER_ALIGNMENT);
+		removeButton.setDoubleBuffered(true);
+		verticalBox.add(removeButton);
 
 		lblDirectionReadout = new JLabel("Direction Readout");
 		lblDirectionReadout.setAlignmentX(CENTER_ALIGNMENT);
@@ -260,7 +266,7 @@ public class HermesUI extends JPanel implements IHumanInteractionListener{
 		tabbedPane.addNewTab("New tab", null, new MapTabbedPane<MapTabPane>(JTabbedPane.BOTTOM), null);
 		tabbedPane.getSelectedTabPane().addNewTab("Tab in tab", null, new MapTabPane(currentCell), null);
 		tabbedPane.getSelectedTabPane().getSelectedTabPane().humanInteractive.addListener(this);
-		/*//Adding more tabs for testing
+		//Adding more tabs for testing
 		tabbedPane.addNewTab("tab 2", null, new MapTabbedPane<MapTabPane>(JTabbedPane.BOTTOM), null);
 		tabbedPane.setSelectedIndex(1);
 		tabbedPane.getSelectedTabPane().addNewTab("1", null, new MapTabPane(currentCell), null);
@@ -272,7 +278,7 @@ public class HermesUI extends JPanel implements IHumanInteractionListener{
 		tabbedPane.getSelectedTabPane().addNewTab("shit", null, new MapTabPane(currentCell), null);
 		tabbedPane.getSelectedTabPane().addNewTab("scat", null, new MapTabPane(currentCell), null);
 		tabbedPane.getSelectedTabPane().setSelectedIndex(2);
-		tabbedPane.setSelectedIndex(0);*/
+		tabbedPane.setSelectedIndex(0);
 		
 		//If the textpane's change, add HermesUI as a listener TODO: this is probably wrong
 		tabbedPane.addChangeListener(new ChangeListener() {
@@ -290,6 +296,15 @@ public class HermesUI extends JPanel implements IHumanInteractionListener{
 				});
 			}
 			
+		});
+		
+		removeButton.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				if(tabbedPane.getSelectedIndex() != 0)
+					tabbedPane.removeTabAt(tabbedPane.getSelectedIndex());
+				else
+					DebugManagement.writeNotificationToLog("Can't delete the main pane");
+			}
 		});
 		
 		frameHermes.getContentPane().add(zoomPanel);
