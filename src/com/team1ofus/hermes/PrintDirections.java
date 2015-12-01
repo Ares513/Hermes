@@ -11,19 +11,20 @@ import java.text.DecimalFormat;
 import java.lang.Double;
 //import javax.swing.*;
 
+//This class handles converting the A* path into a set of directions
 public class PrintDirections { 
 	public PrintDirections() { 
 	
 	}	 
-	public void parseDirections(ArrayList<CellPoint> AStarDirections){
+	public ArrayList<String> parseDirections(ArrayList<CellPoint> AStarDirections){
 		ArrayList<String> statesList = stateList(AStarDirections); 
 		ArrayList<Directions> directionsList = route(statesList);
-		ArrayList<Directions> finalList = routePrintOut(directionsList); 
+		ArrayList<String> finalList = routePrintOut(directionsList); 
+		return finalList; 
 	}
 	
 	/* 
-	 * takes a* path, 
-	 * Returns ArrayList of string that represents the direction that each tile is heading  
+	 * Takes a* path, and returns ArrayList of string that represents the direction that each tile is heading.
 	 */
 	private ArrayList<String> stateList(ArrayList<CellPoint> aStarPath){ 
 		int numberOfSteps = aStarPath.size(); 
@@ -40,15 +41,19 @@ public class PrintDirections {
 	}
 	
 	/* 
-	 * Takes a list of directions that have a heading, and distances
-	 * Adds in colloquial turn instructions to list of directions 
+	 * Takes a list of directions that have a heading, and distances.
+	 * Adds in colloquial turn instructions to list of directions.
 	 */
-	private ArrayList<Directions> routePrintOut(ArrayList<Directions> dList){ 
+	private ArrayList<String> routePrintOut(ArrayList<Directions> dList){ 
 		DecimalFormat df = new DecimalFormat("#.00");  
 		df.setRoundingMode(RoundingMode.CEILING);
+		
+		ArrayList<String> humanReadableDirections = new ArrayList<String>(); 
+		
 		int dListSize = dList.size(); 
 		int prevDegree = 0;  
 		double totalDistance = 0; 
+		
 		for(int i = 0; i < dListSize; i++){ 
 			Directions currentInstruction = dList.get(i); 
 			double currentDistance = currentInstruction.getDistance(); 
@@ -77,16 +82,17 @@ public class PrintDirections {
 				currentInstruction.turnInstruction = newInstruction; 
 				prevDegree = toDegrees(currentState); 
 				}
-				
+			humanReadableDirections.add(currentInstruction.turnInstruction); 
 			//System.out.println(currentInstruction.turnInstruction);
 			}
+			humanReadableDirections.add(estimatedTime(totalDistance)); 
 		  //	System.out.println(estimatedTime(totalDistance));  
-			return dList;
+			return humanReadableDirections;
 		}	
 	
 	
 	/* 
-	 * finds the change in X between two coordinates 
+	 * Finds the change in X between two coordinates 
 	 * @param CellPoint CellPoint 
 	 * @return double
 	 */
@@ -135,10 +141,8 @@ public class PrintDirections {
 	}
 	
 	/* 
-	 * given the "state" (direction) of a step
-	 * outputs the distance traveled.
-	 * each tile is a 3x3 box 
-	 * steps N,S,E,W all travel 3 feet 
+	 * Given the "state" (direction) of a step, outputs the distance traveled.
+	 * Each tile is a 3x3 box, steps N,S,E,W all travel 3 feet 
 	 * Steps NE,NW,SE,SW travel 4.34 feet
 	 */
 	private double getDistance(String state){ 
@@ -151,8 +155,7 @@ public class PrintDirections {
 	}
 	
 	/*
-	 * given a heading and distance
-	 * outputs Directions
+	 * Given a heading and distance outputs Directions
 	 */
 	private Directions newDirection(String heading, double distance){ 
 		Directions newEntry = new Directions(); 
@@ -162,8 +165,7 @@ public class PrintDirections {
 	}
 	
 	/*
-	 * given an ArrayList of (string) States (N,S,E,W,NE,NW,SE,SW)
-	 * outputs an ArrayList of non-repeating Directions 
+	 * Given an ArrayList of (string) States (N,S,E,W,NE,NW,SE,SW), outputs an ArrayList of non-repeating Directions 
 	 *  N,N,N,E,E -> N 9, E 6
 	 */
 	private ArrayList<Directions> route(ArrayList<String> states){ 
@@ -191,12 +193,6 @@ public class PrintDirections {
 		}
 		return dList; 
 	}
-	
-	/*
-	 * this is where the code gets dumb.... I couldnt think of a better way to do this, and didnt want to spend more time on it.  
-	 * to convert the heading to directions to turn left, slight left, sharp left etc... 
-	 */
-	
 	/*
 	 * Takes Cardinal direction and converts to degrees. 
 	 * Degrees with respect to +Y Axis This way North is 0... 
@@ -253,7 +249,7 @@ public class PrintDirections {
 	}
 	
 	/*
-	 * turn 1 or 2 letter heading into a word
+	 * Turn 1 or 2 letter heading into a word
 	 */
 	private String toFullWord(String state){ 
 		String degree = null; 
@@ -278,6 +274,7 @@ public class PrintDirections {
 		return degree; 
 	}
 	
+	//Converts distance into a time estimate
 	private String estimatedTime(double distance){ 
 		DecimalFormat df = new DecimalFormat("#.00");  
 		df.setRoundingMode(RoundingMode.CEILING);

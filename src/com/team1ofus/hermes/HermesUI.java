@@ -22,14 +22,18 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Random;
+import java.util.List;
 
 import javax.swing.JButton;
+import javax.swing.JComboBox;
+
 import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
@@ -44,6 +48,9 @@ import javax.swing.SwingConstants;
 import java.awt.Rectangle;
 import javax.swing.JTextArea;
 import javax.swing.border.LineBorder;
+import completely.AutocompleteEngine;
+import com.sun.xml.internal.ws.api.pipe.Engine;
+import com.team1ofus.apollo.TILE_TYPE;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 import javax.swing.JScrollBar;
@@ -51,8 +58,9 @@ import javax.swing.JScrollPane;
 import javax.swing.ScrollPaneConstants;
 import javax.swing.JTabbedPane;
 
+//Holds all of the UI elements for the project
 public class HermesUI extends JPanel implements IHumanInteractionListener{
-	
+
 	ArrayList<Point> pointsList = new ArrayList<Point>();
 	private JFrame frameHermes;
 	//private PathPane pathPanel;
@@ -64,7 +72,6 @@ public class HermesUI extends JPanel implements IHumanInteractionListener{
 	int scrollSpeed = 5;
 	private PathCell currentCell;
 	public HumanInteractionEventObject humanInteractive; 
-	public ZoomEventObject zoomEvent;
 	private Point first; //for showing in the UI which points were clicked.
 	private Point second; 
 	//private JLayeredPane layeredPane;
@@ -73,11 +80,11 @@ public class HermesUI extends JPanel implements IHumanInteractionListener{
 	//private TextPane textPanel;
 	private int panelSize = 230;
 	private Box verticalBox;
-	private JTextField startPoint;
-	private JTextField destination;
+	private JComboBox<String> startPoint;
+	private JComboBox<String> destination;
 	private JSeparator separator;
 	private JLabel lblDirectionReadout;
-	private JTextArea directionsTextPane;
+	public JTextArea directionsTextPane;
 	private Component verticalStrut_1;
 	private Component verticalStrut_2;
 	private Component verticalStrut_3;
@@ -91,15 +98,21 @@ public class HermesUI extends JPanel implements IHumanInteractionListener{
 	private JButton zoomOutBtn;
 	private Box horizontalBox;
 	private MapTabbedPane<MapTabbedPane<MapTabPane>> tabbedPane;
-	public HermesUI(PathCell viewCell) {
+	private ArrayList<Record> locationNameInfoRecords;
+	private AutocompleteEngine<Record> engine = new AutocompleteEngine.Builder<Record>()
+            .setIndex(new ACAdapter())
+            .setAnalyzer(new ACAnalyzer())
+            .build();
+            
+	public HermesUI(PathCell viewCell, ArrayList<Record> locationNameInfoRecords) {
+		this.locationNameInfoRecords = locationNameInfoRecords;
+		
 		humanInteractive = new HumanInteractionEventObject();
 		initialize(viewCell);
 	}
-	
 	/*
 	 * initialize the Hermes UI
-	*/
-	
+	 */
 	public void initialize(PathCell viewCell) {		
 		currentCell = viewCell;
 		buildControl();
@@ -123,13 +136,14 @@ public class HermesUI extends JPanel implements IHumanInteractionListener{
 		 repaintPanel();;
 	    }
 
+	//Allows us to paint the image within the JLabel	
 	@Override
 	public void paintComponent(Graphics g){
 		super.paintComponent(g);
 		tabbedPane.getSelectedTabPane().getSelectedTabPane().paintComponents(g);
-	//Allows us to paint the image within the JLabel	
 	}
-	
+
+	//Builds the frames and panels for the UI, as well as adding the mouse events that will affect the UI
 	private void buildControl(){
 		frameHermes = new JFrame();
 		frameHermes.setIconImage(Toolkit.getDefaultToolkit().getImage(HermesUI.class.getResource("/com/team1ofus/hermes/setup_assistant.png")));
@@ -154,83 +168,88 @@ public class HermesUI extends JPanel implements IHumanInteractionListener{
 		zoomPanel.setBounds(66, 134, 134, -113);
 		frameHermes.getContentPane().add(zoomPanel);
 		zoomPanel.setLayout(new BorderLayout(0, 0));
-		
+
 		Box verticalBox_1 = Box.createVerticalBox();
 		zoomPanel.add(verticalBox_1);
-		
+
 		btnPlus = new JButton("Plus");
 		verticalBox_1.add(btnPlus);
-		
+
 		btnMinus = new JButton("Minus");
 		verticalBox_1.add(btnMinus);
 		JPanel interacactionpanel = new JPanel();
 		interacactionpanel.setBounds(0, 0, BootstrapperConstants.PANEL_SIZE, BootstrapperConstants.FRAME_HEIGHT);
 		frameHermes.getContentPane().add(interacactionpanel);
 		interacactionpanel.setLayout(null);
-		
+
 		verticalBox = Box.createVerticalBox();
-		verticalBox.setBounds(13, 5, 203, 400);
+		verticalBox.setBounds(13, 5, 275, 400);
 		interacactionpanel.add(verticalBox);
-		
+
 		verticalStrut_1 = Box.createVerticalStrut(20);
 		verticalStrut_1.setPreferredSize(new Dimension(0, 30));
 		verticalBox.add(verticalStrut_1);
-		
-		startPoint = new JTextField();
+
+		JComboBox<String> startPoint = new JComboBox();
+		startPoint.setEditable(true);
 		verticalBox.add(startPoint);
-		startPoint.setText("Startpoint");
-		startPoint.setColumns(18);
+		//startPoint.setText("Startpoint");
+		startPoint.addKeyListener(new KeyListenerForStart());
 		
 		verticalStrut_2 = Box.createVerticalStrut(20);
 		verticalStrut_2.setPreferredSize(new Dimension(0, 15));
 		verticalBox.add(verticalStrut_2);
+
+		//String[] destinations = new String[] {"AK", "FL", "SL"};
+		JComboBox<String> destination = new JComboBox();
+		destination.setEditable(true);
 		
-		destination = new JTextField();
-		destination.setText("Destination");
+		//destination.setText("Destination");
 		verticalBox.add(destination);
-		destination.setColumns(18);
-		
+		destination.addKeyListener(new KeyListenerForDestination());
+		//destination.setColumns(18);
+
 		verticalStrut_3 = Box.createVerticalStrut(20);
 		verticalStrut_3.setPreferredSize(new Dimension(0, 5));
 		verticalBox.add(verticalStrut_3);
-		
+
 		searchButton = new JButton("Search");
 		searchButton.setAlignmentX(Component.CENTER_ALIGNMENT);
 		searchButton.setDoubleBuffered(true);
 		verticalBox.add(searchButton);
-		
+
 		separator = new JSeparator();
 		verticalBox.add(separator);
-		
+
 		lblDirectionReadout = new JLabel("Direction Readout");
 		lblDirectionReadout.setAlignmentX(CENTER_ALIGNMENT);
 
 		verticalBox.add(lblDirectionReadout);
-		
+
 		scrollPane = new JScrollPane();
 		scrollPane.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
 		verticalBox.add(scrollPane);
-		
+
 		directionsTextPane = new JTextArea();
 		scrollPane.setViewportView(directionsTextPane);
 		directionsTextPane.setLineWrap(true);
 		directionsTextPane.setBorder(new LineBorder(new Color(0, 0, 0)));
-		directionsTextPane.setText(createText());
+		//directionsTextPane.setText(createText());
 		directionsTextPane.setEditable(false);
 		directionsTextPane.setRows(20);
 		directionsTextPane.setColumns(18);
-		
+
 		horizontalBox = Box.createHorizontalBox();
 		verticalBox.add(horizontalBox);
-		
+
 		zoomInButton = new JButton("");
 		horizontalBox.add(zoomInButton);
 		zoomInButton.setIcon(new ImageIcon(HermesUI.class.getResource("/com/team1ofus/hermes/zoomin25.png")));
-		
+
 		zoomOutBtn = new JButton("");
 		horizontalBox.add(zoomOutBtn);
 		zoomOutBtn.setIcon(new ImageIcon(HermesUI.class.getResource("/com/team1ofus/hermes/zoomout25.png")));
-		
+
 		tabbedPane = new MapTabbedPane<MapTabbedPane<MapTabPane>>(JTabbedPane.TOP);
 		tabbedPane.setBounds(BootstrapperConstants.PANEL_SIZE, 0, BootstrapperConstants.FRAME_WIDTH-BootstrapperConstants.PANEL_SIZE-10, BootstrapperConstants.FRAME_HEIGHT-30);
 		frameHermes.getContentPane().add(tabbedPane);
@@ -267,38 +286,42 @@ public class HermesUI extends JPanel implements IHumanInteractionListener{
 						addListenerToSelectedTab();
 						
 					}
-					
+
 				});
 			}
 			
 		});
 		
 		frameHermes.getContentPane().add(zoomPanel);
-		
+
 		/*
 		 * Temporary layered
 		 */
-		
+
 		repaintPanel();
-		
-	}
-	//This is a dummy method to check and make sure directions will be able to load well.
-	//Can get rid of once we have directions.
-	public String createText(){
-		String text = null;
-		Random randomGenerator = new Random();
-		text = Integer.toString(randomGenerator.nextInt(10));
-		return text;
+
 	}
 	
+	//This is a dummy method to check and make sure directions will be able to load well.
+	//Can get rid of once we have directions.
+	public void directionText(ArrayList<String> directions){
+		int size = directions.size(); 
+		for(int i =0; i < size; i++){ 
+			String direction = directions.get(i); 
+			directionsTextPane.append(direction);
+			directionsTextPane.append("\n");
+		//	directionsTextPane.line
+		} 
+	}
+
 	public PathPane getPathPanel(){
 		return tabbedPane.getSelectedTabPane().getSelectedTabPane().getPathPane();
 	}
 	public PointPane getPointPane(){
 		return tabbedPane.getSelectedTabPane().getSelectedTabPane().getPointPane();
 	}
-	
 
+	//These keyboard events handle panning with the keyboard
 	private void doOffsetCalc(KeyEvent e) {
 		switch(e.getKeyCode()) {
 		//some optimizations to be made here
@@ -333,17 +356,43 @@ public class HermesUI extends JPanel implements IHumanInteractionListener{
 	public void addListenerToSelectedTab() {
 		tabbedPane.getSelectedTabPane().getSelectedTabPane().humanInteractive.addListener(this);
 	}
+	
+	/* CustomKeyListener for the Startpoint, each time a key is pressed return a list of matching from the database
+	 * 
+	 */
+	abstract class CustomKeyListener implements KeyListener{
+	      public void keyTyped(KeyEvent e) {
+	      }
+
+	      public void keyPressed(KeyEvent e) {
+	      }
+	      
+	      public abstract void updateResultPoint(String[] possibleDestinations);
+
+	      public void keyReleased(KeyEvent e) {
+	    	  JComboBox cb = (JComboBox) e.getSource();
+	    	  
+	    	  String input = (String) cb.getSelectedItem();
+	    	  
+	    	  List<Record> result = engine.search(input);
+	    	  String[] possibleDestinations = new String[result.size()];
+	    	  for (int i = 0; i < result.size(); i++){
+	    		  possibleDestinations[i] = result.get(i).getVal();
+	    	  }
+	    	  updateResultPoint(possibleDestinations);
+	      }   
+	   }
+	
+	class KeyListenerForStart extends CustomKeyListener{
+		public void updateResultPoint(String[] possibleDestinations){
+			startPoint = new JComboBox<String>(possibleDestinations);
+		}
+	}
+	class KeyListenerForDestination extends CustomKeyListener{
+		public void updateResultPoint(String[] possibleDestinations){
+			destination = new JComboBox<String>(possibleDestinations);
+		}
+	}
 }
 
-
-
-
-
-
-
-
-
-
 //CHAFF
-
-

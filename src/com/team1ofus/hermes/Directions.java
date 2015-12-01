@@ -1,6 +1,7 @@
 package com.team1ofus.hermes;
 
 import java.lang.String;
+//An object used for storing direction information. This will be used when printing out directions to the user
 public class Directions { 
 	public String heading; 
 	public String turnInstruction; 

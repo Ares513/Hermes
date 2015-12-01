@@ -2,25 +2,20 @@ package com.team1ofus.hermes;
 
 import java.util.ArrayList;
 import java.awt.Point;
-
+import com.team1ofus.apollo.TILE_TYPE;
 public abstract class Tile implements TileInterface{
 	
 	public static byte cellNum = 0;
-	
 	public Point tilePoint = null;
-
 	public TILE_TYPE tileType = TILE_TYPE.WALL;
-
 	public String cellName;
-	
 	public Tile parent = null;
-	
 	public int costSoFar = 0;
-	
 	public int estimatedTotalCost = 0;
 //-------------------------------------------------
 // Getters:
 	
+	//Retrieves the tiles neighbors for use in A*
 	public ArrayList<Tile> getNeighbors(PathCell curCell){
 		// Nodes that neighbor the current node
 		ArrayList<Tile> neighbors = new ArrayList<Tile>();
@@ -76,7 +71,6 @@ public abstract class Tile implements TileInterface{
 	}
 
 // Setters:
-	
 	public void setParent(Tile parentTile){
 		parent = parentTile;
 	}
@@ -84,12 +78,8 @@ public abstract class Tile implements TileInterface{
 	public void setCSF(int tentativeCSF){
 		costSoFar = tentativeCSF;
 	}
-	
 
 	public void setETC(int ETC){
 		estimatedTotalCost = ETC;
 	}
-
-
-
 }

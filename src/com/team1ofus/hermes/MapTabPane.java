@@ -11,6 +11,8 @@ import javax.swing.JLayeredPane;
 import javax.swing.SwingUtilities;
 import javax.swing.border.EtchedBorder;
 
+import com.team1ofus.apollo.TILE_TYPE;
+
 public class MapTabPane extends JLayeredPane {
 	
 	private MapPane mapPanel;
@@ -78,12 +80,12 @@ public class MapTabPane extends JLayeredPane {
 					else{
 						System.out.println(zoomScale);
 						zoomScale += delta;
-						mapPanel.render.zoom(zoomScale);
+						mapPanel.render.zoom(zoomScale, BootstrapperConstants.FRAME_WIDTH, BootstrapperConstants.FRAME_HEIGHT);
 						pathPanel.zoom(zoomScale);
 						//textPanel.zoom(zoomScale); TODO scale with text
 						pointPanel.zoom(zoomScale);
 
-					};
+					}
 				}
 			});
 				
