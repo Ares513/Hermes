@@ -14,12 +14,28 @@ public class UIManagement implements IHumanInteractionListener, IMapManagementIn
 	PrintDirections printList; 
 	public UIManagementInteractionEventObject events;
 	private ArrayList<PathCell> allCells;
+	private ArrayList<LocationNameInfo> allLocationNameInfos;
+	private ArrayList<Record> locationNameInfoRecords; //exists just for search autocomplete (the 'completely' library)
+	
 	public UIManagement(ArrayList<PathCell> allCells) {
 		events = new UIManagementInteractionEventObject(); 
 		this.allCells = allCells;
 		loader = new Loader(allCells);  
 		loader.events.addChooseListener(this);
 		printList = new PrintDirections(); 
+		
+		allLocationNameInfos = new ArrayList<LocationNameInfo>();
+		for (PathCell aCell : allCells){
+			allLocationNameInfos.addAll(aCell.getLocationNameInfo());
+		}
+		locationNameInfoRecords = new ArrayList<Record>();
+		String cellName;
+		for (LocationNameInfo lni : allLocationNameInfos){
+			cellName = lni.getCellName();
+			for (String str : lni.getNames()){
+				locationNameInfoRecords.add(new Record(str, cellName));
+			}
+		}
 	}
 	
 	public JFrame frame; 
@@ -65,6 +81,6 @@ public class UIManagement implements IHumanInteractionListener, IMapManagementIn
 		
 	}
 
-
+	
 
 }
