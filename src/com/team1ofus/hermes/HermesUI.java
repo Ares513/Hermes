@@ -82,6 +82,8 @@ public class HermesUI extends JPanel{
 	private Box verticalBox;
 	private JComboBox<String> startPoint;
 	private JComboBox<String> destination;
+	private Record searchStartRecord = null; //an inelegant way to retain the information we need for search. 
+	private Record searchEndRecord = null; //hopefully we can re-factor these at some point. If you want to please feel free to.
 	private JSeparator separator;
 	private JLabel lblDirectionReadout;
 	public JTextArea directionsTextPane;
@@ -104,11 +106,14 @@ public class HermesUI extends JPanel{
             .setIndex(new ACAdapter())
             .setAnalyzer(new ACAnalyzer())
             .build();
+	
+	private SearchReadyEventObject searchEvents;
 
 	public HermesUI(PathCell viewCell, ArrayList<Record> locationNameInfoRecords) {
 		this.locationNameInfoRecords = locationNameInfoRecords;
 		
-		humanInteractive = new HumanInteractionEventObject();
+		this.searchEvents = new SearchReadyEventObject(); 
+		this.humanInteractive = new HumanInteractionEventObject();
 		initialize(viewCell);
 	}
 	/*
@@ -244,6 +249,7 @@ public class HermesUI extends JPanel{
 		searchButton = new JButton("Search");
 		searchButton.setAlignmentX(Component.CENTER_ALIGNMENT);
 		searchButton.setDoubleBuffered(true);
+		searchButton.addActionListener(new SearchListener());
 		verticalBox.add(searchButton);
 
 		separator = new JSeparator();
@@ -463,6 +469,7 @@ public class HermesUI extends JPanel{
 	      }
 	      
 	      public abstract void updateResultPoint(String[] possibleDestinations);
+	      public abstract void updateTargetRecord(Record r);
 
 	      public void keyReleased(KeyEvent e) {
 	    	  JComboBox cb = (JComboBox) e.getSource();
@@ -473,6 +480,9 @@ public class HermesUI extends JPanel{
 	    	  String[] possibleDestinations = new String[result.size()];
 	    	  for (int i = 0; i < result.size(); i++){
 	    		  possibleDestinations[i] = result.get(i).getVal();
+	    		  if (input.equals(possibleDestinations[i])){
+	    			  updateTargetRecord(result.get(i));
+	    		  }
 	    	  }
 	    	  updateResultPoint(possibleDestinations);
 	      }   
@@ -482,11 +492,31 @@ public class HermesUI extends JPanel{
 		public void updateResultPoint(String[] possibleDestinations){
 			startPoint = new JComboBox<String>(possibleDestinations);
 		}
+		public void updateTargetRecord(Record r){
+			searchStartRecord = r;
+		}
 	}
+	
 	class KeyListenerForDestination extends CustomKeyListener{
 		public void updateResultPoint(String[] possibleDestinations){
 			destination = new JComboBox<String>(possibleDestinations);
 		}
+		public void updateTargetRecord(Record r){
+			searchEndRecord = r;
+		}
+	}
+	
+	class SearchListener implements ActionListener{
+
+		@Override
+		public void actionPerformed(ActionEvent e) {
+			searchEvents.doSearchReady(searchStartRecord, searchEndRecord);
+		}
+		
+	}
+	
+	public SearchReadyEventObject getSearchEvents(){
+		return this.searchEvents;
 	}
 }
 
