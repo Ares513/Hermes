@@ -59,6 +59,7 @@ import javax.swing.JViewport;
 import javax.swing.ScrollPaneConstants;
 import javax.swing.JTabbedPane;
 import javax.swing.JTable;
+import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableColumn;
 
 //Holds all of the UI elements for the project
@@ -87,12 +88,7 @@ public class HermesUI extends JPanel{
 	private JComboBox<String> destination;
 	private JSeparator separator;
 	private JLabel lblDirectionReadout;
-	
 	public JTextArea directionsTextPane;
-	public JTable directionsTextTable; 
-	public TableColumn turnIcons; 
-	public TableColumn directionText;
-	
 	private Component verticalStrut_1;
 	private Component verticalStrut_2;
 	private Component verticalStrut_3;
@@ -265,16 +261,7 @@ public class HermesUI extends JPanel{
 		scrollPane = new JScrollPane();
 		scrollPane.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
 		verticalBox.add(scrollPane);
-		directionsTextTable = new JTable();
-		scrollPane.setViewportView(directionsTextTable);
 		
-		//turnIcons = new TableColumn();
-		//directionText = new TableColumn(); 
-		//turnIcons.setPreferredWidth(100);
-		//directionsTextTable.addColumn(turnIcons);
-		//directionsTextTable.addColumn(directionText);
-		
-		/*
 		directionsTextPane = new JTextArea();
 		scrollPane.setViewportView(directionsTextPane);
 		directionsTextPane.setLineWrap(true);
@@ -283,7 +270,7 @@ public class HermesUI extends JPanel{
 		directionsTextPane.setEditable(false);
 		directionsTextPane.setRows(20);
 		directionsTextPane.setColumns(18);
-		 */ 
+		 
 		horizontalBox = Box.createHorizontalBox();
 		verticalBox.add(horizontalBox);
 
@@ -435,6 +422,9 @@ public class HermesUI extends JPanel{
 		} 
 	
 	}
+	
+	
+	
 	public PathPane getPathPanel(){
 		return pathPanel;
 	}
