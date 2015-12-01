@@ -47,6 +47,7 @@ import javax.swing.border.LineBorder;
 import javax.swing.JScrollBar;
 import javax.swing.JScrollPane;
 import javax.swing.ScrollPaneConstants;
+import javax.swing.JTabbedPane;
 
 public class HermesUI extends JPanel{
 	
@@ -87,6 +88,7 @@ public class HermesUI extends JPanel{
 	private JButton zoomInButton;
 	private JButton zoomOutBtn;
 	private Box horizontalBox;
+	private JTabbedPane tabbedPane;
 	public HermesUI(PathCell viewCell) {
 		humanInteractive = new HumanInteractionEventObject();
 		initialize(viewCell);
@@ -172,24 +174,7 @@ public class HermesUI extends JPanel{
 		frameHermes.setLocation(frameWidth/2-frameWidth/2, frameHeight/2-frameHeight/2);
 		JPanel MousegridMap = new JPanel();
 		JLabel mouseOut = new JLabel("#mouse#");
-		MousegridMap.add(mouseOut);
-
-		gridMap = new DrawMap(currentCell);
-		gridMap.setBorder(new EtchedBorder(EtchedBorder.RAISED, null, null));
-		gridMap.setBounds(0, 0, frameWidth-panelSize, frameHeight);;
-		pathPanel = new PathPane();
-		textPanel = new TextPane();
-		try {
-			pointPanel = new PointPane();
-		} catch (IOException e1) {
-			// TODO Auto-generated catch block
-			e1.printStackTrace();
-		}
-		pathPanel.setBounds(0, 0, frameWidth-panelSize, frameHeight);
-		textPanel.setBounds(0, 0, frameWidth-panelSize, frameHeight);
-		pointPanel.setBounds(0, 0, frameWidth-panelSize, frameHeight);
-		textPanel.labelAllTiles(currentCell);
-		
+		MousegridMap.add(mouseOut);;
 		zoomPanel = new JPanel();
 		zoomPanel.setBounds(66, 134, 134, -113);
 		frameHermes.getContentPane().add(zoomPanel);
@@ -270,10 +255,30 @@ public class HermesUI extends JPanel{
 		zoomOutBtn = new JButton("");
 		horizontalBox.add(zoomOutBtn);
 		zoomOutBtn.setIcon(new ImageIcon(HermesUI.class.getResource("/com/team1ofus/hermes/zoomout25.png")));
+		
+		tabbedPane = new JTabbedPane(JTabbedPane.TOP);
+		tabbedPane.setBounds(230, 0, 1490, 1000);
+		frameHermes.getContentPane().add(tabbedPane);
+		
+				gridMap = new DrawMap(currentCell);
+				gridMap.setBorder(new EtchedBorder(EtchedBorder.RAISED, null, null));
+				gridMap.setBounds(0, 0, frameWidth-panelSize, frameHeight);
+				pathPanel = new PathPane();
+				textPanel = new TextPane();
+				try {
+					pointPanel = new PointPane();
+				} catch (IOException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				}
+				pathPanel.setBounds(0, 0, frameWidth-panelSize, frameHeight);
+				textPanel.setBounds(0, 0, frameWidth-panelSize, frameHeight);
+				pointPanel.setBounds(0, 0, frameWidth-panelSize, frameHeight);
+				textPanel.labelAllTiles(currentCell);
 	
 		
 		layeredPane = new JLayeredPane();
-		layeredPane.setBounds(panelSize, 0, frameWidth-panelSize, frameHeight);
+		tabbedPane.addTab("New tab", null, layeredPane, null);
 		layeredPane.add(gridMap);
 		layeredPane.add(pathPanel);
 		layeredPane.add(textPanel);
@@ -282,12 +287,6 @@ public class HermesUI extends JPanel{
 		layeredPane.setComponentZOrder(pathPanel, 0);
 		layeredPane.setComponentZOrder(textPanel, 0);
 		layeredPane.setComponentZOrder(pointPanel, 0);
-		frameHermes.getContentPane().add(layeredPane);
-		frameHermes.getContentPane().add(zoomPanel);
-		
-		/*
-		 * Temporary layered
-		 */
 		//This handles map zooming by causing the Cell to re-render
 		layeredPane.addMouseWheelListener(new MouseAdapter() {
             @Override
@@ -315,7 +314,7 @@ public class HermesUI extends JPanel{
         		frameHermes.repaint();
             }
         });
-    
+		
 
 		layeredPane.addMouseMotionListener(new MouseMotionAdapter() {
 			@Override
@@ -371,6 +370,11 @@ public class HermesUI extends JPanel{
 
 			}
 		});
+		frameHermes.getContentPane().add(zoomPanel);
+		
+		/*
+		 * Temporary layered
+		 */
 		
 		repaintPanel();
 		
