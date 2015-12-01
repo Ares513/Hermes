@@ -2,6 +2,8 @@ package com.team1ofus.hermes;
 
 import java.util.ArrayList;
 
+//TODO Comments1
+
 public class LoaderInteractionEventObject {
 	
 	public ArrayList<ILoaderInteractionListener> listeners = new ArrayList<ILoaderInteractionListener>();

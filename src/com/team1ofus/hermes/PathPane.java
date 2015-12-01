@@ -12,6 +12,7 @@ import java.awt.GradientPaint;
 
 import javax.swing.JPanel;
 
+//This panel paints the path over the map
 class PathPane extends JPanel {
 	private int tileWidth = BootstrapperConstants.TILE_WIDTH;
 	private int tileHeight = BootstrapperConstants.TILE_HEIGHT;
