@@ -19,13 +19,49 @@ class PathPane extends JPanel {
 	ArrayList<Point> pointsList = new ArrayList<Point>();
 	private Point offset = new Point(0,0);
 	public double zoomScale = 1;
+	public double prevScale = 1D;
+	PathCell cell;
+	int oldTotalWidth;
+	int oldTotalHeight;
+	int newTotalWidth;
+	int newTotalHeight;
+	int difWidth;
+	int difHeight;	
+	
+	
 	public PathPane() {
 		setOpaque(true);
 
 	}
 	//This updates the zoomScale, which will be used when placing the drawing the path.
-	public void zoom(double scale){
+	public void zoom(double scale, PathCell passedCell){
+		//cell = new CellRenderer(passedCell);
+		cell = passedCell;
 		zoomScale = scale;
+		
+		//Not doing anything right now
+		oldTotalWidth= (int)((BootstrapperConstants.TILE_WIDTH * cell.tiles.length ) * prevScale);
+		//DebugManagement.writeNotificationToLog("The previous total width was:");
+		//System.out.println(oldTotalWidth);
+		oldTotalHeight= (int)((BootstrapperConstants.TILE_HEIGHT * cell.tiles[1].length ) * prevScale);
+		//DebugManagement.writeNotificationToLog("The previous total height was:");
+		//System.out.println(oldTotalHeight);
+		newTotalWidth= (int)((BootstrapperConstants.TILE_WIDTH * cell.tiles.length ) * scale);
+		//DebugManagement.writeNotificationToLog("The current total width is:");
+		//System.out.println(newTotalWidth);
+		newTotalHeight= (int)((BootstrapperConstants.TILE_HEIGHT * cell.tiles[1].length ) * scale);
+		//DebugManagement.writeNotificationToLog("The current total height is:");
+		//System.out.println(newTotalHeight);
+		difWidth = (newTotalWidth - oldTotalWidth)/2;
+		//DebugManagement.writeNotificationToLog("The current x offset is:");
+		//System.out.println(difWidth);
+		difHeight = (newTotalHeight - oldTotalHeight)/2;
+		//DebugManagement.writeNotificationToLog("The current y offset is:");
+		//System.out.println(difHeight);
+		//incrementOffset(difWidth,difHeight, fwidth, fheight);
+		prevScale = scale;
+		
+		
 		repaint();
 	}
 
@@ -58,10 +94,18 @@ class PathPane extends JPanel {
 		Stroke stroke1 = new BasicStroke(6f, BasicStroke.CAP_ROUND, BasicStroke.JOIN_ROUND, 4f);//, dashingPattern1, 2.0f);
 		g2d.setStroke(stroke1);
 		for(int i = 0; i < pointsList.size()-1; i++){
-			g2d.drawLine( (int)(pointsList.get(i).x * zoomScale) - offset.x ,  (int)(pointsList.get(i).y * zoomScale)- offset.y , (int)(pointsList.get(i+1).x * zoomScale) - offset.x, (int)(pointsList.get(i+1).y * zoomScale) -offset.y);
+			Point p1 = convertPoint(pointsList.get(i).x, pointsList.get(i).y);
+			Point p2 = convertPoint(pointsList.get(i+1).x, pointsList.get(i+1).y);
+			g2d.drawLine( (int)p1.x - offset.x,  (int)p1.y - offset.y , (int)(p2.x - offset.x) , (int)(p2.y - offset.y));
+			
 		} 
 	}
-	
+	private Point convertPoint(double x, double y) {
+		
+		int xFinal = (int) ((int) x*zoomScale);
+		int yFinal = (int) ((int) y*zoomScale);
+		return new Point(xFinal, yFinal);
+	}
 	@Override
 	public void paintComponent(Graphics g) {
 		drawLineSets(g);

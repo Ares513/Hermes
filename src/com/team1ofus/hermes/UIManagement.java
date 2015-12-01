@@ -54,7 +54,6 @@ public class UIManagement implements IHumanInteractionListener, IMapManagementIn
 		DebugManagement.writeNotificationToLog("Path received, contents "  + directions);
 		window.getPathPanel().drawPath(directions);
 		ArrayList<String> listOfDirections = printList.parseDirections(directions);
-		//window.ListOfDirections = listOfDirections; 
 		window.directionText(listOfDirections);
 	}
 
@@ -63,6 +62,7 @@ public class UIManagement implements IHumanInteractionListener, IMapManagementIn
 		DebugManagement.writeNotificationToLog("Click processed at " + x + " , " + y);
 		if(first == null) {
 			first = new Point(x, y);
+			window.directionsTextPane.setText(""); // clears directions pane after first click. 
 			DebugManagement.writeNotificationToLog("First point processed at " + x + " , " + y);
 			
 		} else if(second == null) {

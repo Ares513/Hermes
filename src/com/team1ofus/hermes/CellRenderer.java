@@ -23,7 +23,7 @@ public class CellRenderer {
 	int newTotalHeight;
 	int difWidth;
 	int difHeight;	
-	final int rows = 4;
+	final int rows = 2;
 	final int cols = 14;
 	BufferedImage[] spriteImages = new BufferedImage[rows * cols];
 	Point offset = new Point(0, 0);
@@ -44,25 +44,27 @@ public class CellRenderer {
 		DebugManagement.writeNotificationToLog("The previous scale was");
 		System.out.println(prevScale);
 
-
+		
 		oldTotalWidth= (int)((BootstrapperConstants.TILE_WIDTH * drawnCell.tiles.length ) * prevScale);
-		DebugManagement.writeNotificationToLog("The previous total width was:");
-		System.out.println(oldTotalWidth);
+		//DebugManagement.writeNotificationToLog("The previous total width was:");
+		//System.out.println(oldTotalWidth);
 		oldTotalHeight= (int)((BootstrapperConstants.TILE_HEIGHT * drawnCell.tiles[1].length ) * prevScale);
-		DebugManagement.writeNotificationToLog("The previous total height was:");
-		System.out.println(oldTotalHeight);
+		//DebugManagement.writeNotificationToLog("The previous total height was:");
+		//System.out.println(oldTotalHeight);
 		newTotalWidth= (int)((BootstrapperConstants.TILE_WIDTH * drawnCell.tiles.length ) * scale);
-		DebugManagement.writeNotificationToLog("The current total width is:");
-		System.out.println(newTotalWidth);
+		//DebugManagement.writeNotificationToLog("The current total width is:");
+		//System.out.println(newTotalWidth);
 		newTotalHeight= (int)((BootstrapperConstants.TILE_HEIGHT * drawnCell.tiles[1].length ) * scale);
-		DebugManagement.writeNotificationToLog("The current total height is:");
-		System.out.println(newTotalHeight);
+		//DebugManagement.writeNotificationToLog("The current total height is:");
+		//System.out.println(newTotalHeight);
 		difWidth = (newTotalWidth - oldTotalWidth)/2;
-		DebugManagement.writeNotificationToLog("The current x offset is:");
-		System.out.println(difWidth);
+		//DebugManagement.writeNotificationToLog("The current x offset is:");
+		//System.out.println(difWidth);
 		difHeight = (newTotalHeight - oldTotalHeight)/2;
-		DebugManagement.writeNotificationToLog("The current y offset is:");
-		System.out.println(difHeight);
+		//DebugManagement.writeNotificationToLog("The current y offset is:");
+		//System.out.println(difHeight);
+		
+		//NEED TO GET difWidth and difHeight over to pathpane to add to its offsets in drawLine
 		incrementOffset(difWidth,difHeight, fwidth, fheight);
 		prevScale = scale;
 
@@ -75,14 +77,10 @@ public class CellRenderer {
 				switch(drawnCell.tiles[i][j].getTileType()) {
 				case WALL:
 					g.drawImage(spriteImages[0], i*width - offset.x, j*height - offset.y, width, height, null);
-
 					break;
-
 				case PEDESTRIAN_WALKWAY:
 					g.drawImage(spriteImages[1], i*width - offset.x, j*height - offset.y, width, height, null);
-
 					break;
-
 				case DOOR:
 					g.drawImage(spriteImages[2], i*width - offset.x, j*height - offset.y, width, height, null);
 					break;
@@ -107,8 +105,10 @@ public class CellRenderer {
 				case IMPASSABLE:
 					//9 is Steep, which is now deprecated
 					g.drawImage(spriteImages[10], i*width - offset.x, j*height - offset.y, width, height, null);
+					break;
 				case MALE_BATHROOM:
 					g.drawImage(spriteImages[11], i*width - offset.x, j*height - offset.y, width, height, null);
+					break;
 				case FEMALE_BATHROOM:
 					g.drawImage(spriteImages[12], i*width - offset.x, j*height - offset.y, width, height, null);
 					break;
@@ -117,6 +117,9 @@ public class CellRenderer {
 					break;
 				case BENCH:
 					g.drawImage(spriteImages[14], i*width - offset.x, j*height - offset.y, width, height, null);
+					break;
+				case BUSH:
+					g.drawImage(spriteImages[17], i*width - offset.x, j*height - offset.y, width, height, null);
 					break;
 				case TREE:
 					g.drawImage(spriteImages[18], i*width - offset.x, j*height - offset.y, width, height, null);
@@ -176,9 +179,9 @@ public class CellRenderer {
 		offset.translate(dx, dy);
 		if(offset.x < 0) {
 			offset.x = 0;
-		} else if(offset.x > drawnCell.tiles.length * width - (windowWidth -panelSize)) {
+		} else if(offset.x > drawnCell.tiles.length * width - (windowWidth)) {
 			int tileCount = drawnCell.tiles.length;
-			int maxX = drawnCell.tiles.length * width - (windowWidth - panelSize);
+			int maxX = drawnCell.tiles.length * width - (windowWidth);
 			offset.x = maxX ;
 		}
 		//The panelSizae is the size of the side panel. If we need to change that, alter that variable.
