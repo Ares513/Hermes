@@ -1,5 +1,6 @@
 package com.team1ofus.hermes;
 
+//Holds the constants that will be used throughout the program
 public class BootstrapperConstants {
 	public static final String APP_FILE_DIRECTORY = System.getProperty("user.dir");
 	public static final int TILE_WIDTH = 32;

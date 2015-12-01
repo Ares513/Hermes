@@ -16,25 +16,17 @@ public class Bootstrapper {
 		splash.showSplashAndExit();	
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
-
-				try {
-				    
+				try {				    
 				    // Normally, we'd call splash.showSplash() and get on with the program.
 				    // But, since this is only a test...
-				   
 					UIManagement ui;
 					DataManagement data = new DataManagement();
 					ArrayList<PathCell> pathCells = CellConverter.convertList(data.getCells());
-					
 					MapManagement map;			
 					data = new DataManagement();
-					
-
-					map = new MapManagement();
-					
+					map = new MapManagement();	
 					ui = new UIManagement(pathCells);
 					addEventHandlers(data, map, ui);
-					
 				} catch (Exception e) {
 					e.printStackTrace();
 				}
@@ -45,6 +37,4 @@ public class Bootstrapper {
 			}
 		});
 	}
-	
-	
 }
