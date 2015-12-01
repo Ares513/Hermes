@@ -44,12 +44,14 @@ import javax.swing.SwingConstants;
 import java.awt.Rectangle;
 import javax.swing.JTextArea;
 import javax.swing.border.LineBorder;
+import javax.swing.event.ChangeEvent;
+import javax.swing.event.ChangeListener;
 import javax.swing.JScrollBar;
 import javax.swing.JScrollPane;
 import javax.swing.ScrollPaneConstants;
 import javax.swing.JTabbedPane;
 
-public class HermesUI extends JPanel{
+public class HermesUI extends JPanel implements IHumanInteractionListener{
 	
 	ArrayList<Point> pointsList = new ArrayList<Point>();
 	private JFrame frameHermes;
@@ -114,33 +116,6 @@ public class HermesUI extends JPanel{
 				}
 			});
         frameHermes.setVisible(true);
-	}
-	
-	private void processClick(Point picked) {
-		DebugManagement.writeNotificationToLog("Mouse clicked at " + picked.x + " , " + picked.y);
-		if(tabbedPane.getSelectedTabPane().getSelectedTabPane().getMapPane().render.getTile(picked.x, picked.y).tileType == TILE_TYPE.PEDESTRIAN_WALKWAY) {
-			//valid.
-			if(first == null) {
-				
-				first = new Point(picked.x, picked.y);
-				tabbedPane.getSelectedTabPane().getSelectedTabPane().getMapPane().render.setFirst(first);
-				tabbedPane.getSelectedTabPane().getSelectedTabPane().getPointPane().setFirst(first);
-				tabbedPane.getSelectedTabPane().getSelectedTabPane().getPointPane().setSecond(null);
-				tabbedPane.getSelectedTabPane().getSelectedTabPane().getPathPane().clearPath();
-				repaintPanel();
-			} else if(second == null) {
-				
-				second = new Point(picked.x,picked.y);
-				tabbedPane.getSelectedTabPane().getSelectedTabPane().getMapPane().render.setSecond(second);
-				tabbedPane.getSelectedTabPane().getSelectedTabPane().getPointPane().setSecond(second);
-				first = null;
-				second = null;
-
-				repaintPanel();
-			}
-			
-			humanInteractive.doClick(picked.x, picked.y);
-		}
 	}
 	//Would just skip this and go straight to MyPanel's drawPath, but I'm afraid that it will break and I don't have time to fix it
 	 void drawPath(ArrayList<CellPoint> path){
@@ -265,7 +240,8 @@ public class HermesUI extends JPanel{
 		//TODO Make display the name of the cell, i.e. currentCell.getName()
 		tabbedPane.addNewTab("New tab", null, new MapTabbedPane<MapTabPane>(JTabbedPane.BOTTOM), null);
 		tabbedPane.getSelectedTabPane().addNewTab("Tab in tab", null, new MapTabPane(currentCell), null);
-		
+		tabbedPane.getSelectedTabPane().getSelectedTabPane().humanInteractive.addListener(this);
+		/*//Adding more tabs for testing
 		tabbedPane.addNewTab("tab 2", null, new MapTabbedPane<MapTabPane>(JTabbedPane.BOTTOM), null);
 		tabbedPane.setSelectedIndex(1);
 		tabbedPane.getSelectedTabPane().addNewTab("1", null, new MapTabPane(currentCell), null);
@@ -277,102 +253,25 @@ public class HermesUI extends JPanel{
 		tabbedPane.getSelectedTabPane().addNewTab("shit", null, new MapTabPane(currentCell), null);
 		tabbedPane.getSelectedTabPane().addNewTab("scat", null, new MapTabPane(currentCell), null);
 		tabbedPane.getSelectedTabPane().setSelectedIndex(2);
+		tabbedPane.setSelectedIndex(0);*/
 		
-/*
-		//This handles map zooming by causing the Cell to re-render
-		tabbedPane.getSelectedTabPane().getSelectedTabPane().addMouseWheelListener(new MouseAdapter() {
-            @Override
-            public void mouseWheelMoved(MouseWheelEvent e) {
-            	int scalingNum = 2;//Increasing this number increases the amount of zoom one mousewheel "scroll" will zoom in for
-            	int maxZoomOut = 1;
-            	double maxZoomIn = 1.75D;
-            	double zoomIncreaseFactor = (scalingNum/(double)BootstrapperConstants.TILE_WIDTH);
-                double delta = -zoomIncreaseFactor * e.getPreciseWheelRotation();
-                if(zoomScale + delta < maxZoomOut){
-                	zoomScale = maxZoomOut;
-                }
-                else if(zoomScale >  maxZoomIn ){
-                	zoomScale = maxZoomIn;
-                }
-                else{
-                	System.out.println(zoomScale);
-                    zoomScale += delta;
-                    tabbedPane.getSelectedTabPane().getSelectedTabPane().getMapPane().render.zoom(zoomScale);
-                    tabbedPane.getSelectedTabPane().getSelectedTabPane().getPathPane().zoom(zoomScale);
-                    //textPanel.zoom(zoomScale); TODO scale with text
-                    tabbedPane.getSelectedTabPane().getSelectedTabPane().getPointPane().zoom(zoomScale);
-                    //zoomEvent.addListener(gridMap); TODO Get this event handling stuff to work or get rid of it
-                    //zoomEvent.doZoom(zoomScale);
-                }
-                frameHermes.revalidate();
-        		frameHermes.repaint();
-            }
-        });
-		
-
-		tabbedPane.getSelectedTabPane().getSelectedTabPane().addMouseMotionListener(new MouseMotionAdapter() {
+		//If the textpane's change, add HermesUI as a listener TODO: this is probably wrong
+		tabbedPane.addChangeListener(new ChangeListener() {
 			@Override
-			public void mouseMoved(MouseEvent e) {
+			public void stateChanged(ChangeEvent e) {
+				addListenerToSelectedTab();
+				tabbedPane.getSelectedTabPane().addChangeListener(new ChangeListener() {
 
-			}
-			@Override
-			public void mouseDragged(MouseEvent e) {
-				if(dragging) {
-					//safety check
-					
-					if(lastDragLocation != null) {
-						int x = (int) (-0.5*(e.getX() - lastDragLocation.getX()));
-						int y = (int) (-0.5*(e.getY() - lastDragLocation.getY()));
-						DebugManagement.writeNotificationToLog("Dragging occurred, dx dy " + x + " , " + y);
-						tabbedPane.getSelectedTabPane().getSelectedTabPane().getMapPane().render.incrementOffset(x, y, frameWidth, frameHeight);
-						tabbedPane.getSelectedTabPane().getSelectedTabPane().getPathPane().setOffset(tabbedPane.getSelectedTabPane().getSelectedTabPane().getMapPane().render.offset);
-						tabbedPane.getSelectedTabPane().getSelectedTabPane().getPointPane().setOffset(tabbedPane.getSelectedTabPane().getSelectedTabPane().getMapPane().render.offset);
-						repaintPanel();
-						lastDragLocation = e.getPoint();
-					} else {
-						lastDragLocation = new Point(e.getX(), e.getY());
+					@Override
+					public void stateChanged(ChangeEvent e) {
+						addListenerToSelectedTab();
+						
 					}
-				}
-			}
-			}
-		);
-		tabbedPane.getSelectedTabPane().getSelectedTabPane().addMouseListener(new MouseAdapter() {
-
-		@Override
-		public void mouseClicked(MouseEvent e) {
-			Point picked = tabbedPane.getSelectedTabPane().getSelectedTabPane().getMapPane().render.pickTile(e.getX() , e.getY());
-			if(SwingUtilities.isLeftMouseButton(e)) {
-				processClick(picked);
-			}  
-
-		}			@Override
-			public void mouseReleased(MouseEvent e) {
-				//do the dragging here
-			DebugManagement.writeNotificationToLog("Dragging disabled");
-				dragging = false;
-				lastDragLocation = null;
-			}
-			@Override
-			public void mousePressed(MouseEvent e) {
-
 					
-				if(SwingUtilities.isRightMouseButton(e)) {
-					//right click, they intend to drag
-					DebugManagement.writeNotificationToLog("Dragging enabled");
-					dragging = true;
-				}
-
+				});
 			}
+			
 		});
-		
-		tabbedPane.getSelectedTabPane().addMouseListener(new MouseAdapter() {
-			@Override
-			public void mouseClicked(MouseEvent e) {
-				if(SwingUtilities.isLeftMouseButton(e)) {
-					System.out.println("Selected Index: " + tabbedPane.getSelectedTabPane().getSelectedIndex());
-				}  
-			}	
-		});*/
 		
 		frameHermes.getContentPane().add(zoomPanel);
 		
@@ -424,6 +323,15 @@ public class HermesUI extends JPanel{
 	}
 	private void repaintPanel() {
 		frameHermes.repaint();
+	}
+
+	@Override
+	public void onTileClicked(int x, int y) {
+		humanInteractive.doClick(x, y);
+	}
+	
+	public void addListenerToSelectedTab() {
+		tabbedPane.getSelectedTabPane().getSelectedTabPane().humanInteractive.addListener(this);
 	}
 }
 

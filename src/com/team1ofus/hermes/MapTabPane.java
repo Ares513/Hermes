@@ -189,7 +189,6 @@ public class MapTabPane extends JLayeredPane {
 
 				repaintPanel();
 			}
-
 			humanInteractive.doClick(picked.x, picked.y);
 		}
 	}
