@@ -49,8 +49,9 @@ import javax.swing.JScrollPane;
 import javax.swing.ScrollPaneConstants;
 import javax.swing.JTabbedPane;
 
+//Holds all of the UI elements for the project
 public class HermesUI extends JPanel{
-	
+
 	ArrayList<Point> pointsList = new ArrayList<Point>();
 	private JFrame frameHermes;
 	private PathPane pathPanel;
@@ -62,7 +63,6 @@ public class HermesUI extends JPanel{
 	int scrollSpeed = 5;
 	private PathCell currentCell;
 	public HumanInteractionEventObject humanInteractive; 
-	public ZoomEventObject zoomEvent;
 	private Point first; //for showing in the UI which points were clicked.
 	private Point second; 
 	private JLayeredPane layeredPane;
@@ -93,11 +93,9 @@ public class HermesUI extends JPanel{
 		humanInteractive = new HumanInteractionEventObject();
 		initialize(viewCell);
 	}
-	
 	/*
 	 * initialize the Hermes UI
-	*/
-	
+	 */
 	public void initialize(PathCell viewCell) {		
 		currentCell = viewCell;
 		buildControl();
@@ -107,21 +105,21 @@ public class HermesUI extends JPanel{
 				doOffsetCalc(e);
 			}
 		});
-			gridMap.addKeyListener(new KeyAdapter() {
-				@Override
-				public void keyPressed(KeyEvent e) {
-					doOffsetCalc(e);
-				}
-			});
-        frameHermes.setVisible(true);
+		gridMap.addKeyListener(new KeyAdapter() {
+			@Override
+			public void keyPressed(KeyEvent e) {
+				doOffsetCalc(e);
+			}
+		});
+		frameHermes.setVisible(true);
 	}
-	
+
 	private void processClick(Point picked) {
 		DebugManagement.writeNotificationToLog("Mouse clicked at " + picked.x + " , " + picked.y);
 		if(gridMap.render.getTile(picked.x, picked.y).tileType == TILE_TYPE.PEDESTRIAN_WALKWAY) {
 			//valid.
 			if(first == null) {
-				
+
 				first = new Point(picked.x, picked.y);
 				gridMap.render.setFirst(first);
 				pointPanel.setFirst(first);
@@ -129,7 +127,7 @@ public class HermesUI extends JPanel{
 				pathPanel.clearPath();
 				repaintPanel();
 			} else if(second == null) {
-				
+
 				second = new Point(picked.x,picked.y);
 				gridMap.render.setSecond(second);
 				pointPanel.setSecond(second);
@@ -138,23 +136,24 @@ public class HermesUI extends JPanel{
 
 				repaintPanel();
 			}
-			
+
 			humanInteractive.doClick(picked.x, picked.y);
 		}
 	}
-	//Would just skip this and go straight to MyPanel's drawPath, but I'm afraid that it will break and I don't have time to fix it
-	 void drawPath(ArrayList<CellPoint> path){
-		 pathPanel.drawPath(path);
-		 repaintPanel();;
-	    }
+	//Would just skip this and go straight to MyPanel's drawPath, but I'm afraid that it will break and I don't have time to fix it TODO Comments1
+	void drawPath(ArrayList<CellPoint> path){
+		pathPanel.drawPath(path);
+		repaintPanel();;
+	}
 
+	//Allows us to paint the image within the JLabel	
 	@Override
 	public void paintComponent(Graphics g){
 		super.paintComponent(g);
 		layeredPane.paintComponents(g);
-	//Allows us to paint the image within the JLabel	
 	}
-	
+
+	//Builds the frames and panels for the UI, as well as adding the mouse events that will affect the UI
 	private void buildControl(){
 		frameHermes = new JFrame();
 		frameHermes.setIconImage(Toolkit.getDefaultToolkit().getImage(HermesUI.class.getResource("/com/team1ofus/hermes/setup_assistant.png")));
@@ -167,7 +166,7 @@ public class HermesUI extends JPanel{
 		});
 		frameHermes.setTitle("Hermes");
 		frameHermes.setResizable(false);
-		frameHermes.setBounds(0, 0, frameWidth, frameHeight);
+		frameHermes.setBounds(0, 0, BootstrapperConstants.FRAME_WIDTH, BootstrapperConstants.FRAME_HEIGHT);
 		frameHermes.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frameHermes.getContentPane().setLayout(null);
 		frameHermes.setMinimumSize(new Dimension(800,600));
@@ -179,63 +178,63 @@ public class HermesUI extends JPanel{
 		zoomPanel.setBounds(66, 134, 134, -113);
 		frameHermes.getContentPane().add(zoomPanel);
 		zoomPanel.setLayout(new BorderLayout(0, 0));
-		
+
 		Box verticalBox_1 = Box.createVerticalBox();
 		zoomPanel.add(verticalBox_1);
-		
+
 		btnPlus = new JButton("Plus");
 		verticalBox_1.add(btnPlus);
-		
+
 		btnMinus = new JButton("Minus");
 		verticalBox_1.add(btnMinus);
 		JPanel interacactionpanel = new JPanel();
-		interacactionpanel.setBounds(0, 0, panelSize, frameHeight);
+		interacactionpanel.setBounds(0, 0, BootstrapperConstants.PANEL_SIZE, BootstrapperConstants.FRAME_HEIGHT);
 		frameHermes.getContentPane().add(interacactionpanel);
 		interacactionpanel.setLayout(null);
-		
+
 		verticalBox = Box.createVerticalBox();
 		verticalBox.setBounds(13, 5, 203, 400);
 		interacactionpanel.add(verticalBox);
-		
+
 		verticalStrut_1 = Box.createVerticalStrut(20);
 		verticalStrut_1.setPreferredSize(new Dimension(0, 30));
 		verticalBox.add(verticalStrut_1);
-		
+
 		startPoint = new JTextField();
 		verticalBox.add(startPoint);
 		startPoint.setText("Startpoint");
 		startPoint.setColumns(18);
-		
+
 		verticalStrut_2 = Box.createVerticalStrut(20);
 		verticalStrut_2.setPreferredSize(new Dimension(0, 15));
 		verticalBox.add(verticalStrut_2);
-		
+
 		destination = new JTextField();
 		destination.setText("Destination");
 		verticalBox.add(destination);
 		destination.setColumns(18);
-		
+
 		verticalStrut_3 = Box.createVerticalStrut(20);
 		verticalStrut_3.setPreferredSize(new Dimension(0, 5));
 		verticalBox.add(verticalStrut_3);
-		
+
 		searchButton = new JButton("Search");
 		searchButton.setAlignmentX(Component.CENTER_ALIGNMENT);
 		searchButton.setDoubleBuffered(true);
 		verticalBox.add(searchButton);
-		
+
 		separator = new JSeparator();
 		verticalBox.add(separator);
-		
+
 		lblDirectionReadout = new JLabel("Direction Readout");
 		lblDirectionReadout.setAlignmentX(CENTER_ALIGNMENT);
 
 		verticalBox.add(lblDirectionReadout);
-		
+
 		scrollPane = new JScrollPane();
 		scrollPane.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
 		verticalBox.add(scrollPane);
-		
+
 		directionsTextPane = new JTextArea();
 		scrollPane.setViewportView(directionsTextPane);
 		directionsTextPane.setLineWrap(true);
@@ -244,39 +243,35 @@ public class HermesUI extends JPanel{
 		directionsTextPane.setEditable(false);
 		directionsTextPane.setRows(20);
 		directionsTextPane.setColumns(18);
-		
+
 		horizontalBox = Box.createHorizontalBox();
 		verticalBox.add(horizontalBox);
-		
+
 		zoomInButton = new JButton("");
 		horizontalBox.add(zoomInButton);
 		zoomInButton.setIcon(new ImageIcon(HermesUI.class.getResource("/com/team1ofus/hermes/zoomin25.png")));
-		
+
 		zoomOutBtn = new JButton("");
 		horizontalBox.add(zoomOutBtn);
 		zoomOutBtn.setIcon(new ImageIcon(HermesUI.class.getResource("/com/team1ofus/hermes/zoomout25.png")));
-		
+
 		tabbedPane = new JTabbedPane(JTabbedPane.TOP);
-		tabbedPane.setBounds(230, 0, 1490, 1000);
+		tabbedPane.setBounds(230, 0, BootstrapperConstants.FRAME_WIDTH-BootstrapperConstants.PANEL_SIZE, BootstrapperConstants.FRAME_HEIGHT);
 		frameHermes.getContentPane().add(tabbedPane);
-		
-				gridMap = new MapPane(currentCell);
-				gridMap.setBorder(new EtchedBorder(EtchedBorder.RAISED, null, null));
-				gridMap.setBounds(0, 0, frameWidth-panelSize, frameHeight);
-				pathPanel = new PathPane();
-				textPanel = new TextPane();
-				try {
-					pointPanel = new PointPane();
-				} catch (IOException e1) {
-					// TODO Auto-generated catch block
-					e1.printStackTrace();
-				}
-				pathPanel.setBounds(0, 0, frameWidth-panelSize, frameHeight);
-				textPanel.setBounds(0, 0, frameWidth-panelSize, frameHeight);
-				pointPanel.setBounds(0, 0, frameWidth-panelSize, frameHeight);
-				textPanel.labelAllTiles(currentCell);
-	
-		
+
+		gridMap = new MapPane(currentCell);
+		gridMap.setBorder(new EtchedBorder(EtchedBorder.RAISED, null, null));
+		gridMap.setBounds(0, 0, frameWidth-panelSize, frameHeight);
+		pathPanel = new PathPane();
+		textPanel = new TextPane();
+
+		pointPanel = new PointPane();
+
+		pathPanel.setBounds(0, 0, frameWidth-panelSize, frameHeight);
+		textPanel.setBounds(0, 0, frameWidth-panelSize, frameHeight);
+		pointPanel.setBounds(0, 0, frameWidth-panelSize, frameHeight);
+		textPanel.labelAllTiles(currentCell);
+
 		layeredPane = new JLayeredPane();
 		tabbedPane.addTab("New tab", null, layeredPane, null);
 		layeredPane.add(gridMap);
@@ -287,35 +282,37 @@ public class HermesUI extends JPanel{
 		layeredPane.setComponentZOrder(pathPanel, 0);
 		layeredPane.setComponentZOrder(textPanel, 0);
 		layeredPane.setComponentZOrder(pointPanel, 0);
+		
 		//This handles map zooming by causing the Cell to re-render
 		layeredPane.addMouseWheelListener(new MouseAdapter() {
-            @Override
-            public void mouseWheelMoved(MouseWheelEvent e) {
-            	int scalingNum = 2;//Increasing this number increases the amount of zoom one mousewheel "scroll" will zoom in for
-            	double zoomIncreaseFactor = (scalingNum/(double)BootstrapperConstants.TILE_WIDTH);
-                double delta = -zoomIncreaseFactor * e.getPreciseWheelRotation();
-                if(zoomScale + delta < 1.0){
-                	zoomScale = 1.0;
-                }
-                else if(zoomScale >  1.75 ){
-                	zoomScale = 1.75;
-                }
-                else{
-                	System.out.println(zoomScale);
-                    zoomScale += delta;
-                    gridMap.render.zoom(zoomScale);
-                    pathPanel.zoom(zoomScale);
-                    //textPanel.zoom(zoomScale); TODO scale with text
-                    pointPanel.zoom(zoomScale);
-                    //zoomEvent.addListener(gridMap); TODO Get this event handling stuff to work or get rid of it
-                    //zoomEvent.doZoom(zoomScale);
-                }
-                frameHermes.revalidate();
-        		frameHermes.repaint();
-            }
-        });
-		
+			@Override
+			public void mouseWheelMoved(MouseWheelEvent e) {
+				int scalingNum = 2;//Increasing this number increases the amount of zoom one mousewheel "scroll" will zoom in for
+				int maxZoomOut = 1;
+				double maxZoomIn = 1.75D;
+				double zoomIncreaseFactor = (scalingNum/(double)BootstrapperConstants.TILE_WIDTH);
+				double delta = -zoomIncreaseFactor * e.getPreciseWheelRotation();
+				if(zoomScale + delta < maxZoomOut){
+					zoomScale = maxZoomOut;
+				}
+				else if(zoomScale >  maxZoomIn ){
+					zoomScale = maxZoomIn;
+				}
+				else{
+					System.out.println(zoomScale);
+					zoomScale += delta;
+					gridMap.render.zoom(zoomScale);
+					pathPanel.zoom(zoomScale);
+					//textPanel.zoom(zoomScale); TODO scale with text
+					pointPanel.zoom(zoomScale);
 
+				}
+				frameHermes.revalidate();
+				frameHermes.repaint();
+			}
+		});
+		
+		//This mouse event controls map panning through mouse dragging
 		layeredPane.addMouseMotionListener(new MouseMotionAdapter() {
 			@Override
 			public void mouseMoved(MouseEvent e) {
@@ -325,7 +322,7 @@ public class HermesUI extends JPanel{
 			public void mouseDragged(MouseEvent e) {
 				if(dragging) {
 					//safety check
-					
+
 					if(lastDragLocation != null) {
 						int x = (int) (-0.5*(e.getX() - lastDragLocation.getX()));
 						int y = (int) (-0.5*(e.getY() - lastDragLocation.getY()));
@@ -340,28 +337,29 @@ public class HermesUI extends JPanel{
 					}
 				}
 			}
-			}
+		}
 		);
+		//This mouse event handles point selection
 		layeredPane.addMouseListener(new MouseAdapter() {
 
-		@Override
-		public void mouseClicked(MouseEvent e) {
-			Point picked = gridMap.render.pickTile(e.getX() , e.getY());
-			if(SwingUtilities.isLeftMouseButton(e)) {
-				processClick(picked);
-			}  
+			@Override
+			public void mouseClicked(MouseEvent e) {
+				Point picked = gridMap.render.pickTile(e.getX() , e.getY());
+				if(SwingUtilities.isLeftMouseButton(e)) {
+					processClick(picked);
+				}  
 
-		}			@Override
+			}			@Override
 			public void mouseReleased(MouseEvent e) {
 				//do the dragging here
-			DebugManagement.writeNotificationToLog("Dragging disabled");
+				DebugManagement.writeNotificationToLog("Dragging disabled");
 				dragging = false;
 				lastDragLocation = null;
 			}
 			@Override
 			public void mousePressed(MouseEvent e) {
 
-					
+
 				if(SwingUtilities.isRightMouseButton(e)) {
 					//right click, they intend to drag
 					DebugManagement.writeNotificationToLog("Dragging enabled");
@@ -371,13 +369,13 @@ public class HermesUI extends JPanel{
 			}
 		});
 		frameHermes.getContentPane().add(zoomPanel);
-		
+
 		/*
 		 * Temporary layered
 		 */
-		
+
 		repaintPanel();
-		
+
 	}
 	
 	//This is a dummy method to check and make sure directions will be able to load well.
@@ -391,15 +389,15 @@ public class HermesUI extends JPanel{
 		//	directionsTextPane.line
 		} 
 	}
-	
+
 	public PathPane getPathPanel(){
 		return pathPanel;
 	}
 	public PointPane getPointPane(){
 		return pointPanel;
 	}
-	
 
+	//These keyboard events handle panning with the keyboard
 	private void doOffsetCalc(KeyEvent e) {
 		switch(e.getKeyCode()) {
 		//some optimizations to be made here
@@ -427,15 +425,4 @@ public class HermesUI extends JPanel{
 	}
 }
 
-
-
-
-
-
-
-
-
-
 //CHAFF
-
-

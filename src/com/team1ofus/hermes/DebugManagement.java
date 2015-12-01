@@ -2,6 +2,7 @@ package com.team1ofus.hermes;
 
 import java.util.Date;
 
+//Used for testing purposes
 public class DebugManagement {
 	
 	public static void writeLineToLog(SEVERITY_LEVEL severity, String message) {
