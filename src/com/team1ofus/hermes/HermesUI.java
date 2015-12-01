@@ -193,7 +193,7 @@ public class HermesUI extends JPanel implements IHumanInteractionListener{
 		interacactionpanel.setLayout(null);
 
 		verticalBox = Box.createVerticalBox();
-		verticalBox.setBounds(13, 5, 275, 400);
+		verticalBox.setBounds(13, 5, 275, 537);
 		interacactionpanel.add(verticalBox);
 
 		verticalStrut_1 = Box.createVerticalStrut(20);
@@ -254,6 +254,19 @@ public class HermesUI extends JPanel implements IHumanInteractionListener{
 		directionsTextPane.setEditable(false);
 		directionsTextPane.setRows(20);
 		directionsTextPane.setColumns(18);
+		
+		JButton printButton = new JButton("Print out Directions");
+		printButton.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseClicked(MouseEvent e) {
+				
+			}
+		});
+		printButton.setAlignmentX(Component.CENTER_ALIGNMENT);
+		verticalBox.add(printButton);
+		
+		JSeparator separator_1 = new JSeparator();
+		verticalBox.add(separator_1);
 		 
 		horizontalBox = Box.createHorizontalBox();
 		verticalBox.add(horizontalBox);
