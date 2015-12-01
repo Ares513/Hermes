@@ -53,7 +53,6 @@ public class UIManagement implements IHumanInteractionListener, IMapManagementIn
 		DebugManagement.writeNotificationToLog("Path received, contents "  + directions);
 		window.getPathPanel().drawPath(directions);
 		ArrayList<String> listOfDirections = printList.parseDirections(directions);
-		//window.ListOfDirections = listOfDirections; 
 		window.directionText(listOfDirections);
 	}
 

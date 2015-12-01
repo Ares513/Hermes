@@ -63,9 +63,10 @@ public class PrintDirections {
 			if(i==0){  
 				String startInstruction = "Head "; 
 				startInstruction += toFullWord(currentState);
-				startInstruction += ", walk for ";
+				startInstruction += "\nwalk for ";
 				startInstruction += df.format(currentDistance);		
 				startInstruction += " feet";
+				startInstruction += "\n-------------";
 				currentInstruction.turnInstruction = startInstruction; 
 				prevDegree = toDegrees(currentState); 
 				dList.set(i, currentInstruction); 
@@ -79,6 +80,7 @@ public class PrintDirections {
 				newInstruction += "\nWalk "; 
 				newInstruction += df.format(currentDistance); 
 				newInstruction += " feet";
+				newInstruction += "\n-------------";
 				currentInstruction.turnInstruction = newInstruction; 
 				prevDegree = toDegrees(currentState); 
 				}

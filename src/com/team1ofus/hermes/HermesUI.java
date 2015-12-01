@@ -12,6 +12,8 @@ import java.awt.Point;
 import java.awt.Stroke;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
+
+
 import java.awt.BasicStroke;
 import java.awt.BorderLayout;
 import java.awt.Color;
@@ -33,6 +35,7 @@ import java.util.List;
 
 import javax.swing.JButton;
 import javax.swing.JComboBox;
+import javax.swing.JEditorPane;
 
 import java.awt.Font;
 import java.awt.Graphics;
@@ -58,9 +61,6 @@ import javax.swing.JScrollPane;
 import javax.swing.JViewport;
 import javax.swing.ScrollPaneConstants;
 import javax.swing.JTabbedPane;
-import javax.swing.JTable;
-import javax.swing.table.DefaultTableModel;
-import javax.swing.table.TableColumn;
 
 //Holds all of the UI elements for the project
 public class HermesUI extends JPanel{
@@ -410,6 +410,7 @@ public class HermesUI extends JPanel{
 
 	}
 	
+
 	//This is a dummy method to check and make sure directions will be able to load well.
 	//Can get rid of once we have directions.
 	public void directionText(ArrayList<String> directions){
