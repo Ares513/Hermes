@@ -13,7 +13,7 @@ public class BootstrapperConstants {
 	public static final Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
 	public static final int FRAME_WIDTH= screenSize.width-200;
 	public static final int FRAME_HEIGHT= screenSize.height-200;
-	public static final int  PANEL_SIZE= 230;
+	public static final int  PANEL_SIZE= 300;
 	
 	
 }

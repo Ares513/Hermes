@@ -5,7 +5,7 @@ import java.util.ArrayList;
 
 import javax.swing.*;
 
-
+//This class creates the UI and passes on events that will trigger changes in the UI
 public class UIManagement implements IHumanInteractionListener, IMapManagementInteractionListener, ILoaderInteractionListener {
 	HermesUI window;
 	Loader loader;
@@ -23,33 +23,34 @@ public class UIManagement implements IHumanInteractionListener, IMapManagementIn
 		loader = new Loader(allCells);  
 		loader.events.addChooseListener(this);
 		printList = new PrintDirections(); 
-		
+		locationNameInfoRecords = new ArrayList<Record>();
 		allLocationNameInfos = new ArrayList<LocationNameInfo>();
 		for (PathCell aCell : allCells){
 			allLocationNameInfos.addAll(aCell.getLocationNameInfo());
+			for (LocationNameInfo lni : aCell.getLocationNameInfo()){
+				for(String s : lni.getNames()) {
+					locationNameInfoRecords.add(new Record(s, aCell.getName()));
+					
+				}
+			}
 		}
-		locationNameInfoRecords = new ArrayList<Record>();
-		String cellName;
+		
 		for (LocationNameInfo lni : allLocationNameInfos){
-			cellName = lni.getCellName();
+		
 			for (String str : lni.getNames()){
-				locationNameInfoRecords.add(new Record(str, cellName));
+				
 			}
 		}
 	}
 	
 	public JFrame frame; 
-
 	public void begin(int selectedIndex) {
 		window = new HermesUI(allCells.get(selectedIndex));
 		window.humanInteractive.addListener(this);
-	
-		
 	}
 	
 	public void doPathComplete(ArrayList<CellPoint> directions) {
 		DebugManagement.writeNotificationToLog("Path received, contents "  + directions);
-
 		window.getPathPanel().drawPath(directions);
 		ArrayList<String> listOfDirections = printList.parseDirections(directions);
 		//window.ListOfDirections = listOfDirections; 
@@ -77,12 +78,8 @@ public class UIManagement implements IHumanInteractionListener, IMapManagementIn
 	@Override
 	public void selectionMade(int selection, ArrayList<PathCell> allCells) {
 		// TODO Auto-generated method stub
-		
 		events.doWindowReady(selection, allCells);
 		begin(selection);
 		
 	}
-
-	
-
 }
