@@ -23,10 +23,14 @@ public class PointPane extends JPanel{
 	public int height = BootstrapperConstants.TILE_HEIGHT;
 	public double zoomScale = 1;
 
-	 PointPane() throws IOException{
+	public PointPane() {
 		offset = new Point(0,0);
+		try {
 			startMarker = ImageIO.read(new File("markerstart.png"));
 			finishMarker = ImageIO.read(new File("markerfinish.png"));
+		} catch (IOException e1){
+			e1.printStackTrace();
+		}
 		
 		
 	}
