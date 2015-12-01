@@ -166,7 +166,7 @@ public class HermesUI extends JPanel{
 		});
 		frameHermes.setTitle("Hermes");
 		frameHermes.setResizable(false);
-		frameHermes.setBounds(0, 0, frameWidth, frameHeight);
+		frameHermes.setBounds(0, 0, BootstrapperConstants.FRAME_WIDTH, BootstrapperConstants.FRAME_HEIGHT);
 		frameHermes.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frameHermes.getContentPane().setLayout(null);
 		frameHermes.setMinimumSize(new Dimension(800,600));
@@ -188,7 +188,7 @@ public class HermesUI extends JPanel{
 		btnMinus = new JButton("Minus");
 		verticalBox_1.add(btnMinus);
 		JPanel interacactionpanel = new JPanel();
-		interacactionpanel.setBounds(0, 0, panelSize, frameHeight);
+		interacactionpanel.setBounds(0, 0, BootstrapperConstants.PANEL_SIZE, BootstrapperConstants.FRAME_HEIGHT);
 		frameHermes.getContentPane().add(interacactionpanel);
 		interacactionpanel.setLayout(null);
 		
@@ -256,7 +256,7 @@ public class HermesUI extends JPanel{
 		zoomOutBtn.setIcon(new ImageIcon(HermesUI.class.getResource("/com/team1ofus/hermes/zoomout25.png")));
 		
 		tabbedPane = new JTabbedPane(JTabbedPane.TOP);
-		tabbedPane.setBounds(230, 0, 1490, 1000);
+		tabbedPane.setBounds(230, 0, BootstrapperConstants.FRAME_WIDTH-BootstrapperConstants.PANEL_SIZE, BootstrapperConstants.FRAME_HEIGHT);
 		frameHermes.getContentPane().add(tabbedPane);
 		
 				gridMap = new MapPane(currentCell);
@@ -264,12 +264,10 @@ public class HermesUI extends JPanel{
 				gridMap.setBounds(0, 0, frameWidth-panelSize, frameHeight);
 				pathPanel = new PathPane();
 				textPanel = new TextPane();
-				try {
-					pointPanel = new PointPane();
-				} catch (IOException e1) {
-					// TODO Auto-generated catch block
-					e1.printStackTrace();
-				}
+				
+				pointPanel = new PointPane();
+
+				
 				pathPanel.setBounds(0, 0, frameWidth-panelSize, frameHeight);
 				textPanel.setBounds(0, 0, frameWidth-panelSize, frameHeight);
 				pointPanel.setBounds(0, 0, frameWidth-panelSize, frameHeight);
