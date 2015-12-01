@@ -94,10 +94,18 @@ class PathPane extends JPanel {
 		Stroke stroke1 = new BasicStroke(6f, BasicStroke.CAP_ROUND, BasicStroke.JOIN_ROUND, 4f);//, dashingPattern1, 2.0f);
 		g2d.setStroke(stroke1);
 		for(int i = 0; i < pointsList.size()-1; i++){
-			g2d.drawLine( (int)(pointsList.get(i).x * zoomScale) - offset.x  ,  (int)(pointsList.get(i).y *zoomScale)- offset.y , (int)(pointsList.get(i+1).x  * zoomScale) - offset.x , (int)(pointsList.get(i+1).y * zoomScale) - offset.y);
+			Point p1 = convertPoint(pointsList.get(i).x, pointsList.get(i).y);
+			Point p2 = convertPoint(pointsList.get(i+1).x, pointsList.get(i+1).y);
+			g2d.drawLine( (int)p1.x - offset.x,  (int)p1.y - offset.y , (int)(p2.x - offset.x) , (int)(p2.y - offset.y));
+			
 		} 
 	}
-	
+	private Point convertPoint(double x, double y) {
+		
+		int xFinal = (int) ((int) x*zoomScale);
+		int yFinal = (int) ((int) y*zoomScale);
+		return new Point(xFinal, yFinal);
+	}
 	@Override
 	public void paintComponent(Graphics g) {
 		drawLineSets(g);

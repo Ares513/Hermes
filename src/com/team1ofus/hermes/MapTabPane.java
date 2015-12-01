@@ -84,7 +84,12 @@ public class MapTabPane extends JLayeredPane {
 						pathPanel.zoom(zoomScale, currentCell);
 						//textPanel.zoom(zoomScale); TODO scale with text
 						pointPanel.zoom(zoomScale);
-
+						pathPanel.setOffset(mapPanel.render.offset);
+						pathPanel.repaint();
+						pointPanel.setOffset(mapPanel.render.offset);
+						repaintPanel();
+					
+						repaint();
 					}
 				}
 			});
@@ -106,6 +111,8 @@ public class MapTabPane extends JLayeredPane {
 								DebugManagement.writeNotificationToLog("Dragging occurred, dx dy " + x + " , " + y);
 								mapPanel.render.incrementOffset(x, y, mapPanel.getWidth(), mapPanel.getHeight());
 								pathPanel.setOffset(mapPanel.render.offset);
+								pathPanel.repaint();
+								
 								pointPanel.setOffset(mapPanel.render.offset);
 								repaintPanel();
 								lastDragLocation = e.getPoint();
