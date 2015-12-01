@@ -311,7 +311,7 @@ public class HermesUI extends JPanel{
 				else{
 					System.out.println(zoomScale);
 					zoomScale += delta;
-					gridMap.render.zoom(zoomScale);
+					gridMap.render.zoom(zoomScale,frameWidth, frameHeight);
 					pathPanel.zoom(zoomScale);
 					//textPanel.zoom(zoomScale); TODO scale with text
 					pointPanel.zoom(zoomScale);

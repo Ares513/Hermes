@@ -16,6 +16,13 @@ import javax.imageio.ImageIO;
 public class CellRenderer {
 	private int width = BootstrapperConstants.TILE_WIDTH;
 	private int height = BootstrapperConstants.TILE_HEIGHT;
+	public double prevScale = 1D;
+	int oldTotalWidth;
+	int oldTotalHeight;
+	int newTotalWidth;
+	int newTotalHeight;
+	int difWidth;
+	int difHeight;	
 	final int rows = 1;
 	final int cols = 3;
 	BufferedImage[] spriteImages = new BufferedImage[rows * cols];
@@ -30,9 +37,35 @@ public class CellRenderer {
 	}
 
 	//Changes the width and height of tiles to corresponding to changes in the scale of zooming
-	public void zoom(double scale){
+	public void zoom(double scale, int fwidth, int fheight){
 		width =  (int)(BootstrapperConstants.TILE_WIDTH * scale);
 		height = (int)(BootstrapperConstants.TILE_HEIGHT * scale);
+		
+		DebugManagement.writeNotificationToLog("The previous scale was");
+		System.out.println(prevScale);
+		
+		
+		oldTotalWidth= (int)((BootstrapperConstants.TILE_WIDTH * drawnCell.tiles.length ) * prevScale);
+		DebugManagement.writeNotificationToLog("The previous total width was:");
+		System.out.println(oldTotalWidth);
+		oldTotalHeight= (int)((BootstrapperConstants.TILE_HEIGHT * drawnCell.tiles[1].length ) * prevScale);
+		DebugManagement.writeNotificationToLog("The previous total height was:");
+		System.out.println(oldTotalHeight);
+		newTotalWidth= (int)((BootstrapperConstants.TILE_WIDTH * drawnCell.tiles.length ) * scale);
+		DebugManagement.writeNotificationToLog("The current total width is:");
+		System.out.println(newTotalWidth);
+		newTotalHeight= (int)((BootstrapperConstants.TILE_HEIGHT * drawnCell.tiles[1].length ) * scale);
+		DebugManagement.writeNotificationToLog("The current total height is:");
+		System.out.println(newTotalHeight);
+		difWidth = (newTotalWidth - oldTotalWidth)/2;
+		DebugManagement.writeNotificationToLog("The current x offset is:");
+		System.out.println(difWidth);
+		difHeight = (newTotalHeight - oldTotalHeight)/2;
+		DebugManagement.writeNotificationToLog("The current y offset is:");
+		System.out.println(difHeight);
+		incrementOffset(difWidth,difHeight, fwidth, fheight);
+		prevScale = scale;
+	
 	}
 	
 	//Renders the tiles
