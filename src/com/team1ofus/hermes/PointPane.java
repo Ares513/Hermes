@@ -15,7 +15,8 @@ public class PointPane extends JPanel{
 
 	private Point first;
 	private Point second;
-	private BufferedImage marker;
+	private BufferedImage startMarker;
+	private BufferedImage finishMarker;
 	private Point offset;
 	public int width = BootstrapperConstants.TILE_WIDTH;
 	public int height = BootstrapperConstants.TILE_HEIGHT;
@@ -23,7 +24,8 @@ public class PointPane extends JPanel{
 
 	PointPane() throws IOException{
 		offset = new Point(0,0);
-		marker = ImageIO.read(new File("marker.png"));
+		startMarker = ImageIO.read(new File("markerstart.png"));
+		finishMarker = ImageIO.read(new File("markerfinish.png"));
 	}
 	
 	//This updates the zoomScale, which will be used when placing the drawing the point.
@@ -36,13 +38,13 @@ public class PointPane extends JPanel{
 	void drawPoint(Graphics g){
 		Graphics2D g2d = (Graphics2D) g;
 		this.removeAll();
-		int newWidth = (int) (marker.getWidth() * zoomScale);
-		int newHeight = (int)(marker.getHeight() *zoomScale);
+		int newWidth = (int) (startMarker.getWidth() * zoomScale);
+		int newHeight = (int)(startMarker.getHeight() *zoomScale);
 			if(first != null){
-			g2d.drawImage(marker, (int)(first.x * zoomScale) - offset.x, (int)(first.y * zoomScale) - offset.y - height/2, newWidth, newHeight, this);
+			g2d.drawImage(startMarker, (int)(first.x * zoomScale) - offset.x, (int)(first.y * zoomScale) - offset.y - height/2, newWidth, newHeight, this);
 		}
 		if(second != null){
-			g2d.drawImage(marker, (int)(second.x * zoomScale)- offset.x,(int)(second.y * zoomScale) - offset.y - height/2, newWidth, newHeight, this);
+			g2d.drawImage(finishMarker, (int)(second.x * zoomScale)- offset.x,(int)(second.y * zoomScale) - offset.y - height/2, newWidth, newHeight, this);
 		}
 	}
 
