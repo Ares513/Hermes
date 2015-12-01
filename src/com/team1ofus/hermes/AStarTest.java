@@ -7,6 +7,8 @@ import java.util.ArrayList;
 
 import org.junit.Test;
 
+import com.team1ofus.apollo.TILE_TYPE;
+
 public class AStarTest {
 
 	//TODO Delete?

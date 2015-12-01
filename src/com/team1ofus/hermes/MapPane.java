@@ -4,7 +4,7 @@ import java.awt.Graphics;
 import java.awt.Point;
 import javax.swing.JPanel;
 import com.team1ofus.hermes.Tile;
-import com.team1ofus.hermes.TILE_TYPE;
+import com.team1ofus.apollo.TILE_TYPE;
 import com.team1ofus.hermes.CellRenderer;
 
 //JPanel that holds the rendered map
