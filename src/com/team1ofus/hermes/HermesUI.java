@@ -46,6 +46,7 @@ import javax.swing.JTextArea;
 import javax.swing.border.LineBorder;
 import javax.swing.JScrollBar;
 import javax.swing.JScrollPane;
+import javax.swing.JViewport;
 import javax.swing.ScrollPaneConstants;
 import javax.swing.JTabbedPane;
 
@@ -79,7 +80,7 @@ public class HermesUI extends JPanel{
 	private Component verticalStrut_1;
 	private Component verticalStrut_2;
 	private Component verticalStrut_3;
-	private JScrollPane scrollPane;
+	public JScrollPane scrollPane;
 	private double zoomScale;
 	private JButton searchButton;
 	private JPanel zoomPanel;
@@ -381,15 +382,17 @@ public class HermesUI extends JPanel{
 	//This is a dummy method to check and make sure directions will be able to load well.
 	//Can get rid of once we have directions.
 	public void directionText(ArrayList<String> directions){
+		directionsTextPane.setText("");
 		int size = directions.size(); 
 		for(int i =0; i < size; i++){ 
 			String direction = directions.get(i); 
 			directionsTextPane.append(direction);
 			directionsTextPane.append("\n");
-		//	directionsTextPane.line
-		} 
-	}
+		}
+		
+	//scrollPane.getVerticalScrollBar().setValue(0);  
 
+	}
 	public PathPane getPathPanel(){
 		return pathPanel;
 	}
