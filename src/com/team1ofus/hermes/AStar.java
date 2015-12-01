@@ -7,6 +7,8 @@ import java.util.EventObject;
 import java.util.HashMap;
 import java.util.List;
 
+import com.team1ofus.apollo.TILE_TYPE;
+
 public class AStar { 
 	AStarInteractionEventObject events;
 	HashMap<String, TileInfo[][]> cellMap;

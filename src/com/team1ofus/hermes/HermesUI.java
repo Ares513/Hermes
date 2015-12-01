@@ -47,8 +47,8 @@ import javax.swing.SwingConstants;
 import java.awt.Rectangle;
 import javax.swing.JTextArea;
 import javax.swing.border.LineBorder;
-
 import completely.AutocompleteEngine;
+import com.team1ofus.apollo.TILE_TYPE;
 
 import javax.swing.JScrollBar;
 import javax.swing.JScrollPane;

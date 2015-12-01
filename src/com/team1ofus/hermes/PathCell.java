@@ -22,7 +22,7 @@ LocationInfo 1-to-many  A cell has many destinations and exits
 
 import java.awt.Point;
 import java.util.ArrayList;
-
+import com.team1ofus.apollo.TILE_TYPE;
 public class PathCell{
 	
 	public String cellName = null;
@@ -64,14 +64,29 @@ public class PathCell{
         tiles = new Tile[width][height];
     	for(int i=0; i<width; i++) {
     		for(int j=0; j<height; j++) {
-    			com.team1ofus.apollo.TILE_TYPE type = dataTiles[i][j].getType();
+    			TILE_TYPE type = dataTiles[i][j].getType();
+    			
+    			switch(type) {
+    			case WALL:
+       				tiles[i][j] = new Wall(name, new Point(i, j));
+    				tiles[i][j].tileType = type;
+    			case PEDESTRIAN_WALKWAY:
+    				tiles[i][j] = new Walkway(name, new Point(i, j));
+    				tiles[i][j].tileType = type;
+    				break;
+    			case IMPASSABLE:
+       				tiles[i][j] = new Wall(name, new Point(i, j));
+    				tiles[i][j].tileType = type;
+    				break;
+    			default:
+    				tiles[i][j] = new Walkway(name, new Point(i, j));
+    				tiles[i][j].tileType = type;
+    				break;
+    			}
     			if(type == com.team1ofus.apollo.TILE_TYPE.WALL) {
-    				tiles[i][j] = new Wall(name, new Point(i, j));
-    				tiles[i][j].tileType = TILE_TYPE.WALL;
+ 
     			}
     			if(type == com.team1ofus.apollo.TILE_TYPE.PEDESTRIAN_WALKWAY) {
-    				tiles[i][j] = new Wall(name, new Point(i, j));
-    				tiles[i][j].tileType = TILE_TYPE.PEDESTRIAN_WALKWAY;
     			}
     			
     		}
