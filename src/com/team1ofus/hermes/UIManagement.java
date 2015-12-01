@@ -6,7 +6,7 @@ import java.util.ArrayList;
 import javax.swing.*;
 
 //This class creates the UI and passes on events that will trigger changes in the UI
-public class UIManagement implements IHumanInteractionListener, IMapManagementInteractionListener, ILoaderInteractionListener {
+public class UIManagement implements IHumanInteractionListener, IMapManagementInteractionListener, ILoaderInteractionListener, ISearchReadyListener {
 	HermesUI window;
 	Loader loader;
 	Point first;
@@ -46,7 +46,8 @@ public class UIManagement implements IHumanInteractionListener, IMapManagementIn
 	public JFrame frame; 
 	public void begin(int selectedIndex) {
 		window = new HermesUI(allCells.get(selectedIndex), locationNameInfoRecords);
-		window.humanInteractive.addListener(this);
+		window.humanInteractive.addListener(this);//should be refactored
+		window.getSearchEvents().addListener(this);
 	}
 	
 	public void doPathComplete(ArrayList<CellPoint> directions) {
@@ -73,6 +74,37 @@ public class UIManagement implements IHumanInteractionListener, IMapManagementIn
 			first = null;
 			second = null;
 		}
+	}
+	
+	//runs when user picks a destination point using the search feature
+	@Override
+	public void onSearchReady(Record start, Record destination){
+		DebugManagement.writeNotificationToLog("Entering function onSearchReady. \nStartRecord: " + start.getVal() + "\nDestRecord: " + destination.getVal());
+		Point startPoint = null;
+		Point destPoint = null;
+		for (PathCell pc : allCells){
+			if (pc.getName().equals(start.getCellName())){
+				startPoint = locationRecordToPoint(pc, start);
+			}
+		}
+		for (PathCell pc : allCells){
+			if (pc.getName().equals(destination.getCellName())){
+				destPoint = locationRecordToPoint(pc, destination);
+			}
+		}
+		events.doPathReady(0, startPoint, destPoint);
+	}
+	/* converts a record output by search into a point to send to A*
+	 * Will need to be refactored to return a cellPoint soon (before multimap pathing is done).
+	 * */
+	public Point locationRecordToPoint(PathCell pc, Record r){
+		for (LocationNameInfo lni : pc.getLocationNameInfo()){
+			if (lni.getNames().contains(r.getVal())){
+				return lni.getPoint();
+			}
+		}
+		DebugManagement.writeLineToLog(SEVERITY_LEVEL.FATAL, "Location Record not found. Returning Null. This will almost certainly cause a crash.");
+		return null;
 	}
 
 	@Override
