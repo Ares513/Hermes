@@ -2,6 +2,8 @@ package com.team1ofus.hermes;
 
 import java.awt.Point;
 
+import com.team1ofus.apollo.TILE_TYPE;
+
 //A type of tile that represents a traversable tile
 public class Walkway extends Tile implements TileInterface {
 

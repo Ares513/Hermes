@@ -2,7 +2,7 @@ package com.team1ofus.hermes;
 
 import java.util.ArrayList;
 import java.awt.Point;
-
+import com.team1ofus.apollo.TILE_TYPE;
 public abstract class Tile implements TileInterface{
 	
 	public static byte cellNum = 0;

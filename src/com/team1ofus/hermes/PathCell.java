@@ -22,7 +22,7 @@ LocationInfo 1-to-many  A cell has many destinations and exits
 
 import java.awt.Point;
 import java.util.ArrayList;
-
+import com.team1ofus.apollo.TILE_TYPE;
 public class PathCell{
 	
 	public String cellName = null;
@@ -38,6 +38,7 @@ public class PathCell{
     private ArrayList<EntryPointReference> entryPointRefs = new ArrayList<EntryPointReference>(); //places from which you can leave this cell.
     
     public PathCell(String name, int width, int height, double scaling, TILE_TYPE defaultTile) {
+    	DebugManagement.writeLineToLog(SEVERITY_LEVEL.WARNING, "A map was generated with a default tile format! Maps should be loaded from memory.");
         this.cellName = name;
         tiles = new Tile[width][height];
     	for(int i=0; i<width; i++) {
@@ -55,25 +56,45 @@ public class PathCell{
     	this.scaling = scaling;
            
     }
-    public PathCell(String name, int width, int height, double scaling, com.team1ofus.apollo.DataTile[][] dataTiles) {
+    
+    //an unpleasantly long one for 
+	public PathCell(String name, int width, int height, com.team1ofus.apollo.DataTile[][] dataTiles, ArrayList<EntryPoint> entryPoints,
+			ArrayList<LocationNameInfo> namedPoints, ArrayList<EntryPointReference> entryPointRefs) {
         this.cellName = name;
         tiles = new Tile[width][height];
     	for(int i=0; i<width; i++) {
     		for(int j=0; j<height; j++) {
-    			com.team1ofus.apollo.TILE_TYPE type = dataTiles[i][j].getType();
+    			TILE_TYPE type = dataTiles[i][j].getType();
+    			
+    			switch(type) {
+    			case WALL:
+       				tiles[i][j] = new Wall(name, new Point(i, j));
+    				tiles[i][j].tileType = type;
+    			case PEDESTRIAN_WALKWAY:
+    				tiles[i][j] = new Walkway(name, new Point(i, j));
+    				tiles[i][j].tileType = type;
+    				break;
+    			case IMPASSABLE:
+       				tiles[i][j] = new Wall(name, new Point(i, j));
+    				tiles[i][j].tileType = type;
+    				break;
+    			default:
+    				tiles[i][j] = new Walkway(name, new Point(i, j));
+    				tiles[i][j].tileType = type;
+    				break;
+    			}
     			if(type == com.team1ofus.apollo.TILE_TYPE.WALL) {
-    				tiles[i][j] = new Wall(name, new Point(i, j));
-    				tiles[i][j].tileType = TILE_TYPE.WALL;
+ 
     			}
     			if(type == com.team1ofus.apollo.TILE_TYPE.PEDESTRIAN_WALKWAY) {
-    				tiles[i][j] = new Wall(name, new Point(i, j));
-    				tiles[i][j].tileType = TILE_TYPE.PEDESTRIAN_WALKWAY;
     			}
     			
     		}
     	}
     	this.scaling = scaling;
-           
+		this.entryPoints = entryPoints;
+		this.namedPoints = namedPoints;
+		this.entryPointRefs = entryPointRefs;
     }
     /*
      * Not safe for out of bounds calls.
