@@ -54,14 +54,11 @@ public class HermesUI extends JPanel{
 	private JFrame frameHermes;
 	private PathPane pathPanel;
 	private PointPane pointPanel;
-	private JTextField StartField;
-	private JTextField DestinationField;
 	private Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
-	private BufferedImage map;
-	private Point mousePosition;
+	private int frameWidth = screenSize.width-200;
+	private int frameHeight = screenSize.height-200;
 	private DrawMap gridMap;
 	int scrollSpeed = 5;
-	private JLabel lblOffset;
 	private PathCell currentCell;
 	public HumanInteractionEventObject humanInteractive; 
 	public ZoomEventObject zoomEvent;
@@ -77,7 +74,6 @@ public class HermesUI extends JPanel{
 	private JTextField destination;
 	private JSeparator separator;
 	private JLabel lblDirectionReadout;
-	private Component verticalStrut;
 	private JTextArea directionsTextPane;
 	private Component verticalStrut_1;
 	private Component verticalStrut_2;
@@ -169,18 +165,18 @@ public class HermesUI extends JPanel{
 		});
 		frameHermes.setTitle("Hermes");
 		frameHermes.setResizable(false);
-		frameHermes.setBounds(0, 0, screenSize.width, screenSize.height);
+		frameHermes.setBounds(0, 0, frameWidth, frameHeight);
 		frameHermes.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frameHermes.getContentPane().setLayout(null);
 		frameHermes.setMinimumSize(new Dimension(800,600));
-		frameHermes.setLocation(screenSize.width/2-frameHermes.getSize().width/2, screenSize.height/2-frameHermes.getSize().height/2);
+		frameHermes.setLocation(frameWidth/2-frameWidth/2, frameHeight/2-frameHeight/2);
 		JPanel MousegridMap = new JPanel();
 		JLabel mouseOut = new JLabel("#mouse#");
 		MousegridMap.add(mouseOut);
 
 		gridMap = new DrawMap(currentCell);
 		gridMap.setBorder(new EtchedBorder(EtchedBorder.RAISED, null, null));
-		gridMap.setBounds(230, 0, screenSize.width-230, screenSize.height);;
+		gridMap.setBounds(0, 0, frameWidth-panelSize, frameHeight);;
 		pathPanel = new PathPane();
 		textPanel = new TextPane();
 		try {
@@ -189,9 +185,9 @@ public class HermesUI extends JPanel{
 			// TODO Auto-generated catch block
 			e1.printStackTrace();
 		}
-		pathPanel.setBounds(230, 0, screenSize.width-230, screenSize.height);
-		textPanel.setBounds(230, 0, screenSize.width-230, screenSize.height);
-		pointPanel.setBounds(230, 0, screenSize.width-230, screenSize.height);
+		pathPanel.setBounds(0, 0, frameWidth-panelSize, frameHeight);
+		textPanel.setBounds(0, 0, frameWidth-panelSize, frameHeight);
+		pointPanel.setBounds(0, 0, frameWidth-panelSize, frameHeight);
 		textPanel.labelAllTiles(currentCell);
 		
 		zoomPanel = new JPanel();
@@ -208,12 +204,12 @@ public class HermesUI extends JPanel{
 		btnMinus = new JButton("Minus");
 		verticalBox_1.add(btnMinus);
 		JPanel interacactionpanel = new JPanel();
-		interacactionpanel.setBounds(0, 0, panelSize, screenSize.height);
+		interacactionpanel.setBounds(0, 0, panelSize, frameHeight);
 		frameHermes.getContentPane().add(interacactionpanel);
 		interacactionpanel.setLayout(null);
 		
 		verticalBox = Box.createVerticalBox();
-		verticalBox.setBounds(13, 5, 203, 1155);
+		verticalBox.setBounds(13, 5, 203, 400);
 		interacactionpanel.add(verticalBox);
 		
 		verticalStrut_1 = Box.createVerticalStrut(20);
@@ -246,10 +242,6 @@ public class HermesUI extends JPanel{
 		separator = new JSeparator();
 		verticalBox.add(separator);
 		
-		verticalStrut = Box.createVerticalStrut(20);
-		verticalStrut.setPreferredSize(new Dimension(0, 650));
-		verticalBox.add(verticalStrut);
-		
 		lblDirectionReadout = new JLabel("Direction Readout");
 		lblDirectionReadout.setAlignmentX(CENTER_ALIGNMENT);
 
@@ -281,7 +273,7 @@ public class HermesUI extends JPanel{
 	
 		
 		layeredPane = new JLayeredPane();
-		layeredPane.setBounds(0, 0, screenSize.width, screenSize.height);
+		layeredPane.setBounds(panelSize, 0, frameWidth-panelSize, frameHeight);
 		layeredPane.add(gridMap);
 		layeredPane.add(pathPanel);
 		layeredPane.add(textPanel);
@@ -292,8 +284,7 @@ public class HermesUI extends JPanel{
 		layeredPane.setComponentZOrder(pointPanel, 0);
 		frameHermes.getContentPane().add(layeredPane);
 		frameHermes.getContentPane().add(zoomPanel);
-
-		//layeredPane.setBounds(0, 0, 1920, 1080);
+		
 		/*
 		 * Temporary layered
 		 */
