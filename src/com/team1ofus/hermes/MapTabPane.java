@@ -21,7 +21,6 @@ public class MapTabPane extends JLayeredPane {
 		textPanel = new TextPane();
 		pointPanel = new PointPane();
 		}
-		
 	
 	private void initialize() {
 		gridMap.setBorder(new EtchedBorder(EtchedBorder.RAISED, null, null));

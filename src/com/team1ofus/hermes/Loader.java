@@ -27,7 +27,8 @@ import java.awt.Dimension;
 
 import javax.swing.JLabel;
 
-
+//This class handles loading maps from map building application into the user application
+//TODO Comments1 - Explain more?
 public class Loader extends JDialog {
 	public LoaderInteractionEventObject events;
 	/**
@@ -40,29 +41,29 @@ public class Loader extends JDialog {
 		int width = 500;
 		setBounds((screen.width-width)/2, (screen.height-height)/2, 500, 80);
 		getContentPane().setLayout(new BorderLayout());
-			JPanel pane = new JPanel();
-			pane.setLayout(new FlowLayout(FlowLayout.CENTER));
-			getContentPane().add(pane, BorderLayout.CENTER);
-				JComboBox mapChooser = new JComboBox();
-				mapChooser.setModel(new DefaultComboBoxModel(getNames(allCells)));
-				pane.add(mapChooser);
-				JButton okButton = new JButton("OK");
-				okButton.addActionListener(new ActionListener() {
-					public void actionPerformed(ActionEvent e) {
-						setVisible(false);
-						events.selectionMade(mapChooser.getSelectedIndex(), allCells);
-					}
-				});
-				okButton.setActionCommand("OK");
-				pane.add(okButton);
-				getRootPane().setDefaultButton(okButton);
-								
-				
-			setVisible(true);
-			
+		JPanel pane = new JPanel();
+		pane.setLayout(new FlowLayout(FlowLayout.CENTER));
+		getContentPane().add(pane, BorderLayout.CENTER);
+		JComboBox mapChooser = new JComboBox();
+		mapChooser.setModel(new DefaultComboBoxModel(getNames(allCells)));
+		pane.add(mapChooser);
+		JButton okButton = new JButton("OK");
+		okButton.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				setVisible(false);
+				events.selectionMade(mapChooser.getSelectedIndex(), allCells);
+			}
+		});
+		okButton.setActionCommand("OK");
+		pane.add(okButton);
+		getRootPane().setDefaultButton(okButton);
+
+
+		setVisible(true);
+
 	}
 	private void renderSplashScreen(Graphics2D g, int frame) {
-		
+
 	}
 	private String[] getNames(ArrayList<PathCell> allCells) {
 		String[] result = new String[allCells.size()];
@@ -70,6 +71,6 @@ public class Loader extends JDialog {
 			result[c] = allCells.get(c).getName();
 		return result;
 	}
-	
+
 
 }
