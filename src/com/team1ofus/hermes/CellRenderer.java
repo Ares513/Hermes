@@ -16,8 +16,8 @@ import javax.imageio.ImageIO;
 public class CellRenderer {
 	private int width = BootstrapperConstants.TILE_WIDTH;
 	private int height = BootstrapperConstants.TILE_HEIGHT;
-	final int rows = 1;
-	final int cols = 3;
+	final int rows = 4;
+	final int cols = 14;
 	BufferedImage[] spriteImages = new BufferedImage[rows * cols];
 	Point offset = new Point(0, 0);
 	PathCell drawnCell;
@@ -49,6 +49,45 @@ public class CellRenderer {
 						g.drawImage(spriteImages[1], i*width - offset.x, j*height - offset.y, width, height, null);
 					
 					break;
+				case DOOR:
+					g.drawImage(spriteImages[2], i*width - offset.x, j*height - offset.y, width, height, null);
+					break;
+				case GRASS:
+					g.drawImage(spriteImages[3], i*width - offset.x, j*height - offset.y, width, height, null);
+					break;
+				case CONGESTED:
+					g.drawImage(spriteImages[4], i*width - offset.x, j*height - offset.y, width, height, null);
+					break;
+				case VERTICAL_UP_STAIRS:
+					g.drawImage(spriteImages[5], i*width - offset.x, j*height - offset.y, width, height, null);
+					break;
+				case VERTICAL_DOWN_STAIRS:
+					g.drawImage(spriteImages[6], i*width - offset.x, j*height - offset.y, width, height, null);
+					break;
+				case HORIZONTAL_LEFT_STAIRS:
+					g.drawImage(spriteImages[7], i*width - offset.x, j*height - offset.y, width, height, null);
+					break;
+				case HORIZONTAL_RIGHT_STAIRS:
+					g.drawImage(spriteImages[8], i*width - offset.x, j*height - offset.y, width, height, null);
+					break;
+				case IMPASSABLE:
+					//9 is Steep, which is now deprecated
+					g.drawImage(spriteImages[10], i*width - offset.x, j*height - offset.y, width, height, null);
+				case MALE_BATHROOM:
+					g.drawImage(spriteImages[11], i*width - offset.x, j*height - offset.y, width, height, null);
+				case FEMALE_BATHROOM:
+					g.drawImage(spriteImages[12], i*width - offset.x, j*height - offset.y, width, height, null);
+					break;
+				case UNISEX_BATHROOM:
+					g.drawImage(spriteImages[13], i*width - offset.x, j*height - offset.y, width, height, null);
+					break;
+				case BENCH:
+					g.drawImage(spriteImages[14], i*width - offset.x, j*height - offset.y, width, height, null);
+					break;
+				case TREE:
+					g.drawImage(spriteImages[18], i*width - offset.x, j*height - offset.y, width, height, null);
+					break;
+				
 				}
 			}
 		}
