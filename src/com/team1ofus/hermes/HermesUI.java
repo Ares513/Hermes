@@ -22,6 +22,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.image.BufferedImage;
@@ -202,15 +203,16 @@ public class HermesUI extends JPanel{
 		
 		startPoint = new JTextField();
 		verticalBox.add(startPoint);
-		startPoint.setText("Startpoint");
+		//startPoint.setText("Startpoint");
 		startPoint.setColumns(18);
+		startPoint.addKeyListener(new CustomKeyListener());
 		
 		verticalStrut_2 = Box.createVerticalStrut(20);
 		verticalStrut_2.setPreferredSize(new Dimension(0, 15));
 		verticalBox.add(verticalStrut_2);
 		
 		destination = new JTextField();
-		destination.setText("Destination");
+		//destination.setText("Destination");
 		verticalBox.add(destination);
 		destination.setColumns(18);
 		
@@ -419,6 +421,21 @@ public class HermesUI extends JPanel{
 	private void repaintPanel() {
 		frameHermes.repaint();
 	}
+	
+	/* CustomKeyListener for the Startpoint, each time a key is pressed return a list of matching from the database
+	 * 
+	 */
+	class CustomKeyListener implements KeyListener{
+	      public void keyTyped(KeyEvent e) {
+	      }
+
+	      public void keyPressed(KeyEvent e) {
+	      }
+
+	      public void keyReleased(KeyEvent e) {
+	    	  destination.setText(startPoint.getText());
+	      }   
+	   }
 }
 
 
