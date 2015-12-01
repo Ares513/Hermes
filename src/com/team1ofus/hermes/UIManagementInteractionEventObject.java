@@ -4,6 +4,7 @@ import java.awt.Point;
 import java.util.ArrayList;
 import java.util.List;
 
+//TODO Comments1
 public class UIManagementInteractionEventObject { 
 	public UIManagementInteractionEventObject() {
 	}

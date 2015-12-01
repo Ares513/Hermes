@@ -12,6 +12,7 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JWindow;
 
+//This class creates splash screen that will be shown on application launch
 public class SplashScreen extends JWindow {
 	  private int duration;
 	  public SplashScreen(int d) {

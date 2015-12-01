@@ -27,7 +27,7 @@ InstructionDictionary                              Stores the path directions ba
  */
 
 import com.team1ofus.hermes.BootstrapperConstants;
-import com.team1ofus.hermes.TILE_TYPE;
+import com.team1ofus.apollo.TILE_TYPE;
 
 public class DataManagement {
 	ArrayList<Cell> cells;

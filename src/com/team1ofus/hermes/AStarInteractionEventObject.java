@@ -4,6 +4,8 @@ import java.util.ArrayList;
 import java.util.EventObject;
 import java.util.List;
 
+//TODO Comments1
+
 public class AStarInteractionEventObject {
 	private List<IAStarInteractionListener> listeners = new ArrayList<IAStarInteractionListener>(); //list of registered listeners
 	public AStarInteractionEventObject() {

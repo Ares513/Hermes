@@ -1,5 +1,7 @@
 package com.team1ofus.hermes;
 import java.util.*;
+
+//TODO Comments1
 public class MapManagementInteractionEventObject { 
 	public MapManagementInteractionEventObject() {
 	}

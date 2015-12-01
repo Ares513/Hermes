@@ -10,19 +10,16 @@ import java.util.ArrayList;
  * Author: Forrest Cinelli
  * */
 public class LocationNameInfo {
-	private CellPoint loc;
+	private Point loc;
 	private List<String> aliases;
 	
-	public LocationNameInfo(CellPoint aLoc, List<String> listOfNames) {
+	public LocationNameInfo(Point aLoc, List<String> listOfNames) {
 		loc = aLoc;
 		aliases = listOfNames;
 	}
 	
 	public Point getPoint() {
-		return loc.getPoint();
-	}
-	public String getCellName() {
-		return loc.getCellName();
+		return loc;
 	}
 	public ArrayList<String> getNames() {
 		return (ArrayList) aliases;

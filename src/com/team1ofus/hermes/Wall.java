@@ -2,6 +2,9 @@ package com.team1ofus.hermes;
 
 import java.awt.Point;
 
+import com.team1ofus.apollo.TILE_TYPE;
+
+//A type of tile that represents a non-traversable tile
 public class Wall extends Tile implements TileInterface {
 	
 	private static final long serialVersionUID = 1L;

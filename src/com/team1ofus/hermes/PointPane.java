@@ -11,6 +11,7 @@ import java.io.IOException;
 import javax.imageio.ImageIO;
 import javax.swing.JPanel;
 
+//This panel paints the start and end points on the map
 public class PointPane extends JPanel{
 
 	private Point first;
@@ -22,10 +23,12 @@ public class PointPane extends JPanel{
 	public int height = BootstrapperConstants.TILE_HEIGHT;
 	public double zoomScale = 1;
 
-	PointPane() throws IOException{
+	 PointPane() throws IOException{
 		offset = new Point(0,0);
-		startMarker = ImageIO.read(new File("markerstart.png"));
-		finishMarker = ImageIO.read(new File("markerfinish.png"));
+			startMarker = ImageIO.read(new File("markerstart.png"));
+			finishMarker = ImageIO.read(new File("markerfinish.png"));
+		
+		
 	}
 	
 	//This updates the zoomScale, which will be used when placing the drawing the point.

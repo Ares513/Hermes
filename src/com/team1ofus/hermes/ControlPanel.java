@@ -9,7 +9,7 @@ import javax.swing.JButton;
 import javax.swing.JPanel;
 import javax.swing.KeyStroke;
 
-
+//TODO Delete? Comments1
 public class ControlPanel extends JPanel {
 
     private static final int DELTA = 10;
