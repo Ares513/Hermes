@@ -461,25 +461,34 @@ public class HermesUI extends JPanel{
 	/* CustomKeyListener for the Startpoint, each time a key is pressed return a list of matching from the database
 	 * 
 	 */
-	abstract class CustomKeyListener implements KeyListener{
+	 class CustomKeyListener implements KeyListener{
 	      public void keyTyped(KeyEvent e) {
 	      }
 
 	      public void keyPressed(KeyEvent e) {
 	      }
 	      
-	      public abstract void updateResultPoint(String[] possibleDestinations);
-	      public abstract void updateTargetRecord(Record r);
+	      public void updateResultPoint(String[] possibleDestinations){
+	    	  
+	      }
+	      public void updateTargetRecord(Record r){
+	    	  
+	      }
+	      public JComboBox getComboBox(){
+	    	  return startPoint;
+	      }
 
 	      public void keyReleased(KeyEvent e) {
-	    	  JComboBox cb = (JComboBox) e.getSource();
+	    	  String input = (String) getComboBox().getSelectedItem();
+	    	  System.out.println(input);
 	    	  
-	    	  String input = (String) cb.getSelectedItem();
-	    	  
+	    	  DebugManagement.writeNotificationToLog(input);
 	    	  List<Record> result = engine.search(input);
+	    	  DebugManagement.writeNotificationToLog("Result size is: " + result.size());
 	    	  String[] possibleDestinations = new String[result.size()];
 	    	  for (int i = 0; i < result.size(); i++){
 	    		  possibleDestinations[i] = result.get(i).getVal();
+	    		  DebugManagement.writeNotificationToLog("The possible location is: " + possibleDestinations[i]);
 	    		  if (input.equals(possibleDestinations[i])){
 	    			  updateTargetRecord(result.get(i));
 	    		  }
@@ -488,12 +497,42 @@ public class HermesUI extends JPanel{
 	      }   
 	   }
 	
-	class KeyListenerForStart extends CustomKeyListener{
+	class KeyListenerForStart implements KeyListener{
 		public void updateResultPoint(String[] possibleDestinations){
 			startPoint = new JComboBox<String>(possibleDestinations);
 		}
 		public void updateTargetRecord(Record r){
 			searchStartRecord = r;
+		}
+		@Override
+		public void keyTyped(KeyEvent e) {
+			// TODO Auto-generated method stub
+			
+		}
+		@Override
+		public void keyPressed(KeyEvent e) {
+			// TODO Auto-generated method stub
+			
+		}
+		@Override
+		public void keyReleased(KeyEvent e) {
+			  JComboBox cd = (JComboBox) e.getSource();
+	    	  String input = (String) cd.getSelectedItem();
+	    	  System.out.println(input);
+	    	  
+	    	  DebugManagement.writeNotificationToLog(input);
+	    	  List<Record> result = engine.search(input);
+	    	  DebugManagement.writeNotificationToLog("Result size is: " + result.size());
+	    	  String[] possibleDestinations = new String[result.size()];
+	    	  for (int i = 0; i < result.size(); i++){
+	    		  possibleDestinations[i] = result.get(i).getVal();
+	    		  DebugManagement.writeNotificationToLog("The possible location is: " + possibleDestinations[i]);
+	    		  if (input.equals(possibleDestinations[i])){
+	    			  updateTargetRecord(result.get(i));
+	    		  }
+	    	  }
+	    	  updateResultPoint(possibleDestinations);
+			
 		}
 	}
 	
@@ -504,6 +543,9 @@ public class HermesUI extends JPanel{
 		public void updateTargetRecord(Record r){
 			searchEndRecord = r;
 		}
+		public JComboBox getComboBox(){
+	    	  return destination;
+	      }
 	}
 	
 	class SearchListener implements ActionListener{
