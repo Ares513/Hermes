@@ -62,7 +62,6 @@ public class HermesUI extends JPanel{
 	int scrollSpeed = 5;
 	private PathCell currentCell;
 	public HumanInteractionEventObject humanInteractive; 
-	public ZoomEventObject zoomEvent;
 	private Point first; //for showing in the UI which points were clicked.
 	private Point second; 
 	private JLayeredPane layeredPane;
@@ -309,8 +308,7 @@ public class HermesUI extends JPanel{
                     pathPanel.zoom(zoomScale);
                     //textPanel.zoom(zoomScale); TODO scale with text
                     pointPanel.zoom(zoomScale);
-                    //zoomEvent.addListener(gridMap); TODO Get this event handling stuff to work or get rid of it
-                    //zoomEvent.doZoom(zoomScale);
+                    
                 }
                 frameHermes.revalidate();
         		frameHermes.repaint();
