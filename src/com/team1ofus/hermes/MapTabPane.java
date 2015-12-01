@@ -71,10 +71,10 @@ public class MapTabPane extends JLayeredPane {
 					double maxZoomIn = 1.75D;
 					double zoomIncreaseFactor = (scalingNum/(double)BootstrapperConstants.TILE_WIDTH);
 					double delta = -zoomIncreaseFactor * e.getPreciseWheelRotation();
-					if(zoomScale + delta < maxZoomOut){
+					if(zoomScale + delta <= maxZoomOut){
 						zoomScale = maxZoomOut;
 					}
-					else if(zoomScale >  maxZoomIn ){
+					else if(zoomScale >=  maxZoomIn ){
 						zoomScale = maxZoomIn;
 					}
 					else{
