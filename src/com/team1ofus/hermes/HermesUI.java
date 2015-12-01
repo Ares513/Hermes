@@ -328,7 +328,7 @@ public class HermesUI extends JPanel{
 						int x = (int) (-0.5*(e.getX() - lastDragLocation.getX()));
 						int y = (int) (-0.5*(e.getY() - lastDragLocation.getY()));
 						DebugManagement.writeNotificationToLog("Dragging occurred, dx dy " + x + " , " + y);
-						gridMap.render.incrementOffset(x, y, frameHermes.getWidth(), frameHermes.getHeight());
+						gridMap.render.incrementOffset(x, y, frameWidth, frameHeight);
 						pathPanel.setOffset(gridMap.render.offset);
 						pointPanel.setOffset(gridMap.render.offset);
 						repaintPanel();
@@ -344,7 +344,7 @@ public class HermesUI extends JPanel{
 
 		@Override
 		public void mouseClicked(MouseEvent e) {
-			Point picked = gridMap.render.pickTile(e.getX() -panelSize, e.getY());
+			Point picked = gridMap.render.pickTile(e.getX() , e.getY());
 			if(SwingUtilities.isLeftMouseButton(e)) {
 				processClick(picked);
 			}  
