@@ -61,6 +61,7 @@ import javax.swing.JScrollPane;
 import javax.swing.JViewport;
 import javax.swing.ScrollPaneConstants;
 import javax.swing.JTabbedPane;
+import java.awt.print.*;
 
 //Holds all of the UI elements for the project
 public class HermesUI extends JPanel implements IHumanInteractionListener{
@@ -106,6 +107,7 @@ public class HermesUI extends JPanel implements IHumanInteractionListener{
 	private JButton removeButton;
 	private MapTabbedPane<MapTabbedPane<MapTabPane>> tabbedPane;
 	private ArrayList<Record> locationNameInfoRecords;
+	public PrintToPrinter printer =new PrintToPrinter(); ;
 	private AutocompleteEngine<Record> engine = new AutocompleteEngine.Builder<Record>()
             .setIndex(new ACAdapter())
             .setAnalyzer(new ACAnalyzer())
@@ -255,11 +257,22 @@ public class HermesUI extends JPanel implements IHumanInteractionListener{
 		directionsTextPane.setRows(20);
 		directionsTextPane.setColumns(18);
 		
+		
+		//printer = new PrintToPrinter(); 
 		JButton printButton = new JButton("Print out Directions");
 		printButton.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent e) {
-				
+				 PrinterJob job = PrinterJob.getPrinterJob();
+		         job.setPrintable(printer);
+		         boolean ok = job.printDialog();
+		         if (ok) {
+		             try {
+		                  job.print();
+		             } catch (PrinterException ex) {
+		              /* The job did not successfully complete */
+		             }
+		         }
 			}
 		});
 		printButton.setAlignmentX(Component.CENTER_ALIGNMENT);
@@ -345,11 +358,15 @@ public class HermesUI extends JPanel implements IHumanInteractionListener{
 	//Can get rid of once we have directions.
 	public void directionText(ArrayList<String> directions){
 		directionsTextPane.setText("");
+		printer.printInstructions = new ArrayList<String>(); 
 		int size = directions.size(); 
 		for(int i =0; i < size; i++){ 
 			String direction = directions.get(i); 
 			directionsTextPane.append(direction);
-			directionsTextPane.append("\n");		
+			directionsTextPane.append("\n-------------");
+			directionsTextPane.append("\n");
+			printer.printInstructions.add(direction);
+			
 		} 
 	
 	}
