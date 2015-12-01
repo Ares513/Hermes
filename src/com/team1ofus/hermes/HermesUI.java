@@ -209,11 +209,11 @@ public class HermesUI extends JPanel implements IHumanInteractionListener{
 		verticalBox.add(verticalStrut_1);
 
 		JComboBox<String> startPoint = new JComboBox();
-	    DefaultComboBoxModel<String> model = new DefaultComboBoxModel<>(  );
+	    DefaultComboBoxModel<String> modelForStart = new DefaultComboBoxModel<>(  );
 	    for (Record r:locationNameInfoRecords){
-	    	model.addElement(r.getVal());
+	    	modelForStart.addElement(r.getVal());
 	    }
-	    startPoint.setModel(model);
+	    startPoint.setModel(modelForStart);
 		startPoint.setEditable(true);
 		AutoCompleteDecorator.decorate( startPoint );
 
@@ -226,8 +226,14 @@ public class HermesUI extends JPanel implements IHumanInteractionListener{
 		verticalBox.add(verticalStrut_2);
 
 		//String[] destinations = new String[] {"AK", "FL", "SL"};
+		// deep copy from modelForStart
+	    DefaultComboBoxModel<String> modelForDestination = new DefaultComboBoxModel<>(  );
+	    for (Record r:locationNameInfoRecords){
+	    	modelForDestination.addElement(r.getVal());
+	    }
+
 		JComboBox<String> destination = new JComboBox();
-		destination.setModel(model);
+		destination.setModel(modelForDestination);
 		destination.setEditable(true);
 		AutoCompleteDecorator.decorate( destination );
 
