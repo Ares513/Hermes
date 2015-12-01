@@ -178,9 +178,9 @@ public class CellRenderer {
 		offset.translate(dx, dy);
 		if(offset.x < 0) {
 			offset.x = 0;
-		} else if(offset.x > drawnCell.tiles.length * width - (windowWidth -panelSize)) {
+		} else if(offset.x > drawnCell.tiles.length * width - (windowWidth)) {
 			int tileCount = drawnCell.tiles.length;
-			int maxX = drawnCell.tiles.length * width - (windowWidth - panelSize);
+			int maxX = drawnCell.tiles.length * width - (windowWidth);
 			offset.x = maxX ;
 		}
 		//The panelSizae is the size of the side panel. If we need to change that, alter that variable.

@@ -39,6 +39,7 @@ class PathPane extends JPanel {
 		cell = passedCell;
 		zoomScale = scale;
 		
+		//Not doing anything right now
 		oldTotalWidth= (int)((BootstrapperConstants.TILE_WIDTH * cell.tiles.length ) * prevScale);
 		//DebugManagement.writeNotificationToLog("The previous total width was:");
 		//System.out.println(oldTotalWidth);
