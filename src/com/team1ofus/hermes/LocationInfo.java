@@ -10,6 +10,8 @@ Methods
 
  */
 
+//TODO Comments1 Delete?
+
 public class LocationInfo{
 	
 }

@@ -1,5 +1,5 @@
 package com.team1ofus.hermes;
-
+//These are enums for all of the possible tile types
 public enum TILE_TYPE {
 	WALL, //cannot path through a wall
 	PEDESTRIAN_WALKWAY, //can path through pedestrian hallway from any direction to any direction

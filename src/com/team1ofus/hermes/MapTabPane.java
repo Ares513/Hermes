@@ -19,9 +19,13 @@ public class MapTabPane extends JLayeredPane {
 		gridMap = new MapPane(currentCell);
 		pathPanel = new PathPane();
 		textPanel = new TextPane();
-		pointPanel = new PointPane();
-		
-	}
+		try {
+			pointPanel = new PointPane();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		}
 	
 	private void initialize() {
 		gridMap.setBorder(new EtchedBorder(EtchedBorder.RAISED, null, null));
