@@ -233,25 +233,46 @@ public class AStar {
 		return null;
 	}
 
-	private int getHeuristic(CellPoint current, CellPoint end){
-		return 0;
-	}
 
-	//Retrieves the neighbors of a tile
-	private ArrayList<CellPoint> getNeighbors(CellPoint currentPoint){
-		ArrayList<CellPoint> output = new ArrayList<CellPoint>();
-		int curX = (int) currentPoint.getPoint().getX();
-		int curY = (int) currentPoint.getPoint().getY();
-		for(int neiX = curX-1; neiX <= curX+1; neiX++){
-			for(int neiY = curY-1; neiY <= curY+1; neiY++){
-				output.add(new CellPoint(currentPoint.getCellName(), new Point(neiX, neiY)));
+		private int getHeuristic(CellPoint current, CellPoint end){
+		//	Point currentWorldCoords = getWorldCoords(current);
+		//	Point endWorldCoords = getWorldCoords(end);
+		//	double deltaX = endWorldCoords.getX() - currentWorldCoords.getX();
+		//	double deltaY = endWorldCoords.getY() - currentWorldCoords.getY();
+		//	return (int)Math.sqrt((deltaX*deltaX)+(deltaY*deltaY));
+			return 0;
+		}
+		
+		private Point getWorldCoords(CellPoint current) {
+			Point currentCoords = null;
+			if(current.getCellName().equals("CampusMap")){
+				currentCoords = current.getPoint();
 			}
-		}
-		if(getTileInfo(currentPoint).getOffPageNeighbor() != null){
-			System.out.println("found off page connection");
-			output.add(getTileInfo(currentPoint).getOffPageNeighbor());
+			else{
+				currentCoords = approxCoords(current.getCellName());
+			}
+			return currentCoords;
 		}
 
-		return output;
-	}
+		private Point approxCoords(String cellName) {
+			
+			return null;
+		}
+
+		private ArrayList<CellPoint> getNeighbors(CellPoint currentPoint){
+			ArrayList<CellPoint> output = new ArrayList<CellPoint>();
+			int curX = (int) currentPoint.getPoint().getX();
+			int curY = (int) currentPoint.getPoint().getY();
+			for(int neiX = curX-1; neiX <= curX+1; neiX++){
+				for(int neiY = curY-1; neiY <= curY+1; neiY++){
+					output.add(new CellPoint(currentPoint.getCellName(), new Point(neiX, neiY)));
+				}
+			}
+			if(getTileInfo(currentPoint).getOffPageNeighbor() != null){
+				System.out.println("found off page connection");
+				output.add(getTileInfo(currentPoint).getOffPageNeighbor());
+			}
+			
+			return output;
+		}
 }
