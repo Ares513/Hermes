@@ -74,7 +74,7 @@ public class MapTabPane extends JLayeredPane {
 					if(zoomScale + delta <= maxZoomOut){
 						zoomScale = maxZoomOut;
 					}
-					else if(zoomScale >=  maxZoomIn ){
+					else if(zoomScale + delta >=  maxZoomIn ){
 						zoomScale = maxZoomIn;
 					}
 					else{
