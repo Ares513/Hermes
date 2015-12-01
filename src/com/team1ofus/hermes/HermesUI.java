@@ -301,7 +301,9 @@ public class HermesUI extends JPanel{
 		layeredPane.addMouseWheelListener(new MouseAdapter() {
             @Override
             public void mouseWheelMoved(MouseWheelEvent e) {
-                double delta = -0.05f * e.getPreciseWheelRotation();
+            	int scalingNum = 2;//Increasing this number increases the amount of zoom one mousewheel "scroll" will zoom in for
+            	double zoomIncreaseFactor = (scalingNum/(double)BootstrapperConstants.TILE_WIDTH);
+                double delta = -zoomIncreaseFactor * e.getPreciseWheelRotation();
                 if(zoomScale + delta < 1){
                 	zoomScale =1;
                 }
