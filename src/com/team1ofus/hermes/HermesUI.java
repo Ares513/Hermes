@@ -75,7 +75,7 @@ public class HermesUI extends JPanel{
 	private JTextField destination;
 	private JSeparator separator;
 	private JLabel lblDirectionReadout;
-	private JTextArea directionsTextPane;
+	public JTextArea directionsTextPane;
 	private Component verticalStrut_1;
 	private Component verticalStrut_2;
 	private Component verticalStrut_3;
@@ -240,7 +240,7 @@ public class HermesUI extends JPanel{
 		scrollPane.setViewportView(directionsTextPane);
 		directionsTextPane.setLineWrap(true);
 		directionsTextPane.setBorder(new LineBorder(new Color(0, 0, 0)));
-		directionsTextPane.setText(createText());
+		//directionsTextPane.setText(createText());
 		directionsTextPane.setEditable(false);
 		directionsTextPane.setRows(20);
 		directionsTextPane.setColumns(18);
@@ -379,13 +379,17 @@ public class HermesUI extends JPanel{
 		repaintPanel();
 		
 	}
+	
 	//This is a dummy method to check and make sure directions will be able to load well.
 	//Can get rid of once we have directions.
-	public String createText(){
-		String text = null;
-		Random randomGenerator = new Random();
-		text = Integer.toString(randomGenerator.nextInt(10));
-		return text;
+	public void directionText(ArrayList<String> directions){
+		int size = directions.size(); 
+		for(int i =0; i < size; i++){ 
+			String direction = directions.get(i); 
+			directionsTextPane.append(direction);
+			directionsTextPane.append("\n");
+		//	directionsTextPane.line
+		} 
 	}
 	
 	public PathPane getPathPanel(){
