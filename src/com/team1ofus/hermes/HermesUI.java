@@ -75,7 +75,7 @@ public class HermesUI extends JPanel{
 	private JTextField destination;
 	private JSeparator separator;
 	private JLabel lblDirectionReadout;
-	private JTextArea directionsTextPane;
+	public JTextArea directionsTextPane;
 	private Component verticalStrut_1;
 	private Component verticalStrut_2;
 	private Component verticalStrut_3;
@@ -193,7 +193,7 @@ public class HermesUI extends JPanel{
 		interacactionpanel.setLayout(null);
 
 		verticalBox = Box.createVerticalBox();
-		verticalBox.setBounds(13, 5, 203, 400);
+		verticalBox.setBounds(13, 5, 275, 400);
 		interacactionpanel.add(verticalBox);
 
 		verticalStrut_1 = Box.createVerticalStrut(20);
@@ -239,7 +239,7 @@ public class HermesUI extends JPanel{
 		scrollPane.setViewportView(directionsTextPane);
 		directionsTextPane.setLineWrap(true);
 		directionsTextPane.setBorder(new LineBorder(new Color(0, 0, 0)));
-		directionsTextPane.setText(createText());
+		//directionsTextPane.setText(createText());
 		directionsTextPane.setEditable(false);
 		directionsTextPane.setRows(20);
 		directionsTextPane.setColumns(18);
@@ -256,7 +256,7 @@ public class HermesUI extends JPanel{
 		zoomOutBtn.setIcon(new ImageIcon(HermesUI.class.getResource("/com/team1ofus/hermes/zoomout25.png")));
 
 		tabbedPane = new JTabbedPane(JTabbedPane.TOP);
-		tabbedPane.setBounds(230, 0, BootstrapperConstants.FRAME_WIDTH-BootstrapperConstants.PANEL_SIZE, BootstrapperConstants.FRAME_HEIGHT);
+		tabbedPane.setBounds(BootstrapperConstants.PANEL_SIZE, 0, BootstrapperConstants.FRAME_WIDTH-BootstrapperConstants.PANEL_SIZE, BootstrapperConstants.FRAME_HEIGHT);
 		frameHermes.getContentPane().add(tabbedPane);
 
 		gridMap = new MapPane(currentCell);
@@ -265,7 +265,12 @@ public class HermesUI extends JPanel{
 		pathPanel = new PathPane();
 		textPanel = new TextPane();
 
-		pointPanel = new PointPane();
+		try {
+			pointPanel = new PointPane();
+		} catch (IOException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
 
 		pathPanel.setBounds(0, 0, frameWidth-panelSize, frameHeight);
 		textPanel.setBounds(0, 0, frameWidth-panelSize, frameHeight);
@@ -377,13 +382,17 @@ public class HermesUI extends JPanel{
 		repaintPanel();
 
 	}
+	
 	//This is a dummy method to check and make sure directions will be able to load well.
 	//Can get rid of once we have directions.
-	public String createText(){
-		String text = null;
-		Random randomGenerator = new Random();
-		text = Integer.toString(randomGenerator.nextInt(10));
-		return text;
+	public void directionText(ArrayList<String> directions){
+		int size = directions.size(); 
+		for(int i =0; i < size; i++){ 
+			String direction = directions.get(i); 
+			directionsTextPane.append(direction);
+			directionsTextPane.append("\n");
+		//	directionsTextPane.line
+		} 
 	}
 
 	public PathPane getPathPanel(){

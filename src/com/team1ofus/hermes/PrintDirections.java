@@ -16,10 +16,11 @@ public class PrintDirections {
 	public PrintDirections() { 
 	
 	}	 
-	public void parseDirections(ArrayList<CellPoint> AStarDirections){
+	public ArrayList<String> parseDirections(ArrayList<CellPoint> AStarDirections){
 		ArrayList<String> statesList = stateList(AStarDirections); 
 		ArrayList<Directions> directionsList = route(statesList);
-		ArrayList<Directions> finalList = routePrintOut(directionsList); 
+		ArrayList<String> finalList = routePrintOut(directionsList); 
+		return finalList; 
 	}
 	
 	/* 
@@ -43,12 +44,16 @@ public class PrintDirections {
 	 * Takes a list of directions that have a heading, and distances.
 	 * Adds in colloquial turn instructions to list of directions.
 	 */
-	private ArrayList<Directions> routePrintOut(ArrayList<Directions> dList){ 
+	private ArrayList<String> routePrintOut(ArrayList<Directions> dList){ 
 		DecimalFormat df = new DecimalFormat("#.00");  
 		df.setRoundingMode(RoundingMode.CEILING);
+		
+		ArrayList<String> humanReadableDirections = new ArrayList<String>(); 
+		
 		int dListSize = dList.size(); 
 		int prevDegree = 0;  
 		double totalDistance = 0; 
+		
 		for(int i = 0; i < dListSize; i++){ 
 			Directions currentInstruction = dList.get(i); 
 			double currentDistance = currentInstruction.getDistance(); 
@@ -77,11 +82,12 @@ public class PrintDirections {
 				currentInstruction.turnInstruction = newInstruction; 
 				prevDegree = toDegrees(currentState); 
 				}
-				
+			humanReadableDirections.add(currentInstruction.turnInstruction); 
 			//System.out.println(currentInstruction.turnInstruction);
 			}
+			humanReadableDirections.add(estimatedTime(totalDistance)); 
 		  //	System.out.println(estimatedTime(totalDistance));  
-			return dList;
+			return humanReadableDirections;
 		}	
 	
 	
