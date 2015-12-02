@@ -123,6 +123,8 @@ public class HermesUI extends JPanel implements IHumanInteractionListener{
             .build();
 	
 	private SearchReadyEventObject searchEvents;
+	private ArrayList<String> cellsInPath = new ArrayList<String>();
+	private ArrayList<ArrayList<CellPoint>> segmentedPath = new ArrayList<ArrayList<CellPoint>>();
             
 	public HermesUI(ArrayList<PathCell> viewCells, ArrayList<Record> locationNameInfoRecords) {
 		this.locationNameInfoRecords = locationNameInfoRecords;
@@ -151,14 +153,58 @@ public class HermesUI extends JPanel implements IHumanInteractionListener{
 			});
         frameHermes.setVisible(true);
 	}
-	//Would just skip this and go straight to MyPanel's drawPath, but I'm afraid that it will break and I don't have time to fix it
-	 void drawPath(ArrayList<CellPoint> path){
-		 for(MapTabPane m : tabbedPane.getSelectedTabPane().tabPanes) {
-			 m.getPathPane().drawPath(path, m.getCurrentCell().cellName);
-			 
+	
+	/*
+	 * This splits the path and sends them off to the correct map
+	 */
+	public void drawPath(ArrayList<CellPoint> path){/* Test points
+		 ArrayList<CellPoint> test = new ArrayList<CellPoint>();
+		 test.add(new CellPoint("test1.map", new Point(20, 20)));
+		 test.add(new CellPoint("test1.map", new Point(22, 20)));
+		 test.add(new CellPoint("test2.map", new Point(13, 12)));
+		 test.add(new CellPoint("test2.map", new Point(7, 25)));*/
+		 splitPath(path);
+		 for(int i = 0; i < cellsInPath.size(); i++) {
+			 tabbedPane.getSelectedTabPane().setSelectedIndex(tabbedPane.getSelectedTabPane().getIndexOfTab(cellsInPath.get(i)));
+			 tabbedPane.getSelectedTabPane().getSelectedTabPane().getPathPane().drawPath(segmentedPath.get(i), cellsInPath.get(i));
 		 }
 		 repaintPanel();
 	    }
+	
+	/*
+	 * Splits path based on names in cellpoints
+	 * cellsInPath contains the map names, segmentedPath paths for those respective maps
+	 * sizes of those arrays are always the same, indexes always correspond
+	 */
+	private void splitPath(ArrayList<CellPoint> path) {
+		cellsInPath.clear();
+		segmentedPath.clear();
+		
+		int subpathStart = 0;
+		int subpathFinish = path.size();
+		cellsInPath.add(path.get(0).getCellName());
+		
+		for(int i = 1; i < path.size(); i++){
+			if(!cellsInPath.contains(path.get(i).getCellName())) {
+				subpathFinish = i - 1;
+				segmentedPath.add(populateSubpath(path, subpathStart, subpathFinish));
+				cellsInPath.add(path.get(i).getCellName());
+				subpathStart = i;
+			}
+		}
+		subpathFinish = path.size() - 1;
+		segmentedPath.add(populateSubpath(path, subpathStart, subpathFinish));
+	}
+	
+	/*
+	 * Just populates a subpath
+	 */
+	private ArrayList<CellPoint> populateSubpath(ArrayList<CellPoint> path, int start, int finish) {
+		ArrayList<CellPoint> subpath = new ArrayList<CellPoint>();
+		for(int i = start; i <= finish; i++)
+			subpath.add(path.get(i));
+		return subpath;
+	}
 
 	//Allows us to paint the image within the JLabel	
 	@Override
@@ -346,8 +392,7 @@ public class HermesUI extends JPanel implements IHumanInteractionListener{
 		tabbedPane.addNewTab("All Cells", null, new MapTabbedPane<MapTabPane>(JTabbedPane.BOTTOM), null);
 		tabbedPane.setSelectedIndex(0);
 		for(int i=0; i<allCells.size(); i++) {
-			
-			tabbedPane.getSelectedTabPane().addNewTab(allCells.get(i).getDisplayName(), null, new MapTabPane(allCells.get(i)), null);
+			tabbedPane.getSelectedTabPane().addNewTab(allCells.get(i).getName(), null, new MapTabPane(allCells.get(i)), null);
 			tabbedPane.getSelectedTabPane().setSelectedIndex(i);
 			tabbedPane.getSelectedTabPane().getSelectedTabPane().humanInteractive.addListener(this, "HermesUI to " + allCells.get(i).getName());
 		}
@@ -391,10 +436,11 @@ public class HermesUI extends JPanel implements IHumanInteractionListener{
 		
 		removeButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
+				drawPath(null);/*
 				if(tabbedPane.getSelectedIndex() != 0)
 					tabbedPane.removeTabAt(tabbedPane.getSelectedIndex());
 				else
-					DebugManagement.writeNotificationToLog("Can't delete the main pane");
+					DebugManagement.writeNotificationToLog("Can't delete the main pane");*/
 			}
 		});
 		
