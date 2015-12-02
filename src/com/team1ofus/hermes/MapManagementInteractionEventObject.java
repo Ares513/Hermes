@@ -11,10 +11,10 @@ public class MapManagementInteractionEventObject {
 	public void addListener(IMapManagementInteractionListener toAdd){
 		listeners.add(toAdd);
 		}
-	public void doPathComplete(ArrayList<CellPoint> directions) {
+	public void doPathComplete(ArrayList<CellPoint> directions, int cost) {
 		
 		for(IMapManagementInteractionListener UL : listeners){
-			UL.doPathComplete(directions);
+			UL.doPathComplete(directions, cost);
 			DebugManagement.writeNotificationToLog("onAStarPathCompleteEvent Called again");
 			
 		}

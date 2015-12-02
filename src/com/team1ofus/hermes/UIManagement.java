@@ -43,8 +43,8 @@ public class UIManagement implements IHumanInteractionListener, IMapManagementIn
 		events.doWindowReady(allCells);
 	}
 	
-	public void doPathComplete(ArrayList<CellPoint> directions) {
-		DebugManagement.writeNotificationToLog("Path received, contents "  + directions);
+	public void doPathComplete(ArrayList<CellPoint> directions, int cost) {
+		DebugManagement.writeNotificationToLog("Path received, contents "  + directions + " total cost " + Integer.toString(cost) + " units");
 		window.drawPath(directions);
 		ArrayList<String> listOfDirections = printList.parseDirections(directions);
 		window.directionText(listOfDirections);
@@ -72,6 +72,8 @@ public class UIManagement implements IHumanInteractionListener, IMapManagementIn
 	//runs when user picks a destination point using the search feature
 	@Override
 	public void onSearchReady(Record start, Record destination){
+		first = null;
+		second = null;
 		DebugManagement.writeNotificationToLog("Entering function onSearchReady. \nStartRecord: " + start.getVal() + "\nDestRecord: " + destination.getVal());
 		CellPoint startPoint = null;
 		CellPoint destPoint = null;
@@ -79,14 +81,19 @@ public class UIManagement implements IHumanInteractionListener, IMapManagementIn
 			if (pc.getName().equals(start.getCellName())){
 				startPoint = locationRecordToPoint(pc, start);
 				//startPoint.getPoint()
-				window.getPointPane().setFirst(startPoint.getPoint());
+				//window.getPointPane().setFirst(startPoint.getPoint());
+				
 				
 			}
 		}
 		for (PathCell pc : allCells){
+			if(destination.getFields().contains("Any Male Bathroom")) {
+				findNearestLocation(startPoint, "AutoGen");
+				return; //we're done.
+			}
 			if (pc.getName().equals(destination.getCellName())){
 				destPoint = locationRecordToPoint(pc, destination);
-				window.getPointPane().setSecond(destPoint.getPoint());
+				//window.getPointPane().setSecond(destPoint.getPoint());
 			}
 		}
 		events.doPathReady(startPoint, destPoint);
@@ -104,5 +111,10 @@ public class UIManagement implements IHumanInteractionListener, IMapManagementIn
 		}
 		DebugManagement.writeLineToLog(SEVERITY_LEVEL.FATAL, "Location Record not found. Returning Null. This will almost certainly cause a crash.");
 		return null;
+	}
+
+	@Override
+	public void findNearestLocation(CellPoint start, String filter) {
+		events.findNearestLocation(start, filter);
 	}
 }

@@ -20,4 +20,9 @@ public class HumanInteractionEventObject {
 		}
 	
 	}
+	public void findNearestLocation(CellPoint start, String filter) {
+		for(IHumanInteractionListener UL : listeners){
+			UL.findNearestLocation(start, filter);
+		}
+	}
 }
