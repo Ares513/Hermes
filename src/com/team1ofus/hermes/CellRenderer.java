@@ -48,7 +48,7 @@ public class CellRenderer {
 
 		DebugManagement.writeNotificationToLog("The previous scale was");
 		oldTotalWidth= (int)((BootstrapperConstants.TILE_WIDTH * drawnCell.tiles.length ) * prevScale);
-		DebugManagement.writeNotificationToLog("drawnCell.tiles.length shows:");
+		//DebugManagement.writeNotificationToLog("drawnCell.tiles.length: " + );
 		//DebugManagement.writeNotificationToLog("The previous total width was:");
 		oldTotalHeight= (int)((BootstrapperConstants.TILE_HEIGHT * drawnCell.tiles[1].length ) * prevScale);
 		DebugManagement.writeNotificationToLog("drawnCell.tiles[1].length shows:");
@@ -58,11 +58,13 @@ public class CellRenderer {
 		newTotalHeight= (int)((BootstrapperConstants.TILE_HEIGHT * drawnCell.tiles[1].length ) * scale);
 		//DebugManagement.writeNotificationToLog("The current total height is:");
 		difWidth = (newTotalWidth - oldTotalWidth)/2;
+		System.out.println(difWidth);
 		//DebugManagement.writeNotificationToLog("The current x offset is:");
 		difHeight = (newTotalHeight - oldTotalHeight)/2;
+		System.out.println(difHeight);
 		//DebugManagement.writeNotificationToLog("The current y offset is:");
 		
-		incrementOffset(difWidth,difHeight, width, height);
+		incrementOffset(difWidth,difHeight, fwidth, fheight);
 		prevScale = scale;
 
 	}
@@ -179,6 +181,7 @@ public class CellRenderer {
 		//some optimizations to be made here
 		DebugManagement.writeNotificationToLog("Offset is : " + offset.toString());
 		offset.translate(dx, dy);
+
 		if(offset.x < 0) {
 			offset.x = 0;
 		} else if(offset.x > drawnCell.tiles.length * width - (windowWidth)) {
@@ -186,12 +189,21 @@ public class CellRenderer {
 			int maxX = drawnCell.tiles.length * width - (windowWidth);
 			offset.x = maxX ;
 		}
+
 		//The panelSizae is the size of the side panel. If we need to change that, alter that variable.
+
 		if(offset.y < 0) {
 			offset.y = 0;
 		} else if(offset.y > drawnCell.tiles[1].length * height - windowHeight) {
 			offset.y = drawnCell.tiles[1].length * height - windowHeight; 
 
 		}	
+
+		if(offset.x < 0) {
+			offset.x = 0;
+		}
+		if(offset.y < 0) {
+			offset.y = 0;
+		}
 	}
 }
