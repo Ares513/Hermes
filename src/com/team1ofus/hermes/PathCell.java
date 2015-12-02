@@ -26,6 +26,7 @@ import com.team1ofus.apollo.TILE_TYPE;
 public class PathCell{
 	
 	public String cellName = null;
+	String displayName;
     private static final long serialVersionUID = 1L;
     public Tile[][] tiles;
     
@@ -58,9 +59,10 @@ public class PathCell{
     }
     
     //an unpleasantly long one for 
-	public PathCell(String name, int width, int height, com.team1ofus.apollo.DataTile[][] dataTiles, ArrayList<EntryPoint> entryPoints,
+	public PathCell(String name, String display, int width, int height, com.team1ofus.apollo.DataTile[][] dataTiles, ArrayList<EntryPoint> entryPoints,
 			ArrayList<LocationNameInfo> namedPoints, ArrayList<EntryPointReference> entryPointRefs) {
         this.cellName = name;
+        this.displayName = display;
         tiles = new Tile[width][height];
     	for(int i=0; i<width; i++) {
     		for(int j=0; j<height; j++) {
@@ -136,10 +138,13 @@ public class PathCell{
 	public String getName(){
 		return cellName;
 	}
-	
+	public String getDisplayName() {
+		return displayName;
+	}
 	public ArrayList<EntryPoint> getEntryPoints(){
 		return entryPoints;
 	}
+	
 	public void addEntryPoint(EntryPoint anEntryPoint){
 		entryPoints.add(anEntryPoint);
 	}

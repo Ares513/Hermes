@@ -124,11 +124,12 @@ public class MapTabPane extends JLayeredPane {
 				);
 				//This mouse event handles point selection
 				this.addMouseListener(new MouseAdapter() {
-
+					
 					@Override
 					public void mouseClicked(MouseEvent e) {
 						Point picked = mapPanel.render.pickTile(e.getX() , e.getY());
 						if(SwingUtilities.isLeftMouseButton(e)) {
+							DebugManagement.writeNotificationToLog("Point picked at " + picked.toString() + " in cell " + currentCell.cellName);
 							processClick(picked);
 						}  
 					}
@@ -228,7 +229,7 @@ public class MapTabPane extends JLayeredPane {
 
 				repaintPanel();
 			}
-			humanInteractive.doClick(picked.x, picked.y);
+			humanInteractive.doClick(new CellPoint(currentCell.getName(), picked));
 		}
 	}
 		

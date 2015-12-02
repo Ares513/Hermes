@@ -22,17 +22,16 @@ public class MapManagement implements IUIManagementInteractionListener, IAStarIn
 	}
 
 	@Override
-	public void onPathReady(int cellIndex, Point first, Point second) {
+	public void onPathReady(CellPoint first, CellPoint second) {
 		if(pathfindingSystem == null) {//how does this even happen?
 			assert(false);
 		}
+		DebugManagement.writeNotificationToLog("onPathReady event called in MapManagement. Values " + first.toString() + second.toString());
 		pathfindingSystem = new AStar(cells);
 		pathfindingSystem.events.registerListener(this);
-		CellPoint a = new CellPoint(cells.get(cellIndex).getName(), first);
-		CellPoint b = new CellPoint(cells.get(cellIndex).getName(), second);
-		pathfindingSystem.getPath(a,b);
+		pathfindingSystem.getPath(first, second);
 	}
-	public void onWindowReady(int cellIndex, ArrayList<PathCell> loaded) {
+	public void onWindowReady(ArrayList<PathCell> loaded) {
 		pathfindingSystem = new AStar(loaded);
 		pathfindingSystem.events.registerListener(this);
 		cells.addAll(loaded);
