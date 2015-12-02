@@ -53,7 +53,7 @@ public class CellRenderer {
 		width =  (int)(BootstrapperConstants.TILE_WIDTH * scale);
 		height = (int)(BootstrapperConstants.TILE_HEIGHT * scale);
 
-		
+		/*
 		DebugManagement.writeNotificationToLog("The previous scale was");
 		oldTotalWidth= (int)((BootstrapperConstants.TILE_WIDTH * drawnCell.tiles.length ) * prevScale);
 		//DebugManagement.writeNotificationToLog("drawnCell.tiles.length: " + );
@@ -72,7 +72,7 @@ public class CellRenderer {
 		
 		incrementOffset(difWidth, difHeight, fwidth, fheight);
 		prevScale = scale;
-		
+		*/
 	}
 
 	//Renders the tiles
