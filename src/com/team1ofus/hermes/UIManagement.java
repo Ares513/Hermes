@@ -85,11 +85,14 @@ public class UIManagement implements IHumanInteractionListener, IMapManagementIn
 		for (PathCell pc : allCells){
 			if (pc.getName().equals(start.getCellName())){
 				startPoint = locationRecordToPoint(pc, start);
+				window.getPointPane().setFirst(startPoint);
+				
 			}
 		}
 		for (PathCell pc : allCells){
 			if (pc.getName().equals(destination.getCellName())){
 				destPoint = locationRecordToPoint(pc, destination);
+				window.getPointPane().setSecond(destPoint);
 			}
 		}
 		events.doPathReady(0, startPoint, destPoint);
