@@ -39,6 +39,7 @@ import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Random;
+import java.util.function.Predicate;
 import java.util.List;
 
 import javax.swing.JButton;
@@ -61,6 +62,7 @@ import javax.swing.JTextArea;
 import javax.swing.border.LineBorder;
 import completely.AutocompleteEngine;
 import com.sun.xml.internal.ws.api.pipe.Engine;
+import com.team1ofus.apollo.EntryPoint;
 import com.team1ofus.apollo.TILE_TYPE;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
@@ -152,8 +154,11 @@ public class HermesUI extends JPanel implements IHumanInteractionListener{
 	}
 	//Would just skip this and go straight to MyPanel's drawPath, but I'm afraid that it will break and I don't have time to fix it
 	 void drawPath(ArrayList<CellPoint> path){
-		 tabbedPane.getSelectedTabPane().getSelectedTabPane().getPathPane().drawPath(path);
-		 repaintPanel();;
+		 for(MapTabPane m : tabbedPane.getSelectedTabPane().tabPanes) {
+			 m.getPathPane().drawPath(path, m.getCurrentCell().cellName);
+			 
+		 }
+		 repaintPanel();
 	    }
 
 	//Allows us to paint the image within the JLabel	
