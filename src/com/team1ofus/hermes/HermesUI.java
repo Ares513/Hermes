@@ -78,15 +78,14 @@ public class HermesUI extends JPanel implements IHumanInteractionListener{
 	private JFrame frameHermes;
 	//private PathPane pathPanel;
 	//private PointPane pointPanel;
-	private Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
-	private int frameWidth = screenSize.width-200;
-	private int frameHeight = screenSize.height-200;
+	private int frameWidth = BootstrapperConstants.FRAME_WIDTH;
+	private int frameHeight = BootstrapperConstants.FRAME_HEIGHT;
 	//private MapPane gridMap;
 	int scrollSpeed = 5;
-	private PathCell currentCell;
+	private ArrayList<PathCell> allCells = new ArrayList<PathCell>();
 	public HumanInteractionEventObject humanInteractive; 
-	private Point first; //for showing in the UI which points were clicked.
-	private Point second; 
+	private CellPoint first; //for showing in the UI which points were clicked.
+	private CellPoint second; 
 	//private JLayeredPane layeredPane;
 	private boolean dragging;
 	private Point lastDragLocation;
@@ -123,18 +122,18 @@ public class HermesUI extends JPanel implements IHumanInteractionListener{
 	
 	private SearchReadyEventObject searchEvents;
             
-	public HermesUI(PathCell viewCell, ArrayList<Record> locationNameInfoRecords) {
+	public HermesUI(ArrayList<PathCell> viewCells, ArrayList<Record> locationNameInfoRecords) {
 		this.locationNameInfoRecords = locationNameInfoRecords;
 		
 		this.searchEvents = new SearchReadyEventObject(); 
 		this.humanInteractive = new HumanInteractionEventObject();
-		initialize(viewCell);
+		initialize(viewCells);
 	}
 	/*
 	 * initialize the Hermes UI
 	 */
-	public void initialize(PathCell viewCell) {		
-		currentCell = viewCell;
+	public void initialize(ArrayList<PathCell> viewCells) {		
+		allCells = viewCells;
 		buildControl();
 		frameHermes.addKeyListener(new KeyAdapter() {
 			@Override
@@ -316,7 +315,6 @@ public class HermesUI extends JPanel implements IHumanInteractionListener{
 		zoomInButton.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				System.out.println("Plus Button pressed");
 				int zoomin = -1;
 				tabbedPane.getSelectedTabPane().getSelectedTabPane().zoom(zoomin);
 			}
@@ -328,7 +326,6 @@ public class HermesUI extends JPanel implements IHumanInteractionListener{
 		zoomOutBtn.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				System.out.println("Minus Button pressed");
 				int zoomout = 1;
 				tabbedPane.getSelectedTabPane().getSelectedTabPane().zoom(zoomout);
 			}
@@ -341,33 +338,44 @@ public class HermesUI extends JPanel implements IHumanInteractionListener{
 		
 		
 		//TODO Make display the name of the cell, i.e. currentCell.getName()
-		tabbedPane.addNewTab("New tab", null, new MapTabbedPane<MapTabPane>(JTabbedPane.BOTTOM), null);
-		tabbedPane.getSelectedTabPane().addNewTab("Tab in tab", null, new MapTabPane(currentCell), null);
-		tabbedPane.getSelectedTabPane().getSelectedTabPane().humanInteractive.addListener(this);
-		//Adding more tabs for testing
-		tabbedPane.addNewTab("tab 2", null, new MapTabbedPane<MapTabPane>(JTabbedPane.BOTTOM), null);
-		tabbedPane.setSelectedIndex(1);
-		tabbedPane.getSelectedTabPane().addNewTab("1", null, new MapTabPane(currentCell), null);
-		tabbedPane.getSelectedTabPane().addNewTab("2", null, new MapTabPane(currentCell), null);
-		
-		tabbedPane.addNewTab("super tab 3", null, new MapTabbedPane<MapTabPane>(JTabbedPane.BOTTOM), null);
-		tabbedPane.setSelectedIndex(2);
-		tabbedPane.getSelectedTabPane().addNewTab("poop", null, new MapTabPane(currentCell), null);
-		tabbedPane.getSelectedTabPane().addNewTab("shit", null, new MapTabPane(currentCell), null);
-		tabbedPane.getSelectedTabPane().addNewTab("scat", null, new MapTabPane(currentCell), null);
-		tabbedPane.getSelectedTabPane().setSelectedIndex(2);
+		tabbedPane.addNewTab("All Cells", null, new MapTabbedPane<MapTabPane>(JTabbedPane.BOTTOM), null);
 		tabbedPane.setSelectedIndex(0);
+		for(int i=0; i<allCells.size(); i++) {
+			
+			tabbedPane.getSelectedTabPane().addNewTab(allCells.get(i).getDisplayName(), null, new MapTabPane(allCells.get(i)), null);
+			tabbedPane.getSelectedTabPane().setSelectedIndex(i);
+			tabbedPane.getSelectedTabPane().getSelectedTabPane().humanInteractive.addListener(this, "HermesUI to " + allCells.get(i).getName());
+		}
+	
+	
+		//chaff
+//		tabbedPane.addNewTab("New tab", null, new MapTabbedPane<MapTabPane>(JTabbedPane.BOTTOM), null);
+//		tabbedPane.getSelectedTabPane().addNewTab("Tab in tab", null, new MapTabPane(currentCell), null);
+//		tabbedPane.getSelectedTabPane().getSelectedTabPane().humanInteractive.addListener(this);
+//		//Adding more tabs for testing
+//		tabbedPane.addNewTab("tab 2", null, new MapTabbedPane<MapTabPane>(JTabbedPane.BOTTOM), null);
+//		tabbedPane.setSelectedIndex(1);
+//		tabbedPane.getSelectedTabPane().addNewTab("1", null, new MapTabPane(currentCell), null);
+//		tabbedPane.getSelectedTabPane().addNewTab("2", null, new MapTabPane(currentCell), null);
+//		
+//		tabbedPane.addNewTab("super tab 3", null, new MapTabbedPane<MapTabPane>(JTabbedPane.BOTTOM), null);
+//		tabbedPane.setSelectedIndex(2);
+//		tabbedPane.getSelectedTabPane().addNewTab("poop", null, new MapTabPane(currentCell), null);
+//		tabbedPane.getSelectedTabPane().addNewTab("shit", null, new MapTabPane(currentCell), null);
+//		tabbedPane.getSelectedTabPane().addNewTab("scat", null, new MapTabPane(currentCell), null);
+//		tabbedPane.getSelectedTabPane().setSelectedIndex(2);
+//		tabbedPane.setSelectedIndex(0);
 		
 		//If the textpane's change, add HermesUI as a listener TODO: this is probably wrong
 		tabbedPane.addChangeListener(new ChangeListener() {
 			@Override
 			public void stateChanged(ChangeEvent e) {
-				addListenerToSelectedTab();
+				//addListenerToSelectedTab();
 				tabbedPane.getSelectedTabPane().addChangeListener(new ChangeListener() {
 
 					@Override
 					public void stateChanged(ChangeEvent e) {
-						addListenerToSelectedTab();
+						//addListenerToSelectedTab();
 						
 					}
 
@@ -450,16 +458,23 @@ public class HermesUI extends JPanel implements IHumanInteractionListener{
 	}
 
 	@Override
-	public void onTileClicked(int x, int y) {
-		humanInteractive.doClick(x, y);
+	public void onTileClicked(CellPoint input) {
+		DebugManagement.writeNotificationToLog("HermesUI processed a onTileClicked event.");
+		//Ensure that the CellPoint's target cell is the same as the currently viewed cell.
+		String currentCellName = tabbedPane.getSelectedTabPane().getSelectedTabPane().getCurrentCell().getName();
+		DebugManagement.writeNotificationToLog("The cell name of the window was " + currentCellName + " and the input cell was " + input.getCellName());
+		
+		if(currentCellName == input.getCellName()) {
+			humanInteractive.doClick(input);
+			
+		}
 	}
 	
 	public void addListenerToSelectedTab() {
-		tabbedPane.getSelectedTabPane().getSelectedTabPane().humanInteractive.addListener(this);
+		tabbedPane.getSelectedTabPane().getSelectedTabPane().humanInteractive.addListener(this, "HermesUI through addListenerToSelectedTab");
 	}
 	
 	class SearchListener implements ActionListener{
-
 		@Override
 		public void actionPerformed(ActionEvent e) {
 			String startLocation = (String) startPoint.getSelectedItem();

@@ -25,7 +25,7 @@ public class MapTabbedPane<T extends Component> extends JTabbedPane {
 		super(top);
 		tabPanes = new ArrayList<T>();
 		cell = currentCell;
-		System.out.println(currentCell.getName());
+		DebugManagement.writeNotificationToLog(currentCell.getName());
 	}
 	
 	

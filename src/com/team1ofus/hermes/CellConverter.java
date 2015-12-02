@@ -33,7 +33,7 @@ public class CellConverter {
 				entryPoints.add(new com.team1ofus.hermes.EntryPoint(e.getName(), e.getLocation()));
 				
 			}
-			PathCell converted = new PathCell(current.getID(),  current.getWidth(), current.getHeight(), current.getTile(), entryPoints, locations, entryPointRefs);
+			PathCell converted = new PathCell(current.getID(), current.getDisplayName(),  current.getWidth(), current.getHeight(), current.getTile(), entryPoints, locations, entryPointRefs);
 			pathCells.add(converted);
 		}
 		return pathCells;

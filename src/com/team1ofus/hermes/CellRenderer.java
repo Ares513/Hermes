@@ -1,10 +1,12 @@
 package com.team1ofus.hermes;
 
 import java.awt.Color;
+import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.Point;
+import java.awt.Toolkit;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
@@ -14,9 +16,12 @@ import javax.imageio.ImageIO;
  * Pasted from Apollo
  */
 public class CellRenderer {
+	private Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
+	private int frameWidth = screenSize.width-200;
+	private int frameHeight = screenSize.height-200;
 	private int width = BootstrapperConstants.TILE_WIDTH;
 	private int height = BootstrapperConstants.TILE_HEIGHT;
-	public double prevScale = 1D;
+	public double prevScale = 1;
 	int oldTotalWidth;
 	int oldTotalHeight;
 	int newTotalWidth;
@@ -42,30 +47,22 @@ public class CellRenderer {
 		height = (int)(BootstrapperConstants.TILE_HEIGHT * scale);
 
 		DebugManagement.writeNotificationToLog("The previous scale was");
-		System.out.println(prevScale);
-
-		
 		oldTotalWidth= (int)((BootstrapperConstants.TILE_WIDTH * drawnCell.tiles.length ) * prevScale);
+		DebugManagement.writeNotificationToLog("drawnCell.tiles.length shows:");
 		//DebugManagement.writeNotificationToLog("The previous total width was:");
-		//System.out.println(oldTotalWidth);
 		oldTotalHeight= (int)((BootstrapperConstants.TILE_HEIGHT * drawnCell.tiles[1].length ) * prevScale);
+		DebugManagement.writeNotificationToLog("drawnCell.tiles[1].length shows:");
 		//DebugManagement.writeNotificationToLog("The previous total height was:");
-		//System.out.println(oldTotalHeight);
 		newTotalWidth= (int)((BootstrapperConstants.TILE_WIDTH * drawnCell.tiles.length ) * scale);
 		//DebugManagement.writeNotificationToLog("The current total width is:");
-		//System.out.println(newTotalWidth);
 		newTotalHeight= (int)((BootstrapperConstants.TILE_HEIGHT * drawnCell.tiles[1].length ) * scale);
 		//DebugManagement.writeNotificationToLog("The current total height is:");
-		//System.out.println(newTotalHeight);
 		difWidth = (newTotalWidth - oldTotalWidth)/2;
 		//DebugManagement.writeNotificationToLog("The current x offset is:");
-		//System.out.println(difWidth);
 		difHeight = (newTotalHeight - oldTotalHeight)/2;
 		//DebugManagement.writeNotificationToLog("The current y offset is:");
-		//System.out.println(difHeight);
 		
-		//NEED TO GET difWidth and difHeight over to pathpane to add to its offsets in drawLine
-		incrementOffset(difWidth,difHeight, fwidth, fheight);
+		incrementOffset(difWidth,difHeight, width, height);
 		prevScale = scale;
 
 	}
@@ -121,9 +118,12 @@ public class CellRenderer {
 					g.drawImage(spriteImages[14], i*width - offset.x, j*height - offset.y, width, height, null);
 					break;
 				case BUSH:
-					g.drawImage(spriteImages[17], i*width - offset.x, j*height - offset.y, width, height, null);
+					g.drawImage(spriteImages[16], i*width - offset.x, j*height - offset.y, width, height, null);
 					break;
 				case TREE:
+					g.drawImage(spriteImages[17], i*width - offset.x, j*height - offset.y, width, height, null);
+					break;
+				case EXTRA_TILE_TYPE_1:
 					g.drawImage(spriteImages[18], i*width - offset.x, j*height - offset.y, width, height, null);
 					break;
 				}
