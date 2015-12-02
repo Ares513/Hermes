@@ -87,8 +87,22 @@ public class UIManagement implements IHumanInteractionListener, IMapManagementIn
 			}
 		}
 		for (PathCell pc : allCells){
-			if(destination.getFields().contains("Any Male Bathroom")) {
-				findNearestLocation(startPoint, "AutoGen");
+			if(destination.getFields().contains(BootstrapperConstants.MALE_BATHROOM_IDENTIFIER)) {
+				findNearestLocation(startPoint, "Male Bathroom");
+				return; //we're done.
+			}
+			DebugManagement.writeNotificationToLog(destination.getFields().toString());
+			DebugManagement.writeNotificationToLog(Boolean.toString(destination.getFields().contains(BootstrapperConstants.FEMALE_BATHROOM_IDENTIFIER)));
+			if(destination.getFields().contains(BootstrapperConstants.FEMALE_BATHROOM_IDENTIFIER)) {
+				findNearestLocation(startPoint, "Female Bathroom");
+				return; //we're done.
+			}
+			if(destination.getFields().contains(BootstrapperConstants.UNISEX_BATHROOM_IDENTIFIER)) {
+				findNearestLocation(startPoint, "Unisex Bathroom");
+				return; //we're done.
+			}
+			if(destination.getFields().contains(BootstrapperConstants.BENCH_IDENTIFIER)) {
+				findNearestLocation(startPoint, "Bench");
 				return; //we're done.
 			}
 			if (pc.getName().equals(destination.getCellName())){
