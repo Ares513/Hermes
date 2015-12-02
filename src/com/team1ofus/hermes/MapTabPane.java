@@ -92,7 +92,7 @@ public class MapTabPane extends JLayeredPane {
 					else{
 						System.out.println(zoomScale);
 						zoomScale += delta;
-						mapPanel.render.zoom(zoomScale, BootstrapperConstants.FRAME_WIDTH, BootstrapperConstants.FRAME_HEIGHT);
+						mapPanel.render.zoom(zoomScale, mapPanel.getWidth(), mapPanel.getHeight());
 						pathPanel.zoom(zoomScale);
 						//textPanel.zoom(zoomScale); TODO scale with text
 						pointPanel.zoom(zoomScale);
