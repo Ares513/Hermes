@@ -135,6 +135,9 @@ public class PathCell{
 	    		else if(type.equals(TILE_TYPE.CLASSROOM)){
 	    			tiles[i][j] = new Classroom(name, new Point(i, j));
 	    		}
+	    		else if(type.equals(TILE_TYPE.EXTRA_TILE_TYPE_1)){
+	    			tiles[i][j] = new Road(name, new Point(i, j));
+	    		}
 	    		else{
 	    			tiles[i][j] = new Wall(name, new Point(i, j));
 	    		}
