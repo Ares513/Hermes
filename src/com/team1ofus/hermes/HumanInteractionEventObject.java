@@ -7,14 +7,15 @@ public class HumanInteractionEventObject {
 	}
 	
 	private List<IHumanInteractionListener> listeners = new ArrayList<IHumanInteractionListener>();
-	
-	public void addListener(IHumanInteractionListener toAdd){
+	//DebugID is to help narrow down who is adding listeners
+	public void addListener(IHumanInteractionListener toAdd, String debugID){
+		DebugManagement.writeNotificationToLog("HumanInteractionListener added, name " + debugID);
 		listeners.add(toAdd);
 		}
 	public void doClick(CellPoint clicked){
 		
 		for(IHumanInteractionListener UL : listeners){
-			DebugManagement.writeNotificationToLog("Calling tileClicked with value " + clicked.toString());
+			DebugManagement.writeNotificationToLog("Calling tileClicked with value " + clicked.getCellName() + " at " + clicked.getPoint().toString());
 			UL.onTileClicked(clicked);
 		}
 	

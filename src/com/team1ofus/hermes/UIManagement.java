@@ -38,7 +38,7 @@ public class UIManagement implements IHumanInteractionListener, IMapManagementIn
 	public JFrame frame; 
 	public void begin() {
 		window = new HermesUI(allCells, locationNameInfoRecords);
-		window.humanInteractive.addListener(this);//should be refactored
+		window.humanInteractive.addListener(this, "HermesUI");
 		window.getSearchEvents().addListener(this);
 		events.doWindowReady(allCells);
 	}
@@ -78,14 +78,19 @@ public class UIManagement implements IHumanInteractionListener, IMapManagementIn
 		for (PathCell pc : allCells){
 			if (pc.getName().equals(start.getCellName())){
 				startPoint = locationRecordToPoint(pc, start);
+				//window.getPointPane().setFirst(startPoint);
+				
 			}
 		}
 		for (PathCell pc : allCells){
 			if (pc.getName().equals(destination.getCellName())){
 				destPoint = locationRecordToPoint(pc, destination);
+				//window.getPointPane().setSecond(destPoint);
 			}
 		}
 		events.doPathReady(startPoint, destPoint);
+		first = null;
+		second = null;
 	}
 	/* converts a record output by search into a point to send to A*
 	 * Will need to be refactored to return a cellPoint soon (before multimap pathing is done).

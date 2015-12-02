@@ -210,6 +210,8 @@ public class HermesUI extends JPanel implements IHumanInteractionListener{
 		verticalStrut_1.setPreferredSize(new Dimension(0, 30));
 		verticalBox.add(verticalStrut_1);
 
+		//start search ui stuff
+		
 	    DefaultComboBoxModel<String> modelForStart = new DefaultComboBoxModel<>(  );
 	    for (Record r:locationNameInfoRecords){
 	    	modelForStart.addElement(r.getVal());
@@ -221,14 +223,13 @@ public class HermesUI extends JPanel implements IHumanInteractionListener{
 
 		verticalBox.add(startPoint);
 		//startPoint.setText("Startpoint");
-		startPoint.addKeyListener(new KeyListenerForStart());
 		
 		verticalStrut_2 = Box.createVerticalStrut(20);
 		verticalStrut_2.setPreferredSize(new Dimension(0, 15));
 		verticalBox.add(verticalStrut_2);
 
 		//String[] destinations = new String[] {"AK", "FL", "SL"};
-		// deep copy from modelForStart
+		// should be deep copy from modelForStart
 	    DefaultComboBoxModel<String> modelForDestination = new DefaultComboBoxModel<>(  );
 	    for (Record r:locationNameInfoRecords){
 	    	modelForDestination.addElement(r.getVal());
@@ -241,9 +242,10 @@ public class HermesUI extends JPanel implements IHumanInteractionListener{
 		
 		//destination.setText("Destination");
 		verticalBox.add(destination);
-		destination.addKeyListener(new KeyListenerForDestination());
 		//destination.setColumns(18);
 
+		//end search ui stuff
+		
 		verticalStrut_3 = Box.createVerticalStrut(20);
 		verticalStrut_3.setPreferredSize(new Dimension(0, 5));
 		verticalBox.add(verticalStrut_3);
@@ -310,10 +312,27 @@ public class HermesUI extends JPanel implements IHumanInteractionListener{
 		zoomInButton = new JButton("");
 		horizontalBox.add(zoomInButton);
 		zoomInButton.setIcon(new ImageIcon(HermesUI.class.getResource("/com/team1ofus/hermes/zoomin25.png")));
+		//These event handlers will handle zooming in and out based on the zoom buttons TODO Make this work
+		zoomInButton.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				System.out.println("Plus Button pressed");
+				int zoomin = -1;
+				tabbedPane.getSelectedTabPane().getSelectedTabPane().zoom(zoomin);
+			}
+		});
 
 		zoomOutBtn = new JButton("");
 		horizontalBox.add(zoomOutBtn);
 		zoomOutBtn.setIcon(new ImageIcon(HermesUI.class.getResource("/com/team1ofus/hermes/zoomout25.png")));
+		zoomOutBtn.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				System.out.println("Minus Button pressed");
+				int zoomout = 1;
+				tabbedPane.getSelectedTabPane().getSelectedTabPane().zoom(zoomout);
+			}
+		});
 
 		tabbedPane = new MapTabbedPane<MapTabbedPane<MapTabPane>>(JTabbedPane.TOP);
 		tabbedPane.setBounds(BootstrapperConstants.PANEL_SIZE, 0, BootstrapperConstants.FRAME_WIDTH-BootstrapperConstants.PANEL_SIZE-10, BootstrapperConstants.FRAME_HEIGHT-30);
@@ -323,10 +342,12 @@ public class HermesUI extends JPanel implements IHumanInteractionListener{
 		
 		//TODO Make display the name of the cell, i.e. currentCell.getName()
 		tabbedPane.addNewTab("All Cells", null, new MapTabbedPane<MapTabPane>(JTabbedPane.BOTTOM), null);
+		tabbedPane.setSelectedIndex(0);
 		for(int i=0; i<allCells.size(); i++) {
-			tabbedPane.setSelectedIndex(0);
+			
 			tabbedPane.getSelectedTabPane().addNewTab(allCells.get(i).getDisplayName(), null, new MapTabPane(allCells.get(i)), null);
-			tabbedPane.getSelectedTabPane().getSelectedTabPane().humanInteractive.addListener(this);
+			tabbedPane.getSelectedTabPane().setSelectedIndex(i);
+			tabbedPane.getSelectedTabPane().getSelectedTabPane().humanInteractive.addListener(this, "HermesUI to " + allCells.get(i).getName());
 		}
 	
 	
@@ -352,12 +373,12 @@ public class HermesUI extends JPanel implements IHumanInteractionListener{
 		tabbedPane.addChangeListener(new ChangeListener() {
 			@Override
 			public void stateChanged(ChangeEvent e) {
-				addListenerToSelectedTab();
+				//addListenerToSelectedTab();
 				tabbedPane.getSelectedTabPane().addChangeListener(new ChangeListener() {
 
 					@Override
 					public void stateChanged(ChangeEvent e) {
-						addListenerToSelectedTab();
+						//addListenerToSelectedTab();
 						
 					}
 
@@ -441,105 +462,22 @@ public class HermesUI extends JPanel implements IHumanInteractionListener{
 
 	@Override
 	public void onTileClicked(CellPoint input) {
-		humanInteractive.doClick(input);
+		DebugManagement.writeNotificationToLog("HermesUI processed a onTileClicked event.");
+		//Ensure that the CellPoint's target cell is the same as the currently viewed cell.
+		String currentCellName = tabbedPane.getSelectedTabPane().getSelectedTabPane().getCurrentCell().getName();
+		DebugManagement.writeNotificationToLog("The cell name of the window was " + currentCellName + " and the input cell was " + input.getCellName());
+		
+		if(currentCellName == input.getCellName()) {
+			humanInteractive.doClick(input);
+			
+		}
 	}
 	
 	public void addListenerToSelectedTab() {
-		tabbedPane.getSelectedTabPane().getSelectedTabPane().humanInteractive.addListener(this);
-	}
-	
-	/* CustomKeyListener for the Startpoint, each time a key is pressed return a list of matching from the database
-	 * 
-	 */
-	 class CustomKeyListener implements KeyListener{
-	      public void keyTyped(KeyEvent e) {
-	      }
-
-	      public void keyPressed(KeyEvent e) {
-	      }
-	      
-	      public void updateResultPoint(String[] possibleDestinations){
-	    	  
-	      }
-	      public void updateTargetRecord(Record r){
-	    	  
-	      }
-	      public JComboBox getComboBox(){
-	    	  return startPoint;
-	      }
-
-	      public void keyReleased(KeyEvent e) {
-	    	  String input = (String) getComboBox().getSelectedItem();
-	    	  System.out.println(input);
-	    	  
-	    	  DebugManagement.writeNotificationToLog(input);
-	    	  List<Record> result = engine.search(input);
-	    	  DebugManagement.writeNotificationToLog("Result size is: " + result.size());
-	    	  String[] possibleDestinations = new String[result.size()];
-	    	  for (int i = 0; i < result.size(); i++){
-	    		  possibleDestinations[i] = result.get(i).getVal();
-	    		  DebugManagement.writeNotificationToLog("The possible location is: " + possibleDestinations[i]);
-	    		  if (input.equals(possibleDestinations[i])){
-	    			  updateTargetRecord(result.get(i));
-	    		  }
-	    	  }
-	    	  updateResultPoint(possibleDestinations);
-	      }   
-	   }
-	
-	class KeyListenerForStart implements KeyListener{
-		public void updateResultPoint(String[] possibleDestinations){
-			startPoint = new JComboBox<String>(possibleDestinations);
-		}
-		public void updateTargetRecord(Record r){
-			searchStartRecord = r;
-		}
-		@Override
-		public void keyTyped(KeyEvent e) {
-			// TODO Auto-generated method stub
-			
-		}
-		@Override
-		public void keyPressed(KeyEvent e) {
-			// TODO Auto-generated method stub
-			
-		}
-		@Override
-		public void keyReleased(KeyEvent e) {
-			  JComboBox cd = (JComboBox) e.getSource();
-	    	  String input = (String) cd.getSelectedItem();
-	    	  System.out.println(input);
-	    	  
-	    	  DebugManagement.writeNotificationToLog(input);
-	    	  List<Record> result = engine.search(input);
-	    	  DebugManagement.writeNotificationToLog("Result size is: " + result.size());
-	    	  String[] possibleDestinations = new String[result.size()];
-	    	  for (int i = 0; i < result.size(); i++){
-	    		  possibleDestinations[i] = result.get(i).getVal();
-	    		  DebugManagement.writeNotificationToLog("The possible location is: " + possibleDestinations[i]);
-	    		  if (input.equals(possibleDestinations[i])){
-	    			  updateTargetRecord(result.get(i));
-	    		  }
-	    	  }
-	    	  updateResultPoint(possibleDestinations);
-			
-		}
-	}
-	
-	class KeyListenerForDestination extends CustomKeyListener{
-		public void updateResultPoint(String[] possibleDestinations){
-			destination = new JComboBox<String>(possibleDestinations);
-		}
-		public void updateTargetRecord(Record r){
-			searchEndRecord = r;
-		}
-		public JComboBox getComboBox(){
-	    	  return destination;
-	      }
+		tabbedPane.getSelectedTabPane().getSelectedTabPane().humanInteractive.addListener(this, "HermesUI through addListenerToSelectedTab");
 	}
 	
 	class SearchListener implements ActionListener{
-
 		@Override
 		public void actionPerformed(ActionEvent e) {
 			String startLocation = (String) startPoint.getSelectedItem();
@@ -557,6 +495,7 @@ public class HermesUI extends JPanel implements IHumanInteractionListener{
 		    }
 
 			searchEvents.doSearchReady(searchStartRecord, searchEndRecord);
+			repaintPanel();
 		}
 		
 	}

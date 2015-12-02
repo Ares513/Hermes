@@ -11,7 +11,8 @@ public class UIManagementInteractionEventObject {
 	
 private List<IUIManagementInteractionListener> managementListeners = new ArrayList<IUIManagementInteractionListener>();
 
-public void addManagementListener(IUIManagementInteractionListener toAdd){
+public void addManagementListener(IUIManagementInteractionListener toAdd) {
+
 	managementListeners.add(toAdd);
 	}
 public void doPathReady(CellPoint first, CellPoint second){
