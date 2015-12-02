@@ -34,7 +34,7 @@ public class SplashScreen extends JWindow {
 	    setBounds(x,y,width,height);
 
 	    // Build the splash screen
-	    JLabel label = new JLabel(new ImageIcon("DapperMapper.png"));
+	    JLabel label = new JLabel(new ImageIcon(HermesUI.class.getResource("/com/team1ofus/hermes/resources/DapperMapper.png")));
 	    JLabel copyrt = new JLabel
 	      ("Team 1 of us", JLabel.CENTER);
 	    copyrt.setFont(new Font("Sans-Serif", Font.BOLD, 12));

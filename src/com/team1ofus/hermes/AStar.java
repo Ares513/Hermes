@@ -26,6 +26,7 @@ public class AStar {
 		explored = new ArrayList<CellPoint>();
 		cellMap = new HashMap<String, TileInfo[][]>();
 		for(PathCell cell: cells){
+			DebugManagement.writeNotificationToLog("Created a new TileInfoArray for " + cell.getName());
 			cellMap.put(cell.getName(), makeTileInfoArray(cell));
 		}
 	}
@@ -86,7 +87,8 @@ public class AStar {
 	}
 
 	private TileInfo getTileInfo(CellPoint aCellPoint){
-		return cellMap.get(aCellPoint.getCellName())[(int) aCellPoint.getPoint().getX()][(int) aCellPoint.getPoint().getY()];
+		TileInfo output = cellMap.get(aCellPoint.getCellName())[(int) aCellPoint.getPoint().getX()][(int) aCellPoint.getPoint().getY()];
+		return output;
 	}
 
 	/*
@@ -178,9 +180,10 @@ public class AStar {
 				}
 
 				moveMultiplier = 1;
-				if((curX != (int)neighborPoint.getPoint().getX()) && (curY != neighborPoint.getPoint().getY())){ //&& (currentTile.getCellName() == aNeighbor.getCellName())){
+				if((curX != (int)neighborPoint.getPoint().getX()) && (curY != neighborPoint.getPoint().getY())){ 
 					moveMultiplier = 1.41; // sqrt(2)
 				}
+				DebugManagement.writeNotificationToLog("Traverse cost " + moveMultiplier*neighborTile.getTraverseCost());
 				tentativeCSF = (int) (currentTile.getCostSoFar() + (moveMultiplier*neighborTile.getTraverseCost()));
 
 				if(!neighborPoint.isIn(frontier)){
@@ -197,7 +200,7 @@ public class AStar {
 				neighborTile.setEstimatedTotalCost(tentativeCSF+ getHeuristic(neighborPoint,endPoint));
 			}
 		}
-		System.out.println("No Path Found");
+		DebugManagement.writeLineToLog(SEVERITY_LEVEL.SEVERE, "No path found!");
 		return null;
 	}
 

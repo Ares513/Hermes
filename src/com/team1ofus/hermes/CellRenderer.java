@@ -142,7 +142,7 @@ public class CellRenderer {
 	//Draws the tiles based on the sprites from our sprite sheet
 	private void getFromSheet(){
 		try{
-			BufferedImage spriteSheet = ImageIO.read(new File("Sprites.png"));
+			BufferedImage spriteSheet = ImageIO.read(HermesUI.class.getResource("/com/team1ofus/hermes/resources/Sprites.png"));
 
 			for (int i = 0; i < rows; i++){
 				for (int j = 0; j < cols; j++){

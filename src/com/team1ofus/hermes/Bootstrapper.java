@@ -24,7 +24,7 @@ public class Bootstrapper {
 					ArrayList<PathCell> pathCells = CellConverter.convertList(data.getCells());
 					MapManagement map;			
 					data = new DataManagement();
-					map = new MapManagement();	
+					map = new MapManagement(pathCells);	
 					ui = new UIManagement(pathCells);
 					addEventHandlers(data, map, ui);
 				} catch (Exception e) {

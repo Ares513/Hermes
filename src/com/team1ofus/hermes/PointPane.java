@@ -26,8 +26,8 @@ public class PointPane extends JPanel{
 	public PointPane() {
 		offset = new Point(0,0);
 		try {
-			startMarker = ImageIO.read(new File("markerstart.png"));
-			finishMarker = ImageIO.read(new File("markerfinish.png"));
+			startMarker = ImageIO.read(HermesUI.class.getResource("/com/team1ofus/hermes/resources//markerstart.png"));
+			finishMarker = ImageIO.read(HermesUI.class.getResource("/com/team1ofus/hermes/resources//markerfinish.png"));
 		} catch (IOException e1){
 			e1.printStackTrace();
 		}

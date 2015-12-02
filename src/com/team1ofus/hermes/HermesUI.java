@@ -39,6 +39,7 @@ import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Random;
+import java.util.function.Predicate;
 import java.util.List;
 
 import javax.swing.JButton;
@@ -61,6 +62,7 @@ import javax.swing.JTextArea;
 import javax.swing.border.LineBorder;
 import completely.AutocompleteEngine;
 import com.sun.xml.internal.ws.api.pipe.Engine;
+import com.team1ofus.apollo.EntryPoint;
 import com.team1ofus.apollo.TILE_TYPE;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
@@ -164,7 +166,7 @@ public class HermesUI extends JPanel implements IHumanInteractionListener{
 		 splitPath(path);
 		 for(int i = 0; i < cellsInPath.size(); i++) {
 			 tabbedPane.getSelectedTabPane().setSelectedIndex(tabbedPane.getSelectedTabPane().getIndexOfTab(cellsInPath.get(i)));
-			 tabbedPane.getSelectedTabPane().getSelectedTabPane().getPathPane().drawPath(segmentedPath.get(i));
+			 tabbedPane.getSelectedTabPane().getSelectedTabPane().getPathPane().drawPath(segmentedPath.get(i), cellsInPath.get(i));
 		 }
 		 repaintPanel();
 	    }
@@ -214,7 +216,7 @@ public class HermesUI extends JPanel implements IHumanInteractionListener{
 	//Builds the frames and panels for the UI, as well as adding the mouse events that will affect the UI
 	private void buildControl(){
 		frameHermes = new JFrame();
-		frameHermes.setIconImage(Toolkit.getDefaultToolkit().getImage(HermesUI.class.getResource("/com/team1ofus/hermes/setup_assistant.png")));
+		frameHermes.setIconImage(Toolkit.getDefaultToolkit().getImage(HermesUI.class.getResource("/com/team1ofus/hermes/resources/setup_assistant.png")));
 		frameHermes.addMouseMotionListener(new MouseMotionAdapter() {
 			@Override
 			public void mouseDragged(MouseEvent e) {
@@ -359,7 +361,7 @@ public class HermesUI extends JPanel implements IHumanInteractionListener{
 
 		zoomInButton = new JButton("");
 		horizontalBox.add(zoomInButton);
-		zoomInButton.setIcon(new ImageIcon(HermesUI.class.getResource("/com/team1ofus/hermes/zoomin25.png")));
+		zoomInButton.setIcon(new ImageIcon(HermesUI.class.getResource("/com/team1ofus/hermes/resources/zoomin25.png")));
 		//These event handlers will handle zooming in and out based on the zoom buttons TODO Make this work
 		zoomInButton.addActionListener(new ActionListener() {
 			@Override
@@ -371,7 +373,7 @@ public class HermesUI extends JPanel implements IHumanInteractionListener{
 
 		zoomOutBtn = new JButton("");
 		horizontalBox.add(zoomOutBtn);
-		zoomOutBtn.setIcon(new ImageIcon(HermesUI.class.getResource("/com/team1ofus/hermes/zoomout25.png")));
+		zoomOutBtn.setIcon(new ImageIcon(HermesUI.class.getResource("/com/team1ofus/hermes/resources/zoomout25.png")));
 		zoomOutBtn.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
