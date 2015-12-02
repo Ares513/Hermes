@@ -7,5 +7,5 @@ import java.util.ArrayList;
 interface IUIManagementInteractionListener { 
 	void onPathReady(CellPoint first, CellPoint second);
 	void onWindowReady(ArrayList<PathCell> loaded);
-	
+	void onFindRequestReady(CellPoint first, String filter);
 }

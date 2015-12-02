@@ -63,6 +63,12 @@ public class PathCell{
 			ArrayList<LocationNameInfo> namedPoints, ArrayList<EntryPointReference> entryPointRefs) {
         this.cellName = name;
         this.displayName = display;
+        if(display == null) {
+        	this.displayName = name; //prevent null case
+        }
+		this.entryPoints = entryPoints;
+		this.namedPoints = namedPoints;
+		this.entryPointRefs = entryPointRefs;
         tiles = new Tile[width][height];
     	for(int i=0; i<width; i++) {
     		for(int j=0; j<height; j++) {
@@ -97,6 +103,10 @@ public class PathCell{
 	    		}
 	    		else if(type.equals(TILE_TYPE.MALE_BATHROOM)){
 	    			tiles[i][j] = new MaleBathroom(name, new Point(i, j));
+	    			ArrayList<String> bathroomNames = new ArrayList<String>();
+	    			bathroomNames.add("AutoGen Men's Room " + this.getDisplayName());
+	    			bathroomNames.add("AutoGen Men's Room " + this.getDisplayName());
+	    			namedPoints.add(new LocationNameInfo(new Point(i,j), bathroomNames));
 	    		}
 	    		else if(type.equals(TILE_TYPE.FEMALE_BATHROOM)){
 	    			tiles[i][j] = new FemaleBathroom(name, new Point(i, j));
@@ -136,9 +146,7 @@ public class PathCell{
     			
     		}
     	}
-		this.entryPoints = entryPoints;
-		this.namedPoints = namedPoints;
-		this.entryPointRefs = entryPointRefs;
+
     }
     /*
      * Not safe for out of bounds calls.

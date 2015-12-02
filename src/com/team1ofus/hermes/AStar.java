@@ -144,7 +144,7 @@ public class AStar {
 	 * end Cell and point.
 	 * Returns the fastest path between two points as an ordered list of Tiles
 	 */
-	public ArrayList<CellPoint> getPath(CellPoint startCellPoint, CellPoint endCellPoint){
+	public ArrayList<CellPoint> getPath(CellPoint startCellPoint, CellPoint endCellPoint, boolean isFiltering){
 		if(alreadyRan == true){ // A* needs to be reinitialized each time it runs. this checks that
 			System.out.println("You done Broke shit, A* already ran");
 			DebugManagement.writeLineToLog(SEVERITY_LEVEL.FATAL, "you done broke shit, A* already ran."
@@ -175,10 +175,14 @@ public class AStar {
 		while(!frontier.isEmpty()) {
 			frontier = sortByCost(frontier);
 			currentPoint = frontier.get(0); 
-			DebugManagement.writeNotificationToLog(currentPoint.getCellName());
 			if(currentPoint.equals(endPoint)){ //if we are at the end: 
 				ArrayList<CellPoint> FinalPath = buildPath(endPoint); 
-				events.AStarCompletePath(FinalPath); // Fires A* event. 
+				if(isFiltering) {
+					events.FilterStepComplete(FinalPath, getTileInfo(currentPoint).getCostSoFar());
+				} else {
+					events.AStarCompletePath(FinalPath, getTileInfo(currentPoint).getCostSoFar()); // Fires A* event. 
+					
+				}
 				return FinalPath;
 			}
 			if(!(explored.contains(currentPoint))){ //if the currentTile isnt already explored

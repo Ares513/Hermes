@@ -5,6 +5,7 @@ import java.util.ArrayList;
 
 public interface IAStarInteractionListener {
 	void onAStarRequestCellEvent(String cellName);
-	void onAStarPathCompleteEvent(ArrayList<CellPoint> directions);
+	void onAStarPathCompleteEvent(ArrayList<CellPoint> directions, int cost);
+	void onFilterStepCompleteEvent(ArrayList<CellPoint> directions, int cost);
 }
 

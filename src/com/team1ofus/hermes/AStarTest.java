@@ -19,7 +19,7 @@ public class AStarTest {
 		ArrayList<PathCell> testCellList = new ArrayList<PathCell>();
 		testCellList.add(testCell);
 		AStar test = new AStar(testCellList);
-		ArrayList<CellPoint> AStarOut = test.getPath(new CellPoint("a", new Point(2,2)), new CellPoint("a", new Point(2,2)));
+		ArrayList<CellPoint> AStarOut = test.getPath(new CellPoint("a", new Point(2,2)), new CellPoint("a", new Point(2,2)), false);
 		if(AStarOut != null){
 			for(CellPoint each:AStarOut){
 				System.out.println(each.getPoint());
@@ -40,7 +40,7 @@ public class AStarTest {
 		testCellList.add(testCell);
 		AStar test = new AStar(testCellList);
 		System.out.println("Path:");
-		ArrayList<CellPoint> AStarOut = test.getPath(new CellPoint("b",new Point(50,50)), new CellPoint("b", new Point(55,40)));
+		ArrayList<CellPoint> AStarOut = test.getPath(new CellPoint("b",new Point(50,50)), new CellPoint("b", new Point(55,40)), false);
 		if(AStarOut.size() >= 5){
 			System.out.println(AStarOut.size());
 			System.out.println("getPath didnt break");
@@ -61,7 +61,7 @@ public class AStarTest {
 		ArrayList<PathCell> testCellList = new ArrayList<PathCell>();
 		testCellList.add(testCell);
 		AStar test = new AStar(testCellList);
-		ArrayList<CellPoint> AStarOut = test.getPath(new CellPoint("c", new Point(2,2)), new CellPoint("c",new Point(2,3)));
+		ArrayList<CellPoint> AStarOut = test.getPath(new CellPoint("c", new Point(2,2)), new CellPoint("c",new Point(2,3)), false);
 		assertEquals(AStarOut,null);
 	}
 
@@ -78,7 +78,7 @@ public class AStarTest {
 		testCellList.add(testCell2);
 		AStar test = new AStar(testCellList);
 		System.out.println("Path:");
-		ArrayList<CellPoint> AStarOut = test.getPath(new CellPoint("a",new Point(50,50)), new CellPoint("b", new Point(55,40)));
+		ArrayList<CellPoint> AStarOut = test.getPath(new CellPoint("a",new Point(50,50)), new CellPoint("b", new Point(55,40)), false);
 		if(AStarOut.size() >= 5){
 			System.out.println("getPath didnt break");
 			for(CellPoint each:AStarOut){

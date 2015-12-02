@@ -4,5 +4,6 @@ import java.util.ArrayList;
 
 //TODO Comments1
 public interface IMapManagementInteractionListener {
-	void doPathComplete(ArrayList<CellPoint> directions);
+	void doPathComplete(ArrayList<CellPoint> directions, int cost);
+	
 }

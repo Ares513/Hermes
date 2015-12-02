@@ -113,7 +113,7 @@ public class HermesUI extends JPanel implements IHumanInteractionListener{
 	private JButton zoomInButton;
 	private JButton zoomOutBtn;
 	private Box horizontalBox;
-	private JButton removeButton;
+	private JButton findBathroom;
 	private MapTabbedPane<MapTabbedPane<MapTabPane>> tabbedPane;
 	private ArrayList<Record> locationNameInfoRecords;
 	public PrintToPrinter printer =new PrintToPrinter(); ;
@@ -263,9 +263,24 @@ public class HermesUI extends JPanel implements IHumanInteractionListener{
 		//start search ui stuff
 		
 	    DefaultComboBoxModel<String> modelForStart = new DefaultComboBoxModel<>(  );
+	    locationNameInfoRecords.add(new Record("Any Male Bathroom", "No Cell Ref"));
+	    locationNameInfoRecords.add(new Record("Any Female Bathroom", "No Cell Ref"));
+	    locationNameInfoRecords.add(new Record("Any Unisex Bathroom", "No Cell Ref"));
+	    
 	    for (Record r:locationNameInfoRecords){
-	    	modelForStart.addElement(r.getVal());
+	    	//leave out bathroom, bench and autogen records
+	    	boolean keep = true;
+	    	for(String s : r.getFields()) {
+	    		if(s.contains("AutoGen")) {
+	    			keep = false;
+	    		}
+	    	}
+	    	if(keep && r.getCellName() != "No Cell Ref") {
+	    		modelForStart.addElement(r.getVal());
+	    	    
+	    	}
 	    }
+	    
 	    startPoint = new JComboBox<String>();
 	    startPoint.setModel(modelForStart);
 		startPoint.setEditable(true);
@@ -282,7 +297,17 @@ public class HermesUI extends JPanel implements IHumanInteractionListener{
 		// should be deep copy from modelForStart
 	    DefaultComboBoxModel<String> modelForDestination = new DefaultComboBoxModel<>(  );
 	    for (Record r:locationNameInfoRecords){
-	    	modelForDestination.addElement(r.getVal());
+	    	//leave out auto generated values;
+	    	boolean keep = true;
+	    	for(String s : r.getFields()) {
+	    		if(s.contains("AutoGen")) {
+	    			keep = false;
+	    		}
+	    	}
+	    	if(keep) {
+	    		modelForDestination.addElement(r.getVal());
+	    	    
+	    	}
 	    }
 	    destination = new JComboBox<String>();
 		destination.setModel(modelForDestination);
@@ -309,10 +334,10 @@ public class HermesUI extends JPanel implements IHumanInteractionListener{
 		separator = new JSeparator();
 		verticalBox.add(separator);
 		
-		removeButton = new JButton("Close this building");
-		removeButton.setAlignmentX(Component.CENTER_ALIGNMENT);
-		removeButton.setDoubleBuffered(true);
-		verticalBox.add(removeButton);
+		findBathroom = new JButton("Find nearest bathroom from start point");
+		findBathroom.setAlignmentX(Component.CENTER_ALIGNMENT);
+		findBathroom.setDoubleBuffered(true);
+		verticalBox.add(findBathroom);
 
 		lblDirectionReadout = new JLabel("Direction Readout");
 		lblDirectionReadout.setAlignmentX(CENTER_ALIGNMENT);
@@ -396,51 +421,9 @@ public class HermesUI extends JPanel implements IHumanInteractionListener{
 			tabbedPane.getSelectedTabPane().setSelectedIndex(i);
 			tabbedPane.getSelectedTabPane().getSelectedTabPane().humanInteractive.addListener(this, "HermesUI to " + allCells.get(i).getName());
 		}
-	
-	
-		//chaff
-//		tabbedPane.addNewTab("New tab", null, new MapTabbedPane<MapTabPane>(JTabbedPane.BOTTOM), null);
-//		tabbedPane.getSelectedTabPane().addNewTab("Tab in tab", null, new MapTabPane(currentCell), null);
-//		tabbedPane.getSelectedTabPane().getSelectedTabPane().humanInteractive.addListener(this);
-//		//Adding more tabs for testing
-//		tabbedPane.addNewTab("tab 2", null, new MapTabbedPane<MapTabPane>(JTabbedPane.BOTTOM), null);
-//		tabbedPane.setSelectedIndex(1);
-//		tabbedPane.getSelectedTabPane().addNewTab("1", null, new MapTabPane(currentCell), null);
-//		tabbedPane.getSelectedTabPane().addNewTab("2", null, new MapTabPane(currentCell), null);
-//		
-//		tabbedPane.addNewTab("super tab 3", null, new MapTabbedPane<MapTabPane>(JTabbedPane.BOTTOM), null);
-//		tabbedPane.setSelectedIndex(2);
-//		tabbedPane.getSelectedTabPane().addNewTab("poop", null, new MapTabPane(currentCell), null);
-//		tabbedPane.getSelectedTabPane().addNewTab("shit", null, new MapTabPane(currentCell), null);
-//		tabbedPane.getSelectedTabPane().addNewTab("scat", null, new MapTabPane(currentCell), null);
-//		tabbedPane.getSelectedTabPane().setSelectedIndex(2);
-//		tabbedPane.setSelectedIndex(0);
-		
-		//If the textpane's change, add HermesUI as a listener TODO: this is probably wrong
-		tabbedPane.addChangeListener(new ChangeListener() {
-			@Override
-			public void stateChanged(ChangeEvent e) {
-				//addListenerToSelectedTab();
-				tabbedPane.getSelectedTabPane().addChangeListener(new ChangeListener() {
 
-					@Override
-					public void stateChanged(ChangeEvent e) {
-						//addListenerToSelectedTab();
-						
-					}
-
-				});
-			}
-			
-		});
-		
-		removeButton.addActionListener(new ActionListener() {
+		findBathroom.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
-				drawPath(null);/*
-				if(tabbedPane.getSelectedIndex() != 0)
-					tabbedPane.removeTabAt(tabbedPane.getSelectedIndex());
-				else
-					DebugManagement.writeNotificationToLog("Can't delete the main pane");*/
 			}
 		});
 		
@@ -531,6 +514,9 @@ public class HermesUI extends JPanel implements IHumanInteractionListener{
 			String startLocation = (String) startPoint.getSelectedItem();
 			DebugManagement.writeNotificationToLog("start location is : " + startLocation);
 			String destLocation = (String) destination.getSelectedItem();
+			if(destLocation == "Any Female Bathroom") {
+				
+			}
 			searchStartRecord = locationNameInfoRecords.get(0);
 			searchEndRecord = locationNameInfoRecords.get(0);
 		    for (Record r:locationNameInfoRecords){
@@ -550,5 +536,9 @@ public class HermesUI extends JPanel implements IHumanInteractionListener{
 	
 	public SearchReadyEventObject getSearchEvents(){
 		return this.searchEvents;
+	}
+	@Override
+	public void findNearestLocation(CellPoint start, String filter) {
+		humanInteractive.findNearestLocation(start, filter);
 	}
 }

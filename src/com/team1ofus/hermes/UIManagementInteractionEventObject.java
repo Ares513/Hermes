@@ -30,4 +30,9 @@ public void doWindowReady(ArrayList<PathCell> allCells){
 	}	
 
 }
+public void findNearestLocation(CellPoint start, String filter) {
+	for(IUIManagementInteractionListener UL : managementListeners){
+		 UL.onFindRequestReady(start, filter);
+	}	
+}
 }
