@@ -52,6 +52,7 @@ public class MapManagement implements IUIManagementInteractionListener, IAStarIn
 	@Override
 	public void onFindRequestReady(CellPoint first, String filter) {
 		//Finds the shortest path to the nearest bathroom.
+		DebugManagement.writeNotificationToLog(filter);
 		ArrayList<CellPoint> targets = new ArrayList<CellPoint>(); //build a list of points that contain the filter.
 		for(PathCell c : cells) {
 			//Iterate over cells, checking locations at each.

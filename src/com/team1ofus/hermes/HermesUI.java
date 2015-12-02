@@ -281,9 +281,9 @@ public class HermesUI extends JPanel implements IHumanInteractionListener{
 		//start search ui stuff
 		
 	    DefaultComboBoxModel<String> modelForStart = new DefaultComboBoxModel<>(  );
-	    locationNameInfoRecords.add(new Record("Any Male Bathroom", "No Cell Ref"));
-	    locationNameInfoRecords.add(new Record("Any Female Bathroom", "No Cell Ref"));
-	    locationNameInfoRecords.add(new Record("Any Unisex Bathroom", "No Cell Ref"));
+	    locationNameInfoRecords.add(new Record(BootstrapperConstants.MALE_BATHROOM_IDENTIFIER, "No Cell Ref"));
+	    locationNameInfoRecords.add(new Record(BootstrapperConstants.FEMALE_BATHROOM_IDENTIFIER, "No Cell Ref"));
+	    locationNameInfoRecords.add(new Record(BootstrapperConstants.UNISEX_BATHROOM_IDENTIFIER, "No Cell Ref"));
 	    
 	    for (Record r:locationNameInfoRecords){
 	    	//leave out bathroom, bench and autogen records
@@ -532,9 +532,6 @@ public class HermesUI extends JPanel implements IHumanInteractionListener{
 			String startLocation = (String) startPoint.getSelectedItem();
 			DebugManagement.writeNotificationToLog("start location is : " + startLocation);
 			String destLocation = (String) destination.getSelectedItem();
-			if(destLocation == "Any Female Bathroom") {
-				
-			}
 			searchStartRecord = locationNameInfoRecords.get(0);
 			searchEndRecord = locationNameInfoRecords.get(0);
 		    for (Record r:locationNameInfoRecords){

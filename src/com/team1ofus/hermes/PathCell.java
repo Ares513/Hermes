@@ -104,15 +104,23 @@ public class PathCell{
 	    		else if(type.equals(TILE_TYPE.MALE_BATHROOM)){
 	    			tiles[i][j] = new MaleBathroom(name, new Point(i, j));
 	    			ArrayList<String> bathroomNames = new ArrayList<String>();
-	    			bathroomNames.add("AutoGen Men's Room " + this.getDisplayName());
+	    			bathroomNames.add("AutoGen Male Bathroom " + this.getDisplayName());
 	    			bathroomNames.add("AutoGen Men's Room " + this.getDisplayName());
 	    			namedPoints.add(new LocationNameInfo(new Point(i,j), bathroomNames));
 	    		}
 	    		else if(type.equals(TILE_TYPE.FEMALE_BATHROOM)){
 	    			tiles[i][j] = new FemaleBathroom(name, new Point(i, j));
+	    			ArrayList<String> bathroomNames = new ArrayList<String>();
+	    			bathroomNames.add("AutoGen Female Bathroom " + this.getDisplayName());
+	    			bathroomNames.add("AutoGen Women's Room " + this.getDisplayName());
+	    			namedPoints.add(new LocationNameInfo(new Point(i,j), bathroomNames));
 	    		}
 	    		else if(type.equals(TILE_TYPE.UNISEX_BATHROOM)){
 	    			tiles[i][j] = new UnisexBathroom(name, new Point(i, j));
+	    			ArrayList<String> bathroomNames = new ArrayList<String>();
+	    			bathroomNames.add("AutoGen Unisex Bathroom " + this.getDisplayName());
+	    			bathroomNames.add("AutoGen Unisex Room " + this.getDisplayName());
+	    			namedPoints.add(new LocationNameInfo(new Point(i,j), bathroomNames));
 	    		}
 	    		else if(type.equals(TILE_TYPE.BENCH)){
 	    			tiles[i][j] = new Bench(name, new Point(i, j));
