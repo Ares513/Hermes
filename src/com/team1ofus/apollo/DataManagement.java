@@ -92,6 +92,7 @@ public class DataManagement {
 		List<Path> output = new ArrayList<Path>();
 		File file = new File("src/com/team1ofus/hermes/resources/");
 		DebugManagement.writeNotificationToLog((file.getAbsolutePath()));
+		System.out.println(file.getAbsolutePath());
 		File[] listOfFiles = file.listFiles();
 		for(int i=0; i<listOfFiles.length; i++) {
 			DebugManagement.writeNotificationToLog(listOfFiles[i].getName());

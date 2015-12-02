@@ -16,6 +16,6 @@ public class MapPane extends JPanel{
 	}
 	
 	public void paintComponent(Graphics g) {
-		render.renderTiles(g);
+		render.renderTiles(g, this.getWidth(), this.getHeight());
 	}
 }

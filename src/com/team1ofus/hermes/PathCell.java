@@ -219,4 +219,12 @@ public class PathCell{
 			entryPointRefs.add(epf);
 		}
 	}
+	
+	public int getWidth() {
+		return tiles.length;
+	}
+	
+	public int getHeight() {
+		return tiles[0].length;
+	}
 }
