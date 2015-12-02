@@ -477,6 +477,7 @@ public class HermesUI extends JPanel implements IHumanInteractionListener{
 		    }
 
 			searchEvents.doSearchReady(searchStartRecord, searchEndRecord);
+			repaint();
 		}
 		
 	}
