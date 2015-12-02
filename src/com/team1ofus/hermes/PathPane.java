@@ -40,15 +40,19 @@ class PathPane extends JPanel {
 	}
 
 	//Creates the list of points that will be used to draw the path
-	void drawPath(ArrayList<CellPoint> path){
+	void drawPath(ArrayList<CellPoint> path, String cellName){
 		pointsList.clear();
 		if(path == null) {
 			DebugManagement.writeLineToLog(SEVERITY_LEVEL.CRITICAL, "CellPoint path is empty! Not drawing path.");
 			return;
 		}
-		for(int c = 0; c < path.size(); c++){
-			pointsList.add(new Point((int) path.get(c).getPoint().getX(), (int) path.get(c).getPoint().getY()));
-			pointsList.get(c).move(pointsList.get(c).x*tileWidth+tileWidth/2, pointsList.get(c).y*tileHeight+tileHeight/2);
+		for(int c = 0; c < path.size(); c++) {
+			if(path.get(c).getCellName() == cellName) {
+				//matches, add it.
+				pointsList.add(new Point((int) path.get(c).getPoint().getX(), (int) path.get(c).getPoint().getY()));
+				pointsList.get(c).move(pointsList.get(c).x*tileWidth+tileWidth/2, pointsList.get(c).y*tileHeight+tileHeight/2);
+			
+			}
 		}
 		validate();
 		repaint();

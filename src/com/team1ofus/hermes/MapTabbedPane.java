@@ -37,5 +37,13 @@ public class MapTabbedPane<T extends Component> extends JTabbedPane {
 	public T getSelectedTabPane() {
 		return tabPanes.get(this.getSelectedIndex());
 	}
+	
+	public int getIndexOfTab(String name) {
+		for(int i = 0; i < this.getTabCount(); i++){
+			if(this.getTitleAt(i).equals(name))
+				return i;
+		}
+		return 0;
+	}
 
 }

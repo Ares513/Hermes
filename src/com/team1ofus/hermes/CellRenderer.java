@@ -120,9 +120,12 @@ public class CellRenderer {
 					g.drawImage(spriteImages[14], i*width - offset.x, j*height - offset.y, width, height, null);
 					break;
 				case BUSH:
-					g.drawImage(spriteImages[17], i*width - offset.x, j*height - offset.y, width, height, null);
+					g.drawImage(spriteImages[16], i*width - offset.x, j*height - offset.y, width, height, null);
 					break;
 				case TREE:
+					g.drawImage(spriteImages[17], i*width - offset.x, j*height - offset.y, width, height, null);
+					break;
+				case EXTRA_TILE_TYPE_1:
 					g.drawImage(spriteImages[18], i*width - offset.x, j*height - offset.y, width, height, null);
 					break;
 				}
@@ -141,7 +144,7 @@ public class CellRenderer {
 	//Draws the tiles based on the sprites from our sprite sheet
 	private void getFromSheet(){
 		try{
-			BufferedImage spriteSheet = ImageIO.read(new File("Sprites.png"));
+			BufferedImage spriteSheet = ImageIO.read(HermesUI.class.getResource("/com/team1ofus/hermes/resources/Sprites.png"));
 
 			for (int i = 0; i < rows; i++){
 				for (int j = 0; j < cols; j++){

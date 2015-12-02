@@ -26,24 +26,26 @@ public class AStar {
 		explored = new ArrayList<CellPoint>();
 		cellMap = new HashMap<String, TileInfo[][]>();
 		for(PathCell cell: cells){
+			DebugManagement.writeNotificationToLog("Created a new TileInfoArray for " + cell.getName());
 			cellMap.put(cell.getName(), makeTileInfoArray(cell));
 		}
 	}
-	private class TileInfo {
+	private class TileInfo implements Comparable<TileInfo> {
 		private TILE_TYPE tileType = TILE_TYPE.WALL; 
 		private CellPoint parent = null;
 		private int costSoFar = 0;
 		private int estimatedTotalCost = 0;
 		private int traverseCost = 1000000;
 		private CellPoint offPageNeighbor = null;
+		private CellPoint creator;
 
-
-		private TileInfo(TILE_TYPE newTileType, int newTraverseCost){
+		private TileInfo(TILE_TYPE newTileType, int newTraverseCost, CellPoint creator){
 			parent = null;
 			costSoFar = 0;
 			estimatedTotalCost = 0;
 			traverseCost = newTraverseCost;
 			tileType = newTileType;
+			this.creator = creator;
 		}
 
 		public boolean canBeEntered(CellPoint from, CellPoint to){
@@ -53,7 +55,9 @@ public class AStar {
 		private TILE_TYPE getTileType(){
 			return this.tileType;
 		}
-
+		private CellPoint getCreator() {
+			return creator;
+		}
 		private CellPoint getParent(){
 			return this.parent;
 		}
@@ -65,6 +69,9 @@ public class AStar {
 			return this.costSoFar;
 		}
 		private void setCostSoFar(int newCSF){
+			this.costSoFar = newCSF;
+		}
+		private void updateCostSoFarDebug(int newCSF) {
 			this.costSoFar = newCSF;
 		}
 		private int getEstimatedTotalCost(){
@@ -83,10 +90,16 @@ public class AStar {
 		private CellPoint getOffPageNeighbor(){
 			return this.offPageNeighbor;
 		}
+		public int compareTo(TileInfo o)
+		{
+		     return(getCostSoFar() - o.getCostSoFar());
+		}
+
 	}
 
 	private TileInfo getTileInfo(CellPoint aCellPoint){
-		return cellMap.get(aCellPoint.getCellName())[(int) aCellPoint.getPoint().getX()][(int) aCellPoint.getPoint().getY()];
+		TileInfo output = cellMap.get(aCellPoint.getCellName())[(int) aCellPoint.getPoint().getX()][(int) aCellPoint.getPoint().getY()];
+		return output;
 	}
 
 	/*
@@ -98,7 +111,7 @@ public class AStar {
 		for(int i = 0; i < newCell.tiles.length; i++){
 			for(int j = 0; j < newCell.tiles[0].length; j++){
 				output[i][j] = new TileInfo(newCell.getTile(new Point(i,j)).getTileType(), 
-						newCell.getTile(new Point(i,j)).getTraverseCost());
+						newCell.getTile(new Point(i,j)).getTraverseCost(), new CellPoint(newCell.cellName, new Point(i,j)));
 			}
 		}
 		/*
@@ -152,6 +165,7 @@ public class AStar {
 		/*So long as the frontier is not empty the tile we want to explore is the tile with 
 		 * For now its BFS so we just take the first element*/
 		while(!frontier.isEmpty()){
+			frontier = sortByCost(frontier);
 			currentPoint = frontier.get(0); 						
 			if(currentPoint.equals(endPoint)){ //if we are at the end: 
 				ArrayList<CellPoint> FinalPath = buildPath(endPoint); 
@@ -178,29 +192,44 @@ public class AStar {
 				}
 
 				moveMultiplier = 1;
-				if((curX != (int)neighborPoint.getPoint().getX()) && (curY != neighborPoint.getPoint().getY())){ //&& (currentTile.getCellName() == aNeighbor.getCellName())){
+				if((curX != (int)neighborPoint.getPoint().getX()) && (curY != neighborPoint.getPoint().getY())){ 
 					moveMultiplier = 1.41; // sqrt(2)
 				}
+				
 				tentativeCSF = (int) (currentTile.getCostSoFar() + (moveMultiplier*neighborTile.getTraverseCost()));
-
 				if(!neighborPoint.isIn(frontier)){
 					neighborTile.setParent(currentPoint);
-					neighborTile.setCostSoFar(tentativeCSF);
+					neighborTile.updateCostSoFarDebug(tentativeCSF);
 					neighborTile.setEstimatedTotalCost(tentativeCSF+ getHeuristic(neighborPoint,endPoint));
 					frontier.add(neighborPoint);
 				}
-				else if(tentativeCSF >= neighborTile.getCostSoFar()){
-					continue;
+				else if(tentativeCSF < neighborTile.getCostSoFar()){
+					neighborTile.setParent(currentPoint);
+					neighborTile.updateCostSoFarDebug(tentativeCSF);
+					neighborTile.setEstimatedTotalCost(tentativeCSF+ getHeuristic(neighborPoint,endPoint));
 				}
-				neighborTile.setParent(currentPoint);
-				neighborTile.setCostSoFar(tentativeCSF);
-				neighborTile.setEstimatedTotalCost(tentativeCSF+ getHeuristic(neighborPoint,endPoint));
+				//do nothing if the cost is higher.
 			}
 		}
-		System.out.println("No Path Found");
+		DebugManagement.writeLineToLog(SEVERITY_LEVEL.SEVERE, "No path found!");
 		return null;
 	}
-
+	private ArrayList<CellPoint> sortByCost(ArrayList<CellPoint> input) {
+		ArrayList<TileInfo> working = new ArrayList<TileInfo>();
+		ArrayList<CellPoint> output = new ArrayList<CellPoint>();
+		
+		for(CellPoint c : input) {
+			working.add(getTileInfo(c));
+		}
+		
+		Collections.sort(working);
+	
+		for(TileInfo t : working) {
+			//sorted- now re-add
+			output.add(t.getCreator());
+		}
+		return output;
+	}
 	//Builds the path of points that will be returned and displayed visually
 	private ArrayList<CellPoint> buildPath(CellPoint endPoint) {
 		ArrayList<CellPoint> pointPath = new ArrayList<CellPoint>();
@@ -268,6 +297,7 @@ public class AStar {
 					output.add(new CellPoint(currentPoint.getCellName(), new Point(neiX, neiY)));
 				}
 			}
+			
 			if(getTileInfo(currentPoint).getOffPageNeighbor() != null){
 				System.out.println("found off page connection");
 				output.add(getTileInfo(currentPoint).getOffPageNeighbor());

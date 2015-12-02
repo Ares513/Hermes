@@ -18,6 +18,6 @@ public class Bush extends Tile implements TileInterface {
 	//------------------------------------------------------------------------------
 	
 	public int getTraverseCost() {
-		return 200;
+		return 1200;
 	}
 }

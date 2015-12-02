@@ -9,7 +9,8 @@ public class MapManagement implements IUIManagementInteractionListener, IAStarIn
 	MapManagementInteractionEventObject events = new MapManagementInteractionEventObject();
 	AStar pathfindingSystem;
 	ArrayList<PathCell> cells = new ArrayList<PathCell>();
-	public MapManagement() {
+	public MapManagement(ArrayList<PathCell> cells) {
+		this.cells = cells;
 	}
 	
 	@Override
@@ -32,8 +33,6 @@ public class MapManagement implements IUIManagementInteractionListener, IAStarIn
 		pathfindingSystem.getPath(first, second);
 	}
 	public void onWindowReady(ArrayList<PathCell> loaded) {
-		pathfindingSystem = new AStar(loaded);
-		pathfindingSystem.events.registerListener(this);
-		cells.addAll(loaded);
+		//dummy event, protecting future
 	}
 }
