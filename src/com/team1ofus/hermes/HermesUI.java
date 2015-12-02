@@ -83,10 +83,10 @@ public class HermesUI extends JPanel implements IHumanInteractionListener{
 	private int frameHeight = screenSize.height-200;
 	//private MapPane gridMap;
 	int scrollSpeed = 5;
-	private PathCell currentCell;
+	private ArrayList<PathCell> allCells = new ArrayList<PathCell>();
 	public HumanInteractionEventObject humanInteractive; 
-	private Point first; //for showing in the UI which points were clicked.
-	private Point second; 
+	private CellPoint first; //for showing in the UI which points were clicked.
+	private CellPoint second; 
 	//private JLayeredPane layeredPane;
 	private boolean dragging;
 	private Point lastDragLocation;
@@ -123,18 +123,18 @@ public class HermesUI extends JPanel implements IHumanInteractionListener{
 	
 	private SearchReadyEventObject searchEvents;
             
-	public HermesUI(PathCell viewCell, ArrayList<Record> locationNameInfoRecords) {
+	public HermesUI(ArrayList<PathCell> viewCells, ArrayList<Record> locationNameInfoRecords) {
 		this.locationNameInfoRecords = locationNameInfoRecords;
 		
 		this.searchEvents = new SearchReadyEventObject(); 
 		this.humanInteractive = new HumanInteractionEventObject();
-		initialize(viewCell);
+		initialize(viewCells);
 	}
 	/*
 	 * initialize the Hermes UI
 	 */
-	public void initialize(PathCell viewCell) {		
-		currentCell = viewCell;
+	public void initialize(ArrayList<PathCell> viewCells) {		
+		allCells = viewCells;
 		buildControl();
 		frameHermes.addKeyListener(new KeyAdapter() {
 			@Override
@@ -322,22 +322,31 @@ public class HermesUI extends JPanel implements IHumanInteractionListener{
 		
 		
 		//TODO Make display the name of the cell, i.e. currentCell.getName()
-		tabbedPane.addNewTab("New tab", null, new MapTabbedPane<MapTabPane>(JTabbedPane.BOTTOM), null);
-		tabbedPane.getSelectedTabPane().addNewTab("Tab in tab", null, new MapTabPane(currentCell), null);
-		tabbedPane.getSelectedTabPane().getSelectedTabPane().humanInteractive.addListener(this);
-		//Adding more tabs for testing
-		tabbedPane.addNewTab("tab 2", null, new MapTabbedPane<MapTabPane>(JTabbedPane.BOTTOM), null);
-		tabbedPane.setSelectedIndex(1);
-		tabbedPane.getSelectedTabPane().addNewTab("1", null, new MapTabPane(currentCell), null);
-		tabbedPane.getSelectedTabPane().addNewTab("2", null, new MapTabPane(currentCell), null);
-		
-		tabbedPane.addNewTab("super tab 3", null, new MapTabbedPane<MapTabPane>(JTabbedPane.BOTTOM), null);
-		tabbedPane.setSelectedIndex(2);
-		tabbedPane.getSelectedTabPane().addNewTab("poop", null, new MapTabPane(currentCell), null);
-		tabbedPane.getSelectedTabPane().addNewTab("shit", null, new MapTabPane(currentCell), null);
-		tabbedPane.getSelectedTabPane().addNewTab("scat", null, new MapTabPane(currentCell), null);
-		tabbedPane.getSelectedTabPane().setSelectedIndex(2);
-		tabbedPane.setSelectedIndex(0);
+		tabbedPane.addNewTab("All Cells", null, new MapTabbedPane<MapTabPane>(JTabbedPane.BOTTOM), null);
+		for(int i=0; i<allCells.size(); i++) {
+			tabbedPane.setSelectedIndex(0);
+			tabbedPane.getSelectedTabPane().addNewTab(allCells.get(i).getDisplayName(), null, new MapTabPane(allCells.get(i)), null);
+			tabbedPane.getSelectedTabPane().getSelectedTabPane().humanInteractive.addListener(this);
+		}
+	
+	
+		//chaff
+//		tabbedPane.addNewTab("New tab", null, new MapTabbedPane<MapTabPane>(JTabbedPane.BOTTOM), null);
+//		tabbedPane.getSelectedTabPane().addNewTab("Tab in tab", null, new MapTabPane(currentCell), null);
+//		tabbedPane.getSelectedTabPane().getSelectedTabPane().humanInteractive.addListener(this);
+//		//Adding more tabs for testing
+//		tabbedPane.addNewTab("tab 2", null, new MapTabbedPane<MapTabPane>(JTabbedPane.BOTTOM), null);
+//		tabbedPane.setSelectedIndex(1);
+//		tabbedPane.getSelectedTabPane().addNewTab("1", null, new MapTabPane(currentCell), null);
+//		tabbedPane.getSelectedTabPane().addNewTab("2", null, new MapTabPane(currentCell), null);
+//		
+//		tabbedPane.addNewTab("super tab 3", null, new MapTabbedPane<MapTabPane>(JTabbedPane.BOTTOM), null);
+//		tabbedPane.setSelectedIndex(2);
+//		tabbedPane.getSelectedTabPane().addNewTab("poop", null, new MapTabPane(currentCell), null);
+//		tabbedPane.getSelectedTabPane().addNewTab("shit", null, new MapTabPane(currentCell), null);
+//		tabbedPane.getSelectedTabPane().addNewTab("scat", null, new MapTabPane(currentCell), null);
+//		tabbedPane.getSelectedTabPane().setSelectedIndex(2);
+//		tabbedPane.setSelectedIndex(0);
 		
 		//If the textpane's change, add HermesUI as a listener TODO: this is probably wrong
 		tabbedPane.addChangeListener(new ChangeListener() {
@@ -431,8 +440,8 @@ public class HermesUI extends JPanel implements IHumanInteractionListener{
 	}
 
 	@Override
-	public void onTileClicked(int x, int y) {
-		humanInteractive.doClick(x, y);
+	public void onTileClicked(CellPoint input) {
+		humanInteractive.doClick(input);
 	}
 	
 	public void addListenerToSelectedTab() {

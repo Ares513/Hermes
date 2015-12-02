@@ -28,7 +28,7 @@ import java.awt.Dimension;
 import javax.swing.JLabel;
 
 //This class handles loading maps from map building application into the user application
-//TODO Comments1 - Explain more?
+//OBSOLETE: REMOVED FROM APPLIATION 12/1/2015 8:00 PM.
 public class Loader extends JDialog {
 	public LoaderInteractionEventObject events;
 	/**

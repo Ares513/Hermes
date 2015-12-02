@@ -6,11 +6,10 @@ import java.util.ArrayList;
 import javax.swing.*;
 
 //This class creates the UI and passes on events that will trigger changes in the UI
-public class UIManagement implements IHumanInteractionListener, IMapManagementInteractionListener, ILoaderInteractionListener, ISearchReadyListener {
+public class UIManagement implements IHumanInteractionListener, IMapManagementInteractionListener, ISearchReadyListener {
 	HermesUI window;
-	Loader loader;
-	Point first;
-	Point second;
+	CellPoint first;
+	CellPoint second;
 	PrintDirections printList; 
 	public UIManagementInteractionEventObject events;
 	private ArrayList<PathCell> allCells;
@@ -20,8 +19,7 @@ public class UIManagement implements IHumanInteractionListener, IMapManagementIn
 	public UIManagement(ArrayList<PathCell> allCells) {
 		events = new UIManagementInteractionEventObject(); 
 		this.allCells = allCells;
-		loader = new Loader(allCells);  
-		loader.events.addChooseListener(this);
+		
 		printList = new PrintDirections(); 
 		locationNameInfoRecords = new ArrayList<Record>();
 		allLocationNameInfos = new ArrayList<LocationNameInfo>();
@@ -34,20 +32,15 @@ public class UIManagement implements IHumanInteractionListener, IMapManagementIn
 				}
 			}
 		}
-		
-		for (LocationNameInfo lni : allLocationNameInfos){
-		
-			for (String str : lni.getNames()){
-				
-			}
-		}
+		begin();
 	}
 	
 	public JFrame frame; 
-	public void begin(int selectedIndex) {
-		window = new HermesUI(allCells.get(selectedIndex), locationNameInfoRecords);
+	public void begin() {
+		window = new HermesUI(allCells, locationNameInfoRecords);
 		window.humanInteractive.addListener(this);//should be refactored
 		window.getSearchEvents().addListener(this);
+		events.doWindowReady(allCells);
 	}
 	
 	public void doPathComplete(ArrayList<CellPoint> directions) {
@@ -58,19 +51,19 @@ public class UIManagement implements IHumanInteractionListener, IMapManagementIn
 	}
 
 	@Override
-	public void onTileClicked(int x, int y) {
-		DebugManagement.writeNotificationToLog("Click processed at " + x + " , " + y);
+	public void onTileClicked(CellPoint input) {
+		DebugManagement.writeNotificationToLog("Click processed at " + input.getPoint().x + " , " + input.getPoint().y);
 		if(first == null) {
-			first = new Point(x, y);
+			first = input;
 			window.directionsTextPane.setText(""); // clears directions pane after first click. 
-			DebugManagement.writeNotificationToLog("First point processed at " + x + " , " + y);
+			DebugManagement.writeNotificationToLog("First point processed at " + input.getPoint().x + " , " + input.getPoint().y);
 			
 		} else if(second == null) {
-			DebugManagement.writeNotificationToLog("Second point processed at " + x + " , " + y);
-			second = new Point(x,y);
+			DebugManagement.writeNotificationToLog("Second point processed at " +  input.getPoint().x + " , " + input.getPoint().y);
+			second = input;
 			DebugManagement.writeNotificationToLog("Two points selected. Sending doPath to listeners.");
 			DebugManagement.writeNotificationToLog("Path points" + first + " , " + second);
-			events.doPathReady(0, first, second);
+			events.doPathReady(first, second);
 			first = null;
 			second = null;
 		}
@@ -80,8 +73,8 @@ public class UIManagement implements IHumanInteractionListener, IMapManagementIn
 	@Override
 	public void onSearchReady(Record start, Record destination){
 		DebugManagement.writeNotificationToLog("Entering function onSearchReady. \nStartRecord: " + start.getVal() + "\nDestRecord: " + destination.getVal());
-		Point startPoint = null;
-		Point destPoint = null;
+		CellPoint startPoint = null;
+		CellPoint destPoint = null;
 		for (PathCell pc : allCells){
 			if (pc.getName().equals(start.getCellName())){
 				startPoint = locationRecordToPoint(pc, start);
@@ -92,26 +85,18 @@ public class UIManagement implements IHumanInteractionListener, IMapManagementIn
 				destPoint = locationRecordToPoint(pc, destination);
 			}
 		}
-		events.doPathReady(0, startPoint, destPoint);
+		events.doPathReady(startPoint, destPoint);
 	}
 	/* converts a record output by search into a point to send to A*
 	 * Will need to be refactored to return a cellPoint soon (before multimap pathing is done).
 	 * */
-	public Point locationRecordToPoint(PathCell pc, Record r){
+	public CellPoint locationRecordToPoint(PathCell pc, Record r){
 		for (LocationNameInfo lni : pc.getLocationNameInfo()){
 			if (lni.getNames().contains(r.getVal())){
-				return lni.getPoint();
+				return new CellPoint(pc.cellName, lni.getPoint());
 			}
 		}
 		DebugManagement.writeLineToLog(SEVERITY_LEVEL.FATAL, "Location Record not found. Returning Null. This will almost certainly cause a crash.");
 		return null;
-	}
-
-	@Override
-	public void selectionMade(int selection, ArrayList<PathCell> allCells) {
-		// TODO Auto-generated method stub
-		events.doWindowReady(selection, allCells);
-		begin(selection);
-		
 	}
 }

@@ -11,11 +11,11 @@ public class HumanInteractionEventObject {
 	public void addListener(IHumanInteractionListener toAdd){
 		listeners.add(toAdd);
 		}
-	public void doClick(int x, int y){
+	public void doClick(CellPoint clicked){
 		
 		for(IHumanInteractionListener UL : listeners){
-			UL.onTileClicked(x, y);
-			System.out.println("listeners called");
+			DebugManagement.writeNotificationToLog("Calling tileClicked with value " + clicked.toString());
+			UL.onTileClicked(clicked);
 		}
 	
 	}

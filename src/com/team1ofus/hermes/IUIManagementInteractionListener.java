@@ -5,7 +5,7 @@ import java.util.ArrayList;
 
 //TODO Comments1
 interface IUIManagementInteractionListener { 
-	void onPathReady(int cellIndex, Point first, Point second);
-	void onWindowReady(int cellIndex, ArrayList<PathCell> loaded);
+	void onPathReady(CellPoint first, CellPoint second);
+	void onWindowReady(ArrayList<PathCell> loaded);
 	
 }
