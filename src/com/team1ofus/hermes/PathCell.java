@@ -68,23 +68,66 @@ public class PathCell{
     		for(int j=0; j<height; j++) {
     			TILE_TYPE type = dataTiles[i][j].getType();
     			
-    			switch(type) {
-    			case WALL:
-       				tiles[i][j] = new Wall(name, new Point(i, j));
-    				tiles[i][j].tileType = type;
-    			case PEDESTRIAN_WALKWAY:
-    				tiles[i][j] = new Walkway(name, new Point(i, j));
-    				tiles[i][j].tileType = type;
-    				break;
-    			case IMPASSABLE:
-       				tiles[i][j] = new Wall(name, new Point(i, j));
-    				tiles[i][j].tileType = type;
-    				break;
-    			default:
-    				tiles[i][j] = new Walkway(name, new Point(i, j));
-    				tiles[i][j].tileType = type;
-    				break;
-    			}
+    			if(type.equals(TILE_TYPE.PEDESTRIAN_WALKWAY)){
+	    			tiles[i][j] = new Walkway(name, new Point(i, j));
+	    		}
+	    		else if(type.equals(TILE_TYPE.DOOR)){
+	    			tiles[i][j] = new Door(name, new Point(i, j));
+	    		}
+	    		else if(type.equals(TILE_TYPE.GRASS)){
+	    			tiles[i][j] = new Grass(name, new Point(i, j));
+	    		}
+	    		else if(type.equals(TILE_TYPE.CONGESTED)){
+	    			tiles[i][j] = new Congested(name, new Point(i, j));
+	    		}
+	    		else if(type.equals(TILE_TYPE.VERTICAL_UP_STAIRS)){
+	    			tiles[i][j] = new VerticalUpStairs(name, new Point(i, j));
+	    		}
+	    		else if(type.equals(TILE_TYPE.VERTICAL_DOWN_STAIRS)){
+	    			tiles[i][j] = new VerticalDownStairs(name, new Point(i, j));
+	    		}
+	    		else if(type.equals(TILE_TYPE.HORIZONTAL_LEFT_STAIRS)){
+	    			tiles[i][j] = new HorizontalLeftStairs(name, new Point(i, j));
+	    		}
+	    		else if(type.equals(TILE_TYPE.HORIZONTAL_RIGHT_STAIRS)){
+	    			tiles[i][j] = new HorizontalRightStairs(name, new Point(i, j));
+	    		}
+	    		else if(type.equals(TILE_TYPE.IMPASSABLE)){
+	    			tiles[i][j] = new Impassable(name, new Point(i, j));
+	    		}
+	    		else if(type.equals(TILE_TYPE.MALE_BATHROOM)){
+	    			tiles[i][j] = new MaleBathroom(name, new Point(i, j));
+	    		}
+	    		else if(type.equals(TILE_TYPE.FEMALE_BATHROOM)){
+	    			tiles[i][j] = new FemaleBathroom(name, new Point(i, j));
+	    		}
+	    		else if(type.equals(TILE_TYPE.UNISEX_BATHROOM)){
+	    			tiles[i][j] = new UnisexBathroom(name, new Point(i, j));
+	    		}
+	    		else if(type.equals(TILE_TYPE.BENCH)){
+	    			tiles[i][j] = new Bench(name, new Point(i, j));
+	    		}
+	    		else if(type.equals(TILE_TYPE.TREE)){
+	    			tiles[i][j] = new Tree(name, new Point(i, j));
+	    		}
+	    		else if(type.equals(TILE_TYPE.BUSH)){
+	    			tiles[i][j] = new Bush(name, new Point(i, j));
+	    		}
+	    		else if(type.equals(TILE_TYPE.LINOLEUM)){
+	    			tiles[i][j] = new Linoleum(name, new Point(i, j));
+	    		}
+	    		else if(type.equals(TILE_TYPE.ELEVATOR)){
+	    			tiles[i][j] = new Elevator(name, new Point(i, j));
+	    		}
+	    		else if(type.equals(TILE_TYPE.UNPLOWED)){
+	    			tiles[i][j] = new Unplowed(name, new Point(i, j));
+	    		}
+	    		else if(type.equals(TILE_TYPE.CLASSROOM)){
+	    			tiles[i][j] = new Classroom(name, new Point(i, j));
+	    		}
+	    		else{
+	    			tiles[i][j] = new Wall(name, new Point(i, j));
+	    		}
     			if(type == com.team1ofus.apollo.TILE_TYPE.WALL) {
  
     			}
@@ -93,7 +136,6 @@ public class PathCell{
     			
     		}
     	}
-    	this.scaling = scaling;
 		this.entryPoints = entryPoints;
 		this.namedPoints = namedPoints;
 		this.entryPointRefs = entryPointRefs;
