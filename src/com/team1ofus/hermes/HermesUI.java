@@ -78,9 +78,8 @@ public class HermesUI extends JPanel implements IHumanInteractionListener{
 	private JFrame frameHermes;
 	//private PathPane pathPanel;
 	//private PointPane pointPanel;
-	private Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
-	private int frameWidth = screenSize.width-200;
-	private int frameHeight = screenSize.height-200;
+	private int frameWidth = BootstrapperConstants.FRAME_WIDTH;
+	private int frameHeight = BootstrapperConstants.FRAME_HEIGHT;
 	//private MapPane gridMap;
 	int scrollSpeed = 5;
 	private PathCell currentCell;
@@ -316,7 +315,6 @@ public class HermesUI extends JPanel implements IHumanInteractionListener{
 		zoomInButton.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				System.out.println("Plus Button pressed");
 				int zoomin = -1;
 				tabbedPane.getSelectedTabPane().getSelectedTabPane().zoom(zoomin);
 			}
@@ -328,7 +326,6 @@ public class HermesUI extends JPanel implements IHumanInteractionListener{
 		zoomOutBtn.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				System.out.println("Minus Button pressed");
 				int zoomout = 1;
 				tabbedPane.getSelectedTabPane().getSelectedTabPane().zoom(zoomout);
 			}
