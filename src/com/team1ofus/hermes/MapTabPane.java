@@ -42,7 +42,7 @@ public class MapTabPane extends JLayeredPane {
 		currentCell = cell;
 		mapPanel = new MapPane(currentCell);
 		pathPanel = new PathPane();
-		textPanel = new TextPane();
+		textPanel = new TextPane(currentCell);
 		pointPanel = new PointPane();
 		name = "shit";
 		maxZoomOutx = (BootstrapperConstants.FRAME_WIDTH/ ((currentCell.tiles.length) *(BootstrapperConstants.TILE_WIDTH)));
@@ -100,6 +100,9 @@ public class MapTabPane extends JLayeredPane {
 						pathPanel.setOffset(mapPanel.render.offset);
 						pathPanel.repaint();
 						pointPanel.setOffset(mapPanel.render.offset);
+						textPanel.zoomScale = zoomScale;
+						textPanel.offset = mapPanel.render.offset;
+						textPanel.repaint();
 						repaintPanel();
 						repaint();
 					}
@@ -124,7 +127,7 @@ public class MapTabPane extends JLayeredPane {
 								mapPanel.render.incrementOffset(x, y, mapPanel.getWidth(), mapPanel.getHeight());
 								pathPanel.setOffset(mapPanel.render.offset);
 								pathPanel.repaint();
-								
+								textPanel.offset = mapPanel.render.offset;
 								pointPanel.setOffset(mapPanel.render.offset);
 								repaintPanel();
 								lastDragLocation = e.getPoint();
@@ -209,6 +212,8 @@ public class MapTabPane extends JLayeredPane {
 			pathPanel.setOffset(mapPanel.render.offset);
 			pathPanel.repaint();
 			pointPanel.setOffset(mapPanel.render.offset);
+			textPanel.offset = mapPanel.render.offset;
+			
 			repaintPanel();
 		
 			repaint();
@@ -216,7 +221,15 @@ public class MapTabPane extends JLayeredPane {
 	
 		
 	}
-	
+	public void setOffset(Point offset) {
+		mapPanel.render.offset = offset;
+		
+		//textPanel.zoom(zoomScale); TODO scale with text
+		pathPanel.setOffset(mapPanel.render.offset);
+		pathPanel.repaint();
+		pointPanel.setOffset(mapPanel.render.offset);
+		textPanel.offset = mapPanel.render.offset;
+	}
 	private void processClick(Point picked) {
 		DebugManagement.writeNotificationToLog("Mouse clicked at " + picked.x + " , " + picked.y);
 		if(mapPanel.render.getTile(picked.x, picked.y).tileType != TILE_TYPE.WALL || mapPanel.render.getTile(picked.x, picked.y).tileType != TILE_TYPE.IMPASSABLE) {

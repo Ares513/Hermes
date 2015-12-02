@@ -113,7 +113,6 @@ public class HermesUI extends JPanel implements IHumanInteractionListener{
 	private JButton zoomInButton;
 	private JButton zoomOutBtn;
 	private Box horizontalBox;
-	private JButton findBathroom;
 	private MapTabbedPane<MapTabbedPane<MapTabPane>> tabbedPane;
 	private ArrayList<Record> locationNameInfoRecords;
 	public PrintToPrinter printer =new PrintToPrinter(); ;
@@ -175,7 +174,7 @@ public class HermesUI extends JPanel implements IHumanInteractionListener{
 			 tabbedPane.getSelectedTabPane().setSelectedIndex(tabbedPane.getSelectedTabPane().getIndexOfTab(cellsInPath.get(i)));
 			 repaintPanel();
 			 tabbedPane.getSelectedTabPane().getSelectedTabPane().getPathPane().drawPath(segmentedPath.get(i), cellsInPath.get(i));			 
-			 
+			 tabbedPane.getSelectedTabPane().getSelectedTabPane().setOffset(new Point(segmentedPath.get(i).get(0).getPoint().x * BootstrapperConstants.TILE_WIDTH, segmentedPath.get(i).get(0).getPoint().y * BootstrapperConstants.TILE_HEIGHT));
 			 if(i == 0){ 
 				 tabbedPane.getSelectedTabPane().getSelectedTabPane().getPointPane().setFirst(firstPoint);
 			 }
@@ -352,11 +351,6 @@ public class HermesUI extends JPanel implements IHumanInteractionListener{
 
 		separator = new JSeparator();
 		verticalBox.add(separator);
-		
-		findBathroom = new JButton("Find nearest bathroom from start point");
-		findBathroom.setAlignmentX(Component.CENTER_ALIGNMENT);
-		findBathroom.setDoubleBuffered(true);
-		verticalBox.add(findBathroom);
 
 		lblDirectionReadout = new JLabel("Direction Readout");
 		lblDirectionReadout.setAlignmentX(CENTER_ALIGNMENT);
@@ -440,11 +434,6 @@ public class HermesUI extends JPanel implements IHumanInteractionListener{
 			tabbedPane.getSelectedTabPane().setSelectedIndex(i);
 			tabbedPane.getSelectedTabPane().getSelectedTabPane().humanInteractive.addListener(this, "HermesUI to " + allCells.get(i).getName());
 		}
-
-		findBathroom.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent arg0) {
-			}
-		});
 		
 		frameHermes.getContentPane().add(zoomPanel);
 

@@ -1,30 +1,66 @@
 package com.team1ofus.hermes;
 
 import java.awt.Color;
+import java.awt.Font;
+import java.awt.FontMetrics;
 import java.awt.Graphics;
 import java.awt.Point;
 import java.util.ArrayList;
 
 import javax.swing.JLabel;
 import javax.swing.JPanel;
+
 /*
  * Intended to be efficient at drawing text in a standardized fashion over the screen.
  * Add support for offset needed as a future task.
  */
 public class TextPane extends JPanel {
 	ArrayList<TextLocation> locations = new ArrayList<TextLocation>();
-	public TextPane() {
+	public Point offset = new Point(0,0);
+	public double zoomScale = 1.0;
+	public TextPane(PathCell parent) {
 		setOpaque(true);
-
-	}
-	void drawPath(CellPoint[] path){
+		for(LocationNameInfo l : parent.getLocationNameInfo()) {
+			boolean ignore = false;
+			for(String s: l.getNames()) {
+				if(s.contains("AutoGen")) {
+					ignore = true;
+						
+				}
+			}
+			if(!ignore) {
+				locations.add(new TextLocation(l.getNames(), l.getPoint(), Color.BLACK));
+					
+			}
+		}
 	}
 	public void paintComponent(Graphics g) {
 		this.paintComponents(g);
 		for(TextLocation l : locations) {
-			g.drawString(l.input, l.location.x, l.location.y);
+			g.setColor(l.drawnColor);
+			//we now need to center the text.
+			//double yShift = g.getFont().getSize()/2;
+			for(int i=0; i<l.lines.size(); i++) {
+				
+				//double xShift = 0;
+				FontMetrics metrics = g.getFontMetrics(g.getFont());
+				int stringLength;
+				if(metrics == null) {
+					DebugManagement.writeLineToLog(SEVERITY_LEVEL.ERROR, "FontMetrics was unable to be loaded in TextPane.");
+					stringLength = 0;
+				} else {
+					stringLength = (int) metrics.getStringBounds(l.lines.get(i), g).getWidth();
+					
+				}
+				g.setFont(new Font("TimesRoman", Font.PLAIN, (int)Math.round(zoomScale*16)));
+				int start = stringLength/2;
+				g.drawString(l.lines.get(i), (int)(zoomScale*l.location.x*BootstrapperConstants.TILE_WIDTH)-(int)(start+(zoomScale*(BootstrapperConstants.TILE_WIDTH/2)))-offset.x, (int)(zoomScale*l.location.y*BootstrapperConstants.TILE_HEIGHT)-offset.y+g.getFont().getSize()*i);
+				
+			}
 		}
-		showConsole(g);
+		if(BootstrapperConstants.WRITE_NOTIFICATIONS) {
+			showConsole(g);
+		}
 	}
 	/*
 	 * For debug purposes marks all cells.
@@ -42,14 +78,6 @@ public class TextPane extends JPanel {
 		}
 				
 			
-	}
-	class TextLocation {
-		String input;
-		Point location;
-		public TextLocation(String input, Point location) {
-			this.input = input;
-			this.location = location;
-		}
 	}
 	public void showConsole(Graphics g) {
 		g.setColor(Color.BLACK);
