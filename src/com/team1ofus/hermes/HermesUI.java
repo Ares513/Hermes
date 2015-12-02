@@ -163,12 +163,30 @@ public class HermesUI extends JPanel implements IHumanInteractionListener{
 		 test.add(new CellPoint("test1.map", new Point(22, 20)));
 		 test.add(new CellPoint("test2.map", new Point(13, 12)));
 		 test.add(new CellPoint("test2.map", new Point(7, 25)));*/
+		//searchStartRecord, searchEndRecord; 
+		int size = path.size(); 
+		Point firstPoint = path.get(0).getPoint();
+		Point lastPoint = path.get(size-1).getPoint(); 
+		tabbedPane.getSelectedTabPane().getSelectedTabPane().getPointPane().setFirst(null);
+		tabbedPane.getSelectedTabPane().getSelectedTabPane().getPointPane().setSecond(null);
+
 		 splitPath(path);
 		 for(int i = 0; i < cellsInPath.size(); i++) {
 			 tabbedPane.getSelectedTabPane().setSelectedIndex(tabbedPane.getSelectedTabPane().getIndexOfTab(cellsInPath.get(i)));
-			 tabbedPane.getSelectedTabPane().getSelectedTabPane().getPathPane().drawPath(segmentedPath.get(i), cellsInPath.get(i));
-		 }
-		 repaintPanel();
+			 repaintPanel();
+			 tabbedPane.getSelectedTabPane().getSelectedTabPane().getPathPane().drawPath(segmentedPath.get(i), cellsInPath.get(i));			 
+			 
+			 if(i == 0){ 
+				 tabbedPane.getSelectedTabPane().getSelectedTabPane().getPointPane().setFirst(firstPoint);
+			 }
+			 if(i == cellsInPath.size() -1 ){
+			tabbedPane.getSelectedTabPane().getSelectedTabPane().getPointPane().setSecond(lastPoint);
+			 }
+			 
+			}
+		 	first = null; 
+		 	second = null;
+		 
 	    }
 	
 	/*
@@ -537,8 +555,11 @@ public class HermesUI extends JPanel implements IHumanInteractionListener{
 	public SearchReadyEventObject getSearchEvents(){
 		return this.searchEvents;
 	}
+
 	@Override
 	public void findNearestLocation(CellPoint start, String filter) {
 		humanInteractive.findNearestLocation(start, filter);
 	}
+
+
 }

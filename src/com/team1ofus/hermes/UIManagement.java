@@ -72,6 +72,8 @@ public class UIManagement implements IHumanInteractionListener, IMapManagementIn
 	//runs when user picks a destination point using the search feature
 	@Override
 	public void onSearchReady(Record start, Record destination){
+		first = null;
+		second = null;
 		DebugManagement.writeNotificationToLog("Entering function onSearchReady. \nStartRecord: " + start.getVal() + "\nDestRecord: " + destination.getVal());
 		CellPoint startPoint = null;
 		CellPoint destPoint = null;
@@ -79,7 +81,8 @@ public class UIManagement implements IHumanInteractionListener, IMapManagementIn
 			if (pc.getName().equals(start.getCellName())){
 				startPoint = locationRecordToPoint(pc, start);
 				//startPoint.getPoint()
-				window.getPointPane().setFirst(startPoint.getPoint());
+				//window.getPointPane().setFirst(startPoint.getPoint());
+				
 				
 			}
 		}
@@ -90,7 +93,7 @@ public class UIManagement implements IHumanInteractionListener, IMapManagementIn
 			}
 			if (pc.getName().equals(destination.getCellName())){
 				destPoint = locationRecordToPoint(pc, destination);
-				window.getPointPane().setSecond(destPoint.getPoint());
+				//window.getPointPane().setSecond(destPoint.getPoint());
 			}
 		}
 		events.doPathReady(startPoint, destPoint);

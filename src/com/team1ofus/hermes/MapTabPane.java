@@ -221,7 +221,7 @@ public class MapTabPane extends JLayeredPane {
 		if(mapPanel.render.getTile(picked.x, picked.y).tileType != TILE_TYPE.WALL || mapPanel.render.getTile(picked.x, picked.y).tileType != TILE_TYPE.IMPASSABLE) {
 			//valid.
 			if(first == null) {
-
+			//	first.getPoint();
 				first = new Point(picked.x, picked.y);
 				mapPanel.render.setFirst(first);
 				pointPanel.setFirst(first);
