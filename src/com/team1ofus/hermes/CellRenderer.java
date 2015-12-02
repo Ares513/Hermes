@@ -118,9 +118,12 @@ public class CellRenderer {
 					g.drawImage(spriteImages[14], i*width - offset.x, j*height - offset.y, width, height, null);
 					break;
 				case BUSH:
-					g.drawImage(spriteImages[17], i*width - offset.x, j*height - offset.y, width, height, null);
+					g.drawImage(spriteImages[16], i*width - offset.x, j*height - offset.y, width, height, null);
 					break;
 				case TREE:
+					g.drawImage(spriteImages[17], i*width - offset.x, j*height - offset.y, width, height, null);
+					break;
+				case EXTRA_TILE_TYPE_1:
 					g.drawImage(spriteImages[18], i*width - offset.x, j*height - offset.y, width, height, null);
 					break;
 				}
