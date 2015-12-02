@@ -75,7 +75,7 @@ public class DataManagement {
 			
 			objIn.close();
 			in.close();
-			result.setID(target.getFileName().toString());
+			result.setID(target.getFileName().toString().replaceFirst(".map", ""));
 			return result;
 			
 			//The default.map file isn't located.

@@ -120,12 +120,17 @@ public class AStar {
 		This won't work with incremental cell loading, if we implement that.
 		 */
 
-		for(EntryPointReference erf : newCell.getEntryPointReferences()){
+		for(EntryPointReference ref : newCell.getEntryPointReferences()){
 			for (PathCell pc: accessedCells){
-				if ((pc.getName()).equals(erf.getTargetCell())){
+				DebugManagement.writeNotificationToLog("CellName " + pc.getName() + " compared to " + ref.getTargetCell());
+				if ((pc.getName()).equals(ref.getTargetCell())){
+					DebugManagement.writeNotificationToLog("Matched " + pc.getName() + " to " + ref.getTargetCell());
+					
 					for (EntryPoint ep : pc.getEntryPoints()){
-						if ((ep.getId()).equals(erf.getId())){
-							output[(int) erf.getLoc().getX()][(int) erf.getLoc().getY()].setOffPageNeighbor(new CellPoint(pc.getName(), ep.getLoc()));
+						DebugManagement.writeNotificationToLog(ep.getId() + " comparing to " + ref.getEntryPointID());
+						if ((ep.getId()).equals(ref.getEntryPointID())){
+							DebugManagement.writeNotificationToLog("EntryPoint " + ep.getId() + " linked to " + ref.getEntryPointID());
+							output[(int) ref.getLoc().getX()][(int) ref.getLoc().getY()].setOffPageNeighbor(new CellPoint(pc.getName(), ep.getLoc()));
 						}
 					}
 				}
@@ -145,6 +150,9 @@ public class AStar {
 			DebugManagement.writeLineToLog(SEVERITY_LEVEL.FATAL, "you done broke shit, A* already ran."
 					+ "\n A* will try to continue but it wont do anything");
 		}
+		DebugManagement.writeNotificationToLog("First point " + startCellPoint.getCellName() + " " + startCellPoint.getPoint().toString());
+		DebugManagement.writeNotificationToLog("Second point " + endCellPoint.getCellName() + " " + endCellPoint.getPoint().toString());
+		
 		alreadyRan = true;
 		CellPoint currentPoint = startCellPoint;
 		TileInfo currentTile = getTileInfo(startCellPoint);
@@ -164,9 +172,10 @@ public class AStar {
 		this.frontier.add(startCellPoint);
 		/*So long as the frontier is not empty the tile we want to explore is the tile with 
 		 * For now its BFS so we just take the first element*/
-		while(!frontier.isEmpty()){
+		while(!frontier.isEmpty()) {
 			frontier = sortByCost(frontier);
-			currentPoint = frontier.get(0); 						
+			currentPoint = frontier.get(0); 
+			DebugManagement.writeNotificationToLog(currentPoint.getCellName());
 			if(currentPoint.equals(endPoint)){ //if we are at the end: 
 				ArrayList<CellPoint> FinalPath = buildPath(endPoint); 
 				events.AStarCompletePath(FinalPath); // Fires A* event. 
@@ -299,7 +308,7 @@ public class AStar {
 			}
 			
 			if(getTileInfo(currentPoint).getOffPageNeighbor() != null){
-				System.out.println("found off page connection");
+				DebugManagement.writeNotificationToLog("Off cell neighbor found at " + getTileInfo(currentPoint).getOffPageNeighbor().getCellName() + " " + getTileInfo(currentPoint).getOffPageNeighbor().getPoint()); 
 				output.add(getTileInfo(currentPoint).getOffPageNeighbor());
 			}
 			

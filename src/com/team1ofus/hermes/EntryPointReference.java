@@ -10,7 +10,7 @@ import java.awt.Point;
  */
 public class EntryPointReference {
 	//id of the Entry Point this object references.
-	private String id;
+	private String entryPointID;
 	//name of the Cell which contains the Entry Point this object references. 
 	//Note: this is NOT the cell that the EntryPointReference is contained in.
 	private String targetCell;
@@ -18,12 +18,12 @@ public class EntryPointReference {
 	private Point loc;
 	
 	public EntryPointReference(String anId, String aCellName, Point aLoc){
-		id = anId;
+		entryPointID = anId;
 		targetCell = aCellName;
 		loc = aLoc;
 	}
-	public String getId(){
-		return id;
+	public String getEntryPointID() {
+		return entryPointID;
 	}
 	public String getTargetCell(){
 		return targetCell; //Not the cell that holds this EntryPointReferenceObject!!

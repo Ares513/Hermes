@@ -25,7 +25,7 @@ public class CellConverter {
 				} else {
 					//not empty, it's a EntryPointReference
 					//first only
-					EntryPointReference convertedRef = new EntryPointReference(l.getAliases().get(0), l.getCellReference(), l.getLocation());
+					EntryPointReference convertedRef = new EntryPointReference(l.getEntryPoint(), l.getCellReference(), l.getLocation());
 					entryPointRefs.add(convertedRef);
 				}
 			}
