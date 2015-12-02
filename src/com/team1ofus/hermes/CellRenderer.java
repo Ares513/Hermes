@@ -36,6 +36,7 @@ public class CellRenderer {
 	private Point first;
 	private Point second;
 	private int panelSize = 230;
+	private double scale = 1;
 	public CellRenderer(PathCell inCell) {
 		drawnCell = inCell;
 		getFromSheet();
@@ -43,6 +44,7 @@ public class CellRenderer {
 
 	//Changes the width and height of tiles to corresponding to changes in the scale of zooming
 	public void zoom(double scale, int fwidth, int fheight){
+		this.scale = scale;
 		width =  (int)(BootstrapperConstants.TILE_WIDTH * scale);
 		height = (int)(BootstrapperConstants.TILE_HEIGHT * scale);
 
@@ -59,10 +61,10 @@ public class CellRenderer {
 		//DebugManagement.writeNotificationToLog("The current total height is:");
 		difWidth = (newTotalWidth - oldTotalWidth)/2;
 		System.out.println(difWidth);
-		//DebugManagement.writeNotificationToLog("The current x offset is:");
+		DebugManagement.writeNotificationToLog("difwidth" + difWidth);
 		difHeight = (newTotalHeight - oldTotalHeight)/2;
 		System.out.println(difHeight);
-		//DebugManagement.writeNotificationToLog("The current y offset is:");
+		DebugManagement.writeNotificationToLog("difheight" + difHeight);
 		
 		incrementOffset(difWidth,difHeight, fwidth, fheight);
 		prevScale = scale;
@@ -70,10 +72,38 @@ public class CellRenderer {
 	}
 
 	//Renders the tiles
-	public void renderTiles(Graphics g) {
-		for(int i=0; i<drawnCell.tiles.length; i++) {
-			for(int j=0; j<drawnCell.tiles[1].length; j++) {
-				switch(drawnCell.tiles[i][j].getTileType()) {
+	public void renderTiles(Graphics g, int windowWidth, int windowHeight) {
+		int cellWidth = drawnCell.getWidth();
+		int cellHeight = drawnCell.getHeight();
+		int lowerX = -1+(int)Math.ceil(offset.x / (BootstrapperConstants.TILE_WIDTH*scale));
+		int lowerY = -1+(int)Math.ceil(offset.y / (BootstrapperConstants.TILE_HEIGHT*scale));
+		int higherX = 1+(int)(Math.ceil(offset.x + windowWidth)/(BootstrapperConstants.TILE_WIDTH*scale));
+		int higherY = 1+(int)(Math.ceil(offset.y + windowHeight)/(BootstrapperConstants.TILE_HEIGHT*scale));
+		System.out.println(lowerX + "\t" + lowerY+ "\t" + higherX + "\t" + higherY);
+		if(windowWidth > BootstrapperConstants.TILE_WIDTH * cellWidth) {
+			higherX = cellWidth;
+		}
+		if(windowHeight > BootstrapperConstants.TILE_HEIGHT * cellHeight) {
+			higherY = cellHeight;
+		}
+		if(lowerX < 0)
+			lowerX = 0;
+		if(lowerY < 0)
+			lowerY = 0;
+		if(higherX > cellWidth)
+			higherX = cellWidth;
+		if(higherY > cellHeight)
+			higherY = cellHeight;
+		for(int i=lowerX; i<higherX; i++) {
+			for(int j=lowerY; j<higherY; j++) {
+				try {
+					drawnCell.getTile(new Point(i, j));
+								
+				} catch (ArrayIndexOutOfBoundsException e) {
+					System.out.println("helloworld");
+				}
+				
+				switch(drawnCell.getTile(new Point(i,j)).getTileType()) {
 				case WALL:
 					g.drawImage(spriteImages[0], i*width - offset.x, j*height - offset.y, width, height, null);
 					break;
@@ -197,7 +227,11 @@ public class CellRenderer {
 		} else if(offset.y > drawnCell.tiles[1].length * height - windowHeight) {
 			offset.y = drawnCell.tiles[1].length * height - windowHeight; 
 
-		}	
+		}
+		if(offset.x < 0)
+			offset.x = 0;
+		if(offset.y < 0)
+			offset.y = 0;
 
 		if(offset.x < 0) {
 			offset.x = 0;
