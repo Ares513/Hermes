@@ -39,6 +39,10 @@ public class CellRenderer {
 	private double scale = 1;
 	public CellRenderer(PathCell inCell) {
 		drawnCell = inCell;
+		int centerx= ((BootstrapperConstants.TILE_WIDTH * drawnCell.tiles.length)/2) - BootstrapperConstants.FRAME_WIDTH;
+		int centery= ((BootstrapperConstants.TILE_HEIGHT * drawnCell.tiles.length)/2) -BootstrapperConstants.FRAME_HEIGHT;
+		incrementOffset(centerx,centery, BootstrapperConstants.FRAME_WIDTH, BootstrapperConstants.FRAME_HEIGHT);
+
 		getFromSheet();
 	}
 
@@ -48,6 +52,7 @@ public class CellRenderer {
 		width =  (int)(BootstrapperConstants.TILE_WIDTH * scale);
 		height = (int)(BootstrapperConstants.TILE_HEIGHT * scale);
 
+		
 		DebugManagement.writeNotificationToLog("The previous scale was");
 		oldTotalWidth= (int)((BootstrapperConstants.TILE_WIDTH * drawnCell.tiles.length ) * prevScale);
 		//DebugManagement.writeNotificationToLog("drawnCell.tiles.length: " + );
@@ -59,16 +64,16 @@ public class CellRenderer {
 		//DebugManagement.writeNotificationToLog("The current total width is:");
 		newTotalHeight= (int)((BootstrapperConstants.TILE_HEIGHT * drawnCell.tiles[1].length ) * scale);
 		//DebugManagement.writeNotificationToLog("The current total height is:");
-		difWidth = (newTotalWidth - oldTotalWidth)/2;
+		difWidth = ((newTotalWidth - oldTotalWidth)/2);
 		System.out.println(difWidth);
 		DebugManagement.writeNotificationToLog("difwidth" + difWidth);
-		difHeight = (newTotalHeight - oldTotalHeight)/2;
+		difHeight = ((newTotalHeight - oldTotalHeight)/2);
 		System.out.println(difHeight);
 		DebugManagement.writeNotificationToLog("difheight" + difHeight);
 		
 		incrementOffset(difWidth,difHeight, fwidth, fheight);
 		prevScale = scale;
-
+		
 	}
 
 	//Renders the tiles
@@ -232,12 +237,13 @@ public class CellRenderer {
 			offset.x = 0;
 		if(offset.y < 0)
 			offset.y = 0;
-
+/*
 		if(offset.x < 0) {
 			offset.x = 0;
 		}
 		if(offset.y < 0) {
 			offset.y = 0;
 		}
+		*/
 	}
 }
