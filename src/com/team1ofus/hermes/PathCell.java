@@ -124,6 +124,10 @@ public class PathCell{
 	    		}
 	    		else if(type.equals(TILE_TYPE.BENCH)){
 	    			tiles[i][j] = new Bench(name, new Point(i, j));
+	    			ArrayList<String> benchNames = new ArrayList<String>();
+	    			benchNames.add("AutoGen Bench " + this.getDisplayName());
+	    			benchNames.add("AutoGen Place To Sit " + this.getDisplayName());
+	    			namedPoints.add(new LocationNameInfo(new Point(i,j), benchNames));
 	    		}
 	    		else if(type.equals(TILE_TYPE.TREE)){
 	    			tiles[i][j] = new Tree(name, new Point(i, j));

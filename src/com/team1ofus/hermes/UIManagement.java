@@ -101,6 +101,10 @@ public class UIManagement implements IHumanInteractionListener, IMapManagementIn
 				findNearestLocation(startPoint, "Unisex Bathroom");
 				return; //we're done.
 			}
+			if(destination.getFields().contains(BootstrapperConstants.BENCH_IDENTIFIER)) {
+				findNearestLocation(startPoint, "Bench");
+				return; //we're done.
+			}
 			if (pc.getName().equals(destination.getCellName())){
 				destPoint = locationRecordToPoint(pc, destination);
 				//window.getPointPane().setSecond(destPoint.getPoint());

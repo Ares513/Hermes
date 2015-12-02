@@ -284,6 +284,7 @@ public class HermesUI extends JPanel implements IHumanInteractionListener{
 	    locationNameInfoRecords.add(new Record(BootstrapperConstants.MALE_BATHROOM_IDENTIFIER, "No Cell Ref"));
 	    locationNameInfoRecords.add(new Record(BootstrapperConstants.FEMALE_BATHROOM_IDENTIFIER, "No Cell Ref"));
 	    locationNameInfoRecords.add(new Record(BootstrapperConstants.UNISEX_BATHROOM_IDENTIFIER, "No Cell Ref"));
+	    locationNameInfoRecords.add(new Record(BootstrapperConstants.BENCH_IDENTIFIER, "No Cell Ref"));
 	    
 	    for (Record r:locationNameInfoRecords){
 	    	//leave out bathroom, bench and autogen records
