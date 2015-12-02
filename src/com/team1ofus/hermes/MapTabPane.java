@@ -21,12 +21,19 @@ public class MapTabPane extends JLayeredPane {
 	private PointPane pointPanel;
 	private String name;
 	private PathCell currentCell;
-	private double zoomScale;
+	private double zoomScale = 1;
 	private boolean dragging;
 	private Point lastDragLocation;
 	private Point first;
 	private Point second;
 	public HumanInteractionEventObject humanInteractive; 
+	private double maxZoomOutx;
+	private double maxZoomOuty ;
+	private double maxZoomOutF;
+	private double maxZoomOut = 0.5;
+	private double maxZoomIn = 1.75D;
+	private int scalingNum = 1;
+
 	
 	public MapTabPane(PathCell cell) {
 		humanInteractive = new HumanInteractionEventObject();
@@ -38,6 +45,13 @@ public class MapTabPane extends JLayeredPane {
 		textPanel = new TextPane();
 		pointPanel = new PointPane();
 		name = "shit";
+		maxZoomOutx = (BootstrapperConstants.FRAME_WIDTH/ ((currentCell.tiles.length) *(BootstrapperConstants.TILE_WIDTH)));
+		System.out.println(currentCell.tiles.length);
+		maxZoomOuty = (BootstrapperConstants.FRAME_HEIGHT/ ((currentCell.tiles[1].length) *(BootstrapperConstants.TILE_HEIGHT)));
+		//maxZoomOut = (maxZoomOutx < maxZoomOuty) ? maxZoomOutx : maxZoomOuty;
+		//maxZoomOut = (maxZoomOutF) * 10;// * 0.5;//An estimate for the max zoomout
+		
+		System.out.println(maxZoomOut);
 		
 		initialize();
 		buildControl();
@@ -66,10 +80,8 @@ public class MapTabPane extends JLayeredPane {
 		this.addMouseWheelListener(new MouseAdapter() {
 				@Override
 				public void mouseWheelMoved(MouseWheelEvent e) {
-					int scalingNum = 1;//Increasing this number increases the amount of zoom one mousewheel "scroll" will zoom in for
-					double maxZoomOut = 1;
-					double maxZoomIn = 1.75D;
-					double zoomChangeFactor = (scalingNum/(double)BootstrapperConstants.TILE_WIDTH);
+					//scalingNum = 2;//Increasing this number increases the amount of zoom one mousewheel "scroll" will zoom in for
+				    double zoomChangeFactor = (scalingNum/(double)BootstrapperConstants.TILE_WIDTH);
 					double delta = -zoomChangeFactor * e.getPreciseWheelRotation();
 					if(zoomScale + delta <= maxZoomOut){
 						zoomScale = maxZoomOut;
@@ -178,11 +190,9 @@ public class MapTabPane extends JLayeredPane {
 	
 	public void zoom(int zoomDirection){
 
-		int scalingNum = 5;//Increasing this number increases the amount of zoom one mousewheel "scroll" will zoom in for
-		double maxZoomOut = 1;
-		double maxZoomIn = 1.75D;
+	   // scalingNum = 1;//Increasing this number increases the amount of zoom one mousewheel "scroll" will zoom in for
 		double zoomChangeFactor = (scalingNum/(double)BootstrapperConstants.TILE_WIDTH);
-		double delta = -zoomChangeFactor * zoomDirection;
+	    double delta = -zoomChangeFactor * zoomDirection;
 		if(zoomScale + delta <= maxZoomOut){
 			zoomScale = maxZoomOut;
 		}
@@ -190,7 +200,6 @@ public class MapTabPane extends JLayeredPane {
 			zoomScale = maxZoomIn;
 		}
 		else{
-			System.out.println(zoomScale);
 			zoomScale += delta;
 			mapPanel.render.zoom(zoomScale, BootstrapperConstants.FRAME_WIDTH, BootstrapperConstants.FRAME_HEIGHT);
 			pathPanel.zoom(zoomScale);
