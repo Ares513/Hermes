@@ -27,6 +27,7 @@ InstructionDictionary                              Stores the path directions ba
  */
 
 import com.team1ofus.hermes.BootstrapperConstants;
+import com.team1ofus.hermes.HermesUI;
 import com.team1ofus.apollo.TILE_TYPE;
 
 public class DataManagement {
@@ -88,8 +89,8 @@ public class DataManagement {
 	}
 	private List<Path> getAvailableCells(String directoryPathWithNameAndExtension) throws IOException {
 		List<Path> output = new ArrayList<Path>();
-		File file = new File(BootstrapperConstants.APP_FILE_DIRECTORY);
-		
+		File file = new File(HermesUI.class.getResource("/com/team1ofus/hermes/resources/").getPath());
+		System.out.println(file.getAbsolutePath());
 		File[] listOfFiles = file.listFiles();
 		for(File f : listOfFiles) {
 			if(f.isFile()) {

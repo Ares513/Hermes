@@ -80,9 +80,8 @@ public class HermesUI extends JPanel implements IHumanInteractionListener{
 	private JFrame frameHermes;
 	//private PathPane pathPanel;
 	//private PointPane pointPanel;
-	private Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
-	private int frameWidth = screenSize.width-200;
-	private int frameHeight = screenSize.height-200;
+	private int frameWidth = BootstrapperConstants.FRAME_WIDTH;
+	private int frameHeight = BootstrapperConstants.FRAME_HEIGHT;
 	//private MapPane gridMap;
 	int scrollSpeed = 5;
 	private ArrayList<PathCell> allCells = new ArrayList<PathCell>();
@@ -171,7 +170,7 @@ public class HermesUI extends JPanel implements IHumanInteractionListener{
 	//Builds the frames and panels for the UI, as well as adding the mouse events that will affect the UI
 	private void buildControl(){
 		frameHermes = new JFrame();
-		frameHermes.setIconImage(Toolkit.getDefaultToolkit().getImage(HermesUI.class.getResource("/com/team1ofus/hermes/setup_assistant.png")));
+		frameHermes.setIconImage(Toolkit.getDefaultToolkit().getImage(HermesUI.class.getResource("/com/team1ofus/hermes/resources/setup_assistant.png")));
 		frameHermes.addMouseMotionListener(new MouseMotionAdapter() {
 			@Override
 			public void mouseDragged(MouseEvent e) {
@@ -316,12 +315,11 @@ public class HermesUI extends JPanel implements IHumanInteractionListener{
 
 		zoomInButton = new JButton("");
 		horizontalBox.add(zoomInButton);
-		zoomInButton.setIcon(new ImageIcon(HermesUI.class.getResource("/com/team1ofus/hermes/zoomin25.png")));
+		zoomInButton.setIcon(new ImageIcon(HermesUI.class.getResource("/com/team1ofus/hermes/resources/zoomin25.png")));
 		//These event handlers will handle zooming in and out based on the zoom buttons TODO Make this work
 		zoomInButton.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				System.out.println("Plus Button pressed");
 				int zoomin = -1;
 				tabbedPane.getSelectedTabPane().getSelectedTabPane().zoom(zoomin);
 			}
@@ -329,11 +327,10 @@ public class HermesUI extends JPanel implements IHumanInteractionListener{
 
 		zoomOutBtn = new JButton("");
 		horizontalBox.add(zoomOutBtn);
-		zoomOutBtn.setIcon(new ImageIcon(HermesUI.class.getResource("/com/team1ofus/hermes/zoomout25.png")));
+		zoomOutBtn.setIcon(new ImageIcon(HermesUI.class.getResource("/com/team1ofus/hermes/resources/zoomout25.png")));
 		zoomOutBtn.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				System.out.println("Minus Button pressed");
 				int zoomout = 1;
 				tabbedPane.getSelectedTabPane().getSelectedTabPane().zoom(zoomout);
 			}
