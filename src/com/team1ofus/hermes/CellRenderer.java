@@ -105,8 +105,10 @@ public class CellRenderer {
 				case HORIZONTAL_RIGHT_STAIRS:
 					g.drawImage(spriteImages[8], i*width - offset.x, j*height - offset.y, width, height, null);
 					break;
+				case CLASSROOM:
+					g.drawImage(spriteImages[9], i*width - offset.x, j*height - offset.y, width, height, null);
+					break;
 				case IMPASSABLE:
-					//9 is Steep, which is now deprecated
 					g.drawImage(spriteImages[10], i*width - offset.x, j*height - offset.y, width, height, null);
 					break;
 				case MALE_BATHROOM:
