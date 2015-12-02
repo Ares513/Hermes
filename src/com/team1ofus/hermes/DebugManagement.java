@@ -24,8 +24,8 @@ public class DebugManagement {
 			
 			
 			DebugConsole.addLine("[ " + d + "] " + "NOTIFICATION" + ": " + message);
-		
+			System.out.println("[ " + d + "] " + "NOTIFICATION" + ": " + message);
+			
 		}
-		System.out.println("[ " + d + "] " + "NOTIFICATION" + ": " + message);
-	}
+		}
 }
