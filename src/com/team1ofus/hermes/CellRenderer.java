@@ -16,7 +16,7 @@ import javax.imageio.ImageIO;
 public class CellRenderer {
 	private int width = BootstrapperConstants.TILE_WIDTH;
 	private int height = BootstrapperConstants.TILE_HEIGHT;
-	public double prevScale = 1D;
+	public double prevScale = 1;
 	int oldTotalWidth;
 	int oldTotalHeight;
 	int newTotalWidth;
@@ -46,9 +46,13 @@ public class CellRenderer {
 
 		
 		oldTotalWidth= (int)((BootstrapperConstants.TILE_WIDTH * drawnCell.tiles.length ) * prevScale);
+		DebugManagement.writeNotificationToLog("drawnCell.tiles.length shows:");
+		System.out.println(drawnCell.tiles.length);
 		//DebugManagement.writeNotificationToLog("The previous total width was:");
 		//System.out.println(oldTotalWidth);
 		oldTotalHeight= (int)((BootstrapperConstants.TILE_HEIGHT * drawnCell.tiles[1].length ) * prevScale);
+		DebugManagement.writeNotificationToLog("drawnCell.tiles[1].length shows:");
+		System.out.println(drawnCell.tiles[1].length);
 		//DebugManagement.writeNotificationToLog("The previous total height was:");
 		//System.out.println(oldTotalHeight);
 		newTotalWidth= (int)((BootstrapperConstants.TILE_WIDTH * drawnCell.tiles.length ) * scale);
@@ -64,8 +68,7 @@ public class CellRenderer {
 		//DebugManagement.writeNotificationToLog("The current y offset is:");
 		//System.out.println(difHeight);
 		
-		//NEED TO GET difWidth and difHeight over to pathpane to add to its offsets in drawLine
-		incrementOffset(difWidth,difHeight, fwidth, fheight);
+		incrementOffset(difWidth,difHeight, width, height);
 		prevScale = scale;
 
 	}

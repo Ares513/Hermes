@@ -178,7 +178,7 @@ public class MapTabPane extends JLayeredPane {
 	
 	public void zoom(int zoomDirection){
 
-		int scalingNum = 1;//Increasing this number increases the amount of zoom one mousewheel "scroll" will zoom in for
+		int scalingNum = 5;//Increasing this number increases the amount of zoom one mousewheel "scroll" will zoom in for
 		double maxZoomOut = 1;
 		double maxZoomIn = 1.75D;
 		double zoomChangeFactor = (scalingNum/(double)BootstrapperConstants.TILE_WIDTH);
