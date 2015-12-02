@@ -93,6 +93,8 @@ public class UIManagement implements IHumanInteractionListener, IMapManagementIn
 			}
 		}
 		events.doPathReady(0, startPoint, destPoint);
+		first = null;
+		second = null;
 	}
 	/* converts a record output by search into a point to send to A*
 	 * Will need to be refactored to return a cellPoint soon (before multimap pathing is done).
