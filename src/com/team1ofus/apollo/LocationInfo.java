@@ -19,12 +19,12 @@ public class LocationInfo implements Serializable {
 		aliases.add(first);
 		cellReference = cellID;
 		this.entryPoint = entryPoint;
-		com.team1ofus.hermes.DebugManagement.writeNotificationToLog("Created a new location with " + cellID +  " reference with " + first + " at " + location + " entry point " + entryPoint);
+		core.DebugManagement.writeNotificationToLog("Created a new location with " + cellID +  " reference with " + first + " at " + location + " entry point " + entryPoint);
 	}
 	public LocationInfo(String first, Point location) {
 		loc = location;
 		aliases.add(first);
-		com.team1ofus.hermes.DebugManagement.writeNotificationToLog("Created a new location with no reference with " + first + " at " + location);
+		core.DebugManagement.writeNotificationToLog("Created a new location with no reference with " + first + " at " + location);
 	}
 	public void addAlias(String name) {
 		//TODO: prevent duplicate names.

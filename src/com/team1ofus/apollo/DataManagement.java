@@ -26,10 +26,12 @@ loadInstructionDictionary                       Will load the instructions of ge
 InstructionDictionary                              Stores the path directions based on algorithm output
  */
 
-import com.team1ofus.hermes.BootstrapperConstants;
-import com.team1ofus.hermes.DebugManagement;
-import com.team1ofus.hermes.HermesUI;
+import ui.HermesUI;
+
 import com.team1ofus.apollo.TILE_TYPE;
+
+import core.BootstrapperConstants;
+import core.DebugManagement;
 
 public class DataManagement {
 	ArrayList<Cell> cells;
