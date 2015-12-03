@@ -101,7 +101,6 @@ public class MapTabPane extends JLayeredPane {
 						pathPanel.repaint();
 						pointPanel.setOffset(mapPanel.render.offset);
 						textPanel.zoomScale = zoomScale;
-						textPanel.offset = mapPanel.render.offset;
 						textPanel.repaint();
 						repaintPanel();
 						repaint();
@@ -191,7 +190,15 @@ public class MapTabPane extends JLayeredPane {
 	public PathCell getCurrentCell() {
 		return currentCell;
 	}
-	
+	public void setOffset(Point input) {
+		mapPanel.render.offset = input;
+		pathPanel.setOffset(mapPanel.render.offset);
+		pathPanel.repaint();
+		textPanel.offset = mapPanel.render.offset;
+		pointPanel.setOffset(mapPanel.render.offset);
+		repaintPanel();
+		
+	}
 	public void zoom(int zoomDirection){
 
 	   // scalingNum = 1;//Increasing this number increases the amount of zoom one mousewheel "scroll" will zoom in for
@@ -221,15 +228,7 @@ public class MapTabPane extends JLayeredPane {
 	
 		
 	}
-	public void setOffset(Point offset) {
-		mapPanel.render.offset = offset;
-		
-		//textPanel.zoom(zoomScale); TODO scale with text
-		pathPanel.setOffset(mapPanel.render.offset);
-		pathPanel.repaint();
-		pointPanel.setOffset(mapPanel.render.offset);
-		textPanel.offset = mapPanel.render.offset;
-	}
+	
 	private void processClick(Point picked) {
 		DebugManagement.writeNotificationToLog("Mouse clicked at " + picked.x + " , " + picked.y);
 		if(mapPanel.render.getTile(picked.x, picked.y).tileType != TILE_TYPE.WALL || mapPanel.render.getTile(picked.x, picked.y).tileType != TILE_TYPE.IMPASSABLE) {

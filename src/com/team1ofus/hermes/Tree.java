@@ -20,6 +20,6 @@ public class Tree extends Tile implements TileInterface {
 	//------------------------------------------------------------------------------
 	
 	public int getTraverseCost() {
-		return 30;
+		return 300;
 	}
 }

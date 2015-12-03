@@ -175,6 +175,7 @@ public class HermesUI extends JPanel implements IHumanInteractionListener{
 			 repaintPanel();
 			 tabbedPane.getSelectedTabPane().getSelectedTabPane().getPathPane().drawPath(segmentedPath.get(i), cellsInPath.get(i));			 
 			 tabbedPane.getSelectedTabPane().getSelectedTabPane().setOffset(new Point(segmentedPath.get(i).get(0).getPoint().x * BootstrapperConstants.TILE_WIDTH, segmentedPath.get(i).get(0).getPoint().y * BootstrapperConstants.TILE_HEIGHT));
+			 
 			 if(i == 0){ 
 				 tabbedPane.getSelectedTabPane().getSelectedTabPane().getPointPane().setFirst(firstPoint);
 			 }
