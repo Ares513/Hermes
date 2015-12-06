@@ -12,10 +12,11 @@ import com.team1ofus.apollo.TILE_TYPE;
 import core.DebugManagement;
 import core.SEVERITY_LEVEL;
 import events.AStarInteractionEventObject;
+import tiles.Tile;
 
 public class AStar { 
 	AStarInteractionEventObject events;
-	HashMap<String, TileInfo[][]> cellMap;
+	HashMap<String, HashMap<Point, TileInfo>> cellMap;
 	ArrayList<PathCell> accessedCells; 
 	// Nodes that need to be explored
 	ArrayList<CellPoint> frontier;
@@ -28,10 +29,10 @@ public class AStar {
 		accessedCells = cells;
 		frontier = new ArrayList<CellPoint>(); 
 		explored = new ArrayList<CellPoint>();
-		cellMap = new HashMap<String, TileInfo[][]>();
+		cellMap = new HashMap<String, HashMap<Point,TileInfo>>();
 		for(PathCell cell: cells){
 			DebugManagement.writeNotificationToLog("Created a new TileInfoArray for " + cell.getName());
-			cellMap.put(cell.getName(), makeTileInfoArray(cell));
+			cellMap.put(cell.getName(), new HashMap<Point,TileInfo>());
 		}
 	}
 	private class TileInfo implements Comparable<TileInfo> {
@@ -102,7 +103,7 @@ public class AStar {
 	}
 
 	private TileInfo getTileInfo(CellPoint aCellPoint){
-		TileInfo output = cellMap.get(aCellPoint.getCellName())[(int) aCellPoint.getPoint().getX()][(int) aCellPoint.getPoint().getY()];
+		TileInfo output = cellMap.get(aCellPoint.getCellName()).get(aCellPoint.getPoint());
 		return output;
 	}
 
@@ -110,38 +111,39 @@ public class AStar {
 	 * Makes a 2d array of size x,y filled with blank TileInfos
 	 * This is a function right now so that its more flexible if needed.
 	 */
-	private TileInfo[][] makeTileInfoArray(PathCell newCell){
-		TileInfo[][] output = new TileInfo[newCell.tiles.length][newCell.tiles[0].length];
-		for(int i = 0; i < newCell.tiles.length; i++){
-			for(int j = 0; j < newCell.tiles[0].length; j++){
-				output[i][j] = new TileInfo(newCell.getTile(new Point(i,j)).getTileType(), 
-						newCell.getTile(new Point(i,j)).getTraverseCost(), new CellPoint(newCell.cellName, new Point(i,j)));
-			}
-		}
-		/*
-		Find the tiles who have references to an entry point in another cell, 
-		and then give them a cell point which is the point they reference.
-		This won't work with incremental cell loading, if we implement that.
-		 */
-
-		for(EntryPointReference ref : newCell.getEntryPointReferences()){
-			for (PathCell pc: accessedCells){
-				DebugManagement.writeNotificationToLog("CellName " + pc.getName() + " compared to " + ref.getTargetCell());
-				if ((pc.getName()).equals(ref.getTargetCell())){
-					DebugManagement.writeNotificationToLog("Matched " + pc.getName() + " to " + ref.getTargetCell());
-					
-					for (EntryPoint ep : pc.getEntryPoints()){
-						DebugManagement.writeNotificationToLog(ep.getId() + " comparing to " + ref.getEntryPointID());
-						if ((ep.getId()).equals(ref.getEntryPointID())){
-							DebugManagement.writeNotificationToLog("EntryPoint " + ep.getId() + " linked to " + ref.getEntryPointID());
-							output[(int) ref.getLoc().getX()][(int) ref.getLoc().getY()].setOffPageNeighbor(new CellPoint(pc.getName(), ep.getLoc()));
-						}
-					}
-				}
-			}
-		}
-		return output;
-	}
+//	private TileInfo[][] makeTileInfoArray(PathCell newCell){
+//		TileInfo[][] output = new TileInfo[newCell.tiles.length][newCell.tiles[0].length];
+//		for(int i = 0; i < newCell.tiles.length; i++){
+//			for(int j = 0; j < newCell.tiles[0].length; j++){
+//				output[i][j] = new TileInfo(newCell.getTile(new Point(i,j)).getTileType(), 
+//						newCell.getTile(new Point(i,j)).getTraverseCost(), new CellPoint(newCell.cellName, new Point(i,j)));
+//			
+//			}
+//		}
+//		/*
+//		Find the tiles who have references to an entry point in another cell, 
+//		and then give them a cell point which is the point they reference.
+//		This won't work with incremental cell loading, if we implement that.
+//		 */
+//
+//		for(EntryPointReference ref : newCell.getEntryPointReferences()){
+//			for (PathCell pc: accessedCells){
+//				DebugManagement.writeNotificationToLog("CellName " + pc.getName() + " compared to " + ref.getTargetCell());
+//				if ((pc.getName()).equals(ref.getTargetCell())){
+//					DebugManagement.writeNotificationToLog("Matched " + pc.getName() + " to " + ref.getTargetCell());
+//					
+//					for (EntryPoint ep : pc.getEntryPoints()){
+//						DebugManagement.writeNotificationToLog(ep.getId() + " comparing to " + ref.getEntryPointID());
+//						if ((ep.getId()).equals(ref.getEntryPointID())){
+//							DebugManagement.writeNotificationToLog("EntryPoint " + ep.getId() + " linked to " + ref.getEntryPointID());
+//							output[(int) ref.getLoc().getX()][(int) ref.getLoc().getY()].setOffPageNeighbor(new CellPoint(pc.getName(), ep.getLoc()));
+//						}
+//					}
+//				}
+//			}
+//		}
+//		return output;
+//	}
 
 	/*
 	 * Takes a start Cell "map", start point (the exact tile within a Cell, and the 
@@ -150,7 +152,6 @@ public class AStar {
 	 */
 	public ArrayList<CellPoint> getPath(CellPoint startCellPoint, CellPoint endCellPoint, boolean isFiltering){
 		if(alreadyRan == true){ // A* needs to be reinitialized each time it runs. this checks that
-			System.out.println("You done Broke shit, A* already ran");
 			DebugManagement.writeLineToLog(SEVERITY_LEVEL.FATAL, "you done broke shit, A* already ran."
 					+ "\n A* will try to continue but it wont do anything");
 		}
@@ -159,6 +160,7 @@ public class AStar {
 		
 		alreadyRan = true;
 		CellPoint currentPoint = startCellPoint;
+		cellMap.get(currentPoint.getCellName()).put(currentPoint.getPoint(), buildTileInfo(currentPoint));
 		TileInfo currentTile = getTileInfo(startCellPoint);
 		if(currentTile.getTileType().equals(TILE_TYPE.WALL)){
 			return null;
@@ -200,6 +202,9 @@ public class AStar {
 			currentTile = getTileInfo(currentPoint);
 			double moveMultiplier;
 			for(CellPoint neighborPoint: getNeighbors(currentPoint)){
+				if(!cellMap.containsKey(neighborPoint)){
+					cellMap.get(currentPoint.getCellName()).put(currentPoint.getPoint(), buildTileInfo(currentPoint));
+				}
 				neighborTile = getTileInfo(neighborPoint);
 				if(!neighborTile.canBeEntered(currentPoint, neighborPoint)){
 					continue;
@@ -231,6 +236,23 @@ public class AStar {
 		DebugManagement.writeLineToLog(SEVERITY_LEVEL.SEVERE, "No path found!");
 		return null;
 	}
+	private TileInfo buildTileInfo(CellPoint currentPoint) {
+		PathCell currentCell = null;
+		Tile currentTile = null;
+		TileInfo currentTileInfo = null;
+		for(PathCell each: accessedCells){
+			if(each.getName().equals(currentPoint.getCellName())){
+				currentCell = each;
+			}
+		}
+		if(currentCell.equals(null)){
+			DebugManagement.writeNotificationToLog("BuildTileInfo failed to find the appropriate Cell");
+		}
+		currentTile = currentCell.getTile(currentPoint.getPoint());
+		currentTileInfo = new TileInfo(currentTile.getTileType(), currentTile.getTraverseCost(), currentPoint);
+		return currentTileInfo;
+	}
+
 	private ArrayList<CellPoint> sortByCost(ArrayList<CellPoint> input) {
 		ArrayList<TileInfo> working = new ArrayList<TileInfo>();
 		ArrayList<CellPoint> output = new ArrayList<CellPoint>();
@@ -322,4 +344,7 @@ public class AStar {
 			
 			return output;
 		}
+		
+		/*utility function to get a particular path cell from accessed cells knowing only its name*/
+		
 }
