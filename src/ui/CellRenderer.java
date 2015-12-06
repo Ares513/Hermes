@@ -35,6 +35,8 @@ public class CellRenderer {
 	int newTotalHeight;
 	int difWidth;
 	int difHeight;	
+	int finalHeight;
+	int finalWidth;
 	final int rows = 2;
 	final int cols = 14;
 	BufferedImage[] spriteImages = new BufferedImage[rows * cols];
@@ -60,26 +62,27 @@ public class CellRenderer {
 		width =  (int)(BootstrapperConstants.TILE_WIDTH * scale);
 		height = (int)(BootstrapperConstants.TILE_HEIGHT * scale);
 
-		/*
-		DebugManagement.writeNotificationToLog("The previous scale was");
-		oldTotalWidth= (int)((BootstrapperConstants.TILE_WIDTH * drawnCell.tiles.length ) * prevScale);
-		//DebugManagement.writeNotificationToLog("drawnCell.tiles.length: " + );
-		//DebugManagement.writeNotificationToLog("The previous total width was:");
-		oldTotalHeight= (int)((BootstrapperConstants.TILE_HEIGHT * drawnCell.tiles[1].length ) * prevScale);
-		DebugManagement.writeNotificationToLog("drawnCell.tiles[1].length shows:");
-		//DebugManagement.writeNotificationToLog("The previous total height was:");
-		newTotalWidth= (int)((BootstrapperConstants.TILE_WIDTH * drawnCell.tiles.length ) * scale);
-		//DebugManagement.writeNotificationToLog("The current total width is:");
-		newTotalHeight= (int)((BootstrapperConstants.TILE_HEIGHT * drawnCell.tiles[1].length ) * scale);
-		//DebugManagement.writeNotificationToLog("The current total height is:");
-		difWidth = ((newTotalWidth - oldTotalWidth)/2);
-		DebugManagement.writeNotificationToLog("difwidth" + difWidth);
-		difHeight = ((newTotalHeight - oldTotalHeight)/2);
-		DebugManagement.writeNotificationToLog("difheight" + difHeight);
-		
-		incrementOffset(difWidth, difHeight, fwidth, fheight);
-		prevScale = scale;
-		*/
+		//DebugManagement.writeNotificationToLog("The previous scale was");
+				oldTotalWidth= (int)((BootstrapperConstants.TILE_WIDTH * drawnCell.getWidth() ) * prevScale);
+				//DebugManagement.writeNotificationToLog("drawnCell.tiles.length: " + );
+				//DebugManagement.writeNotificationToLog("The previous total width was:");
+				oldTotalHeight= (int)((BootstrapperConstants.TILE_HEIGHT * drawnCell.getHeight() ) * prevScale);
+				//DebugManagement.writeNotificationToLog("drawnCell.tiles[1].length shows:");
+				//DebugManagement.writeNotificationToLog("The previous total height was:");
+				newTotalWidth= (int)((BootstrapperConstants.TILE_WIDTH * drawnCell.getWidth() ) * scale);
+				//DebugManagement.writeNotificationToLog("The current total width is:");
+				newTotalHeight= (int)((BootstrapperConstants.TILE_HEIGHT * drawnCell.getHeight() ) * scale);
+				//DebugManagement.writeNotificationToLog("The current total height is:");
+				difWidth = ( ((newTotalWidth - oldTotalWidth)/2) );
+				finalWidth = difWidth + (int)(difWidth * (scale - 1));
+				finalHeight = difHeight + (int)(difHeight * (scale - 1));
+				DebugManagement.writeNotificationToLog("difwidth" + difWidth);
+				difHeight = ((newTotalHeight - oldTotalHeight)/2);
+				DebugManagement.writeNotificationToLog("difheight" + difHeight);
+				
+				incrementOffset(difWidth, difHeight, fwidth, fheight);
+				prevScale = scale;
+
 	}
 
 	//Renders the tiles

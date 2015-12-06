@@ -36,7 +36,7 @@ public class MapTabPane extends JLayeredPane {
 	private double maxZoomOutx;
 	private double maxZoomOuty ;
 	private double maxZoomOutF;
-	private double maxZoomOut = 0.5;
+	private double maxZoomOut = 0.01;
 	private double maxZoomIn = 3D;
 	private int scalingNum = 1;
 
