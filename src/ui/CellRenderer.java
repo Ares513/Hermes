@@ -13,6 +13,8 @@ import java.io.IOException;
 
 import javax.imageio.ImageIO;
 
+import com.team1ofus.apollo.TILE_TYPE;
+
 import core.BootstrapperConstants;
 import core.DebugManagement;
 import pathing.PathCell;
@@ -216,6 +218,26 @@ public class CellRenderer {
 
 		return drawnCell.getTile(new Point(xActual, yActual));
 	}
+	private void drawWall(Point p, Graphics g) {
+		if(p.getX() > 1 && p.getY() > 1) {
+			boolean[] pt = new boolean[8];
+			pt[0] = getTile((int)p.getX() - 1, (int)p.getY() - 1).getTileType() == TILE_TYPE.WALL;
+			pt[1] = getTile((int)p.getX(), (int)p.getY() - 1).getTileType() == TILE_TYPE.WALL;
+			pt[2] = getTile((int)p.getX(), (int)p.getY() - 1).getTileType() == TILE_TYPE.WALL;
+			pt[3] = getTile((int)p.getX()+1, (int)p.getY() - 1).getTileType() == TILE_TYPE.WALL;
+			pt[4] = getTile((int)p.getX()-1, (int)p.getY()).getTileType() == TILE_TYPE.WALL;
+			pt[5] = getTile((int)p.getX()+1, (int)p.getY()).getTileType() == TILE_TYPE.WALL;
+			pt[6] = getTile((int)p.getX()-1, (int)p.getY()).getTileType() == TILE_TYPE.WALL;
+			pt[7] = getTile((int)p.getX()-1, (int)p.getY()+1).getTileType() == TILE_TYPE.WALL;
+			pt[8] = getTile((int)p.getX()+1, (int)p.getY()+1).getTileType() == TILE_TYPE.WALL;
+			//now, draw the segments based on t/f values.
+			Point pixelPt = new Point(p.x * BootstrapperConstants.TILE_WIDTH, p.y * BootstrapperConstants.TILE_HEIGHT);
+			//g.drawImage(spriteImages[0], dx1, dy1, dx2, dy2, sx1, sy1, sx2, sy2, observer)
+		} else {
+			//map edge
+		}
+	}
+	
 	public void incrementOffset(int dx, int dy, int windowWidth, int windowHeight) {
 		//some optimizations to be made here
 		DebugManagement.writeNotificationToLog("Offset is : " + offset.toString());
