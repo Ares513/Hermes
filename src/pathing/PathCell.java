@@ -177,7 +177,11 @@ public class PathCell{
      * Not safe for out of bounds calls.
      */
     public Tile getTile(Point tilePoint) {
-        return tiles.get(tilePoint);
+    	Tile output = tiles.get(tilePoint);
+    	if(output == null) {
+    		return new Wall(getName(), tilePoint);
+    	}
+        return output;
     }
     
 	public ArrayList<Tile> getPossibleTraversals(Point tilePoint){

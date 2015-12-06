@@ -232,7 +232,8 @@ public class CellRenderer {
 			pt[8] = getTile((int)p.getX()+1, (int)p.getY()+1).getTileType() == TILE_TYPE.WALL;
 			//now, draw the segments based on t/f values.
 			Point pixelPt = new Point(p.x * BootstrapperConstants.TILE_WIDTH, p.y * BootstrapperConstants.TILE_HEIGHT);
-			//g.drawImage(spriteImages[0], dx1, dy1, dx2, dy2, sx1, sy1, sx2, sy2, observer)
+			
+			//g.drawImage(spriteImages[0], pixelPt.x, dy1, pixelPt.y, dy2, sx1, sy1, sx2, sy2, observer)
 		} else {
 			//map edge
 		}

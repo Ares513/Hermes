@@ -2,6 +2,7 @@ package core;
 
 import java.awt.Dimension;
 import java.awt.Toolkit;
+import java.io.File;
 
 public class BootstrapperConstants {
 	public static final String APP_FILE_DIRECTORY = System.getProperty("user.dir");

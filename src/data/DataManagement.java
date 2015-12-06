@@ -37,6 +37,7 @@ public class DataManagement implements IUIManagementInteractionListener {
 	ArrayList<HashCell> cells;
 	private boolean upgradeNeeded; //boolean indicating if a save is needed on launch.
 	public DataManagement() {
+		DebugManagement.writeNotificationToLog("Launching with directory " + BootstrapperConstants.APP_FILE_DIRECTORY);
 		cells = new ArrayList<HashCell>();
 		//process: load blank map into memory, then save it
 
