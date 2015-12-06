@@ -75,9 +75,9 @@ public class TextPane extends JPanel {
 	public void labelAllTiles(PathCell target) {
 		int i=0;
 		int j=0;
-		while(i < target.tiles.length) {
+		while(i < target.getWidth()) {
 			j = 0;
-			while(j < target.tiles[i].length) {
+			while(j < target.getHeight()) {
 				//locations.add(new TextLocation(i + "," + j, new Point(i*BootstrapperConstants.TILE_WIDTH, j*BootstrapperConstants.TILE_HEIGHT)));
 				j = j + 5;
 			}

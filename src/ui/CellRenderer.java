@@ -44,8 +44,8 @@ public class CellRenderer {
 	private double scale = 1;
 	public CellRenderer(PathCell inCell) {
 		drawnCell = inCell;
-		int centerx= (BootstrapperConstants.TILE_WIDTH * drawnCell.tiles.length)/2;
-		int centery= (BootstrapperConstants.TILE_HEIGHT * drawnCell.tiles.length)/2;
+		int centerx= (BootstrapperConstants.TILE_WIDTH * drawnCell.getWidth())/2;
+		int centery= (BootstrapperConstants.TILE_HEIGHT * drawnCell.getHeight())/2;
 		incrementOffset(centerx,centery, BootstrapperConstants.FRAME_WIDTH, BootstrapperConstants.FRAME_WIDTH);
 		//might need to 
 
@@ -205,16 +205,16 @@ public class CellRenderer {
 	public Tile getTile(int x, int y) {
 		int xActual = x;
 		int yActual = y;
-		int actualWidth = drawnCell.tiles.length - 1;
+		int actualWidth = drawnCell.getWidth() - 1;
 		if(x > actualWidth) {
 			xActual = actualWidth;
 		}
-		int actualHeight = drawnCell.tiles[1].length - 1;
+		int actualHeight = drawnCell.getHeight() - 1;
 		if(y > actualHeight) {
 			yActual = actualHeight;
 		}
 
-		return drawnCell.tiles[xActual][yActual];
+		return drawnCell.getTile(new Point(xActual, yActual));
 	}
 	public void incrementOffset(int dx, int dy, int windowWidth, int windowHeight) {
 		//some optimizations to be made here
@@ -223,18 +223,18 @@ public class CellRenderer {
 
 		if(offset.x < 0) {
 			offset.x = 0;
-		} else if(offset.x > drawnCell.tiles.length * width - (windowWidth)) {
-			int tileCount = drawnCell.tiles.length;
-			int maxX = drawnCell.tiles.length * width - (windowWidth);
-			offset.x = maxX ;
+		} else if(offset.x > drawnCell.getWidth() * width - (windowWidth)) {
+			int tileCount = drawnCell.getWidth();
+			int maxX = drawnCell.getWidth() * width - (windowWidth);
+			offset.x = maxX;
 		}
 
 		//The panelSizae is the size of the side panel. If we need to change that, alter that variable.
 
 		if(offset.y < 0) {
 			offset.y = 0;
-		} else if(offset.y > drawnCell.tiles[1].length * height - windowHeight) {
-			offset.y = drawnCell.tiles[1].length * height - windowHeight; 
+		} else if(offset.y > drawnCell.getHeight() * height - windowHeight) {
+			offset.y = drawnCell.getHeight() * height - windowHeight; 
 
 		}
 		if(offset.x < 0)

@@ -22,6 +22,8 @@ LocationInfo 1-to-many  A cell has many destinations and exits
 
 import java.awt.Point;
 import java.util.ArrayList;
+import java.util.HashMap;
+
 import com.team1ofus.apollo.TILE_TYPE;
 
 import core.DebugManagement;
@@ -53,7 +55,7 @@ public class PathCell{
 	public String cellName = null;
 	String displayName;
     private static final long serialVersionUID = 1L;
-    public Tile[][] tiles;
+    public HashMap<Point, Tile> tiles = new HashMap<Point, Tile>();
     
     //end minimum required information
     
@@ -62,139 +64,120 @@ public class PathCell{
     private ArrayList<EntryPoint> entryPoints = new ArrayList<EntryPoint>(); //places which you can enter into this cell at. 
     private ArrayList<LocationNameInfo> namedPoints = new ArrayList<LocationNameInfo>();
     private ArrayList<EntryPointReference> entryPointRefs = new ArrayList<EntryPointReference>(); //places from which you can leave this cell.
+	private int width;
+	private int height;
     
-    public PathCell(String name, int width, int height, double scaling, TILE_TYPE defaultTile) {
+    public PathCell(String name, int width, int height, double scaling) {
     	DebugManagement.writeLineToLog(SEVERITY_LEVEL.WARNING, "A map was generated with a default tile format! Maps should be loaded from memory.");
         this.cellName = name;
-        tiles = new Tile[width][height];
-    	for(int i=0; i<width; i++) {
-    		if(defaultTile.equals(TILE_TYPE.PEDESTRIAN_WALKWAY)){
-	    		for(int j=0; j<height; j++) {
-	    			tiles[i][j] = new Walkway(name, new Point(i, j));
-	    		}
-    		}
-    		else{
-    			for(int j=0; j<height; j++) {
-	    			tiles[i][j] = new Wall(name, new Point(i, j));
-	    		}
-    		}
-    	}
     	this.scaling = scaling;
            
     }
     
     //an unpleasantly long one for 
-	public PathCell(String name, String display, int width, int height, com.team1ofus.apollo.DataTile[][] dataTiles, ArrayList<EntryPoint> entryPoints,
+	public PathCell(String name, String display, int width, int height, HashMap<Point, TILE_TYPE> dataTiles, ArrayList<EntryPoint> entryPoints,
 			ArrayList<LocationNameInfo> namedPoints, ArrayList<EntryPointReference> entryPointRefs) {
+		tiles = new HashMap<Point, Tile>();
         this.cellName = name;
         this.displayName = display;
+        this.width = width;
+        this.height = height;
         if(display == null) {
         	this.displayName = name; //prevent null case
         }
 		this.entryPoints = entryPoints;
 		this.namedPoints = namedPoints;
 		this.entryPointRefs = entryPointRefs;
-        tiles = new Tile[width][height];
-    	for(int i=0; i<width; i++) {
-    		for(int j=0; j<height; j++) {
-    			TILE_TYPE type = dataTiles[i][j].getType();
-    			
-    			if(type.equals(TILE_TYPE.PEDESTRIAN_WALKWAY)){
-	    			tiles[i][j] = new Walkway(name, new Point(i, j));
-	    		}
-	    		else if(type.equals(TILE_TYPE.DOOR)){
-	    			tiles[i][j] = new Door(name, new Point(i, j));
-	    		}
-	    		else if(type.equals(TILE_TYPE.GRASS)){
-	    			tiles[i][j] = new Grass(name, new Point(i, j));
-	    		}
-	    		else if(type.equals(TILE_TYPE.CONGESTED)){
-	    			tiles[i][j] = new Congested(name, new Point(i, j));
-	    		}
-	    		else if(type.equals(TILE_TYPE.VERTICAL_UP_STAIRS)){
-	    			tiles[i][j] = new VerticalUpStairs(name, new Point(i, j));
-	    		}
-	    		else if(type.equals(TILE_TYPE.VERTICAL_DOWN_STAIRS)){
-	    			tiles[i][j] = new VerticalDownStairs(name, new Point(i, j));
-	    		}
-	    		else if(type.equals(TILE_TYPE.HORIZONTAL_LEFT_STAIRS)){
-	    			tiles[i][j] = new HorizontalLeftStairs(name, new Point(i, j));
-	    		}
-	    		else if(type.equals(TILE_TYPE.HORIZONTAL_RIGHT_STAIRS)){
-	    			tiles[i][j] = new HorizontalRightStairs(name, new Point(i, j));
-	    		}
-	    		else if(type.equals(TILE_TYPE.IMPASSABLE)){
-	    			tiles[i][j] = new Impassable(name, new Point(i, j));
-	    		}
-	    		else if(type.equals(TILE_TYPE.MALE_BATHROOM)){
-	    			tiles[i][j] = new MaleBathroom(name, new Point(i, j));
-	    			ArrayList<String> bathroomNames = new ArrayList<String>();
-	    			bathroomNames.add("AutoGen Male Bathroom " + this.getDisplayName());
-	    			bathroomNames.add("AutoGen Men's Room " + this.getDisplayName());
-	    			namedPoints.add(new LocationNameInfo(new Point(i,j), bathroomNames));
-	    		}
-	    		else if(type.equals(TILE_TYPE.FEMALE_BATHROOM)){
-	    			tiles[i][j] = new FemaleBathroom(name, new Point(i, j));
-	    			ArrayList<String> bathroomNames = new ArrayList<String>();
-	    			bathroomNames.add("AutoGen Female Bathroom " + this.getDisplayName());
-	    			bathroomNames.add("AutoGen Women's Room " + this.getDisplayName());
-	    			namedPoints.add(new LocationNameInfo(new Point(i,j), bathroomNames));
-	    		}
-	    		else if(type.equals(TILE_TYPE.UNISEX_BATHROOM)){
-	    			tiles[i][j] = new UnisexBathroom(name, new Point(i, j));
-	    			ArrayList<String> bathroomNames = new ArrayList<String>();
-	    			bathroomNames.add("AutoGen Unisex Bathroom " + this.getDisplayName());
-	    			bathroomNames.add("AutoGen Unisex Room " + this.getDisplayName());
-	    			namedPoints.add(new LocationNameInfo(new Point(i,j), bathroomNames));
-	    		}
-	    		else if(type.equals(TILE_TYPE.BENCH)){
-	    			tiles[i][j] = new Bench(name, new Point(i, j));
-	    			ArrayList<String> benchNames = new ArrayList<String>();
-	    			benchNames.add("AutoGen Bench " + this.getDisplayName());
-	    			benchNames.add("AutoGen Place To Sit " + this.getDisplayName());
-	    			namedPoints.add(new LocationNameInfo(new Point(i,j), benchNames));
-	    		}
-	    		else if(type.equals(TILE_TYPE.TREE)){
-	    			tiles[i][j] = new Tree(name, new Point(i, j));
-	    		}
-	    		else if(type.equals(TILE_TYPE.BUSH)){
-	    			tiles[i][j] = new Bush(name, new Point(i, j));
-	    		}
-	    		else if(type.equals(TILE_TYPE.LINOLEUM)){
-	    			tiles[i][j] = new Linoleum(name, new Point(i, j));
-	    		}
-	    		else if(type.equals(TILE_TYPE.ELEVATOR)){
-	    			tiles[i][j] = new Elevator(name, new Point(i, j));
-	    		}
-	    		else if(type.equals(TILE_TYPE.UNPLOWED)){
-	    			tiles[i][j] = new Unplowed(name, new Point(i, j));
-	    		}
-	    		else if(type.equals(TILE_TYPE.CLASSROOM)){
-	    			tiles[i][j] = new Classroom(name, new Point(i, j));
-	    		}
-	    		else if(type.equals(TILE_TYPE.EXTRA_TILE_TYPE_1)){
-	    			tiles[i][j] = new Road(name, new Point(i, j));
-	    		}
-	    		else{
-	    			tiles[i][j] = new Wall(name, new Point(i, j));
-	    		}
-    			if(type == com.team1ofus.apollo.TILE_TYPE.WALL) {
- 
-    			}
-    			if(type == com.team1ofus.apollo.TILE_TYPE.PEDESTRIAN_WALKWAY) {
-    			}
-    			
+		for(Point p : dataTiles.keySet()) {
+			TILE_TYPE type = dataTiles.get(p);
+			if(type.equals(TILE_TYPE.PEDESTRIAN_WALKWAY)){
+    			tiles.put(p,new Walkway(name, p));
     		}
-    	}
+    		else if(type.equals(TILE_TYPE.DOOR)){
+    			tiles.put(p,new Door(name, p));
+    		}
+    		else if(type.equals(TILE_TYPE.GRASS)){
+    			tiles.put(p,new Grass(name, p));
+    		}
+    		else if(type.equals(TILE_TYPE.CONGESTED)){
+    			tiles.put(p,new Congested(name, p));
+    		}
+    		else if(type.equals(TILE_TYPE.VERTICAL_UP_STAIRS)){
+    			tiles.put(p,new VerticalUpStairs(name, p));
+    		}
+    		else if(type.equals(TILE_TYPE.VERTICAL_DOWN_STAIRS)){
+    			tiles.put(p,new VerticalDownStairs(name, p));
+    		}
+    		else if(type.equals(TILE_TYPE.HORIZONTAL_LEFT_STAIRS)){
+    			tiles.put(p,new HorizontalLeftStairs(name, p));
+    		}
+    		else if(type.equals(TILE_TYPE.HORIZONTAL_RIGHT_STAIRS)){
+    			tiles.put(p,new HorizontalRightStairs(name, p));
+    		}
+    		else if(type.equals(TILE_TYPE.IMPASSABLE)){
+    			tiles.put(p,new Impassable(name, p));
+    		}
+    		else if(type.equals(TILE_TYPE.MALE_BATHROOM)){
+    			tiles.put(p,new MaleBathroom(name, p));
+    			ArrayList<String> bathroomNames = new ArrayList<String>();
+    			bathroomNames.add("AutoGen Male Bathroom " + this.getDisplayName());
+    			bathroomNames.add("AutoGen Men's Room " + this.getDisplayName());
+    			namedPoints.add(new LocationNameInfo(p, bathroomNames));
+    		}
+    		else if(type.equals(TILE_TYPE.FEMALE_BATHROOM)){
+    			tiles.put(p,new FemaleBathroom(name, p));
+    			ArrayList<String> bathroomNames = new ArrayList<String>();
+    			bathroomNames.add("AutoGen Female Bathroom " + this.getDisplayName());
+    			bathroomNames.add("AutoGen Women's Room " + this.getDisplayName());
+    			namedPoints.add(new LocationNameInfo(p, bathroomNames));
+    		}
+    		else if(type.equals(TILE_TYPE.UNISEX_BATHROOM)){
+    			tiles.put(p,new UnisexBathroom(name, p));
+    			ArrayList<String> bathroomNames = new ArrayList<String>();
+    			bathroomNames.add("AutoGen Unisex Bathroom " + this.getDisplayName());
+    			bathroomNames.add("AutoGen Unisex Room " + this.getDisplayName());
+    			namedPoints.add(new LocationNameInfo(p, bathroomNames));
+    		}
+    		else if(type.equals(TILE_TYPE.BENCH)){
+    			tiles.put(p,new Bench(name, p));
+    			ArrayList<String> benchNames = new ArrayList<String>();
+    			benchNames.add("AutoGen Bench " + this.getDisplayName());
+    			benchNames.add("AutoGen Place To Sit " + this.getDisplayName());
+    			namedPoints.add(new LocationNameInfo(p, benchNames));
+    		}
+    		else if(type.equals(TILE_TYPE.TREE)){
+    			tiles.put(p,new Tree(name, p));
+    		}
+    		else if(type.equals(TILE_TYPE.BUSH)){
+    			tiles.put(p,new Bush(name, p));
+    		}
+    		else if(type.equals(TILE_TYPE.LINOLEUM)){
+    			tiles.put(p,new Linoleum(name, p));
+    		}
+    		else if(type.equals(TILE_TYPE.ELEVATOR)){
+    			tiles.put(p,new Elevator(name, p));
+    		}
+    		else if(type.equals(TILE_TYPE.UNPLOWED)){
+    			tiles.put(p,new Unplowed(name, p));
+    		}
+    		else if(type.equals(TILE_TYPE.CLASSROOM)){
+    			tiles.put(p,new Classroom(name, p));
+    		}
+    		else if(type.equals(TILE_TYPE.EXTRA_TILE_TYPE_1)){
+    			tiles.put(p,new Road(name, p));
+    		}
+    		else{
+    			tiles.put(p,new Wall(name, p));
+    		}
+
+		}
 
     }
     /*
      * Not safe for out of bounds calls.
      */
     public Tile getTile(Point tilePoint) {
-        int x = (int)tilePoint.getX();
-        int y = (int)tilePoint.getY();
-        return this.tiles[x][y];
+        return tiles.get(tilePoint);
     }
     
 	public ArrayList<Tile> getPossibleTraversals(Point tilePoint){
@@ -269,10 +252,10 @@ public class PathCell{
 	}
 	
 	public int getWidth() {
-		return tiles.length;
+		return width;
 	}
 	
 	public int getHeight() {
-		return tiles[0].length;
+		return height;
 	}
 }

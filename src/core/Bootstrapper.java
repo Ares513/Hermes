@@ -3,9 +3,8 @@ package core;
 import java.awt.EventQueue;
 import java.util.ArrayList;
 
-import com.team1ofus.apollo.DataManagement;
-
 import data.CellConverter;
+import data.DataManagement;
 import pathing.MapManagement;
 import pathing.PathCell;
 import ui.SplashScreen;

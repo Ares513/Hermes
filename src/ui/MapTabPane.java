@@ -43,17 +43,16 @@ public class MapTabPane extends JLayeredPane {
 	
 	public MapTabPane(PathCell cell) {
 		humanInteractive = new HumanInteractionEventObject();
-		System.out.println("MapTabPane constructor");
-		System.out.println(cell.getName());
+
 		currentCell = cell;
 		mapPanel = new MapPane(currentCell);
 		pathPanel = new PathPane();
 		textPanel = new TextPane(currentCell);
 		pointPanel = new PointPane();
 		name = "shit";
-		maxZoomOutx = (BootstrapperConstants.FRAME_WIDTH/ ((currentCell.tiles.length) *(BootstrapperConstants.TILE_WIDTH)));
-		System.out.println(currentCell.tiles.length);
-		maxZoomOuty = (BootstrapperConstants.FRAME_HEIGHT/ ((currentCell.tiles[1].length) *(BootstrapperConstants.TILE_HEIGHT)));
+		maxZoomOutx = (BootstrapperConstants.FRAME_WIDTH/ ((currentCell.getWidth()) *(BootstrapperConstants.TILE_WIDTH)));
+		
+		maxZoomOuty = (BootstrapperConstants.FRAME_HEIGHT/ ((currentCell.getHeight()) *(BootstrapperConstants.TILE_HEIGHT)));
 		//maxZoomOut = (maxZoomOutx < maxZoomOuty) ? maxZoomOutx : maxZoomOuty;
 		//maxZoomOut = (maxZoomOutF) * 10;// * 0.5;//An estimate for the max zoomout
 		
