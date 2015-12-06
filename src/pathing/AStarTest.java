@@ -41,6 +41,9 @@ public class AStarTest {
 		AStar test = new AStar(testCellList);
 		System.out.println("Path:");
 		ArrayList<CellPoint> AStarOut = test.getPath(new CellPoint("b",new Point(50,50)), new CellPoint("b", new Point(55,40)), false);
+		if(AStarOut.isEmpty()){
+			fail("A*.getPath() didnt return anything");
+		}
 		if(AStarOut.size() >= 5){
 			System.out.println(AStarOut.size());
 			System.out.println("getPath didnt break");
