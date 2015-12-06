@@ -431,7 +431,7 @@ public class HermesUI extends JPanel implements IHumanInteractionListener{
 		});
 
 		tabbedPane = new MapTabbedPane<MapTabbedPane<MapTabPane>>(JTabbedPane.TOP);
-		tabbedPane.setBounds(BootstrapperConstants.PANEL_SIZE, 0, BootstrapperConstants.FRAME_WIDTH-BootstrapperConstants.PANEL_SIZE-10, BootstrapperConstants.FRAME_HEIGHT-30);
+		tabbedPane.setBounds(BootstrapperConstants.PANEL_SIZE, 2, BootstrapperConstants.FRAME_WIDTH-BootstrapperConstants.PANEL_SIZE-10, BootstrapperConstants.FRAME_HEIGHT-30);
 		frameHermes.getContentPane().add(tabbedPane);
 		
 		
