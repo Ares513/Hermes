@@ -4,7 +4,9 @@ import java.awt.Color;
 import java.awt.Font;
 import java.awt.FontMetrics;
 import java.awt.Graphics;
+import java.awt.Graphics2D;
 import java.awt.Point;
+import java.awt.geom.AffineTransform;
 import java.util.ArrayList;
 
 import javax.swing.JLabel;
@@ -43,8 +45,15 @@ public class TextPane extends JPanel {
 	}
 	public void paintComponent(Graphics g) {
 		this.paintComponents(g);
+		Graphics2D g2d = (Graphics2D) g;
+		AffineTransform transformer = new AffineTransform();
+		transformer.translate(this.getWidth()/2, this.getHeight()/2);
+		transformer.scale(zoomScale, zoomScale);
+		transformer.translate(-this.getWidth()/2, -this.getHeight()/2);
+		transformer.translate(offset.x, offset.y);
+		g2d.setTransform(transformer);
 		for(TextLocation l : locations) {
-			g.setColor(l.drawnColor);
+			g2d.setColor(l.drawnColor);
 			//we now need to center the text.
 			//double yShift = g.getFont().getSize()/2;
 			for(int i=0; i<l.lines.size(); i++) {
@@ -59,9 +68,9 @@ public class TextPane extends JPanel {
 					stringLength = (int) metrics.getStringBounds(l.lines.get(i), g).getWidth();
 					
 				}
-				g.setFont(new Font("TimesRoman", Font.PLAIN, (int)Math.round(zoomScale*16)));
+				g2d.setFont(new Font("TimesRoman", Font.PLAIN, (int)Math.round(zoomScale*16)));
 				int start = stringLength/2;
-				g.drawString(l.lines.get(i), (int)(zoomScale*l.location.x*BootstrapperConstants.TILE_WIDTH)-(int)(start+(zoomScale*(BootstrapperConstants.TILE_WIDTH/2)))-offset.x, (int)(zoomScale*l.location.y*BootstrapperConstants.TILE_HEIGHT)-offset.y+g.getFont().getSize()*i);
+				g2d.drawString(l.lines.get(i), (int)(l.location.x*BootstrapperConstants.TILE_WIDTH)-(int)(start+((BootstrapperConstants.TILE_WIDTH/2))), (int)(l.location.y*BootstrapperConstants.TILE_HEIGHT)+g.getFont().getSize()*i);
 				
 			}
 		}

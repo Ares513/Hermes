@@ -387,7 +387,11 @@ public class CellRenderer {
 	public void incrementOffset(int dx, int dy, int windowWidth, int windowHeight) {
 		// some optimizations to be made here
 		DebugManagement.writeNotificationToLog("Offset is : " + offset.toString());
-		offset.translate(-dx, -dy);
+		int scaleFactor = (int) (3 - scale);
+		if(scaleFactor < 1) {
+			scaleFactor = 1;
+		}
+		offset.translate((int)(-dx)*scaleFactor, (int)(-dy)*scaleFactor);
 
 /*		if (offset.x < 0) {
 			offset.x = 0;
