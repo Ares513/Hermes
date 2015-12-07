@@ -178,9 +178,6 @@ public class PathCell{
      */
     public Tile getTile(Point tilePoint) {
     	Tile output = tiles.get(tilePoint);
-    	if(output == null) {
-    		return new Wall(getName(), tilePoint);
-    	}
         return output;
     }
     
