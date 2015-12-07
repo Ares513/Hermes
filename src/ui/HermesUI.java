@@ -122,7 +122,7 @@ public class HermesUI extends JPanel implements IHumanInteractionListener{
 	private JButton zoomInButton;
 	private JButton zoomOutBtn;
 	private Box horizontalBox;
-	private MapTabbedPane<MapTabbedPane<MapTabPane>> tabbedPane;
+	private MapTabbedPane<MapTabbedPane<MapLayeredPane>> tabbedPane;
 	private ArrayList<Record> locationNameInfoRecords;
 	public PrintToPrinter printer =new PrintToPrinter(); ;
 	private AutocompleteEngine<Record> engine = new AutocompleteEngine.Builder<Record>()
@@ -430,17 +430,17 @@ public class HermesUI extends JPanel implements IHumanInteractionListener{
 			}
 		});
 
-		tabbedPane = new MapTabbedPane<MapTabbedPane<MapTabPane>>(JTabbedPane.TOP);
-		tabbedPane.setBounds(BootstrapperConstants.PANEL_SIZE, 0, BootstrapperConstants.FRAME_WIDTH-BootstrapperConstants.PANEL_SIZE-10, BootstrapperConstants.FRAME_HEIGHT-30);
+		tabbedPane = new MapTabbedPane<MapTabbedPane<MapLayeredPane>>(JTabbedPane.TOP);
+		tabbedPane.setBounds(BootstrapperConstants.PANEL_SIZE, 2, BootstrapperConstants.FRAME_WIDTH-BootstrapperConstants.PANEL_SIZE-10, BootstrapperConstants.FRAME_HEIGHT-30);
 		frameHermes.getContentPane().add(tabbedPane);
 		
 		
 		
 		//TODO Make display the name of the cell, i.e. currentCell.getName()
-		tabbedPane.addNewTab("All Cells", null, new MapTabbedPane<MapTabPane>(JTabbedPane.BOTTOM), null);
+		tabbedPane.addNewTab("All Cells", null, new MapTabbedPane<MapLayeredPane>(JTabbedPane.BOTTOM), null);
 		tabbedPane.setSelectedIndex(0);
 		for(int i=0; i<allCells.size(); i++) {
-			tabbedPane.getSelectedTabPane().addNewTab(allCells.get(i).getName(), null, new MapTabPane(allCells.get(i)), null);
+			tabbedPane.getSelectedTabPane().addNewTab(allCells.get(i).getName(), null, new MapLayeredPane(allCells.get(i)), null);
 			tabbedPane.getSelectedTabPane().setSelectedIndex(i);
 			tabbedPane.getSelectedTabPane().getSelectedTabPane().humanInteractive.addListener(this, "HermesUI to " + allCells.get(i).getName());
 		}

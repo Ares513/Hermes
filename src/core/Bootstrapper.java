@@ -3,6 +3,8 @@ package core;
 import java.awt.EventQueue;
 import java.util.ArrayList;
 
+import com.alee.laf.WebLookAndFeel;
+
 import data.CellConverter;
 import data.DataManagement;
 import pathing.MapManagement;
@@ -16,6 +18,7 @@ public class Bootstrapper {
 	 * Launch the application.
 	 */
 	public static void main(String[] args) {
+		WebLookAndFeel.install();
 		SplashScreen splash = new SplashScreen(1000); //X000 -> x seconds 
 		splash.showSplashAndExit();	
 		EventQueue.invokeLater(new Runnable() {

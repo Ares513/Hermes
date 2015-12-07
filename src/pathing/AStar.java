@@ -30,10 +30,11 @@ public class AStar {
 		frontier = new ArrayList<CellPoint>(); 
 		explored = new ArrayList<CellPoint>();
 		cellMap = new HashMap<String, HashMap<Point,TileInfo>>();
-		for(PathCell cell: cells){
+		for(PathCell cell: accessedCells){
 			DebugManagement.writeNotificationToLog("Created a new TileInfoArray for " + cell.getName());
 			cellMap.put(cell.getName(), new HashMap<Point,TileInfo>());
 		}
+		
 	}
 	private class TileInfo implements Comparable<TileInfo> {
 		private TILE_TYPE tileType = TILE_TYPE.WALL; 
@@ -156,13 +157,20 @@ public class AStar {
 					+ "\n A* will try to continue but it wont do anything");
 		}
 		DebugManagement.writeNotificationToLog("First point " + startCellPoint.getCellName() + " " + startCellPoint.getPoint().toString());
-		DebugManagement.writeNotificationToLog("Second point " + endCellPoint.getCellName() + " " + endCellPoint.getPoint().toString());
+		DebugManagement.writeNotificationToLog("End point " + endCellPoint.getCellName() + " " + endCellPoint.getPoint().toString());
 		
 		alreadyRan = true;
 		CellPoint currentPoint = startCellPoint;
 		cellMap.get(currentPoint.getCellName()).put(currentPoint.getPoint(), buildTileInfo(currentPoint));
+//		for(String cell: cellMap.keySet()){
+//			for(Point point: cellMap.get(cell).keySet()){
+//				System.out.println("cell: " + cell + ". point: " + point +
+//						". type: " + cellMap.get(cell).get(point).getTileType());
+//			}
+//		}
 		TileInfo currentTile = getTileInfo(startCellPoint);
 		if(currentTile.getTileType().equals(TILE_TYPE.WALL)){
+			System.out.println("Starting Tile is a Wall, Return is Null");
 			return null;
 		}
 		CellPoint endPoint = endCellPoint;
@@ -245,11 +253,16 @@ public class AStar {
 				currentCell = each;
 			}
 		}
-		if(currentCell.equals(null)){
-			DebugManagement.writeNotificationToLog("BuildTileInfo failed to find the appropriate Cell");
-		}
 		currentTile = currentCell.getTile(currentPoint.getPoint());
-		currentTileInfo = new TileInfo(currentTile.getTileType(), currentTile.getTraverseCost(), currentPoint);
+
+		if(currentTile != null){
+			currentTileInfo = new TileInfo(currentTile.getTileType(), currentTile.getTraverseCost(), currentPoint);
+		}
+		else{
+			currentTileInfo = new TileInfo(TILE_TYPE.WALL, 1000000, currentPoint);
+			System.out.println("The TileInfo being made is a wall");
+		}
+	
 		return currentTileInfo;
 	}
 
