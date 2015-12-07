@@ -6,6 +6,7 @@ import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.Point;
 import java.awt.Stroke;
+import java.awt.geom.AffineTransform;
 import java.util.ArrayList;
 import java.awt.GradientPaint;
 
@@ -77,10 +78,16 @@ class PathPane extends JPanel {
 		
 		Stroke stroke1 = new BasicStroke(6f, BasicStroke.CAP_ROUND, BasicStroke.JOIN_ROUND, 4f);//, dashingPattern1, 2.0f);
 		g2d.setStroke(stroke1);
+		AffineTransform transformer = new AffineTransform();
+		transformer.translate(this.getWidth()/2, this.getHeight()/2);
+		transformer.scale(zoomScale, zoomScale);
+		transformer.translate(-this.getWidth()/2, -this.getHeight()/2);
+		transformer.translate(offset.x, offset.y);
+		g2d.setTransform(transformer);
 		for(int i = 0; i < pointsList.size()-1; i++){
 			Point p1 = convertPoint(pointsList.get(i).x, pointsList.get(i).y);
 			Point p2 = convertPoint(pointsList.get(i+1).x, pointsList.get(i+1).y);
-			g2d.drawLine( (int)p1.x - offset.x,  (int)p1.y - offset.y , (int)(p2.x - offset.x) , (int)(p2.y - offset.y));
+			g2d.drawLine( (int)p1.x,  (int)p1.y, (int)(p2.x) , (int)(p2.y));
 			
 		} 
 	}

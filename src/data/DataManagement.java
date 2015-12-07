@@ -24,20 +24,17 @@ import java.util.stream.Stream;
 import com.team1ofus.apollo.Cell;
 import com.team1ofus.apollo.HashCell;
 import com.team1ofus.apollo.TILE_TYPE;
-
+import com.team1ofus.apollo.*;
 import core.BootstrapperConstants;
 import core.DebugManagement;
 import core.SEVERITY_LEVEL;
 import events.IUIManagementInteractionListener;
-import pathing.CellPoint;
-import pathing.PathCell;
 
 
-public class DataManagement implements IUIManagementInteractionListener {
+public class DataManagement {
 	ArrayList<HashCell> cells;
 	private boolean upgradeNeeded; //boolean indicating if a save is needed on launch.
 	public DataManagement() {
-		DebugManagement.writeNotificationToLog("Launching with directory " + BootstrapperConstants.APP_FILE_DIRECTORY);
 		cells = new ArrayList<HashCell>();
 		//process: load blank map into memory, then save it
 
@@ -66,7 +63,7 @@ public class DataManagement implements IUIManagementInteractionListener {
 	private HashCell makePlaceholderMap() {
 		DebugManagement.writeLineToLog(SEVERITY_LEVEL.CRITICAL, "No HashCell files found!");
 		String uuid = UUID.randomUUID().toString();
-		return new HashCell(50, 50, uuid, uuid);
+		return new HashCell(50, 50, uuid, uuid, new ArrayList<LocationInfo>(), new ArrayList<EntryPoint>());
 		
 	}
 	private ArrayList<HashCell> loadAllCells() throws ClassNotFoundException, IOException {
@@ -84,7 +81,7 @@ public class DataManagement implements IUIManagementInteractionListener {
 			ArrayList<HashCell> hashOutput = new ArrayList<HashCell>();
 			
 			for(Cell c : output) {
-				HashCell working = new HashCell(c.getWidth(), c.getHeight(), c.getID(), c.getDisplayName());
+				HashCell working = new HashCell(c.getWidth(), c.getHeight(), c.getID(), c.getDisplayName(), c.getListedLocations(), c.getEntryPoints());
 				for(int i=0; i<c.getTile().length; i++) {
 					for(int j=0; j<c.getTile()[i].length; j++) {
 						if(c.getTile()[i][j].getType() == TILE_TYPE.WALL) {
@@ -214,19 +211,8 @@ public class DataManagement implements IUIManagementInteractionListener {
 	public ArrayList<HashCell> getCells() {
 		return cells;
 	}
-	@Override
-	public void onPathReady(CellPoint first, CellPoint second) {
-		// TODO Auto-generated method stub
-		
-	}
-	@Override
-	public void onWindowReady(ArrayList<PathCell> loaded) {
-		// TODO Auto-generated method stub
-		
-	}
-	@Override
-	public void onFindRequestReady(CellPoint first, String filter) {
-		// TODO Auto-generated method stub
+	private List<Cell> streamToList(Stream<Cell> input) {
+		return input.collect(Collectors.toList());
 		
 	}
 }

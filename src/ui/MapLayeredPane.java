@@ -19,7 +19,7 @@ import events.HumanInteractionEventObject;
 import pathing.CellPoint;
 import pathing.PathCell;
 
-public class MapTabPane extends JLayeredPane {
+public class MapLayeredPane extends JLayeredPane {
 	
 	private MapPane mapPanel;
 	private PathPane pathPanel;
@@ -41,7 +41,7 @@ public class MapTabPane extends JLayeredPane {
 	private int scalingNum = 1;
 
 	
-	public MapTabPane(PathCell cell) {
+	public MapLayeredPane(PathCell cell) {
 		humanInteractive = new HumanInteractionEventObject();
 
 		currentCell = cell;
