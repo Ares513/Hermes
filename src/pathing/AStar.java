@@ -9,6 +9,7 @@ import java.util.List;
 
 import com.team1ofus.apollo.TILE_TYPE;
 
+import core.BootstrapperConstants;
 import core.DebugManagement;
 import core.SEVERITY_LEVEL;
 import events.AStarInteractionEventObject;
@@ -33,6 +34,25 @@ public class AStar {
 		for(PathCell cell: accessedCells){
 			DebugManagement.writeNotificationToLog("Created a new TileInfoArray for " + cell.getName());
 			cellMap.put(cell.getName(), new HashMap<Point,TileInfo>());
+			
+			for(EntryPointReference ref : cell.getEntryPointReferences()){
+				for (PathCell pc: accessedCells){
+					DebugManagement.writeNotificationToLog("CellName " + pc.getName() + " compared to " + ref.getTargetCell());
+					if ((pc.getName()).equals(ref.getTargetCell())){
+						DebugManagement.writeNotificationToLog("Matched " + pc.getName() + " to " + ref.getTargetCell());
+						
+						for (EntryPoint ep : pc.getEntryPoints()){
+							DebugManagement.writeNotificationToLog(ep.getId() + " comparing to " + ref.getEntryPointID());
+							if ((ep.getId()).equals(ref.getEntryPointID())){
+								DebugManagement.writeNotificationToLog("EntryPoint " + ep.getId() + " linked to " + ref.getEntryPointID());
+								TileInfo currentTileInfo = new TileInfo(cell.getTile(ref.getLoc()).getTileType(), cell.getTile(ref.getLoc()).getTraverseCost());
+								currentTileInfo.setOffPageNeighbor(new CellPoint(ref.getTargetCell(), ep.getLoc()));
+								cellMap.get(cell.getName()).put(ref.getLoc(), currentTileInfo);
+							}
+						}
+					}
+				}
+			}
 		}
 		
 	}
@@ -43,15 +63,15 @@ public class AStar {
 		private int estimatedTotalCost = 0;
 		private int traverseCost = 1000000;
 		private CellPoint offPageNeighbor = null;
-		private CellPoint creator;
+//		private CellPoint creator;
 
-		private TileInfo(TILE_TYPE newTileType, int newTraverseCost, CellPoint creator){
+		private TileInfo(TILE_TYPE newTileType, int newTraverseCost){
 			parent = null;
 			costSoFar = 0;
 			estimatedTotalCost = 0;
 			traverseCost = newTraverseCost;
 			tileType = newTileType;
-			this.creator = creator;
+//			this.creator = creator;
 		}
 
 		public boolean canBeEntered(CellPoint from, CellPoint to){
@@ -61,9 +81,9 @@ public class AStar {
 		private TILE_TYPE getTileType(){
 			return this.tileType;
 		}
-		private CellPoint getCreator() {
-			return creator;
-		}
+//		private CellPoint getCreator() {
+//			return creator;
+//		}
 		private CellPoint getParent(){
 			return this.parent;
 		}
@@ -96,8 +116,7 @@ public class AStar {
 		private CellPoint getOffPageNeighbor(){
 			return this.offPageNeighbor;
 		}
-		public int compareTo(TileInfo o)
-		{
+		public int compareTo(TileInfo o){
 		     return(getCostSoFar() - o.getCostSoFar());
 		}
 
@@ -105,6 +124,9 @@ public class AStar {
 
 	private TileInfo getTileInfo(CellPoint aCellPoint){
 		TileInfo output = cellMap.get(aCellPoint.getCellName()).get(aCellPoint.getPoint());
+		if(output == null){
+			DebugManagement.writeNotificationToLog("you tried to get a tile thats not in the HM");
+		}
 		return output;
 	}
 
@@ -162,15 +184,9 @@ public class AStar {
 		alreadyRan = true;
 		CellPoint currentPoint = startCellPoint;
 		cellMap.get(currentPoint.getCellName()).put(currentPoint.getPoint(), buildTileInfo(currentPoint));
-//		for(String cell: cellMap.keySet()){
-//			for(Point point: cellMap.get(cell).keySet()){
-//				System.out.println("cell: " + cell + ". point: " + point +
-//						". type: " + cellMap.get(cell).get(point).getTileType());
-//			}
-//		}
 		TileInfo currentTile = getTileInfo(startCellPoint);
 		if(currentTile.getTileType().equals(TILE_TYPE.WALL)){
-			System.out.println("Starting Tile is a Wall, Return is Null");
+			DebugManagement.writeNotificationToLog("Starting Tile is a Wall, Return is Null");
 			return null;
 		}
 		CellPoint endPoint = endCellPoint;
@@ -188,7 +204,8 @@ public class AStar {
 		 * For now its BFS so we just take the first element*/
 		while(!frontier.isEmpty()) {
 			frontier = sortByCost(frontier);
-			currentPoint = frontier.get(0); 
+			currentPoint = frontier.get(0);
+			DebugManagement.writeNotificationToLog(currentPoint.getCellName());
 			if(currentPoint.equals(endPoint)){ //if we are at the end: 
 				ArrayList<CellPoint> FinalPath = buildPath(endPoint); 
 				if(isFiltering) {
@@ -210,10 +227,12 @@ public class AStar {
 			currentTile = getTileInfo(currentPoint);
 			double moveMultiplier;
 			for(CellPoint neighborPoint: getNeighbors(currentPoint)){
-				if(!cellMap.containsKey(neighborPoint)){
-					cellMap.get(currentPoint.getCellName()).put(currentPoint.getPoint(), buildTileInfo(currentPoint));
-				}
+				cellMap.get(neighborPoint.getCellName()).putIfAbsent(neighborPoint.getPoint(), buildTileInfo(neighborPoint));
+
 				neighborTile = getTileInfo(neighborPoint);
+				if(neighborTile == null){
+					DebugManagement.writeNotificationToLog("****neighborTile is null****");
+				}
 				if(!neighborTile.canBeEntered(currentPoint, neighborPoint)){
 					continue;
 				}
@@ -231,12 +250,18 @@ public class AStar {
 					neighborTile.setParent(currentPoint);
 					neighborTile.updateCostSoFarDebug(tentativeCSF);
 					neighborTile.setEstimatedTotalCost(tentativeCSF+ getHeuristic(neighborPoint,endPoint));
+					cellMap.get(neighborPoint.getCellName()).put(neighborPoint.getPoint(), neighborTile);
+					if(neighborPoint == null || neighborTile == null){
+						DebugManagement.writeNotificationToLog("before adding to frontier, neighborPoint is null");
+					}
 					frontier.add(neighborPoint);
 				}
 				else if(tentativeCSF < neighborTile.getCostSoFar()){
 					neighborTile.setParent(currentPoint);
 					neighborTile.updateCostSoFarDebug(tentativeCSF);
 					neighborTile.setEstimatedTotalCost(tentativeCSF+ getHeuristic(neighborPoint,endPoint));
+					cellMap.get(neighborPoint.getCellName()).put(neighborPoint.getPoint(), neighborTile);
+
 				}
 				//do nothing if the cost is higher.
 			}
@@ -256,10 +281,10 @@ public class AStar {
 		currentTile = currentCell.getTile(currentPoint.getPoint());
 
 		if(currentTile != null){
-			currentTileInfo = new TileInfo(currentTile.getTileType(), currentTile.getTraverseCost(), currentPoint);
+			currentTileInfo = new TileInfo(currentTile.getTileType(), currentTile.getTraverseCost());// currentPoint);
 		}
 		else{
-			currentTileInfo = new TileInfo(TILE_TYPE.WALL, 1000000, currentPoint);
+			currentTileInfo = new TileInfo(TILE_TYPE.WALL, 1000000); //currentPoint);
 			System.out.println("The TileInfo being made is a wall");
 		}
 	
@@ -267,18 +292,35 @@ public class AStar {
 	}
 
 	private ArrayList<CellPoint> sortByCost(ArrayList<CellPoint> input) {
-		ArrayList<TileInfo> working = new ArrayList<TileInfo>();
+		/* This is a cell point collections can sort. This means that 
+		 * it implicitly references tile infos. We need to think of a 
+		 * better way to do this.*/
+		class SortableCellPoint extends CellPoint implements Comparable<SortableCellPoint>{
+			CellPoint cp;
+			private SortableCellPoint(CellPoint cp){
+				super(cp.getCellName(), cp.getPoint());
+				this.cp = cp;
+			}
+			public int compareTo(SortableCellPoint o){
+			     return(getTileInfo(this).getEstimatedTotalCost() - getTileInfo(o).getEstimatedTotalCost());
+			}
+			public CellPoint getCellPoint(){
+				return cp;
+			}
+		}
+		
+		ArrayList<SortableCellPoint> working = new ArrayList<SortableCellPoint>();
 		ArrayList<CellPoint> output = new ArrayList<CellPoint>();
 		
 		for(CellPoint c : input) {
-			working.add(getTileInfo(c));
+			working.add(new SortableCellPoint(c));
 		}
 		
 		Collections.sort(working);
 	
-		for(TileInfo t : working) {
+		for(SortableCellPoint t : working) {
 			//sorted- now re-add
-			output.add(t.getCreator());
+			output.add(t.getCellPoint());
 		}
 		return output;
 	}
