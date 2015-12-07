@@ -15,7 +15,7 @@ public class MapPane extends JPanel{
 	public CellRenderer render;
 	
 	public MapPane(PathCell inCell) {
-		render = new CellRenderer(inCell);
+		render = new CellRenderer(inCell, this.getWidth(), this.getHeight());
 	}
 	
 	public void paintComponent(Graphics g) {
