@@ -49,7 +49,7 @@ public class MapLayeredPane extends JLayeredPane {
 		pathPanel = new PathPane();
 		textPanel = new TextPane(currentCell);
 		pointPanel = new PointPane();
-		name = "shit";
+		name = cell.cellName;
 		maxZoomOutx = (BootstrapperConstants.FRAME_WIDTH/ ((currentCell.getWidth()) *(BootstrapperConstants.TILE_WIDTH)));
 		
 		maxZoomOuty = (BootstrapperConstants.FRAME_HEIGHT/ ((currentCell.getHeight()) *(BootstrapperConstants.TILE_HEIGHT)));

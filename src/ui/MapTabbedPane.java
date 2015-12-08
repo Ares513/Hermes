@@ -11,8 +11,9 @@ import pathing.PathCell;
 
 public class MapTabbedPane<T extends Component> extends JTabbedPane {
 	
-	ArrayList<T> tabPanes;
-	PathCell cell;
+	private ArrayList<T> tabPanes;
+	private PathCell cell;
+	private String building;
 
 	public MapTabbedPane() {
 		super();
@@ -22,6 +23,13 @@ public class MapTabbedPane<T extends Component> extends JTabbedPane {
 	public MapTabbedPane(int top) {
 		super(top);
 		tabPanes = new ArrayList<T>();
+	}
+	
+	public MapTabbedPane(int top, String name) {
+		super(top);
+		tabPanes = new ArrayList<T>();
+		building = name;
+		System.out.println(building);
 	}
 
 	public MapTabbedPane(int top, PathCell currentCell) {
@@ -47,6 +55,10 @@ public class MapTabbedPane<T extends Component> extends JTabbedPane {
 				return i;
 		}
 		return 0;
+	}
+	
+	public String getName() {
+		return building;
 	}
 
 }
