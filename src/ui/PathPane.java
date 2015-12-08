@@ -53,11 +53,13 @@ class PathPane extends JPanel {
 			DebugManagement.writeLineToLog(SEVERITY_LEVEL.CRITICAL, "CellPoint path is empty! Not drawing path.");
 			return;
 		}
+		int tileWidth =  (int) ((int)BootstrapperConstants.TILE_WIDTH*zoomScale);
+		int tileHeight = (int) ((int)BootstrapperConstants.TILE_HEIGHT*zoomScale);
 		for(int c = 0; c < path.size(); c++) {
 			if(path.get(c).getCellName() == cellName) {
 				//matches, add it.
 				pointsList.add(new Point((int) path.get(c).getPoint().getX(), (int) path.get(c).getPoint().getY()));
-				pointsList.get(c).move(pointsList.get(c).x*tileWidth+tileWidth/2, pointsList.get(c).y*tileHeight+tileHeight/2);
+				//pointsList.get(c).move(pointsList.get(c).x*tileWidth+tileWidth/2, pointsList.get(c).y*tileHeight+tileHeight/2);
 			
 			}
 		}
@@ -84,10 +86,12 @@ class PathPane extends JPanel {
 		transformer.translate(-this.getWidth()/2, -this.getHeight()/2);
 		transformer.translate(offset.x, offset.y);
 		g2d.setTransform(transformer);
+		int tileWidth =  (int) ((int)BootstrapperConstants.TILE_WIDTH);
+		int tileHeight = (int) ((int)BootstrapperConstants.TILE_HEIGHT);
 		for(int i = 0; i < pointsList.size()-1; i++){
-			Point p1 = convertPoint(pointsList.get(i).x, pointsList.get(i).y);
-			Point p2 = convertPoint(pointsList.get(i+1).x, pointsList.get(i+1).y);
-			g2d.drawLine( (int)p1.x,  (int)p1.y, (int)(p2.x) , (int)(p2.y));
+			Point p1 = pointsList.get(i);
+			Point p2 = pointsList.get(i+1);
+			g2d.drawLine( (int)p1.x*tileWidth+tileWidth/2,  (int)p1.y*tileHeight+tileHeight/2, (int)(p2.x)*tileWidth+tileWidth/2, (int)(p2.y*tileHeight+tileHeight/2));
 			
 		} 
 	}

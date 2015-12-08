@@ -5,14 +5,22 @@ import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
+import java.awt.GraphicsConfiguration;
+import java.awt.GraphicsDevice;
+import java.awt.GraphicsEnvironment;
+import java.awt.Image;
 import java.awt.Point;
 import java.awt.RenderingHints;
 import java.awt.Toolkit;
+import java.awt.Transparency;
 import java.awt.geom.AffineTransform;
 import java.awt.geom.Point2D;
 import java.awt.image.BufferedImage;
+import java.awt.image.IndexColorModel;
 import java.io.File;
 import java.io.IOException;
+import java.util.HashMap;
+import java.util.Map;
 
 import javax.imageio.ImageIO;
 
@@ -51,15 +59,22 @@ public class CellRenderer {
 	private Point second;
 	private int panelSize = 230;
 	private double scale = 1;
-
-	public CellRenderer(PathCell inCell, int windowWidth, int windowHeight) {
+	private HashMap<Point, TILE_TYPE> bufferedTiles = new HashMap<Point, TILE_TYPE>();
+	private Image campusMap;
+	private boolean isCampusMap;
+	public CellRenderer(PathCell inCell, int windowWidth, int windowHeight, Image campusMap) {
 		drawnCell = inCell;
-		int centerx = (BootstrapperConstants.TILE_WIDTH * drawnCell.getWidth()) / 2;
-		int centery = (BootstrapperConstants.TILE_HEIGHT * drawnCell.getHeight()) / 2;
-		incrementOffset(centerx, centery, BootstrapperConstants.FRAME_WIDTH, BootstrapperConstants.FRAME_WIDTH);
+		if(campusMap != null) {
+			this.campusMap = campusMap;
+			isCampusMap = true;
+		}
+		for(Point p : drawnCell.tiles.keySet()) {
+			bufferedTiles.put(p, drawnCell.tiles.get(p).getTileType());
+		}
+	
 		// might need to
-		offset = getMapCenter();
-		offset = new Point(offset.x - windowWidth/2, windowHeight/2);
+		//offset = getMapCenter();
+		//offset = new Point(offset.x - windowWidth/2, offset.y - windowHeight/2);
 		
 		getFromSheet();
 	}
@@ -113,8 +128,9 @@ public class CellRenderer {
 	// Renders the tiles
 	public void renderTiles(Graphics g, int windowWidth, int windowHeight) {
 		//render based on what's most efficient for the zoom level.
-		if (scale < 0.5) {
-			renderByKeySet(g, windowWidth, windowHeight);
+		if (isCampusMap) {
+			//do campus specific rendering
+			renderByImage(g, windowWidth, windowHeight);
 		} else {
 			renderByKeySet(g, windowWidth, windowHeight);
 		}
@@ -135,11 +151,9 @@ public class CellRenderer {
 	public int getMapHeight() {
 		return (int)(drawnCell.getHeight() * BootstrapperConstants.TILE_HEIGHT * scale);
 	}
-	private void renderByKeySet(Graphics g, int windowWidth, int windowHeight) {
+	private void renderByImage(Graphics g, int windowWidth, int windowHeight) {
 		Graphics2D g2d = (Graphics2D) g;
-		
-		g2d.setColor(new Color(128, 0, 0));
-		g2d.fillRect(0,0, windowWidth, windowHeight);
+	
 		//g2d.setRenderingHint(RenderingHints.KEY_INTERPOLATION, RenderingHints.VALUE_INTERPOLATION_BILINEAR);
 		AffineTransform transformer = new AffineTransform();
 		transformer.translate(windowWidth/2, windowHeight/2);
@@ -148,74 +162,15 @@ public class CellRenderer {
 		transformer.translate(-windowWidth/2, -windowHeight/2);
 		transformer.translate(offset.x, offset.y);
 		g2d.setTransform(transformer);
-		
-		for (Point p : drawnCell.tiles.keySet()) {
-			Tile tile = drawnCell.getTile(p);
-			int x = p.x * width;
-			int y = p.y * height;
-			if (tile == null) {
-				g2d.drawImage(spriteImages[0], x, y, width, height, null);
-
-			}
-
-			switch (tile.getTileType()) {
-			case PEDESTRIAN_WALKWAY:
-				g2d.drawImage(spriteImages[1], x, y, width, height, null);
-				break;
-			case DOOR:
-				g2d.drawImage(spriteImages[2], x, y, width, height, null);
-				break;
-			case GRASS:
-				g2d.drawImage(spriteImages[3], x, y, width, height, null);
-				break;
-			case CONGESTED:
-				g2d.drawImage(spriteImages[4], x, y, width, height, null);
-				break;
-			case VERTICAL_UP_STAIRS:
-				g2d.drawImage(spriteImages[5], x, y, width, height, null);
-				break;
-			case VERTICAL_DOWN_STAIRS:
-				g2d.drawImage(spriteImages[6], x, y, width, height, null);
-				break;
-			case HORIZONTAL_LEFT_STAIRS:
-				g2d.drawImage(spriteImages[7], x, y, width, height, null);
-				break;
-			case HORIZONTAL_RIGHT_STAIRS:
-				g2d.drawImage(spriteImages[8], x, y, width, height, null);
-				break;
-			case CLASSROOM:
-				g2d.drawImage(spriteImages[9], x, y, width, height, null);
-				break;
-			case IMPASSABLE:
-				g2d.drawImage(spriteImages[10], x, y, width, height, null);
-				break;
-			case MALE_BATHROOM:
-				g2d.drawImage(spriteImages[11], x, y, width, height, null);
-				break;
-			case FEMALE_BATHROOM:
-				g2d.drawImage(spriteImages[12], x, y, width, height, null);
-				break;
-			case UNISEX_BATHROOM:
-				g2d.drawImage(spriteImages[13], x, y, width, height, null);
-				break;
-			case BENCH:
-				g2d.drawImage(spriteImages[14], x, y, width, height, null);
-				break;
-			case BUSH:
-				g2d.drawImage(spriteImages[16], x, y, width, height, null);
-				break;
-			case TREE:
-				g2d.drawImage(spriteImages[17], x, y, width, height, null);
-				break;
-			case EXTRA_TILE_TYPE_1:
-				g2d.drawImage(spriteImages[18], x, y, width, height, null);
-				break;
-			}
-		}
+		g2d.drawImage(campusMap, 0, 0, drawnCell.getWidth() * BootstrapperConstants.TILE_WIDTH, drawnCell.getHeight() * BootstrapperConstants.TILE_HEIGHT, null);
 	}
-
-	private void renderByModulus(Graphics g, int windowWidth, int windowHeight) {
+	private void renderByKeySet(Graphics g, int windowWidth, int windowHeight) {
 		Graphics2D g2d = (Graphics2D) g;
+		long startTime = System.nanoTime(); //measure time for each run
+		g2d.setColor(new Color(128, 0, 0));
+		g2d.fillRect(0,0, windowWidth, windowHeight);
+	
+		//g2d.setRenderingHint(RenderingHints.KEY_INTERPOLATION, RenderingHints.VALUE_INTERPOLATION_BILINEAR);
 		AffineTransform transformer = new AffineTransform();
 		transformer.translate(windowWidth/2, windowHeight/2);
 		
@@ -223,98 +178,42 @@ public class CellRenderer {
 		transformer.translate(-windowWidth/2, -windowHeight/2);
 		transformer.translate(offset.x, offset.y);
 		g2d.setTransform(transformer);
-		int cellWidth = drawnCell.getWidth();
-		int cellHeight = drawnCell.getHeight();
-		int lowerX = -1 + (int) Math.ceil(offset.x / (BootstrapperConstants.TILE_WIDTH * scale));
-		int lowerY = -1 + (int) Math.ceil(offset.y / (BootstrapperConstants.TILE_HEIGHT * scale));
-		int higherX = 1 + (int) (Math.ceil(offset.x + windowWidth) / (BootstrapperConstants.TILE_WIDTH * scale));
-		int higherY = 1 + (int) (Math.ceil(offset.y + windowHeight) / (BootstrapperConstants.TILE_HEIGHT * scale));
-
-		if (windowWidth > BootstrapperConstants.TILE_WIDTH * cellWidth) {
-			higherX = cellWidth;
-		}
-		if (windowHeight > BootstrapperConstants.TILE_HEIGHT * cellHeight) {
-			higherY = cellHeight;
-		}
-		if (lowerX < 0)
-			lowerX = 0;
-		if (lowerY < 0)
-			lowerY = 0;
-		if (higherX > cellWidth)
-			higherX = cellWidth;
-		if (higherY > cellHeight)
-			higherY = cellHeight;
-		for (int i = lowerX; i < higherX; i++) {
-			for (int j = lowerY; j < higherY; j++) {
-				try {
-					drawnCell.getTile(new Point(i, j));
-
-				} catch (ArrayIndexOutOfBoundsException e) {
-					System.out.println("helloworld");
+		System.out.println(bufferedTiles.entrySet().size());
+		Point2D scaled = null;
+		Point2D origin = null;
+		Point2D target = null;
+		
+		
+		for (Map.Entry<Point, TILE_TYPE> e : bufferedTiles.entrySet()) {
+		
+				
+				
+				
+		
+		
+				
+				origin = transformer.transform(new Point2D.Float(-offset.x,-offset.y), origin);
+				scaled = transformer.transform(new Point2D.Float(-offset.x + windowWidth, -offset.y + windowHeight), scaled);
+				target = transformer.transform(new Point2D.Float(e.getKey().x * width, e.getKey().y * height), target);
+				if(origin.getX() < target.getX() && scaled.getX() > target.getX() && origin.getY() < target.getY() && scaled.getY() > target.getY()) {
+					
 				}
-				Tile tile = drawnCell.getTile(new Point(i, j));
-				if (tile == null) {
-					g2d.drawImage(spriteImages[0], i * width, j * height, width, height, null);
-
-				} else {
-					switch (tile.getTileType()) {
-					case PEDESTRIAN_WALKWAY:
-						g2d.drawImage(spriteImages[1], i * width, j * height, width, height, null);
-						break;
-					case DOOR:
-						g2d.drawImage(spriteImages[2], i * width, j * height, width, height, null);
-						break;
-					case GRASS:
-						g2d.drawImage(spriteImages[3], i * width, j * height, width, height, null);
-						break;
-					case CONGESTED:
-						g2d.drawImage(spriteImages[4], i * width, j * height, width, height, null);
-						break;
-					case VERTICAL_UP_STAIRS:
-						g2d.drawImage(spriteImages[5], i * width, j * height, width, height, null);
-						break;
-					case VERTICAL_DOWN_STAIRS:
-						g2d.drawImage(spriteImages[6], i * width, j * height, width, height, null);
-						break;
-					case HORIZONTAL_LEFT_STAIRS:
-						g2d.drawImage(spriteImages[7], i * width, j * height, width, height, null);
-						break;
-					case HORIZONTAL_RIGHT_STAIRS:
-						g2d.drawImage(spriteImages[8], i * width, j * height, width, height, null);
-						break;
-					case CLASSROOM:
-						g2d.drawImage(spriteImages[9], i * width, j * height, width, height, null);
-						break;
-					case IMPASSABLE:
-						g2d.drawImage(spriteImages[10], i * width, j * height, width, height, null);
-						break;
-					case MALE_BATHROOM:
-						g2d.drawImage(spriteImages[11], i * width, j * height, width, height, null);
-						break;
-					case FEMALE_BATHROOM:
-						g2d.drawImage(spriteImages[12], i * width, j * height, width, height, null);
-						break;
-					case UNISEX_BATHROOM:
-						g2d.drawImage(spriteImages[13], i * width, j * height, width, height, null);
-						break;
-					case BENCH:
-						g2d.drawImage(spriteImages[14], i * width, j * height, width, height, null);
-						break;
-					case BUSH:
-						g2d.drawImage(spriteImages[16], i * width, j * height, width, height, null);
-						break;
-					case TREE:
-						g2d.drawImage(spriteImages[17], i * width, j * height, width, height, null);
-						break;
-					case EXTRA_TILE_TYPE_1:
-						g2d.drawImage(spriteImages[18], i * width, j * height, width, height, null);
-						break;
-					}
-				}
-			}
+				g2d.drawImage(spriteImages[e.getValue().ordinal()],	 e.getKey().x*width, e.getKey().y*height, width, height, null);
+				
+			
+			
+				
 		}
+		System.out.println(scaled.toString() + " " + origin.toString() + target.toString());
+		System.out.println((System.nanoTime() - startTime)/1000000);
 	}
-
+	//TODO: make it happen
+	private void drawMiniMap(Graphics2D g2d, int windowWidth, int windowHeight, int mapWidth, int mapHeight) {
+		//need to have a minimap for sanity's sake
+		g2d.setColor(Color.WHITE);
+		//takes up 10% of screen
+		
+	}
 	public void setFirst(Point inPoint) {
 		DebugManagement.writeNotificationToLog("First point in CellRenderer set.");
 		first = inPoint;
@@ -330,7 +229,10 @@ public class CellRenderer {
 		try {
 			BufferedImage spriteSheet = ImageIO
 					.read(HermesUI.class.getResource("/com/team1ofus/hermes/resources/Sprites.png"));
-
+			 GraphicsEnvironment env = GraphicsEnvironment.getLocalGraphicsEnvironment();
+			    GraphicsDevice device = env.getDefaultScreenDevice();
+			    GraphicsConfiguration config = device.getDefaultConfiguration();
+			    BufferedImage buffy = config.createCompatibleImage(width, height, Transparency.TRANSLUCENT);
 			for (int i = 0; i < rows; i++) {
 				for (int j = 0; j < cols; j++) {
 					spriteImages[(i * cols) + j] = spriteSheet.getSubimage(j * (width + 8), i * (height + 8), width,
@@ -389,82 +291,70 @@ public class CellRenderer {
 	public void incrementOffset(int dx, int dy, int windowWidth, int windowHeight) {
 		// some optimizations to be made here
 		DebugManagement.writeNotificationToLog("Offset is : " + offset.toString());
-		int scaleFactor = 1;
-		if(scaleFactor < 1) {
-			scaleFactor = 1;
+		double scaleFactor = 1;
+		if(isCampusMap) {
+			scaleFactor = (double)50*(1 - scale/3.3);
 		}
-		offset.translate((int)(-dx)*scaleFactor, (int)(-dy)*scaleFactor);
-
-		/*if (offset.x < 0) {
-			offset.x = 0;
-		} else if (offset.x > drawnCell.getWidth() * width - (windowWidth)) {
-			int tileCount = drawnCell.getWidth();
-			int maxX = drawnCell.getWidth() * width - (windowWidth);
-			offset.x = maxX;
+		offset.translate((int)(-dx)*(int)Math.round(scaleFactor), (int)(-dy)*(int)Math.round(scaleFactor));
+		if(isCampusMap) {
+			
 		}
-
-		// The panelSizae is the size of the side panel. If we need to change
-		// that, alter that variable.
-
-		if (offset.y < 0) {
-			offset.y = 0;
-		} else if (offset.y > drawnCell.getHeight() * height - windowHeight) {
-			offset.y = drawnCell.getHeight() * height - windowHeight;
-
-		}
-		if (offset.x < 0)
-			offset.x = 0;
-		if (offset.y < 0)
-			offset.y = 0;*/
-		/*
-		 * if(offset.x < 0) { offset.x = 0; } if(offset.y < 0) { offset.y = 0; }
-		 */
+		
 	}
 }
 
 
 
-/*width = (int) (BootstrapperConstants.TILE_WIDTH * scale);
-height = (int) (BootstrapperConstants.TILE_HEIGHT * scale);
-
-// DebugManagement.writeNotificationToLog("The previous scale was");
-oldTotalWidth = (int) ((BootstrapperConstants.TILE_WIDTH * drawnCell.getWidth()) * prevScale);
-// DebugManagement.writeNotificationToLog("drawnCell.tiles.length: " +
-// );
-// DebugManagement.writeNotificationToLog("The previous total width
-// was:");
-oldTotalHeight = (int) ((BootstrapperConstants.TILE_HEIGHT * drawnCell.getHeight()) * prevScale);
-// DebugManagement.writeNotificationToLog("drawnCell.tiles[1].length
-// shows:");
-// DebugManagement.writeNotificationToLog("The previous total height
-// was:");
-newTotalWidth = (int) ((BootstrapperConstants.TILE_WIDTH * drawnCell.getWidth()) * scale);
-// DebugManagement.writeNotificationToLog("The current total width
-// is:");
-newTotalHeight = (int) ((BootstrapperConstants.TILE_HEIGHT * drawnCell.getHeight()) * scale);
-// DebugManagement.writeNotificationToLog("The current total height
-// is:");
-difWidth = (((newTotalWidth - oldTotalWidth) / 2));
-finalWidth = difWidth + (int) (difWidth * (scale - 1));
-finalHeight = difHeight + (int) (difHeight * (scale - 1));
-DebugManagement.writeNotificationToLog("oldTotalWidth " + oldTotalWidth + " oldTotalHeight " + oldTotalHeight);
-DebugManagement.writeNotificationToLog("newTotalWidth " + newTotalWidth + " newTotalHeight " + newTotalHeight);
-difHeight = ((newTotalHeight - oldTotalHeight) / 2);
-DebugManagement.writeNotificationToLog("difHeight" + difHeight);
-
-Point amountToShift = tilesOnScreen(windowWidth, windowHeight);
-DebugManagement.writeNotificationToLog("Tiles on screen: " + amountToShift.x + " " + amountToShift.y);
-//incrementOffset(amountToShift.x + oldAmountToShift.x, amountToShift.y  + oldAmountToShift.y, windowWidth, windowHeight);
-
-Point picked = pickTile(offset.x, offset.y);
-//so we have 2 picked tiles
-Point finalPicked = new Point(oldPicked.x - picked.x, oldPicked.y - picked.y);
-Point finalPixels = new Point((int) (finalPicked.x * BootstrapperConstants.TILE_WIDTH * scale), (int) (finalPicked.y * BootstrapperConstants.TILE_HEIGHT * scale));
-
-Point center = getCenter(windowWidth, windowHeight);
-Point mapCenter = getMapCenter();
-Point difference = new Point(mapCenter.x - center.x, mapCenter.y - center.y);
-AffineTransform.getTranslateInstance(difference.x, difference.y).scale(scale, scale);
-
-
-Point newOffset = new Point((int)(offset.x * (scale - prevScale)),(int)(offset.y * (scale - prevScale)));*/
+/*switch (tile.getTileType()) {
+case PEDESTRIAN_WALKWAY:
+	g2d.drawImage(spriteImages[1], x, y, width, height, null);
+	break;
+case DOOR:
+	g2d.drawImage(spriteImages[2], x, y, width, height, null);
+	break;
+case GRASS:
+	g2d.drawImage(spriteImages[3], x, y, width, height, null);
+	break;
+case CONGESTED:
+	g2d.drawImage(spriteImages[4], x, y, width, height, null);
+	break;
+case VERTICAL_UP_STAIRS:
+	g2d.drawImage(spriteImages[5], x, y, width, height, null);
+	break;
+case VERTICAL_DOWN_STAIRS:
+	g2d.drawImage(spriteImages[6], x, y, width, height, null);
+	break;
+case HORIZONTAL_LEFT_STAIRS:
+	g2d.drawImage(spriteImages[7], x, y, width, height, null);
+	break;
+case HORIZONTAL_RIGHT_STAIRS:
+	g2d.drawImage(spriteImages[8], x, y, width, height, null);
+	break;
+case CLASSROOM:
+	g2d.drawImage(spriteImages[9], x, y, width, height, null);
+	break;
+case IMPASSABLE:
+	g2d.drawImage(spriteImages[10], x, y, width, height, null);
+	break;
+case MALE_BATHROOM:
+	g2d.drawImage(spriteImages[11], x, y, width, height, null);
+	break;
+case FEMALE_BATHROOM:
+	g2d.drawImage(spriteImages[12], x, y, width, height, null);
+	break;
+case UNISEX_BATHROOM:
+	g2d.drawImage(spriteImages[13], x, y, width, height, null);
+	break;
+case BENCH:
+	g2d.drawImage(spriteImages[14], x, y, width, height, null);
+	break;
+case BUSH:
+	g2d.drawImage(spriteImages[16], x, y, width, height, null);
+	break;
+case TREE:
+	g2d.drawImage(spriteImages[17], x, y, width, height, null);
+	break;
+case EXTRA_TILE_TYPE_1:
+	g2d.drawImage(spriteImages[18], x, y, width, height, null);
+	break;
+}*/

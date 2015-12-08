@@ -205,7 +205,7 @@ public class AStar {
 		while(!frontier.isEmpty()) {
 			frontier = sortByCost(frontier);
 			currentPoint = frontier.get(0);
-			DebugManagement.writeNotificationToLog(currentPoint.getCellName());
+//			DebugManagement.writeNotificationToLog(currentPoint.getCellName());
 			if(currentPoint.equals(endPoint)){ //if we are at the end: 
 				ArrayList<CellPoint> FinalPath = buildPath(endPoint); 
 				if(isFiltering) {
