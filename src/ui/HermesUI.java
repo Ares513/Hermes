@@ -76,12 +76,17 @@ import com.team1ofus.apollo.TILE_TYPE;
 
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
+import javax.swing.text.AttributeSet;
+import javax.swing.text.SimpleAttributeSet;
+import javax.swing.text.StyleConstants;
+import javax.swing.text.StyledDocument;
 import javax.swing.JScrollBar;
 import javax.swing.JScrollPane;
 import javax.swing.JViewport;
 import javax.swing.ScrollPaneConstants;
 import javax.swing.JTabbedPane;
 import java.awt.print.*;
+import javax.swing.JTextPane;
 
 //Holds all of the UI elements for the project
 public class HermesUI extends JPanel implements IHumanInteractionListener{
@@ -110,7 +115,6 @@ public class HermesUI extends JPanel implements IHumanInteractionListener{
 	private Record searchEndRecord = null; //hopefully we can re-factor these at some point. If you want to please feel free to.
 	private JSeparator separator;
 	private JLabel lblDirectionReadout;
-	public JTextArea directionsTextPane;
 	private Component verticalStrut_1;
 	private Component verticalStrut_2;
 	private Component verticalStrut_3;
@@ -140,7 +144,8 @@ public class HermesUI extends JPanel implements IHumanInteractionListener{
 	private ArrayList<ArrayList<String>> floors = new ArrayList<ArrayList<String>>();
 	private HashMap<String, String> nameToDisplay = new HashMap<String, String>();
 	private int mapIndex = 0; // index of where one is in switching between maps in the path AStar returns
-            
+	private JTextPane instructionsTextPane;
+    private StyledDocument instructionsDoc;         
 	public HermesUI(ArrayList<PathCell> viewCells, ArrayList<Record> locationNameInfoRecords) {
 		this.locationNameInfoRecords = locationNameInfoRecords;
 		
@@ -400,19 +405,16 @@ public class HermesUI extends JPanel implements IHumanInteractionListener{
 		lblDirectionReadout.setAlignmentX(CENTER_ALIGNMENT);
 
 		verticalBox.add(lblDirectionReadout);
-
+		
+		instructionsTextPane = new JTextPane();
+		instructionsTextPane.setEditable(false);
+		verticalBox.add(instructionsTextPane);
+		instructionsDoc = instructionsTextPane.getStyledDocument();
+		instructionsTextPane.setText("");
+		
 		scrollPane = new JScrollPane();
 		scrollPane.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
 		verticalBox.add(scrollPane);
-		
-		directionsTextPane = new JTextArea();
-		scrollPane.setViewportView(directionsTextPane);
-		directionsTextPane.setLineWrap(true);
-		directionsTextPane.setBorder(new LineBorder(new Color(0, 0, 0)));
-		//directionsTextPane.setText(createText());
-		directionsTextPane.setEditable(false);
-		directionsTextPane.setRows(20);
-		directionsTextPane.setColumns(18);
 		
 		Box mapSwitchHBox = Box.createHorizontalBox();
 		verticalBox.add(mapSwitchHBox);
@@ -547,21 +549,44 @@ public class HermesUI extends JPanel implements IHumanInteractionListener{
 
 	//This is a dummy method to check and make sure directions will be able to load well.
 	//Can get rid of once we have directions.
-	public void directionText(ArrayList<String> directions){
-		directionsTextPane.setText("");
-		printer.printInstructions = new ArrayList<String>(); 
-		int size = directions.size(); 
-		for(int i =0; i < size; i++){ 
-			String direction = directions.get(i); 
-			directionsTextPane.append(direction);
-			directionsTextPane.append("\n-------------");
-			directionsTextPane.append("\n");
-			printer.printInstructions.add(direction);
-			
-		} 
-	
-	}
-	
+//	public void directionText(ArrayList<String> directions){
+//		directionsTextPane.setText("");
+//		printer.printInstructions = new ArrayList<String>(); 
+//		int size = directions.size(); 
+//		for(int i =0; i < size; i++){ 
+//			String direction = directions.get(i); 
+//			directionsTextPane.append(direction);
+//			directionsTextPane.append("\n-------------");
+//			directionsTextPane.append("\n");
+//			printer.printInstructions.add(direction);
+//			
+//		} 
+//	
+//	}
+//	public void directionText(ArrayList<String> directions){
+//		instructionsTextPane.setText(""); 
+//		AttributeSet keyWord = new SimpleAttributeSet();
+//		StyleConstants.setForeground(keyWord, Color.RED);
+//		StyleConstants.setBackground(keyWord, Color.YELLOW);
+//		StyleConstants.setBold(keyWord, true);
+//		//printInstructions = new ArrayList<String>(); 
+//		int size = directions.size(); 
+//		for(int i =0; i < size; i++){ 
+//			String direction = directions.get(i); 
+//			try{ 
+//			instructionsDoc.insertString(instructionsDoc.getLength(), directions, keyWord);
+//			} 
+//			catch(Exception e){ 
+//				System.out.println(e);
+//			}
+//			//directionsTextPane.append(direction);
+//			//directionsTextPane.append("\n-------------");
+//			// directionsTextPane.append("\n");
+//			//printer.printInstructions.add(direction);
+//			
+//		} 
+//	
+//	}
 	
 	
 	public PathPane getPathPanel(){
