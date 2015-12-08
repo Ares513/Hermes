@@ -87,12 +87,7 @@ public class PathCell{
     	for(int x = 0; x < width; x++)
 	    	for(int y = 0; y < height; y++) {
 	    		Point p = new Point(x,y);
-			    if(tt.equals(TILE_TYPE.PEDESTRIAN_WALKWAY)){
-					tiles.put(p,new Walkway(name, p));
-				}
-				else{
-					tiles.put(p,new Wall(name, p));
-				}
+				tiles.put(p,TileFactory.MakeTile(tt, name, p));
     	}
     }
     
@@ -112,86 +107,32 @@ public class PathCell{
 		this.entryPointRefs = entryPointRefs;
 		for(Point p : dataTiles.keySet()) {
 			TILE_TYPE type = dataTiles.get(p);
-			if(type.equals(TILE_TYPE.PEDESTRIAN_WALKWAY)){
-    			tiles.put(p,new Walkway(name, p));
-    		}
-    		else if(type.equals(TILE_TYPE.DOOR)){
-    			tiles.put(p,new Door(name, p));
-    		}
-    		else if(type.equals(TILE_TYPE.GRASS)){
-    			tiles.put(p,new Grass(name, p));
-    		}
-    		else if(type.equals(TILE_TYPE.CONGESTED)){
-    			tiles.put(p,new Congested(name, p));
-    		}
-    		else if(type.equals(TILE_TYPE.VERTICAL_UP_STAIRS)){
-    			tiles.put(p,new VerticalUpStairs(name, p));
-    		}
-    		else if(type.equals(TILE_TYPE.VERTICAL_DOWN_STAIRS)){
-    			tiles.put(p,new VerticalDownStairs(name, p));
-    		}
-    		else if(type.equals(TILE_TYPE.HORIZONTAL_LEFT_STAIRS)){
-    			tiles.put(p,new HorizontalLeftStairs(name, p));
-    		}
-    		else if(type.equals(TILE_TYPE.HORIZONTAL_RIGHT_STAIRS)){
-    			tiles.put(p,new HorizontalRightStairs(name, p));
-    		}
-    		else if(type.equals(TILE_TYPE.IMPASSABLE)){
-    			tiles.put(p,new Impassable(name, p));
-    		}
-    		else if(type.equals(TILE_TYPE.MALE_BATHROOM)){
-    			tiles.put(p,new MaleBathroom(name, p));
+			tiles.put(p, TileFactory.MakeTile(type, name, p));
+			if(type.equals(TILE_TYPE.MALE_BATHROOM)){
     			ArrayList<String> bathroomNames = new ArrayList<String>();
     			bathroomNames.add("AutoGen Male Bathroom " + this.getDisplayName());
     			bathroomNames.add("AutoGen Men's Room " + this.getDisplayName());
     			namedPoints.add(new LocationNameInfo(p, bathroomNames));
     		}
     		else if(type.equals(TILE_TYPE.FEMALE_BATHROOM)){
-    			tiles.put(p,new FemaleBathroom(name, p));
     			ArrayList<String> bathroomNames = new ArrayList<String>();
     			bathroomNames.add("AutoGen Female Bathroom " + this.getDisplayName());
     			bathroomNames.add("AutoGen Women's Room " + this.getDisplayName());
     			namedPoints.add(new LocationNameInfo(p, bathroomNames));
     		}
     		else if(type.equals(TILE_TYPE.UNISEX_BATHROOM)){
-    			tiles.put(p,new UnisexBathroom(name, p));
     			ArrayList<String> bathroomNames = new ArrayList<String>();
     			bathroomNames.add("AutoGen Unisex Bathroom " + this.getDisplayName());
     			bathroomNames.add("AutoGen Unisex Room " + this.getDisplayName());
     			namedPoints.add(new LocationNameInfo(p, bathroomNames));
     		}
     		else if(type.equals(TILE_TYPE.BENCH)){
-    			tiles.put(p,new Bench(name, p));
     			ArrayList<String> benchNames = new ArrayList<String>();
     			benchNames.add("AutoGen Bench " + this.getDisplayName());
     			benchNames.add("AutoGen Place To Sit " + this.getDisplayName());
     			namedPoints.add(new LocationNameInfo(p, benchNames));
     		}
-    		else if(type.equals(TILE_TYPE.TREE)){
-    			tiles.put(p,new Tree(name, p));
-    		}
-    		else if(type.equals(TILE_TYPE.BUSH)){
-    			tiles.put(p,new Bush(name, p));
-    		}
-    		else if(type.equals(TILE_TYPE.LINOLEUM)){
-    			tiles.put(p,new Linoleum(name, p));
-    		}
-    		else if(type.equals(TILE_TYPE.ELEVATOR)){
-    			tiles.put(p,new Elevator(name, p));
-    		}
-    		else if(type.equals(TILE_TYPE.UNPLOWED)){
-    			tiles.put(p,new Unplowed(name, p));
-    		}
-    		else if(type.equals(TILE_TYPE.CLASSROOM)){
-    			tiles.put(p,new Classroom(name, p));
-    		}
-    		else if(type.equals(TILE_TYPE.EXTRA_TILE_TYPE_1)){
-    			tiles.put(p,new Road(name, p));
-    		}
-    		else{
-    			tiles.put(p,new Wall(name, p));
-    		}
-
+			
 		}
 
     }
@@ -203,33 +144,6 @@ public class PathCell{
         return output;
     }
     
-	public ArrayList<Tile> getPossibleTraversals(Point tilePoint){
-    	ArrayList<Tile> openNeighbors = new ArrayList<Tile>();
-    	Point curPoint = tilePoint;
-    	Tile curTile = null;
-    	int tileX = (int)tilePoint.getX();
-    	int tileY = (int)tilePoint.getY();
-    	
-    	for(int i= tileX-1; i<=tileX+1; i++){
-    		for(int j= tileY-1; j <=tileY+1; j++){
-    			curPoint.setLocation(i,j);
-    			curTile = getTile(curPoint);
-    			
-    			if(curPoint == tilePoint){
-    				continue;
-    			}
-    			else if(curTile.getTileType() == TILE_TYPE.WALL){ // 0 means wall
-    				continue;
-    			}
-    			else{
-    				openNeighbors.add(curTile);
-    			}
-    		}
-    	}
-    	
-    	
-		return openNeighbors;
-    }
 	
 	public String getName(){
 		return cellName;
@@ -281,4 +195,33 @@ public class PathCell{
 	public int getHeight() {
 		return height;
 	}
+	
+	/*//this code was commented out by Forrest Cinelli on Dec 7 2015 at 11pm. If it's been a long time and this code has not been missed, feel free to delete it. 
+	public ArrayList<Tile> getPossibleTraversals(Point tilePoint){
+    	ArrayList<Tile> openNeighbors = new ArrayList<Tile>();
+    	Point curPoint = tilePoint;
+    	Tile curTile = null;
+    	int tileX = (int)tilePoint.getX();
+    	int tileY = (int)tilePoint.getY();
+    	
+    	for(int i= tileX-1; i<=tileX+1; i++){
+    		for(int j= tileY-1; j <=tileY+1; j++){
+    			curPoint.setLocation(i,j);
+    			curTile = getTile(curPoint);
+    			
+    			if(curPoint == tilePoint){
+    				continue;
+    			}
+    			else if(curTile.getTileType() == TILE_TYPE.WALL){ // 0 means wall
+    				continue;
+    			}
+    			else{
+    				openNeighbors.add(curTile);
+    			}
+    		}
+    	}
+    	
+    	
+		return openNeighbors;
+    }*/
 }
