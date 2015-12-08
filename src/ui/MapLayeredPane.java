@@ -63,7 +63,6 @@ public class MapLayeredPane extends JLayeredPane {
 	}
 	
 	private void initialize() {
-		mapPanel.setBorder(new EtchedBorder(EtchedBorder.RAISED, null, null));
 		mapPanel.setBounds(0, 0, BootstrapperConstants.FRAME_WIDTH-BootstrapperConstants.PANEL_SIZE, BootstrapperConstants.FRAME_HEIGHT);
 		pathPanel.setBounds(0, 0, BootstrapperConstants.FRAME_WIDTH-BootstrapperConstants.PANEL_SIZE, BootstrapperConstants.FRAME_HEIGHT);
 		textPanel.setBounds(0, 0, BootstrapperConstants.FRAME_WIDTH-BootstrapperConstants.PANEL_SIZE, BootstrapperConstants.FRAME_HEIGHT);
