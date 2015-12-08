@@ -181,33 +181,6 @@ public class PathCell{
         return output;
     }
     
-	public ArrayList<Tile> getPossibleTraversals(Point tilePoint){
-    	ArrayList<Tile> openNeighbors = new ArrayList<Tile>();
-    	Point curPoint = tilePoint;
-    	Tile curTile = null;
-    	int tileX = (int)tilePoint.getX();
-    	int tileY = (int)tilePoint.getY();
-    	
-    	for(int i= tileX-1; i<=tileX+1; i++){
-    		for(int j= tileY-1; j <=tileY+1; j++){
-    			curPoint.setLocation(i,j);
-    			curTile = getTile(curPoint);
-    			
-    			if(curPoint == tilePoint){
-    				continue;
-    			}
-    			else if(curTile.getTileType() == TILE_TYPE.WALL){ // 0 means wall
-    				continue;
-    			}
-    			else{
-    				openNeighbors.add(curTile);
-    			}
-    		}
-    	}
-    	
-    	
-		return openNeighbors;
-    }
 	
 	public String getName(){
 		return cellName;
@@ -259,4 +232,33 @@ public class PathCell{
 	public int getHeight() {
 		return height;
 	}
+	
+	//this code was commented out by Forrest Cinelli on Dec 7 2015 at 11pm. If it's been a long time and this code has not been missed, feel free to delete it. 
+	public ArrayList<Tile> getPossibleTraversals(Point tilePoint){
+    	ArrayList<Tile> openNeighbors = new ArrayList<Tile>();
+    	Point curPoint = tilePoint;
+    	Tile curTile = null;
+    	int tileX = (int)tilePoint.getX();
+    	int tileY = (int)tilePoint.getY();
+    	
+    	for(int i= tileX-1; i<=tileX+1; i++){
+    		for(int j= tileY-1; j <=tileY+1; j++){
+    			curPoint.setLocation(i,j);
+    			curTile = getTile(curPoint);
+    			
+    			if(curPoint == tilePoint){
+    				continue;
+    			}
+    			else if(curTile.getTileType() == TILE_TYPE.WALL){ // 0 means wall
+    				continue;
+    			}
+    			else{
+    				openNeighbors.add(curTile);
+    			}
+    		}
+    	}
+    	
+    	
+		return openNeighbors;
+    }
 }
