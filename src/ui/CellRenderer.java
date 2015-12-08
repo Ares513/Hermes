@@ -52,13 +52,15 @@ public class CellRenderer {
 	private int panelSize = 230;
 	private double scale = 1;
 
-	public CellRenderer(PathCell inCell) {
+	public CellRenderer(PathCell inCell, int windowWidth, int windowHeight) {
 		drawnCell = inCell;
 		int centerx = (BootstrapperConstants.TILE_WIDTH * drawnCell.getWidth()) / 2;
 		int centery = (BootstrapperConstants.TILE_HEIGHT * drawnCell.getHeight()) / 2;
 		incrementOffset(centerx, centery, BootstrapperConstants.FRAME_WIDTH, BootstrapperConstants.FRAME_WIDTH);
 		// might need to
-
+		offset = getMapCenter();
+		offset = new Point(offset.x - windowWidth/2, windowHeight/2);
+		
 		getFromSheet();
 	}
 
@@ -138,7 +140,7 @@ public class CellRenderer {
 		
 		g2d.setColor(new Color(128, 0, 0));
 		g2d.fillRect(0,0, windowWidth, windowHeight);
-		g2d.setRenderingHint(RenderingHints.KEY_INTERPOLATION, RenderingHints.VALUE_INTERPOLATION_BILINEAR);
+		//g2d.setRenderingHint(RenderingHints.KEY_INTERPOLATION, RenderingHints.VALUE_INTERPOLATION_BILINEAR);
 		AffineTransform transformer = new AffineTransform();
 		transformer.translate(windowWidth/2, windowHeight/2);
 		
@@ -387,13 +389,13 @@ public class CellRenderer {
 	public void incrementOffset(int dx, int dy, int windowWidth, int windowHeight) {
 		// some optimizations to be made here
 		DebugManagement.writeNotificationToLog("Offset is : " + offset.toString());
-		int scaleFactor = (int) (3 - scale);
+		int scaleFactor = 1;
 		if(scaleFactor < 1) {
 			scaleFactor = 1;
 		}
 		offset.translate((int)(-dx)*scaleFactor, (int)(-dy)*scaleFactor);
 
-/*		if (offset.x < 0) {
+		/*if (offset.x < 0) {
 			offset.x = 0;
 		} else if (offset.x > drawnCell.getWidth() * width - (windowWidth)) {
 			int tileCount = drawnCell.getWidth();
