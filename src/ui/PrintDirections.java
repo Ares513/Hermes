@@ -18,7 +18,7 @@ public class PrintDirections {
 	
 	}	 
 	public ArrayList<String> parseDirections(ArrayList<CellPoint> AStarDirections){
-		ArrayList<String> statesList = stateList(AStarDirections); 
+		ArrayList<Directions> statesList = stateList(AStarDirections); 
 		ArrayList<Directions> directionsList = route(statesList);
 		ArrayList<String> finalList = routePrintOut(directionsList); 
 		return finalList; 
@@ -27,16 +27,19 @@ public class PrintDirections {
 	/* 
 	 * Takes a* path, and returns ArrayList of string that represents the direction that each tile is heading.
 	 */
-	private ArrayList<String> stateList(ArrayList<CellPoint> aStarPath){ 
+	private ArrayList<Directions> stateList(ArrayList<CellPoint> aStarPath){ 
 		int numberOfSteps = aStarPath.size(); 
-		ArrayList<String> stateList = new ArrayList<String>(); 
+		ArrayList<Directions> stateList = new ArrayList<Directions>(); 
 		for(int i = 1; i < numberOfSteps; i++){ 
 			CellPoint iterationI = aStarPath.get(i);
 			CellPoint prevIteration = aStarPath.get(i-1); 
 			double xDiff = getXDifference(iterationI,prevIteration);
 			double yDiff = getYDifference(iterationI,prevIteration); 
 			String state = getState(xDiff, yDiff); 
-			stateList.add(state); 
+			
+			Directions onlyAHeading = new Directions();
+			onlyAHeading = newDirection(state, 0, iterationI, null); 
+			stateList.add(onlyAHeading); 
 		}
 		return stateList; 
 	}
@@ -69,7 +72,7 @@ public class PrintDirections {
 				startInstruction += df.format(currentDistance);		
 				startInstruction += " feet";
 				//startInstruction += "\n-------------";
-				currentInstruction.turnInstruction = startInstruction; 
+				currentInstruction.setTurnInstructions(startInstruction); 
 				prevDegree = toDegrees(currentState); 
 				dList.set(i, currentInstruction); 
 			}
@@ -84,10 +87,10 @@ public class PrintDirections {
 				newInstruction += df.format(currentDistance); 
 				newInstruction += " feet";
 				//newInstruction += "\n-------------";
-				currentInstruction.turnInstruction = newInstruction; 
+				currentInstruction.setTurnInstructions(newInstruction);
 				prevDegree = toDegrees(currentState); 
 				}
-			humanReadableDirections.add(currentInstruction.turnInstruction); 
+			humanReadableDirections.add(currentInstruction.getTurnInstruction()); 
 			//System.out.println(currentInstruction.turnInstruction);
 			}
 			humanReadableDirections.add(estimatedTime(totalDistance)); 
@@ -162,10 +165,12 @@ public class PrintDirections {
 	/*
 	 * Given a heading and distance outputs Directions
 	 */
-	private Directions newDirection(String heading, double distance){ 
+	private Directions newDirection(String heading, double distance, CellPoint cellPoint, String turnInst){ 
 		Directions newEntry = new Directions(); 
-		newEntry.heading = heading; 
-		newEntry.distance = distance; 
+		newEntry.setHeading(heading); 
+		newEntry.setDistance(distance);
+		newEntry.setCellPoint(cellPoint);
+		newEntry.setTurnInstructions(turnInst);
 		return newEntry; 
 	}
 	
@@ -173,21 +178,27 @@ public class PrintDirections {
 	 * Given an ArrayList of (string) States (N,S,E,W,NE,NW,SE,SW), outputs an ArrayList of non-repeating Directions 
 	 *  N,N,N,E,E -> N 9, E 6
 	 */
-	private ArrayList<Directions> route(ArrayList<String> states){ 
+	private ArrayList<Directions> route(ArrayList<Directions> states){ 
 		int size = states.size();
 		ArrayList<Directions> dList = new ArrayList<Directions>();
 		double currentDistance =0; 
 		
 		for(int i = 0; i < size; i++){ 
-			String currentState = states.get(i); 
+			Directions current = states.get(i); 
+			String currentState = current.getHeading(); 
 		
 			if(i > 0){ 
-				String previousState = states.get(i-1); 
+				Directions previous = states.get(i-1);
+				String previousState = previous.getHeading();  
+				if(diffMap(current.getCellPoint(), previous.getCellPoint())){ 
+					current.setTurnInstructions("New Map, Entering:");
+					dList.add(current); 
+				}
 				if(currentState.equals(previousState) && i!= (size-1)){ 
 					currentDistance += getDistance(currentState); 
 				}
 				else{ 
-					dList.add(newDirection(previousState, currentDistance)); 
+					dList.add(newDirection(previousState, currentDistance,current.getCellPoint(), null));
 					currentDistance = 0; 
 					currentDistance = getDistance(currentState); 
 				}
@@ -197,6 +208,15 @@ public class PrintDirections {
 			}
 		}
 		return dList; 
+	}
+	
+	boolean diffMap (CellPoint current, CellPoint previous){ 
+		if(current.getCellName().equals(previous.getCellName())){ 
+			return false;
+		}
+		else{ 
+			return true;
+		} 
 	}
 	/*
 	 * Takes Cardinal direction and converts to degrees. 

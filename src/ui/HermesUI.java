@@ -122,6 +122,8 @@ public class HermesUI extends JPanel implements IHumanInteractionListener{
 	private JButton btnMinus;
 	private JButton zoomInButton;
 	private JButton zoomOutBtn;
+	private JButton prevButton;
+	private JButton nextButton;
 	private Box horizontalBox;
 	private MapTabbedPane<MapTabbedPane<MapLayeredPane>> tabbedPane;
 	private ArrayList<Record> locationNameInfoRecords;
@@ -137,6 +139,7 @@ public class HermesUI extends JPanel implements IHumanInteractionListener{
 	private ArrayList<String> buildings = new ArrayList<String>();
 	private ArrayList<ArrayList<String>> floors = new ArrayList<ArrayList<String>>();
 	private HashMap<String, String> nameToDisplay = new HashMap<String, String>();
+	private int mapIndex = 0; // index of where one is in switching between maps in the path AStar returns
             
 	public HermesUI(ArrayList<PathCell> viewCells, ArrayList<Record> locationNameInfoRecords) {
 		this.locationNameInfoRecords = locationNameInfoRecords;
@@ -192,26 +195,37 @@ public class HermesUI extends JPanel implements IHumanInteractionListener{
 		tabbedPane.getSelectedTabPane().getSelectedTabPane().getPointPane().setFirst(null);
 		tabbedPane.getSelectedTabPane().getSelectedTabPane().getPointPane().setSecond(null);
 
-		 splitPath(path);
-		 for(int i = 0; i < cellsInPath.size(); i++) {
-			 tabbedPane.setSelectedIndex(tabbedPane.getIndexOfTab(cellsInPath.get(i).substring(0, 2)));
-			 tabbedPane.getSelectedTabPane().setSelectedIndex(tabbedPane.getSelectedTabPane().getIndexOfTab(nameToDisplay.get(cellsInPath.get(i))));
-			 repaintPanel();
-			 tabbedPane.getSelectedTabPane().getSelectedTabPane().getPathPane().drawPath(segmentedPath.get(i), cellsInPath.get(i));			 
-			 tabbedPane.getSelectedTabPane().getSelectedTabPane().setOffset(new Point(segmentedPath.get(i).get(0).getPoint().x * BootstrapperConstants.TILE_WIDTH, segmentedPath.get(i).get(0).getPoint().y * BootstrapperConstants.TILE_HEIGHT));
-			 
-			 if(i == 0){ 
-				 tabbedPane.getSelectedTabPane().getSelectedTabPane().getPointPane().setFirst(firstPoint);
-			 }
-			 if(i == cellsInPath.size() -1 ){
-			tabbedPane.getSelectedTabPane().getSelectedTabPane().getPointPane().setSecond(lastPoint);
-			 }
-			 
+		splitPath(path);
+		for(int i = 0; i < cellsInPath.size(); i++) {
+			tabbedPane.setSelectedIndex(tabbedPane.getIndexOfTab(cellsInPath.get(i).substring(0, 2)));
+			tabbedPane.getSelectedTabPane().setSelectedIndex(tabbedPane.getSelectedTabPane().getIndexOfTab(nameToDisplay.get(cellsInPath.get(i))));
+			repaintPanel();
+			tabbedPane.getSelectedTabPane().getSelectedTabPane().getPathPane().drawPath(segmentedPath.get(i), cellsInPath.get(i));			 
+			tabbedPane.getSelectedTabPane().getSelectedTabPane().setOffset(new Point(segmentedPath.get(i).get(0).getPoint().x * BootstrapperConstants.TILE_WIDTH, segmentedPath.get(i).get(0).getPoint().y * BootstrapperConstants.TILE_HEIGHT));
+			
+			if(i == 0){ 
+				tabbedPane.getSelectedTabPane().getSelectedTabPane().getPointPane().setFirst(firstPoint);
 			}
-		 	first = null; 
-		 	second = null;
-		 
-	    }
+			if(i == cellsInPath.size() -1 ){
+				tabbedPane.getSelectedTabPane().getSelectedTabPane().getPointPane().setSecond(lastPoint);
+			}
+			 
+		}
+	 	first = null; 
+	 	second = null;
+	 	
+		if(cellsInPath.size() > 1) {
+			prevButton.setEnabled(false);
+			nextButton.setEnabled(true);
+		} else {
+			prevButton.setEnabled(false);
+			nextButton.setEnabled(false);
+		}
+		
+		tabbedPane.setSelectedIndex(tabbedPane.getIndexOfTab(cellsInPath.get(0).substring(0, 2)));
+		tabbedPane.getSelectedTabPane().setSelectedIndex(tabbedPane.getSelectedTabPane().getIndexOfTab(nameToDisplay.get(cellsInPath.get(0))));
+		
+	}
 	
 	/*
 	 * Splits path based on names in cellpoints
@@ -329,6 +343,9 @@ public class HermesUI extends JPanel implements IHumanInteractionListener{
 		startPoint.setEditable(true);
 		AutoCompleteDecorator.decorate( startPoint );
 
+		JLabel lblStart = new JLabel("Starting point");
+		lblStart.setAlignmentX(Component.CENTER_ALIGNMENT);
+		verticalBox.add(lblStart);
 		verticalBox.add(startPoint);
 		//startPoint.setText("Startpoint");
 		
@@ -357,7 +374,9 @@ public class HermesUI extends JPanel implements IHumanInteractionListener{
 		destination.setEditable(true);
 		AutoCompleteDecorator.decorate( destination );
 
-		
+		JLabel lblDestination = new JLabel("Destination");
+		lblDestination.setAlignmentX(Component.CENTER_ALIGNMENT);
+		verticalBox.add(lblDestination);
 		//destination.setText("Destination");
 		verticalBox.add(destination);
 		//destination.setColumns(18);
@@ -395,12 +414,55 @@ public class HermesUI extends JPanel implements IHumanInteractionListener{
 		directionsTextPane.setRows(20);
 		directionsTextPane.setColumns(18);
 		
+		Box mapSwitchHBox = Box.createHorizontalBox();
+		verticalBox.add(mapSwitchHBox);
+		
+		prevButton = new JButton("Prev map");
+		prevButton.setAlignmentX(Component.CENTER_ALIGNMENT);
+		prevButton.setEnabled(false);
+		mapSwitchHBox.add(prevButton);
+
+		nextButton = new JButton("Next map");
+		nextButton.setAlignmentX(Component.CENTER_ALIGNMENT);
+		nextButton.setEnabled(false);
+		mapSwitchHBox.add(nextButton);
+		
+		prevButton.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				if(cellsInPath.size() > 0) {
+					mapIndex--;
+					tabbedPane.setSelectedIndex(tabbedPane.getIndexOfTab(cellsInPath.get(mapIndex).substring(0, 2)));
+					tabbedPane.getSelectedTabPane().setSelectedIndex(tabbedPane.getSelectedTabPane().getIndexOfTab(nameToDisplay.get(cellsInPath.get(mapIndex))));
+					if(mapIndex == 0) {
+						prevButton.setEnabled(false);
+					} else if(mapIndex < cellsInPath.size() - 1)
+						nextButton.setEnabled(true);
+				}	
+			}
+		});
+
+		nextButton.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				if(cellsInPath.size() > 0) {
+					mapIndex++;
+					tabbedPane.setSelectedIndex(tabbedPane.getIndexOfTab(cellsInPath.get(mapIndex).substring(0, 2)));
+					tabbedPane.getSelectedTabPane().setSelectedIndex(tabbedPane.getSelectedTabPane().getIndexOfTab(nameToDisplay.get(cellsInPath.get(mapIndex))));
+					if(mapIndex >= cellsInPath.size() - 1) {
+						mapIndex = cellsInPath.size() - 1;
+						nextButton.setEnabled(false);
+					} else if(mapIndex > 0)
+						prevButton.setEnabled(true);
+				}
+			}
+		});
 		
 		//printer = new PrintToPrinter(); 
 		JButton printButton = new JButton("Print out Directions");
-		printButton.addMouseListener(new MouseAdapter() {
+		printButton.addActionListener(new ActionListener() {
 			@Override
-			public void mouseClicked(MouseEvent e) {
+			public void actionPerformed(ActionEvent e) {
 				 PrinterJob job = PrinterJob.getPrinterJob();
 		         job.setPrintable(printer);
 		         boolean ok = job.printDialog();
