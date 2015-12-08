@@ -38,6 +38,7 @@ import java.awt.event.MouseEvent;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Random;
 import java.util.function.Predicate;
 import java.util.List;
@@ -133,6 +134,8 @@ public class HermesUI extends JPanel implements IHumanInteractionListener{
 	private SearchReadyEventObject searchEvents;
 	private ArrayList<String> cellsInPath = new ArrayList<String>();
 	private ArrayList<ArrayList<CellPoint>> segmentedPath = new ArrayList<ArrayList<CellPoint>>();
+	private ArrayList<String> buildings = new ArrayList<String>();
+	private ArrayList<ArrayList<String>> floors = new ArrayList<ArrayList<String>>();
             
 	public HermesUI(ArrayList<PathCell> viewCells, ArrayList<Record> locationNameInfoRecords) {
 		this.locationNameInfoRecords = locationNameInfoRecords;
@@ -146,6 +149,19 @@ public class HermesUI extends JPanel implements IHumanInteractionListener{
 	 */
 	public void initialize(ArrayList<PathCell> viewCells) {		
 		allCells = viewCells;
+		
+		int buildingIterator = 0;
+		for(int i = 0; i < allCells.size(); i++) {
+			if(buildings.contains(allCells.get(i).getName().substring(0, 2)))
+				floors.get(buildingIterator-1).add(allCells.get(i).getDisplayName());
+			else {
+				buildings.add(allCells.get(i).getName().substring(0, 2));
+				floors.add(new ArrayList<String>());
+				floors.get(buildingIterator).add(allCells.get(i).getDisplayName());
+				buildingIterator++;
+			}
+		}
+
 		buildControl();
 		frameHermes.addKeyListener(new KeyAdapter() {
 			@Override
@@ -435,7 +451,7 @@ public class HermesUI extends JPanel implements IHumanInteractionListener{
 		frameHermes.getContentPane().add(tabbedPane);
 		
 		
-		
+		/*
 		//TODO Make display the name of the cell, i.e. currentCell.getName()
 		tabbedPane.addNewTab("All Cells", null, new MapTabbedPane<MapLayeredPane>(JTabbedPane.BOTTOM), null);
 		tabbedPane.setSelectedIndex(0);
@@ -443,6 +459,18 @@ public class HermesUI extends JPanel implements IHumanInteractionListener{
 			tabbedPane.getSelectedTabPane().addNewTab(allCells.get(i).getName(), null, new MapLayeredPane(allCells.get(i)), null);
 			tabbedPane.getSelectedTabPane().setSelectedIndex(i);
 			tabbedPane.getSelectedTabPane().getSelectedTabPane().humanInteractive.addListener(this, "HermesUI to " + allCells.get(i).getName());
+		}*/
+		
+		int cellIterator = 0;
+		for(int i = 0; i < buildings.size(); i++) {
+			tabbedPane.addNewTab(buildings.get(i), null, new MapTabbedPane<MapLayeredPane>(JTabbedPane.BOTTOM), null);
+			tabbedPane.setSelectedIndex(i);
+			for(int j = 0; j < floors.get(i).size(); j++) {
+				tabbedPane.getSelectedTabPane().addNewTab(floors.get(i).get(j), null, new MapLayeredPane(allCells.get(cellIterator)), null);
+				tabbedPane.getSelectedTabPane().setSelectedIndex(j);
+				tabbedPane.getSelectedTabPane().getSelectedTabPane().humanInteractive.addListener(this, "HermesUI to " + allCells.get(cellIterator).getName());
+				cellIterator++;
+			}
 		}
 		
 		frameHermes.getContentPane().add(zoomPanel);
