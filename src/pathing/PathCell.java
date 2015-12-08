@@ -28,28 +28,8 @@ import com.team1ofus.apollo.TILE_TYPE;
 
 import core.DebugManagement;
 import core.SEVERITY_LEVEL;
-import tiles.Bench;
-import tiles.Bush;
-import tiles.Classroom;
-import tiles.Congested;
-import tiles.Door;
-import tiles.Elevator;
-import tiles.FemaleBathroom;
-import tiles.Grass;
-import tiles.HorizontalLeftStairs;
-import tiles.HorizontalRightStairs;
-import tiles.Impassable;
-import tiles.Linoleum;
-import tiles.MaleBathroom;
-import tiles.Road;
 import tiles.Tile;
-import tiles.Tree;
-import tiles.UnisexBathroom;
-import tiles.Unplowed;
-import tiles.VerticalDownStairs;
-import tiles.VerticalUpStairs;
-import tiles.Walkway;
-import tiles.Wall;
+
 public class PathCell{
 	
 	public String cellName = null;
@@ -82,8 +62,6 @@ public class PathCell{
     	this.scaling = scaling;
     	this.width = width;
     	this.height = height;
-    	this.addEntryPoints(entryPoints);
-    	this.addEntryPointReferences(entryPointRefs);
     	for(int x = 0; x < width; x++)
 	    	for(int y = 0; y < height; y++) {
 	    		Point p = new Point(x,y);
@@ -134,7 +112,15 @@ public class PathCell{
     		}
 			
 		}
-
+		DebugManagement.writeNotificationToLog(this.cellName);
+		DebugManagement.writeNotificationToLog("num entry points "+String.valueOf(this.entryPoints.size()));
+		for (EntryPoint ep : entryPoints){
+			DebugManagement.writeNotificationToLog(ep.getId());
+		}
+		DebugManagement.writeNotificationToLog("num entry point refs"+String.valueOf(this.entryPointRefs.size()));
+		for (EntryPointReference epr : entryPointRefs){
+			DebugManagement.writeNotificationToLog(epr.getEntryPointID());
+		}
     }
     /*
      * Not safe for out of bounds calls.
