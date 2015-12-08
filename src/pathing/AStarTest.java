@@ -11,7 +11,6 @@ import com.team1ofus.apollo.TILE_TYPE;
 
 public class AStarTest {
 
-	//TODO Delete?
 	@Test // should return the 1 cell.(start and end are the same)
 	public void test1() { 
 		System.out.println("Test1: should return a path with 1 tile (2,2)");

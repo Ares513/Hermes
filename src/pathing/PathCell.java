@@ -82,6 +82,8 @@ public class PathCell{
     	this.scaling = scaling;
     	this.width = width;
     	this.height = height;
+    	this.addEntryPoints(entryPoints);
+    	this.addEntryPointReferences(entryPointRefs);
     	for(int x = 0; x < width; x++)
 	    	for(int y = 0; y < height; y++) {
 	    		Point p = new Point(x,y);
