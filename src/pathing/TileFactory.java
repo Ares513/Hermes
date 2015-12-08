@@ -29,6 +29,7 @@ import tiles.Walkway;
 import tiles.Wall;
 
 public class TileFactory {
+	// build tiles conveniently!
 	public static Tile MakeTile(TILE_TYPE tt, String name, Point p){
 		if(tt.equals(TILE_TYPE.PEDESTRIAN_WALKWAY)){
 			return(new Walkway(name, p));
