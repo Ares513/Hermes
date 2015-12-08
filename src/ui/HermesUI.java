@@ -136,6 +136,7 @@ public class HermesUI extends JPanel implements IHumanInteractionListener{
 	private ArrayList<ArrayList<CellPoint>> segmentedPath = new ArrayList<ArrayList<CellPoint>>();
 	private ArrayList<String> buildings = new ArrayList<String>();
 	private ArrayList<ArrayList<String>> floors = new ArrayList<ArrayList<String>>();
+	private HashMap<String, String> nameToDisplay = new HashMap<String, String>();
             
 	public HermesUI(ArrayList<PathCell> viewCells, ArrayList<Record> locationNameInfoRecords) {
 		this.locationNameInfoRecords = locationNameInfoRecords;
@@ -160,6 +161,7 @@ public class HermesUI extends JPanel implements IHumanInteractionListener{
 				floors.get(buildingIterator).add(allCells.get(i).getDisplayName());
 				buildingIterator++;
 			}
+			nameToDisplay.put(allCells.get(i).getName(), allCells.get(i).getDisplayName());
 		}
 
 		buildControl();
@@ -181,12 +183,8 @@ public class HermesUI extends JPanel implements IHumanInteractionListener{
 	/*
 	 * This splits the path and sends them off to the correct map
 	 */
-	public void drawPath(ArrayList<CellPoint> path){/* Test points
-		 ArrayList<CellPoint> test = new ArrayList<CellPoint>();
-		 test.add(new CellPoint("test1.map", new Point(20, 20)));
-		 test.add(new CellPoint("test1.map", new Point(22, 20)));
-		 test.add(new CellPoint("test2.map", new Point(13, 12)));
-		 test.add(new CellPoint("test2.map", new Point(7, 25)));*/
+	public void drawPath(ArrayList<CellPoint> path){// Test points
+		 //*/
 		//searchStartRecord, searchEndRecord; 
 		int size = path.size(); 
 		Point firstPoint = path.get(0).getPoint();
@@ -196,7 +194,8 @@ public class HermesUI extends JPanel implements IHumanInteractionListener{
 
 		 splitPath(path);
 		 for(int i = 0; i < cellsInPath.size(); i++) {
-			 tabbedPane.getSelectedTabPane().setSelectedIndex(tabbedPane.getSelectedTabPane().getIndexOfTab(cellsInPath.get(i)));
+			 tabbedPane.setSelectedIndex(tabbedPane.getIndexOfTab(cellsInPath.get(i).substring(0, 2)));
+			 tabbedPane.getSelectedTabPane().setSelectedIndex(tabbedPane.getSelectedTabPane().getIndexOfTab(nameToDisplay.get(cellsInPath.get(i))));
 			 repaintPanel();
 			 tabbedPane.getSelectedTabPane().getSelectedTabPane().getPathPane().drawPath(segmentedPath.get(i), cellsInPath.get(i));			 
 			 tabbedPane.getSelectedTabPane().getSelectedTabPane().setOffset(new Point(segmentedPath.get(i).get(0).getPoint().x * BootstrapperConstants.TILE_WIDTH, segmentedPath.get(i).get(0).getPoint().y * BootstrapperConstants.TILE_HEIGHT));
@@ -463,7 +462,7 @@ public class HermesUI extends JPanel implements IHumanInteractionListener{
 		
 		int cellIterator = 0;
 		for(int i = 0; i < buildings.size(); i++) {
-			tabbedPane.addNewTab(buildings.get(i), null, new MapTabbedPane<MapLayeredPane>(JTabbedPane.BOTTOM), null);
+			tabbedPane.addNewTab(buildings.get(i), null, new MapTabbedPane<MapLayeredPane>(JTabbedPane.BOTTOM, buildings.get(i)), null);
 			tabbedPane.setSelectedIndex(i);
 			for(int j = 0; j < floors.get(i).size(); j++) {
 				tabbedPane.getSelectedTabPane().addNewTab(floors.get(i).get(j), null, new MapLayeredPane(allCells.get(cellIterator)), null);
