@@ -71,7 +71,8 @@ public abstract class Tile implements TileInterface{
 	public CellPoint getCellPoint() {
 		CellPoint curCellPoint = new CellPoint(this.getCellName(),this.getPoint());
 		return curCellPoint;
-	}
+	} 
+	public abstract int getTraverseCost();
 
 // Setters:
 	public void setParent(Tile parentTile){
@@ -85,4 +86,5 @@ public abstract class Tile implements TileInterface{
 	public void setETC(int ETC){
 		estimatedTotalCost = ETC;
 	}
+
 }

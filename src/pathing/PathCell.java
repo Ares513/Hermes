@@ -67,11 +67,33 @@ public class PathCell{
 	private int width;
 	private int height;
     
+	// FOR TESTING ONLY
     public PathCell(String name, int width, int height, double scaling) {
     	DebugManagement.writeLineToLog(SEVERITY_LEVEL.WARNING, "A map was generated with a default tile format! Maps should be loaded from memory.");
         this.cellName = name;
     	this.scaling = scaling;
+    	this.width = width;
+    	this.height = height;
            
+    }
+    
+    public PathCell(String name, int width, int height, double scaling, TILE_TYPE tt) {
+    	this.cellName = name;
+    	this.scaling = scaling;
+    	this.width = width;
+    	this.height = height;
+    	this.addEntryPoints(entryPoints);
+    	this.addEntryPointReferences(entryPointRefs);
+    	for(int x = 0; x < width; x++)
+	    	for(int y = 0; y < height; y++) {
+	    		Point p = new Point(x,y);
+			    if(tt.equals(TILE_TYPE.PEDESTRIAN_WALKWAY)){
+					tiles.put(p,new Walkway(name, p));
+				}
+				else{
+					tiles.put(p,new Wall(name, p));
+				}
+    	}
     }
     
     //an unpleasantly long one for 
