@@ -18,6 +18,7 @@ import core.DebugManagement;
 import events.HumanInteractionEventObject;
 import pathing.CellPoint;
 import pathing.PathCell;
+import tiles.Tile;
 
 public class MapLayeredPane extends JLayeredPane {
 	
@@ -37,7 +38,7 @@ public class MapLayeredPane extends JLayeredPane {
 	private double maxZoomOuty ;
 	private double maxZoomOutF;
 	private double maxZoomOut = 0.01;
-	private double maxZoomIn = 3D;
+	private double maxZoomIn = 3.0;
 	private int scalingNum = 1;
 
 	
@@ -235,7 +236,12 @@ public class MapLayeredPane extends JLayeredPane {
 	
 	private void processClick(Point picked) {
 		DebugManagement.writeNotificationToLog("Mouse clicked at " + picked.x + " , " + picked.y);
-		if(mapPanel.render.getTile(picked.x, picked.y).tileType != TILE_TYPE.WALL || mapPanel.render.getTile(picked.x, picked.y).tileType != TILE_TYPE.IMPASSABLE) {
+		Tile pickedTile = mapPanel.render.getTile(picked.x, picked.y);
+		if(pickedTile == null) {
+			return;
+		}
+		DebugManagement.writeNotificationToLog("Picked " + pickedTile.getTileType().toString());
+		if(pickedTile.getTileType() != TILE_TYPE.WALL && pickedTile.getTileType() != TILE_TYPE.IMPASSABLE) {
 			//valid.
 			if(first == null) {
 			//	first.getPoint();
