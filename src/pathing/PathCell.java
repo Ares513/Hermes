@@ -23,6 +23,7 @@ LocationInfo 1-to-many  A cell has many destinations and exits
 import java.awt.Point;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.regex.Pattern;
 
 import com.team1ofus.apollo.TILE_TYPE;
 
@@ -73,7 +74,9 @@ public class PathCell{
 	public PathCell(String name, String display, int width, int height, HashMap<Point, TILE_TYPE> dataTiles, ArrayList<EntryPoint> entryPoints,
 			ArrayList<LocationNameInfo> namedPoints, ArrayList<EntryPointReference> entryPointRefs) {
 		tiles = new HashMap<Point, Tile>();
-        this.cellName = name;
+		//this should really be done in loading, not here. Let's fix this later.
+		//TODO: fix this
+        this.cellName = name.split(Pattern.quote("."))[0];
         this.displayName = display;
         this.width = width;
         this.height = height;
