@@ -212,10 +212,10 @@ public class PrintDirections {
 	
 	boolean diffMap (CellPoint current, CellPoint previous){ 
 		if(current.getCellName().equals(previous.getCellName())){ 
-			return true;
+			return false;
 		}
 		else{ 
-			return false;
+			return true;
 		} 
 	}
 	/*
