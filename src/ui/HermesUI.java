@@ -214,12 +214,12 @@ public class HermesUI extends JPanel implements IHumanInteractionListener{
 	 	first = null; 
 	 	second = null;
 	 	
-		if(cellsInPath.size() > 0) {
+		if(cellsInPath.size() > 1) {
 			prevButton.setEnabled(false);
 			nextButton.setEnabled(true);
 		} else {
 			prevButton.setEnabled(false);
-			nextButton.setEnabled(true);
+			nextButton.setEnabled(false);
 		}
 		
 		tabbedPane.setSelectedIndex(tabbedPane.getIndexOfTab(cellsInPath.get(0).substring(0, 2)));
