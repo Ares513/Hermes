@@ -136,6 +136,7 @@ public class HermesUI extends JPanel implements IHumanInteractionListener{
 	private ArrayList<ArrayList<CellPoint>> segmentedPath = new ArrayList<ArrayList<CellPoint>>();
 	private ArrayList<String> buildings = new ArrayList<String>();
 	private ArrayList<ArrayList<String>> floors = new ArrayList<ArrayList<String>>();
+	private HashMap<String, String> nameToDisplay = new HashMap<String, String>();
             
 	public HermesUI(ArrayList<PathCell> viewCells, ArrayList<Record> locationNameInfoRecords) {
 		this.locationNameInfoRecords = locationNameInfoRecords;
@@ -160,6 +161,7 @@ public class HermesUI extends JPanel implements IHumanInteractionListener{
 				floors.get(buildingIterator).add(allCells.get(i).getDisplayName());
 				buildingIterator++;
 			}
+			nameToDisplay.put(allCells.get(i).getName(), allCells.get(i).getDisplayName());
 		}
 
 		buildControl();
@@ -193,7 +195,7 @@ public class HermesUI extends JPanel implements IHumanInteractionListener{
 		 splitPath(path);
 		 for(int i = 0; i < cellsInPath.size(); i++) {
 			 tabbedPane.setSelectedIndex(tabbedPane.getIndexOfTab(cellsInPath.get(i).substring(0, 2)));
-			 tabbedPane.getSelectedTabPane().setSelectedIndex(tabbedPane.getSelectedTabPane().getIndexOfTab(cellsInPath.get(i)));
+			 tabbedPane.getSelectedTabPane().setSelectedIndex(tabbedPane.getSelectedTabPane().getIndexOfTab(nameToDisplay.get(cellsInPath.get(i))));
 			 repaintPanel();
 			 tabbedPane.getSelectedTabPane().getSelectedTabPane().getPathPane().drawPath(segmentedPath.get(i), cellsInPath.get(i));			 
 			 tabbedPane.getSelectedTabPane().getSelectedTabPane().setOffset(new Point(segmentedPath.get(i).get(0).getPoint().x * BootstrapperConstants.TILE_WIDTH, segmentedPath.get(i).get(0).getPoint().y * BootstrapperConstants.TILE_HEIGHT));
@@ -398,7 +400,7 @@ public class HermesUI extends JPanel implements IHumanInteractionListener{
 		JButton printButton = new JButton("Print out Directions");
 		printButton.addMouseListener(new MouseAdapter() {
 			@Override
-			public void mouseClicked(MouseEvent e) {	
+			public void mouseClicked(MouseEvent e) {
 				 PrinterJob job = PrinterJob.getPrinterJob();
 		         job.setPrintable(printer);
 		         boolean ok = job.printDialog();
