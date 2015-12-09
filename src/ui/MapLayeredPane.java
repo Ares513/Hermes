@@ -89,28 +89,7 @@ public class MapLayeredPane extends JLayeredPane {
 					//scalingNum = 2;//Increasing this number increases the amount of zoom one mousewheel "scroll" will zoom in for
 				    double zoomChangeFactor = (scalingNum/(double)BootstrapperConstants.TILE_WIDTH);
 					double delta = -zoomChangeFactor * e.getPreciseWheelRotation();
-					if(zoomScale + delta <= maxZoomOut){
-						zoomScale = maxZoomOut;
-					}
-					else if(zoomScale + delta >=  maxZoomIn ){
-						zoomScale = maxZoomIn;
-					}
-					else{
-						System.out.println(zoomScale);
-						zoomScale += delta;
-						mapPanel.render.zoom(zoomScale, mapPanel.getWidth(), mapPanel.getHeight());
-						//mapPanel.render.zoom(zoomScale, BootstrapperConstants.FRAME_WIDTH, BootstrapperConstants.FRAME_WIDTH);
-						pathPanel.zoom(zoomScale);
-						//textPanel.zoom(zoomScale); TODO scale with text
-						pointPanel.zoom(zoomScale);
-						pathPanel.setOffset(mapPanel.render.getOffset());
-						pathPanel.repaint();
-						pointPanel.setOffset(mapPanel.render.getOffset());
-						textPanel.zoomScale = zoomScale;
-						textPanel.repaint();
-						repaintPanel();
-						repaint();
-					}
+					doZoom(delta);
 				}
 			});
 				
@@ -211,29 +190,7 @@ public class MapLayeredPane extends JLayeredPane {
 	   // scalingNum = 1;//Increasing this number increases the amount of zoom one mousewheel "scroll" will zoom in for
 		double zoomChangeFactor = (scalingNum/(double)BootstrapperConstants.TILE_WIDTH);
 	    double delta = -zoomChangeFactor * zoomDirection;
-		if(zoomScale + delta <= maxZoomOut){
-			zoomScale = maxZoomOut;
-		}
-		else if(zoomScale + delta >=  maxZoomIn ){
-			zoomScale = maxZoomIn;
-		}
-		else{
-			zoomScale += delta;
-			mapPanel.render.zoom(zoomScale, BootstrapperConstants.FRAME_WIDTH, BootstrapperConstants.FRAME_HEIGHT);
-			pathPanel.zoom(zoomScale);
-			//textPanel.zoom(zoomScale); TODO scale with text
-			pointPanel.zoom(zoomScale);
-			pathPanel.setOffset(mapPanel.render.getOffset());
-			pathPanel.repaint();
-			pointPanel.setOffset(mapPanel.render.getOffset());
-			textPanel.offset = mapPanel.render.getOffset();
-			
-			repaintPanel();
-		
-			repaint();
-		}
-	
-		
+	    doZoom(delta);
 	}
 	
 	private void processClick(Point picked) {
@@ -270,5 +227,30 @@ public class MapLayeredPane extends JLayeredPane {
 		
 	private void repaintPanel() {
 		this.repaint();
+	}
+	
+	private void doZoom(double addToScale){
+		if(zoomScale + addToScale <= maxZoomOut){
+			zoomScale = maxZoomOut;
+		}
+		else if(zoomScale + addToScale >=  maxZoomIn ){
+			zoomScale = maxZoomIn;
+		}
+		else{
+			System.out.println(zoomScale);
+			zoomScale += addToScale;
+			mapPanel.render.zoom(zoomScale, mapPanel.getWidth(), mapPanel.getHeight());
+			//mapPanel.render.zoom(zoomScale, BootstrapperConstants.FRAME_WIDTH, BootstrapperConstants.FRAME_WIDTH);
+			pathPanel.zoom(zoomScale);
+			//textPanel.zoom(zoomScale); TODO scale with text
+			pointPanel.zoom(zoomScale);
+			pathPanel.setOffset(mapPanel.render.getOffset());
+			pathPanel.repaint();
+			pointPanel.setOffset(mapPanel.render.getOffset());
+			textPanel.zoomScale = zoomScale;
+			textPanel.repaint();
+			repaintPanel();
+			repaint();
+		}
 	}
 }
