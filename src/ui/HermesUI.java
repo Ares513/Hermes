@@ -179,6 +179,7 @@ public class HermesUI extends JPanel implements IHumanInteractionListener{
 		}
 
 		buildControl();
+		
 		frameHermes.addKeyListener(new KeyAdapter() {
 			@Override
 			public void keyPressed(KeyEvent e) {
@@ -191,6 +192,7 @@ public class HermesUI extends JPanel implements IHumanInteractionListener{
 					doOffsetCalc(e);
 				}
 			});
+			
         frameHermes.setVisible(true);
 	}
 	
@@ -316,13 +318,13 @@ public class HermesUI extends JPanel implements IHumanInteractionListener{
 		JPanel MousegridMap = new JPanel();
 		JLabel mouseOut = new JLabel("#mouse#");
 		MousegridMap.add(mouseOut);;
-		zoomPanel = new JPanel();
-		zoomPanel.setBounds(66, 134, 134, -113);
-		frameHermes.getContentPane().add(zoomPanel);
-		zoomPanel.setLayout(new BorderLayout(0, 0));
+		///zoomPanel = new JPanel();
+		//zoomPanel.setBounds(66, 134, 134, -113);
+		//frameHermes.getContentPane().add(zoomPanel);
+		//zoomPanel.setLayout(new BorderLayout(0, 0));
 
 		Box verticalBox_1 = Box.createVerticalBox();
-		zoomPanel.add(verticalBox_1);
+		//zoomPanel.add(verticalBox_1);
 
 		btnPlus = new JButton("Plus");
 		verticalBox_1.add(btnPlus);
@@ -330,7 +332,7 @@ public class HermesUI extends JPanel implements IHumanInteractionListener{
 		btnMinus = new JButton("Minus");
 		verticalBox_1.add(btnMinus);
 		JPanel interacactionpanel = new JPanel();
-		interacactionpanel.setBounds(0, 0, BootstrapperConstants.PANEL_SIZE, BootstrapperConstants.FRAME_HEIGHT);
+		interacactionpanel.setBounds(BootstrapperConstants.FRAME_WIDTH-BootstrapperConstants.PANEL_SIZE, 0, BootstrapperConstants.PANEL_SIZE, BootstrapperConstants.FRAME_HEIGHT);
 		frameHermes.getContentPane().add(interacactionpanel);
 		interacactionpanel.setLayout(null);
 
@@ -545,7 +547,8 @@ public class HermesUI extends JPanel implements IHumanInteractionListener{
 		});
 
 		tabbedPane = new MapTabbedPane<MapTabbedPane<MapLayeredPane>>(JTabbedPane.TOP);
-		tabbedPane.setBounds(BootstrapperConstants.PANEL_SIZE, 2, BootstrapperConstants.FRAME_WIDTH-BootstrapperConstants.PANEL_SIZE-10, BootstrapperConstants.FRAME_HEIGHT-30);
+		//tabbedPane.setBounds(BootstrapperConstants.PANEL_SIZE, 2, BootstrapperConstants.FRAME_WIDTH-BootstrapperConstants.PANEL_SIZE-10, BootstrapperConstants.FRAME_HEIGHT-30);
+		tabbedPane.setBounds(0, 0, BootstrapperConstants.FRAME_WIDTH-BootstrapperConstants.PANEL_SIZE-10, BootstrapperConstants.FRAME_HEIGHT-30);
 		frameHermes.getContentPane().add(tabbedPane);
 		
 		
@@ -571,7 +574,7 @@ public class HermesUI extends JPanel implements IHumanInteractionListener{
 			}
 		}
 		
-		frameHermes.getContentPane().add(zoomPanel);
+		//frameHermes.getContentPane().add(zoomPanel);
 
 		/*
 		 * Temporary layered
