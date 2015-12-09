@@ -249,7 +249,10 @@ public class AStar {
 		/*So long as the frontier is not empty the tile we want to explore is the tile with 
 		 * For now its BFS so we just take the first element*/
 		DebugManagement.writeNotificationToLog("Entering A* main while loop");
+		int i = 0;
 		while(!frontier.isEmpty()) {
+			i++;
+			DebugManagement.writeNotificationToLog("Explored: " + String.valueOf(i));
 			frontier = sortByCost(frontier);
 			currentPoint = frontier.get(0);
 //			DebugManagement.writeNotificationToLog(currentPoint.getCellName());
@@ -412,7 +415,7 @@ public class AStar {
 			Point currentCoords = getCoords(current);
 			
 //			int delta x = endCoords.getX() - currentCoords.getY();
-			return (int)Math.sqrt((Math.pow((endCoords.getX() - currentCoords.getX()), 2) + Math.pow((endCoords.getY() - currentCoords.getY()), 2)));
+			return 5*(int)Math.sqrt((Math.pow((endCoords.getX() - currentCoords.getX()), 2) + Math.pow((endCoords.getY() - currentCoords.getY()), 2)));
 		}
 
 		private Point getCoords(CellPoint aCP) {
