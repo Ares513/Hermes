@@ -38,7 +38,7 @@ public class TextPane extends JPanel {
 				}
 			}
 			if(!ignore) {
-				locations.add(new TextLocation(l.getNames(), l.getPoint(), Color.BLACK));
+				locations.add(new TextLocation(l.getNames(), l.getPoint(), Color.WHITE));
 					
 			}
 		}
@@ -54,7 +54,7 @@ public class TextPane extends JPanel {
 		transformer.translate(offset.x, offset.y);
 		g2d.setTransform(transformer);
 		for(TextLocation l : locations) {
-			g2d.setColor(l.drawnColor);
+			
 			//we now need to center the text.
 			//double yShift = g.getFont().getSize()/2;
 			for(int i=0; i<l.lines.size(); i++) {
@@ -71,6 +71,13 @@ public class TextPane extends JPanel {
 				}
 				g2d.setFont(new Font("TimesRoman", Font.PLAIN, 16));
 				double start = stringLength/2;
+				g2d.setColor(Color.BLACK);
+				g2d.drawString(l.lines.get(i), ShiftWest((int)(l.location.x*BootstrapperConstants.TILE_WIDTH)-(int)(start+((BootstrapperConstants.TILE_WIDTH))),1), ShiftNorth((int)(l.location.y*BootstrapperConstants.TILE_HEIGHT)+g.getFont().getSize()*i,1));
+				g2d.drawString(l.lines.get(i), ShiftWest((int)(l.location.x*BootstrapperConstants.TILE_WIDTH)-(int)(start+((BootstrapperConstants.TILE_WIDTH))),1), ShiftSouth((int)(l.location.y*BootstrapperConstants.TILE_HEIGHT)+g.getFont().getSize()*i,1));
+				g2d.drawString(l.lines.get(i), ShiftEast((int)(l.location.x*BootstrapperConstants.TILE_WIDTH)-(int)(start+((BootstrapperConstants.TILE_WIDTH))),1), ShiftNorth((int)(l.location.y*BootstrapperConstants.TILE_HEIGHT)+g.getFont().getSize()*i,1));
+				g2d.drawString(l.lines.get(i), ShiftEast((int)(l.location.x*BootstrapperConstants.TILE_WIDTH)-(int)(start+((BootstrapperConstants.TILE_WIDTH))),1), ShiftSouth((int)(l.location.y*BootstrapperConstants.TILE_HEIGHT)+g.getFont().getSize()*i,1));
+				
+				g2d.setColor(l.drawnColor);
 				g2d.drawString(l.lines.get(i), (int)(l.location.x*BootstrapperConstants.TILE_WIDTH)-(int)(start+((BootstrapperConstants.TILE_WIDTH))), (int)(l.location.y*BootstrapperConstants.TILE_HEIGHT)+g.getFont().getSize()*i);
 				
 			}
@@ -122,4 +129,17 @@ public class TextPane extends JPanel {
 	
 		//draw the number of lines onscreen that are specified, but don't remove them
 	}
+	private int ShiftNorth(int p, int distance) {
+		return (p - distance);
+		}
+	private	int ShiftSouth(int p, int distance) {
+		return (p + distance);
+		}
+	private int ShiftEast(int p, int distance) {
+		return (p + distance);
+		}
+	private int ShiftWest(int p, int distance) {
+		return (p - distance);
+		}
+	
 }
