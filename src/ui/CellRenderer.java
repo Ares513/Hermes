@@ -138,7 +138,7 @@ public class CellRenderer {
 	private void renderByKeySet(Graphics g, int windowWidth, int windowHeight) {
 		Graphics2D g2d = (Graphics2D) g;
 		long startTime = System.nanoTime(); //measure time for each run
-		g2d.setColor(new Color(128, 0, 0));
+		g2d.setColor(new Color(70, 70, 70));
 		g2d.fillRect(0,0, windowWidth, windowHeight);
 	
 		g2d.setRenderingHint(RenderingHints.KEY_INTERPOLATION, RenderingHints.VALUE_INTERPOLATION_BILINEAR);
@@ -169,7 +169,8 @@ public class CellRenderer {
 				if(origin.getX() < target.getX() && scaled.getX() > target.getX() && origin.getY() < target.getY() && scaled.getY() > target.getY()) {
 					
 				}
-				g2d.drawImage(spriteImages[e.getValue().ordinal()],	 e.getKey().x*width, e.getKey().y*height, width, height, null);
+				if(e.getValue() != TILE_TYPE.WALL)
+					g2d.drawImage(spriteImages[e.getValue().ordinal()],	 e.getKey().x*width, e.getKey().y*height, width, height, null);
 				
 			
 			
