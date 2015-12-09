@@ -27,7 +27,9 @@ public class TextPane extends JPanel {
 	ArrayList<TextLocation> locations = new ArrayList<TextLocation>();
 	public Point offset = new Point(0,0);
 	public double zoomScale = 1.0;
+	private String cellName = "";
 	public TextPane(PathCell parent) {
+		cellName = parent.getName();
 		setOpaque(true);
 		for(LocationNameInfo l : parent.getLocationNameInfo()) {
 			boolean ignore = false;
@@ -69,13 +71,18 @@ public class TextPane extends JPanel {
 					stringLength = (int) metrics.getStringBounds(l.lines.get(i), g).getWidth();
 					
 				}
-				g2d.setFont(new Font("TimesRoman", Font.PLAIN, 16));
+				int strokeOffset = 1;
+				if(cellName.equals("World")) {
+					g2d.setFont(new Font("Calibri", Font.PLAIN, 250));
+					strokeOffset = 10;
+				} else
+					g2d.setFont(new Font("Calibri", Font.PLAIN, 16));
 				double start = stringLength/2;
 				g2d.setColor(Color.BLACK);
-				g2d.drawString(l.lines.get(i), ShiftWest((int)(l.location.x*BootstrapperConstants.TILE_WIDTH)-(int)(start+((BootstrapperConstants.TILE_WIDTH))),1), ShiftNorth((int)(l.location.y*BootstrapperConstants.TILE_HEIGHT)+g.getFont().getSize()*i,1));
-				g2d.drawString(l.lines.get(i), ShiftWest((int)(l.location.x*BootstrapperConstants.TILE_WIDTH)-(int)(start+((BootstrapperConstants.TILE_WIDTH))),1), ShiftSouth((int)(l.location.y*BootstrapperConstants.TILE_HEIGHT)+g.getFont().getSize()*i,1));
-				g2d.drawString(l.lines.get(i), ShiftEast((int)(l.location.x*BootstrapperConstants.TILE_WIDTH)-(int)(start+((BootstrapperConstants.TILE_WIDTH))),1), ShiftNorth((int)(l.location.y*BootstrapperConstants.TILE_HEIGHT)+g.getFont().getSize()*i,1));
-				g2d.drawString(l.lines.get(i), ShiftEast((int)(l.location.x*BootstrapperConstants.TILE_WIDTH)-(int)(start+((BootstrapperConstants.TILE_WIDTH))),1), ShiftSouth((int)(l.location.y*BootstrapperConstants.TILE_HEIGHT)+g.getFont().getSize()*i,1));
+				g2d.drawString(l.lines.get(i), ShiftWest((int)(l.location.x*BootstrapperConstants.TILE_WIDTH)-(int)(start+((BootstrapperConstants.TILE_WIDTH))),strokeOffset), ShiftNorth((int)(l.location.y*BootstrapperConstants.TILE_HEIGHT)+g.getFont().getSize()*i,strokeOffset));
+				g2d.drawString(l.lines.get(i), ShiftWest((int)(l.location.x*BootstrapperConstants.TILE_WIDTH)-(int)(start+((BootstrapperConstants.TILE_WIDTH))),strokeOffset), ShiftSouth((int)(l.location.y*BootstrapperConstants.TILE_HEIGHT)+g.getFont().getSize()*i,strokeOffset));
+				g2d.drawString(l.lines.get(i), ShiftEast((int)(l.location.x*BootstrapperConstants.TILE_WIDTH)-(int)(start+((BootstrapperConstants.TILE_WIDTH))),strokeOffset), ShiftNorth((int)(l.location.y*BootstrapperConstants.TILE_HEIGHT)+g.getFont().getSize()*i,strokeOffset));
+				g2d.drawString(l.lines.get(i), ShiftEast((int)(l.location.x*BootstrapperConstants.TILE_WIDTH)-(int)(start+((BootstrapperConstants.TILE_WIDTH))),strokeOffset), ShiftSouth((int)(l.location.y*BootstrapperConstants.TILE_HEIGHT)+g.getFont().getSize()*i,strokeOffset));
 				
 				g2d.setColor(l.drawnColor);
 				g2d.drawString(l.lines.get(i), (int)(l.location.x*BootstrapperConstants.TILE_WIDTH)-(int)(start+((BootstrapperConstants.TILE_WIDTH))), (int)(l.location.y*BootstrapperConstants.TILE_HEIGHT)+g.getFont().getSize()*i);
