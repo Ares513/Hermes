@@ -207,9 +207,11 @@ public class HermesUI extends JPanel implements IHumanInteractionListener{
 		tabbedPane.getSelectedTabPane().getSelectedTabPane().getPointPane().setFirst(null);
 		tabbedPane.getSelectedTabPane().getSelectedTabPane().getPointPane().setSecond(null);
 		//reset all tab colors
-		for(int i = 0; i < tabbedPane.getTabCount(); i++)
+		for(int i = 0; i < tabbedPane.getTabCount(); i++) {
+			tabbedPane.setForegroundAt(i, null);
 			for(int j = 0; j < tabbedPane.getTabAt(i).getTabCount(); j++)
 				tabbedPane.getTabAt(i).setForegroundAt(j, null);
+			}
 
 		 splitPath(path);
 		 for(int i = 0; i < cellsInPath.size(); i++) {
@@ -226,6 +228,7 @@ public class HermesUI extends JPanel implements IHumanInteractionListener{
 				tabbedPane.getSelectedTabPane().getSelectedTabPane().getPointPane().setSecond(lastPoint);
 			}
 			tabbedPane.getSelectedTabPane().setForegroundAt(tabbedPane.getSelectedTabPane().getSelectedIndex(), new Color(153, 0, 80));
+			tabbedPane.setForegroundAt(tabbedPane.getSelectedIndex(), new Color(153, 0, 80));
 		}
 	 	first = null; 
 	 	second = null;
