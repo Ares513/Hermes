@@ -46,7 +46,7 @@ public class AStar {
 							if ((ep.getId()).equals(ref.getEntryPointID())){
 								DebugManagement.writeNotificationToLog("EntryPoint " + ep.getId() + " linked to " + ref.getEntryPointID());
 								TileInfo currentTileInfo = new TileInfo(cell.getTile(ref.getLoc()).getTileType(), cell.getTile(ref.getLoc()).getTraverseCost());
-								currentTileInfo.setOffPageNeighbor(new CellPoint(ref.getTargetCell(), ep.getLoc()));
+								currentTileInfo.addOffPageNeighbor(new CellPoint(ref.getTargetCell(), ep.getLoc()));
 								cellMap.get(cell.getName()).put(ref.getLoc(), currentTileInfo);
 							}
 						}
@@ -62,7 +62,7 @@ public class AStar {
 		private int costSoFar = 0;
 		private int estimatedTotalCost = 0;
 		private int traverseCost = 1000000;
-		private CellPoint offPageNeighbor = null;
+		private ArrayList<CellPoint> offPageNeighbors = new ArrayList<CellPoint>();
 //		private CellPoint creator;
 
 		private TileInfo(TILE_TYPE newTileType, int newTraverseCost){
@@ -110,11 +110,11 @@ public class AStar {
 			return this.traverseCost;
 		}
 
-		private void setOffPageNeighbor(CellPoint newOPN){
-			this.offPageNeighbor = newOPN;
+		private void addOffPageNeighbor(CellPoint newOPN){
+			this.offPageNeighbors.add(newOPN);
 		}
-		private CellPoint getOffPageNeighbor(){
-			return this.offPageNeighbor;
+		private ArrayList<CellPoint> getOffPageNeighbors(){
+			return this.offPageNeighbors;
 		}
 		public int compareTo(TileInfo o){
 		     return(getCostSoFar() - o.getCostSoFar());
@@ -392,9 +392,10 @@ public class AStar {
 				}
 			}
 			
-			if(getTileInfo(currentPoint).getOffPageNeighbor() != null){
-				DebugManagement.writeNotificationToLog("Off cell neighbor found at " + getTileInfo(currentPoint).getOffPageNeighbor().getCellName() + " " + getTileInfo(currentPoint).getOffPageNeighbor().getPoint()); 
-				output.add(getTileInfo(currentPoint).getOffPageNeighbor());
+			if(getTileInfo(currentPoint).getOffPageNeighbors() != null){
+				// we commented this out because it doesnt work...
+//				DebugManagement.writeNotificationToLog("Off cell neighbor found at " + getTileInfo(currentPoint).getOffPageNeighbors().getCellName() + " " + getTileInfo(currentPoint).getOffPageNeighbor().getPoint()); 
+				output.addAll(getTileInfo(currentPoint).getOffPageNeighbors());
 			}
 			
 			return output;
