@@ -57,8 +57,8 @@ public class UIManagement implements IHumanInteractionListener, IMapManagementIn
 	public void doPathComplete(ArrayList<CellPoint> directions, int cost) {
 		DebugManagement.writeNotificationToLog("Path received, contents "  + directions + " total cost " + Integer.toString(cost) + " units");
 		window.drawPath(directions);
-		ArrayList<String> listOfDirections = printList.parseDirections(directions);
-	//	window.directionText(listOfDirections);
+		ArrayList<Directions> listOfDirections = printList.parseDirections(directions);
+		window.directionText(listOfDirections);
 	}
 
 	@Override
