@@ -200,6 +200,7 @@ public class HermesUI extends JPanel implements IHumanInteractionListener{
 	public void drawPath(ArrayList<CellPoint> path){// Test points
 		 //*/
 		//searchStartRecord, searchEndRecord; 
+		mapIndex = 0;
 		int size = path.size(); 
 		Point firstPoint = path.get(0).getPoint();
 		Point lastPoint = path.get(size-1).getPoint(); 
@@ -466,7 +467,8 @@ public class HermesUI extends JPanel implements IHumanInteractionListener{
 					tabbedPane.getSelectedTabPane().setSelectedIndex(tabbedPane.getSelectedTabPane().getIndexOfTab(nameToDisplay.get(cellsInPath.get(mapIndex))));
 					if(mapIndex == 0) {
 						prevButton.setEnabled(false);
-					} else if(mapIndex < cellsInPath.size() - 1)
+					}
+					if(mapIndex < cellsInPath.size() - 1)
 						nextButton.setEnabled(true);
 				}	
 			}
@@ -477,12 +479,17 @@ public class HermesUI extends JPanel implements IHumanInteractionListener{
 			public void actionPerformed(ActionEvent e) {
 				if(cellsInPath.size() > 0) {
 					mapIndex++;
+					System.out.println("Index " + tabbedPane.getSelectedIndex());
+					System.out.println("mapIndex " + mapIndex);
+					System.out.println("Building name " + buildingNames.get(cellsInPath.get(mapIndex).substring(0, 2)));
+					System.out.println("Index of tab we want " + tabbedPane.getIndexOfTab(buildingNames.get(cellsInPath.get(mapIndex).substring(0, 2))));
 					tabbedPane.setSelectedIndex(tabbedPane.getIndexOfTab(buildingNames.get(cellsInPath.get(mapIndex).substring(0, 2))));
 					tabbedPane.getSelectedTabPane().setSelectedIndex(tabbedPane.getSelectedTabPane().getIndexOfTab(nameToDisplay.get(cellsInPath.get(mapIndex))));
 					if(mapIndex >= cellsInPath.size() - 1) {
 						mapIndex = cellsInPath.size() - 1;
 						nextButton.setEnabled(false);
-					} else if(mapIndex > 0)
+					}
+					if(mapIndex > 0)
 						prevButton.setEnabled(true);
 				}
 			}
