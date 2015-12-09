@@ -8,6 +8,7 @@ public class Directions {
 	private String turnInstruction; 
 	private double distance; 
 	private CellPoint cellPoint; 
+	private String iconType; 
 	
 	public Directions(){ 
 		
@@ -27,6 +28,9 @@ public class Directions {
 	public CellPoint getCellPoint(){ 
 		return this.cellPoint; 
 	}
+	public String getIcon() { 
+		return this.iconType; 
+	}
 	
 	public void setHeading(String newHeading){ 
 		this.heading = newHeading;
@@ -42,5 +46,9 @@ public class Directions {
 	
 	public void setCellPoint (CellPoint newCellPoint){ 
 		this.cellPoint = newCellPoint; 
+	}
+	
+	public void setTurnIcon(String turnInstruction){ 
+		this.iconType = turnInstruction + ".png"; 
 	}
 }

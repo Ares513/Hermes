@@ -17,10 +17,10 @@ public class PrintDirections {
 	public PrintDirections() { 
 	
 	}	 
-	public ArrayList<String> parseDirections(ArrayList<CellPoint> AStarDirections){
+	public ArrayList<Directions> parseDirections(ArrayList<CellPoint> AStarDirections){
 		ArrayList<Directions> statesList = stateList(AStarDirections); 
 		ArrayList<Directions> directionsList = route(statesList);
-		ArrayList<String> finalList = routePrintOut(directionsList); 
+		ArrayList<Directions> finalList = routePrintOut(directionsList); 
 		return finalList; 
 	}
 	
@@ -48,11 +48,11 @@ public class PrintDirections {
 	 * Takes a list of directions that have a heading, and distances.
 	 * Adds in colloquial turn instructions to list of directions.
 	 */
-	private ArrayList<String> routePrintOut(ArrayList<Directions> dList){ 
+	private ArrayList<Directions> routePrintOut(ArrayList<Directions> dList){ 
 		DecimalFormat df = new DecimalFormat("#.00");  
 		df.setRoundingMode(RoundingMode.CEILING);
 		
-		ArrayList<String> humanReadableDirections = new ArrayList<String>(); 
+		//ArrayList<String> humanReadableDirections = new ArrayList<String>(); 
 		
 		int dListSize = dList.size(); 
 		int prevDegree = 0;  
@@ -68,35 +68,42 @@ public class PrintDirections {
 				String startInstruction = "Head "; 
 				startInstruction += toFullWord(currentState);
 				startInstruction += " "; 
-				startInstruction += "\nwalk for ";
+				startInstruction += "\n       walk for ";
 				startInstruction += df.format(currentDistance);		
 				startInstruction += " feet";
 				//startInstruction += "\n-------------";
-				currentInstruction.setTurnInstructions(startInstruction); 
+				currentInstruction.setTurnInstructions(startInstruction);
+				
 				prevDegree = toDegrees(currentState); 
-				dList.set(i, currentInstruction); 
+				//dList.set(i, currentInstruction); 
 			}
 			/*  Format for all instructions that are not the first /special instruction. */
-			else {
+			
+			else if (currentInstruction.getTurnInstruction() == null){
 				String newInstruction = "Take a ";  
-				newInstruction += toTurns(toDegrees(currentState),prevDegree); 
+				String turnInstruction = toTurns(toDegrees(currentState),prevDegree); 
+				newInstruction += turnInstruction; 
 				newInstruction += " to head "; 
 				newInstruction += toFullWord(currentState);;
 				newInstruction += " "; 
-				newInstruction += "\nWalk "; 
+				newInstruction += "\n       Walk "; 
 				newInstruction += df.format(currentDistance); 
 				newInstruction += " feet";
 				//newInstruction += "\n-------------";
 				currentInstruction.setTurnInstructions(newInstruction);
+				currentInstruction.setTurnIcon(turnInstruction);
 				prevDegree = toDegrees(currentState); 
-				}
-			humanReadableDirections.add(currentInstruction.getTurnInstruction()); 
-			//System.out.println(currentInstruction.turnInstruction);
 			}
-			humanReadableDirections.add(estimatedTime(totalDistance)); 
-		  //	System.out.println(estimatedTime(totalDistance));  
-			return humanReadableDirections;
-		}	
+			//humanReadableDirections.add(currentInstruction.getTurnInstruction()); 
+			dList.set(i, currentInstruction); 
+		}
+		//humanReadableDirections.add(estimatedTime(totalDistance)); 
+		Directions last = new Directions(); 
+		String estimatedTime = estimatedTime(totalDistance); 
+		last.setTurnInstructions(estimatedTime);
+		dList.add(dList.size(), last);
+		return dList; 
+	}	
 	
 	
 	/* 
@@ -191,6 +198,7 @@ public class PrintDirections {
 				Directions previous = states.get(i-1);
 				String previousState = previous.getHeading();  
 				if(diffMap(current.getCellPoint(), previous.getCellPoint())){ 
+					
 					current.setTurnInstructions("New Map, Entering:");
 					dList.add(current); 
 				}
@@ -217,6 +225,10 @@ public class PrintDirections {
 		else{ 
 			return true;
 		} 
+	}
+	
+	private String diffMapInstruction(){ 
+		return null; 
 	}
 	/*
 	 * Takes Cardinal direction and converts to degrees. 

@@ -57,7 +57,7 @@ public class UIManagement implements IHumanInteractionListener, IMapManagementIn
 	public void doPathComplete(ArrayList<CellPoint> directions, int cost) {
 		DebugManagement.writeNotificationToLog("Path received, contents "  + directions + " total cost " + Integer.toString(cost) + " units");
 		window.drawPath(directions);
-		ArrayList<String> listOfDirections = printList.parseDirections(directions);
+		ArrayList<Directions> listOfDirections = printList.parseDirections(directions);
 		window.directionText(listOfDirections);
 	}
 
@@ -66,7 +66,7 @@ public class UIManagement implements IHumanInteractionListener, IMapManagementIn
 		DebugManagement.writeNotificationToLog("Click processed at " + input.getPoint().x + " , " + input.getPoint().y);
 		if(first == null) {
 			first = input;
-			window.directionsTextPane.setText(""); // clears directions pane after first click. 
+		//	window.directionsTextPane.setText(""); // clears directions pane after first click. 
 			DebugManagement.writeNotificationToLog("First point processed at " + input.getPoint().x + " , " + input.getPoint().y);
 			
 		} else if(second == null) {
