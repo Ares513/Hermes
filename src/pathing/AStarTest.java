@@ -97,26 +97,34 @@ public class AStarTest {
 		HashMap<Point, TILE_TYPE> hm1 = new HashMap<Point, TILE_TYPE>();
 		for(int i =0; i<100;i++){
 			for(int j = 0; j < 100; j++){
-				hm1.put(new Point(i,j), TILE_TYPE.PEDESTRIAN_WALKWAY);
+				hm1.put(new Point(i,j), TILE_TYPE.ELEVATOR);
 			}
 		}
 		EntryPoint ep1 = new EntryPoint("A", new Point(45,45));
+		EntryPoint ep11 = new EntryPoint("B", new Point(45,45));
 		ArrayList<EntryPoint> eps1 = new ArrayList<EntryPoint>();
 		eps1.add(ep1);
+		eps1.add(ep11);
 		
-		EntryPointReference epr1 = new EntryPointReference("A","pc1", new Point(45,45));
+		EntryPointReference epr1 = new EntryPointReference("C","pc1", new Point(45,45));
+		EntryPointReference epr11 = new EntryPointReference("D","pc1", new Point(45,45));
 		ArrayList<EntryPointReference> eprs1 = new ArrayList<EntryPointReference>();
 		eprs1.add(epr1);
+		eprs1.add(epr11);
 		
 		PathCell pc1 = new PathCell("pc1", "pc1", 100, 100, hm1, eps1, new ArrayList<LocationNameInfo>(), eprs1);
 		
-		EntryPoint ep2 = new EntryPoint("A", new Point(45,45));
+		EntryPoint ep2 = new EntryPoint("C", new Point(45,45));
+		EntryPoint ep22 = new EntryPoint("D", new Point(45,45));
 		ArrayList<EntryPoint> eps2 = new ArrayList<EntryPoint>();
 		eps2.add(ep2);
+		eps2.add(ep22);
 		
 		EntryPointReference epr2 = new EntryPointReference("A","pc1", new Point(45,45));
+		EntryPointReference epr22 = new EntryPointReference("B","pc1", new Point(45,45));
 		ArrayList<EntryPointReference> eprs2 = new ArrayList<EntryPointReference>();
 		eprs2.add(epr2);
+		eprs2.add(epr22);
 		
 		PathCell pc2 = new PathCell("pc2", "pc2", 100, 100, hm1, eps2, new ArrayList<LocationNameInfo>(), eprs2);
 		
