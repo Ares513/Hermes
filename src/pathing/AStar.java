@@ -31,6 +31,9 @@ public class AStar {
 		frontier = new ArrayList<CellPoint>(); 
 		explored = new ArrayList<CellPoint>();
 		cellMap = new HashMap<String, HashMap<Point,TileInfo>>();
+		
+		//Pyramid of Doom. Please prepare and make all human sacrifices here.
+		//TODO: refactor this so it's human readable.
 		for(PathCell cell: accessedCells){
 			DebugManagement.writeNotificationToLog("Created a new TileInfoArray for " + cell.getName());
 			cellMap.put(cell.getName(), new HashMap<Point,TileInfo>());
@@ -45,7 +48,19 @@ public class AStar {
 							DebugManagement.writeNotificationToLog(ep.getId() + " comparing to " + ref.getEntryPointID());
 							if ((ep.getId()).equals(ref.getEntryPointID())){
 								DebugManagement.writeNotificationToLog("EntryPoint " + ep.getId() + " linked to " + ref.getEntryPointID());
-								TileInfo currentTileInfo = new TileInfo(cell.getTile(ref.getLoc()).getTileType(), cell.getTile(ref.getLoc()).getTraverseCost());
+								TileInfo currentTileInfo = cellMap.get(cell.getName()).get(ref.getLoc());
+								if (currentTileInfo == null){
+									DebugManagement.writeNotificationToLog("ref is null:" + String.valueOf(ref == null));
+									DebugManagement.writeNotificationToLog("ref loc is null:" + String.valueOf(ref.getLoc() == null));
+									DebugManagement.writeNotificationToLog("cell_tile_type at ref is null:" + String.valueOf(cell.getTile(ref.getLoc()) == null));
+									
+									// stops shit from breaking if someone puts an off page connection in a wall
+									if(cell.getTile(ref.getLoc()) == null){
+										DebugManagement.writeLineToLog(SEVERITY_LEVEL.CORRUPTED, "someone stuck an off page connection in a wall");
+										continue;
+									}
+									currentTileInfo = new TileInfo(cell.getTile(ref.getLoc()).getTileType(), cell.getTile(ref.getLoc()).getTraverseCost());
+								}
 								currentTileInfo.addOffPageNeighbor(new CellPoint(ref.getTargetCell(), ep.getLoc()));
 								cellMap.get(cell.getName()).put(ref.getLoc(), currentTileInfo);
 							}
