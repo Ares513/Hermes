@@ -140,8 +140,23 @@ public class AStar {
 	private TileInfo getTileInfo(CellPoint aCellPoint){
 		TileInfo output = cellMap.get(aCellPoint.getCellName()).get(aCellPoint.getPoint());
 		if(output == null){
-			DebugManagement.writeNotificationToLog("you tried to get a tile thats not in the HM");
+			for(PathCell aPC: accessedCells){
+				if(aPC.getName().equals(aCellPoint.getCellName())){
+					TileInfo newTI;
+					//case where it's a wall
+					if (aPC.getTile(aCellPoint.getPoint()) == null){
+						newTI = new TileInfo(TILE_TYPE.WALL, 1000000000);
+					}
+					//case where it's anything besides a wall
+					else {
+						newTI = new TileInfo(aPC.getTile(aCellPoint.getPoint()).getTileType(), aPC.getTile(aCellPoint.getPoint()).getTraverseCost());
+					}
+					return newTI;
+				}
+			}
+			DebugManagement.writeLineToLog(SEVERITY_LEVEL.CORRUPTED, "getTileInfo is returning as null");
 		}
+		
 		return output;
 	}
 
@@ -402,6 +417,15 @@ public class AStar {
 			int curY = (int) currentPoint.getPoint().getY();
 			for(int neiX = curX-1; neiX <= curX+1; neiX++){
 				for(int neiY = curY-1; neiY <= curY+1; neiY++){
+					CellPoint neighbor = new CellPoint(currentPoint.getCellName(), new Point(neiX, neiY));
+					// This prevents impassables or trees from being pathed through.
+					TileInfo neighborTile = getTileInfo(neighbor);
+					
+					if((neighborTile == null) ||
+							(getTileInfo(neighbor).getTileType() == TILE_TYPE.IMPASSABLE) ||
+							(getTileInfo(neighbor).getTileType() == TILE_TYPE.TREE)){
+						continue;
+					}
 					output.add(new CellPoint(currentPoint.getCellName(), new Point(neiX, neiY)));
 				}
 			}
