@@ -3,6 +3,7 @@ package ui;
 import org.jdesktop.swingx.autocomplete.AutoCompleteDecorator;
 
 import javax.swing.DefaultComboBoxModel;
+import javax.swing.Icon;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JFrame;
@@ -76,12 +77,17 @@ import com.team1ofus.apollo.TILE_TYPE;
 
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
+import javax.swing.text.AttributeSet;
+import javax.swing.text.SimpleAttributeSet;
+import javax.swing.text.StyleConstants;
+import javax.swing.text.StyledDocument;
 import javax.swing.JScrollBar;
 import javax.swing.JScrollPane;
 import javax.swing.JViewport;
 import javax.swing.ScrollPaneConstants;
 import javax.swing.JTabbedPane;
 import java.awt.print.*;
+import javax.swing.JTextPane;
 
 //Holds all of the UI elements for the project
 public class HermesUI extends JPanel implements IHumanInteractionListener{
@@ -110,11 +116,9 @@ public class HermesUI extends JPanel implements IHumanInteractionListener{
 	private Record searchEndRecord = null; //hopefully we can re-factor these at some point. If you want to please feel free to.
 	private JSeparator separator;
 	private JLabel lblDirectionReadout;
-	public JTextArea directionsTextPane;
 	private Component verticalStrut_1;
 	private Component verticalStrut_2;
 	private Component verticalStrut_3;
-	public JScrollPane scrollPane;
 	private double zoomScale;
 	private JButton searchButton;
 	private JPanel zoomPanel;
@@ -141,7 +145,9 @@ public class HermesUI extends JPanel implements IHumanInteractionListener{
 	private HashMap<String, String> nameToDisplay = new HashMap<String, String>();
 	private HashMap<String, String> buildingNames = new HashMap<String, String>();
 	private int mapIndex = 0; // index of where one is in switching between maps in the path AStar returns
-            
+	private JTextPane instructionsTextPane;
+    private StyledDocument instructionsDoc;         
+    private JScrollPane scrollPane;
 	public HermesUI(ArrayList<PathCell> viewCells, ArrayList<Record> locationNameInfoRecords) {
 		this.locationNameInfoRecords = locationNameInfoRecords;
 		
@@ -207,7 +213,6 @@ public class HermesUI extends JPanel implements IHumanInteractionListener{
 		 splitPath(path);
 		 for(int i = 0; i < cellsInPath.size(); i++) {
 			tabbedPane.setSelectedIndex(tabbedPane.getIndexOfTab(buildingNames.get(cellsInPath.get(i).substring(0, 2))));
-			System.out.println(nameToDisplay.get(cellsInPath.get(i)));
 			tabbedPane.getSelectedTabPane().setSelectedIndex(tabbedPane.getSelectedTabPane().getIndexOfTab(nameToDisplay.get(cellsInPath.get(i))));
 			repaintPanel();
 			tabbedPane.getSelectedTabPane().getSelectedTabPane().getPathPane().drawPath(segmentedPath.get(i), cellsInPath.get(i));			 
@@ -329,11 +334,11 @@ public class HermesUI extends JPanel implements IHumanInteractionListener{
 		interacactionpanel.setLayout(null);
 
 		verticalBox = Box.createVerticalBox();
-		verticalBox.setBounds(13, 5, 275, 537);
+		verticalBox.setBounds(13, 5, 290, 537);
 		interacactionpanel.add(verticalBox);
 
 		verticalStrut_1 = Box.createVerticalStrut(20);
-		verticalStrut_1.setPreferredSize(new Dimension(0, 30));
+		verticalStrut_1.setPreferredSize(new Dimension(0, 2));
 		verticalBox.add(verticalStrut_1);
 
 		//start search ui stuff
@@ -359,6 +364,7 @@ public class HermesUI extends JPanel implements IHumanInteractionListener{
 	    }
 	    
 	    startPoint = new JComboBox<String>();
+	    startPoint.setMaximumSize(new Dimension(32767, 50));
 	    startPoint.setModel(modelForStart);
 		startPoint.setEditable(true);
 		AutoCompleteDecorator.decorate( startPoint );
@@ -390,6 +396,7 @@ public class HermesUI extends JPanel implements IHumanInteractionListener{
 	    	}
 	    }
 	    destination = new JComboBox<String>();
+	    destination.setMaximumSize(new Dimension(32767, 26));
 		destination.setModel(modelForDestination);
 		destination.setEditable(true);
 		AutoCompleteDecorator.decorate( destination );
@@ -414,25 +421,28 @@ public class HermesUI extends JPanel implements IHumanInteractionListener{
 		verticalBox.add(searchButton);
 
 		separator = new JSeparator();
+		separator.setMaximumSize(new Dimension(32767, 2));
 		verticalBox.add(separator);
 
 		lblDirectionReadout = new JLabel("Direction Readout");
 		lblDirectionReadout.setAlignmentX(CENTER_ALIGNMENT);
 
 		verticalBox.add(lblDirectionReadout);
-
+		
 		scrollPane = new JScrollPane();
+		scrollPane.setMinimumSize(new Dimension(32, 100));
+		scrollPane.setPreferredSize(new Dimension(2, 400));
 		scrollPane.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
 		verticalBox.add(scrollPane);
 		
-		directionsTextPane = new JTextArea();
-		scrollPane.setViewportView(directionsTextPane);
-		directionsTextPane.setLineWrap(true);
-		directionsTextPane.setBorder(new LineBorder(new Color(0, 0, 0)));
-		//directionsTextPane.setText(createText());
-		directionsTextPane.setEditable(false);
-		directionsTextPane.setRows(20);
-		directionsTextPane.setColumns(18);
+		instructionsTextPane = new JTextPane();
+		instructionsTextPane.setPreferredSize(new Dimension(6, 400));
+		instructionsTextPane.setBounds(new Rectangle(0, 0, 0, 400));
+		instructionsTextPane.setMinimumSize(new Dimension(6, 400));
+		scrollPane.setViewportView(instructionsTextPane);
+		instructionsTextPane.setEditable(false);
+		instructionsDoc = instructionsTextPane.getStyledDocument();
+		instructionsTextPane.setText("");
 		
 		Box mapSwitchHBox = Box.createHorizontalBox();
 		verticalBox.add(mapSwitchHBox);
@@ -564,24 +574,53 @@ public class HermesUI extends JPanel implements IHumanInteractionListener{
 
 	}
 	
-
-	//This is a dummy method to check and make sure directions will be able to load well.
-	//Can get rid of once we have directions.
-	public void directionText(ArrayList<String> directions){
-		directionsTextPane.setText("");
-		printer.printInstructions = new ArrayList<String>(); 
+	public void directionText(ArrayList<Directions> directions){
+		instructionsTextPane.setText(""); 
+		SimpleAttributeSet keyWord = new SimpleAttributeSet();
+		StyleConstants.setForeground(keyWord, Color.BLACK);
+	//	StyleConstants.set(keyWord, Color.BLACK);
+		//StyleConstants.setBackground(keyWord, Color.YELLOW);
+		StyleConstants.setBold(keyWord, true);
+		
+		SimpleAttributeSet lineBreak = new SimpleAttributeSet(); 
+		StyleConstants.setForeground(lineBreak, Color.LIGHT_GRAY);
+		//printInstructions = new ArrayList<String>(); 
+		
+			
+		
 		int size = directions.size(); 
 		for(int i =0; i < size; i++){ 
-			String direction = directions.get(i); 
-			directionsTextPane.append(direction);
-			directionsTextPane.append("\n-------------");
-			directionsTextPane.append("\n");
-			printer.printInstructions.add(direction);
+			Directions current = directions.get(i); 
+			
+			String direction = current.getTurnInstruction(); 
+			String iconName = current.getIcon(); 
+			SimpleAttributeSet turnImage =new SimpleAttributeSet();
+			Icon icon;  
+			if(i == 0){ 
+				icon = new ImageIcon ("Forward.png");
+			}
+			else { 
+				icon = new ImageIcon (iconName);
+			}
+			JLabel label = new JLabel(icon); 
+			
+			StyleConstants.setComponent(turnImage, label);
+			try{ 
+			instructionsDoc.insertString(instructionsDoc.getLength(), " ",turnImage);
+			instructionsDoc.insertString(instructionsDoc.getLength(), direction, keyWord);
+			instructionsDoc.insertString(instructionsDoc.getLength(), "\n      ———————————————\n",lineBreak);
+			
+			System.out.println("tried to display instruction");
+			} 
+			catch(Exception e){ 
+				System.out.println(e);
+			}
+			
+			//printer.printInstructions.add(direction);
 			
 		} 
 	
 	}
-	
 	
 	
 	public PathPane getPathPanel(){
@@ -666,6 +705,4 @@ public class HermesUI extends JPanel implements IHumanInteractionListener{
 	public void findNearestLocation(CellPoint start, String filter) {
 		humanInteractive.findNearestLocation(start, filter);
 	}
-
-
 }

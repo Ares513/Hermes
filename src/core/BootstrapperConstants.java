@@ -14,7 +14,7 @@ public class BootstrapperConstants {
 	public static final Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
 	public static final int FRAME_WIDTH= screenSize.width-200;
 	public static final int FRAME_HEIGHT= screenSize.height-200;
-	public static final int  PANEL_SIZE= 300;
+	public static final int  PANEL_SIZE= 315;
 	public static final String MALE_BATHROOM_IDENTIFIER = "Any Male Bathroom";
 	public static final String FEMALE_BATHROOM_IDENTIFIER = "Any Female Bathroom";
 	public static final String UNISEX_BATHROOM_IDENTIFIER = "Any Unisex Bathroom";
