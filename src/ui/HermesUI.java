@@ -564,30 +564,30 @@ public class HermesUI extends JPanel implements IHumanInteractionListener{
 //		} 
 //	
 //	}
-//	public void directionText(ArrayList<String> directions){
-//		instructionsTextPane.setText(""); 
-//		AttributeSet keyWord = new SimpleAttributeSet();
-//		StyleConstants.setForeground(keyWord, Color.RED);
-//		StyleConstants.setBackground(keyWord, Color.YELLOW);
-//		StyleConstants.setBold(keyWord, true);
-//		//printInstructions = new ArrayList<String>(); 
-//		int size = directions.size(); 
-//		for(int i =0; i < size; i++){ 
-//			String direction = directions.get(i); 
-//			try{ 
-//			instructionsDoc.insertString(instructionsDoc.getLength(), directions, keyWord);
-//			} 
-//			catch(Exception e){ 
-//				System.out.println(e);
-//			}
-//			//directionsTextPane.append(direction);
-//			//directionsTextPane.append("\n-------------");
-//			// directionsTextPane.append("\n");
-//			//printer.printInstructions.add(direction);
-//			
-//		} 
-//	
-//	}
+	public void directionText(ArrayList<String> directions){
+		instructionsTextPane.setText(""); 
+		SimpleAttributeSet keyWord = new SimpleAttributeSet();
+		StyleConstants.setForeground(keyWord, Color.RED);
+		StyleConstants.setBackground(keyWord, Color.YELLOW);
+		StyleConstants.setBold(keyWord, true);
+		//printInstructions = new ArrayList<String>(); 
+		int size = directions.size(); 
+		for(int i =0; i < size; i++){ 
+			String direction = directions.get(i); 
+			try{ 
+			instructionsDoc.insertString(instructionsDoc.getLength(), direction, keyWord);
+			} 
+			catch(Exception e){ 
+				System.out.println(e);
+			}
+			//directionsTextPane.append(direction);
+			//directionsTextPane.append("\n-------------");
+			// directionsTextPane.append("\n");
+			//printer.printInstructions.add(direction);
+			
+		} 
+	
+	}
 	
 	
 	public PathPane getPathPanel(){
