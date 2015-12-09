@@ -285,7 +285,6 @@ public class AStar {
 		}
 		else{
 			currentTileInfo = new TileInfo(TILE_TYPE.WALL, 1000000); //currentPoint);
-			System.out.println("The TileInfo being made is a wall");
 		}
 	
 		return currentTileInfo;
