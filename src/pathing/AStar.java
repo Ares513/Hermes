@@ -94,7 +94,7 @@ public class AStar {
 		private int estimatedTotalCost = 0;
 		private int traverseCost = 1000000;
 		private ArrayList<CellPoint> offPageNeighbors = new ArrayList<CellPoint>();
-//		private CellPoint creator;
+//		private boolean explored = false;
 
 		private TileInfo(TILE_TYPE newTileType, int newTraverseCost){
 			parent = null;
@@ -118,6 +118,14 @@ public class AStar {
 		private CellPoint getParent(){
 			return this.parent;
 		}
+		
+//		private boolean getExplored(){
+//			return this.explored;
+//		}
+//		
+//		private void setExplored(boolean status){
+//			this.explored = status;
+//		}
 
 		private void setParent(CellPoint newParent){
 			this.parent = newParent;
@@ -270,6 +278,9 @@ public class AStar {
 			if(!(explored.contains(currentPoint))){ //if the currentTile isnt already explored
 				explored.add(currentPoint); // add to explored
 			}
+//			if(!currentTile.getExplored()){
+//				currentTile.setExplored(true);
+//			}
 			frontier.remove(currentPoint); // remove the curTile from frontier so we dont check it again, just for readability and convenience
 			curX = (int) currentPoint.getPoint().getX();
 			curY = (int) currentPoint.getPoint().getY(); 
@@ -290,6 +301,9 @@ public class AStar {
 				if(neighborPoint.isIn(explored)){
 					continue;
 				}
+//				if(neighborTile.explored){
+//					continue;
+//				}
 
 				moveMultiplier = 1;
 				if((curX != (int)neighborPoint.getPoint().getX()) && (curY != neighborPoint.getPoint().getY())){ 
@@ -415,7 +429,7 @@ public class AStar {
 			Point currentCoords = getCoords(current);
 			
 //			int delta x = endCoords.getX() - currentCoords.getY();
-			return 5*(int)Math.sqrt((Math.pow((endCoords.getX() - currentCoords.getX()), 2) + Math.pow((endCoords.getY() - currentCoords.getY()), 2)));
+			return 10*(int)Math.sqrt((Math.pow((endCoords.getX() - currentCoords.getX()), 2) + Math.pow((endCoords.getY() - currentCoords.getY()), 2)));
 		}
 
 		private Point getCoords(CellPoint aCP) {
