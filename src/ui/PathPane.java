@@ -33,7 +33,8 @@ class PathPane extends JPanel {
 	int newTotalWidth;
 	int newTotalHeight;
 	int difWidth;
-	int difHeight;	
+	int difHeight;
+	String cellName = "";
 	
 	
 	public PathPane() {
@@ -55,6 +56,7 @@ class PathPane extends JPanel {
 		}
 		int tileWidth =  (int) ((int)BootstrapperConstants.TILE_WIDTH*zoomScale);
 		int tileHeight = (int) ((int)BootstrapperConstants.TILE_HEIGHT*zoomScale);
+		this.cellName = path.get(0).getCellName();
 		for(int c = 0; c < path.size(); c++) {
 			if(path.get(c).getCellName() == cellName) {
 				//matches, add it.
@@ -71,7 +73,8 @@ class PathPane extends JPanel {
 	void drawLineSets(Graphics g){
 		//DebugManagement.writeNotificationToLog("Points for drawing:" + " " + pointsList);
 		Graphics2D g2d = (Graphics2D) g;
-		Color lineColor = new Color(63, 128, 0);
+		//Color lineColor = new Color(63, 128, 0);
+		Color lineColor = new Color(255, 0, 0);
 		g2d.setColor(lineColor);
 		//GradientPaint redtowhite = new GradientPaint(0,0,Color.RED,100, 0,Color.WHITE);
 		//g2d.setPaint(redtowhite);
@@ -91,6 +94,8 @@ class PathPane extends JPanel {
 		for(int i = 0; i < pointsList.size()-1; i++){
 			Point p1 = pointsList.get(i);
 			Point p2 = pointsList.get(i+1);
+			if(cellName.equals("World"))
+				g2d.setStroke(new BasicStroke(40));
 			g2d.drawLine( (int)p1.x*tileWidth+tileWidth/2,  (int)p1.y*tileHeight+tileHeight/2, (int)(p2.x)*tileWidth+tileWidth/2, (int)(p2.y*tileHeight+tileHeight/2));
 			
 		} 
