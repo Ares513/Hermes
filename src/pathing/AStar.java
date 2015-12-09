@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.EventObject;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 
 import com.team1ofus.apollo.TILE_TYPE;
@@ -22,7 +23,8 @@ public class AStar {
 	// Nodes that need to be explored
 	ArrayList<CellPoint> frontier;
 	// Nodes that have already been explored
-	ArrayList<CellPoint> explored;
+	//ArrayList<CellPoint> explored;
+	HashSet<CellPoint> explored;
 	HashMap<String, Point> buildingLocations;
 	private boolean alreadyRan = false;
 
@@ -30,7 +32,8 @@ public class AStar {
 		events = new AStarInteractionEventObject();
 		accessedCells = cells;
 		frontier = new ArrayList<CellPoint>(); 
-		explored = new ArrayList<CellPoint>();
+		//explored = new ArrayList<CellPoint>();
+		explored = new HashSet<CellPoint>();
 		cellMap = new HashMap<String, HashMap<Point,TileInfo>>();
 		buildingLocations = new HashMap<String, Point>(cells.size() - 1);
 		
@@ -298,7 +301,7 @@ public class AStar {
 				if(!neighborTile.canBeEntered(currentPoint, neighborPoint)){
 					continue;
 				}
-				if(neighborPoint.isIn(explored)){
+				if(/*neighborPoint.isIn(explored)*/ explored.contains(neighborPoint)){
 					continue;
 				}
 //				if(neighborTile.explored){
