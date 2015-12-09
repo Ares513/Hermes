@@ -48,6 +48,7 @@ public class TextPane extends JPanel {
 		Graphics2D g2d = (Graphics2D) g;
 		AffineTransform transformer = new AffineTransform();
 		transformer.translate(this.getWidth()/2, this.getHeight()/2);
+		DebugManagement.writeNotificationToLog("text's zoomScale is:" + zoomScale);
 		transformer.scale(zoomScale, zoomScale);
 		transformer.translate(-this.getWidth()/2, -this.getHeight()/2);
 		transformer.translate(offset.x, offset.y);
@@ -68,7 +69,7 @@ public class TextPane extends JPanel {
 					stringLength = (int) metrics.getStringBounds(l.lines.get(i), g).getWidth();
 					
 				}
-				g2d.setFont(new Font("TimesRoman", Font.PLAIN, (int)Math.round(zoomScale*16)));
+				g2d.setFont(new Font("TimesRoman", Font.PLAIN, 16));
 				int start = stringLength/2;
 				g2d.drawString(l.lines.get(i), (int)(l.location.x*BootstrapperConstants.TILE_WIDTH)-(int)(start+((BootstrapperConstants.TILE_WIDTH/2))), (int)(l.location.y*BootstrapperConstants.TILE_HEIGHT)+g.getFont().getSize()*i);
 				

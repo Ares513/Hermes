@@ -61,4 +61,7 @@ public class MapTabbedPane<T extends Component> extends JTabbedPane {
 		return building;
 	}
 
+	public T getTabAt(int index) {
+		return (T) this.getComponentAt(index);
+	}
 }
