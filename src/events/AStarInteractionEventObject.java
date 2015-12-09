@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.EventObject;
 import java.util.List;
 
+import core.DebugManagement;
 import pathing.CellPoint;
 
 //TODO Comments1
@@ -22,7 +23,7 @@ public class AStarInteractionEventObject {
 		listeners.add(aListener);
 	}
 	public void AStarCompletePath(ArrayList<CellPoint> Path, int i){
-
+		DebugManagement.writeNotificationToLog("A* path calculation complete; notifying listeners."); 
 		for(IAStarInteractionListener l : listeners){
 			l.onAStarPathCompleteEvent(Path, i);
 		}

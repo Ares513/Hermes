@@ -50,9 +50,9 @@ public class AStar {
 								DebugManagement.writeNotificationToLog("EntryPoint " + ep.getId() + " linked to " + ref.getEntryPointID());
 								TileInfo currentTileInfo = cellMap.get(cell.getName()).get(ref.getLoc());
 								if (currentTileInfo == null){
-									DebugManagement.writeNotificationToLog("ref is null:" + String.valueOf(ref == null));
-									DebugManagement.writeNotificationToLog("ref loc is null:" + String.valueOf(ref.getLoc() == null));
-									DebugManagement.writeNotificationToLog("cell_tile_type at ref is null:" + String.valueOf(cell.getTile(ref.getLoc()) == null));
+									//DebugManagement.writeNotificationToLog("ref is null:" + String.valueOf(ref == null));
+									//DebugManagement.writeNotificationToLog("ref loc is null:" + String.valueOf(ref.getLoc() == null));
+									//DebugManagement.writeNotificationToLog("cell_tile_type at ref is null:" + String.valueOf(cell.getTile(ref.getLoc()) == null));
 									
 									// stops shit from breaking if someone puts an off page connection in a wall
 									if(cell.getTile(ref.getLoc()) == null){
@@ -232,6 +232,7 @@ public class AStar {
 		this.frontier.add(startCellPoint);
 		/*So long as the frontier is not empty the tile we want to explore is the tile with 
 		 * For now its BFS so we just take the first element*/
+		DebugManagement.writeNotificationToLog("Entering A* main while loop");
 		while(!frontier.isEmpty()) {
 			frontier = sortByCost(frontier);
 			currentPoint = frontier.get(0);
@@ -244,6 +245,7 @@ public class AStar {
 					events.AStarCompletePath(FinalPath, getTileInfo(currentPoint).getCostSoFar()); // Fires A* event. 
 					
 				}
+				DebugManagement.writeNotificationToLog("A* has calculated and returned path");
 				return FinalPath;
 			}
 			if(!(explored.contains(currentPoint))){ //if the currentTile isnt already explored
@@ -283,6 +285,7 @@ public class AStar {
 					cellMap.get(neighborPoint.getCellName()).put(neighborPoint.getPoint(), neighborTile);
 					if(neighborPoint == null || neighborTile == null){
 						DebugManagement.writeNotificationToLog("before adding to frontier, neighborPoint is null");
+						//shouldn't we address this?
 					}
 					frontier.add(neighborPoint);
 				}
@@ -295,6 +298,7 @@ public class AStar {
 				}
 				//do nothing if the cost is higher.
 			}
+			//DebugManagement.writeNotificationToLog("A* Loop is still going...");
 		}
 		DebugManagement.writeLineToLog(SEVERITY_LEVEL.SEVERE, "No path found!");
 		return null;
