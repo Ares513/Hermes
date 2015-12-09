@@ -131,7 +131,7 @@ public class HermesUI extends JPanel implements IHumanInteractionListener{
 	private Box horizontalBox;
 	private MapTabbedPane<MapTabbedPane<MapLayeredPane>> tabbedPane;
 	private ArrayList<Record> locationNameInfoRecords;
-	public PrintToPrinter printer =new PrintToPrinter(); ;
+	public PrintToPrinter printer =new PrintToPrinter(); 
 	private AutocompleteEngine<Record> engine = new AutocompleteEngine.Builder<Record>()
             .setIndex(new ACAdapter())
             .setAnalyzer(new ACAnalyzer())
@@ -597,7 +597,7 @@ public class HermesUI extends JPanel implements IHumanInteractionListener{
 		
 		SimpleAttributeSet lineBreak = new SimpleAttributeSet(); 
 		StyleConstants.setForeground(lineBreak, Color.LIGHT_GRAY);
-		//printInstructions = new ArrayList<String>(); 
+		printer.printInstructions = new ArrayList<String>(); 
 		
 			
 		
@@ -629,7 +629,7 @@ public class HermesUI extends JPanel implements IHumanInteractionListener{
 				System.out.println(e);
 			}
 			
-			//printer.printInstructions.add(direction);
+			printer.printInstructions.add(direction);
 			
 		} 
 	

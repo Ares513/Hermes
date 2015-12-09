@@ -66,6 +66,7 @@ public class PrintDirections {
 			/* First instruction. provides user with initial instruction */
 			if(i==0){  
 				String startInstruction = "Head "; 
+				
 				startInstruction += toFullWord(currentState);
 				startInstruction += " "; 
 				startInstruction += "\n       walk for ";
