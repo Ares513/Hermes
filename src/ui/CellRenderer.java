@@ -121,7 +121,10 @@ public class CellRenderer {
 	}
 	private void renderByImage(Graphics g, int windowWidth, int windowHeight) {
 		Graphics2D g2d = (Graphics2D) g;
-	
+		//Setting color of the World Background here
+		//Color backgroundColor = new Color(177, 215, 142);
+		g2d.setColor(new Color(255,255,255));
+		g2d.fillRect(0,0, windowWidth, windowHeight);
 		//g2d.setRenderingHint(RenderingHints.KEY_INTERPOLATION, RenderingHints.VALUE_INTERPOLATION_BILINEAR);
 		AffineTransform transformer = new AffineTransform();
 		transformer.translate(windowWidth/2, windowHeight/2);
