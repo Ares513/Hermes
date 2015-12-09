@@ -11,6 +11,7 @@ import javax.swing.JLayeredPane;
 import javax.swing.SwingUtilities;
 import javax.swing.border.EtchedBorder;
 
+import com.sun.org.apache.xml.internal.resolver.helpers.Debug;
 import com.team1ofus.apollo.TILE_TYPE;
 
 import core.BootstrapperConstants;
@@ -102,9 +103,9 @@ public class MapLayeredPane extends JLayeredPane {
 						pathPanel.zoom(zoomScale);
 						//textPanel.zoom(zoomScale); TODO scale with text
 						pointPanel.zoom(zoomScale);
-						pathPanel.setOffset(mapPanel.render.offset);
+						pathPanel.setOffset(mapPanel.render.getOffset());
 						pathPanel.repaint();
-						pointPanel.setOffset(mapPanel.render.offset);
+						pointPanel.setOffset(mapPanel.render.getOffset());
 						textPanel.zoomScale = zoomScale;
 						textPanel.repaint();
 						repaintPanel();
@@ -129,10 +130,10 @@ public class MapLayeredPane extends JLayeredPane {
 								int y = (int) (-0.5*(e.getY() - lastDragLocation.getY()));
 								DebugManagement.writeNotificationToLog("Dragging occurred, dx dy " + x + " , " + y);
 								mapPanel.render.incrementOffset(x, y, mapPanel.getWidth(), mapPanel.getHeight());
-								pathPanel.setOffset(mapPanel.render.offset);
+								pathPanel.setOffset(mapPanel.render.getOffset());
 								pathPanel.repaint();
-								textPanel.offset = mapPanel.render.offset;
-								pointPanel.setOffset(mapPanel.render.offset);
+								textPanel.offset = mapPanel.render.getOffset();
+								pointPanel.setOffset(mapPanel.render.getOffset());
 								repaintPanel();
 								lastDragLocation = e.getPoint();
 							} else {
@@ -147,7 +148,7 @@ public class MapLayeredPane extends JLayeredPane {
 					
 					@Override
 					public void mouseClicked(MouseEvent e) {
-						Point picked = mapPanel.render.pickTile(e.getX() , e.getY());
+						Point picked = mapPanel.render.pickTile(e.getX() , e.getY(), getWidth(), getHeight());
 						if(SwingUtilities.isLeftMouseButton(e)) {
 							DebugManagement.writeNotificationToLog("Point picked at " + picked.toString() + " in cell " + currentCell.cellName);
 							processClick(picked);
@@ -196,11 +197,12 @@ public class MapLayeredPane extends JLayeredPane {
 		return currentCell;
 	}
 	public void setOffset(Point input) {
-		mapPanel.render.offset = input;
-		pathPanel.setOffset(mapPanel.render.offset);
+		DebugManagement.writeNotificationToLog("Offset set from a class external to MapLayeredPane.");
+		mapPanel.render.setOffset(input);
+		pathPanel.setOffset(mapPanel.render.getOffset());
 		pathPanel.repaint();
-		textPanel.offset = mapPanel.render.offset;
-		pointPanel.setOffset(mapPanel.render.offset);
+		textPanel.offset = mapPanel.render.getOffset();
+		pointPanel.setOffset(mapPanel.render.getOffset());
 		repaintPanel();
 		
 	}
@@ -221,10 +223,10 @@ public class MapLayeredPane extends JLayeredPane {
 			pathPanel.zoom(zoomScale);
 			//textPanel.zoom(zoomScale); TODO scale with text
 			pointPanel.zoom(zoomScale);
-			pathPanel.setOffset(mapPanel.render.offset);
+			pathPanel.setOffset(mapPanel.render.getOffset());
 			pathPanel.repaint();
-			pointPanel.setOffset(mapPanel.render.offset);
-			textPanel.offset = mapPanel.render.offset;
+			pointPanel.setOffset(mapPanel.render.getOffset());
+			textPanel.offset = mapPanel.render.getOffset();
 			
 			repaintPanel();
 		
@@ -251,6 +253,7 @@ public class MapLayeredPane extends JLayeredPane {
 				pointPanel.setSecond(null);
 				pathPanel.clearPath();
 				repaintPanel();
+				
 			} else if(second == null) {
 
 				second = new Point(picked.x,picked.y);
@@ -258,7 +261,7 @@ public class MapLayeredPane extends JLayeredPane {
 				pointPanel.setSecond(second);
 				first = null;
 				second = null;
-
+				
 				repaintPanel();
 			}
 			humanInteractive.doClick(new CellPoint(currentCell.getName(), picked));

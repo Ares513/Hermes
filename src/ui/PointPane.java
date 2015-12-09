@@ -58,11 +58,11 @@ public class PointPane extends JPanel {
 		int newWidth = (int) (startMarker.getWidth());
 		int newHeight = (int) (startMarker.getHeight());
 		if (first != null) {
-			g2d.drawImage(startMarker, (int) (first.x), (int) (first.y), newWidth, newHeight, this);
+			g2d.drawImage(startMarker, (int) (first.x)*width, (int) (first.y)*height, newWidth, newHeight, this);
 
 		}
 		if (second != null) {
-			g2d.drawImage(finishMarker, (int) (second.x), (int) (second.y), newWidth, newHeight, this);
+			g2d.drawImage(finishMarker, (int) (second.x)*width, (int) (second.y)*height, newWidth, newHeight, this);
 		}
 	}
 
@@ -71,7 +71,7 @@ public class PointPane extends JPanel {
 		if (inPoint == null)
 			first = null;
 		else
-			first = new Point((int) inPoint.getX() * width, (int) inPoint.getY() * height);
+			first = new Point((int)inPoint.getX(), (int) inPoint.getY());
 		System.out.println("First point:" + inPoint);
 		repaint();
 	}
@@ -81,7 +81,7 @@ public class PointPane extends JPanel {
 		if (inPoint == null)
 			second = null;
 		else
-			second = new Point((int) inPoint.getX() * width, (int) inPoint.getY() * height);
+			second = new Point((int) inPoint.getX(), (int) inPoint.getY());
 		System.out.println("Second point:" + inPoint);
 		repaint();
 	}
