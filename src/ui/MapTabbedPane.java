@@ -29,7 +29,6 @@ public class MapTabbedPane<T extends Component> extends JTabbedPane {
 		super(top);
 		tabPanes = new ArrayList<T>();
 		building = name;
-		System.out.println(building);
 	}
 
 	public MapTabbedPane(int top, PathCell currentCell) {
@@ -61,4 +60,7 @@ public class MapTabbedPane<T extends Component> extends JTabbedPane {
 		return building;
 	}
 
+	public T getTabAt(int index) {
+		return (T) this.getComponentAt(index);
+	}
 }

@@ -53,7 +53,16 @@ public class CellRenderer {
 	final int rows = 2;
 	final int cols = 14;
 	BufferedImage[] spriteImages = new BufferedImage[rows * cols];
-	Point offset = new Point(0, 0);
+	private Point offset = new Point(0, 0);
+	public Point getOffset() {
+		return offset;
+	}
+
+	public void setOffset(Point offset) {
+		DebugManagement.writeNotificationToLog("Offset was set by an object external to CellRenderer.");
+		this.offset = offset;
+	}
+
 	PathCell drawnCell;
 	private Point first;
 	private Point second;
@@ -82,48 +91,7 @@ public class CellRenderer {
 	// Changes the width and height of tiles to corresponding to changes in the
 	// scale of zooming
 	public void zoom(double scale, int windowWidth, int windowHeight) {
-		prevScale = this.scale;
-		//width = (int) (BootstrapperConstants.TILE_WIDTH * scale);
-		//height = (int) (BootstrapperConstants.TILE_HEIGHT * scale);
-		oldTotalWidth = (int) ((BootstrapperConstants.TILE_WIDTH * drawnCell.getWidth()) * prevScale);
-		oldTotalHeight = (int) ((BootstrapperConstants.TILE_HEIGHT * drawnCell.getHeight()) * prevScale);
-		Point2D.Double sizePercentage = new Point2D.Double(offset.x / getMapWidth(), offset.y / getMapHeight());
-		DebugManagement.writeNotificationToLog("Size percentage " + sizePercentage.x  + " " + sizePercentage.y);
-		this.scale = scale;
-		newTotalWidth = (int) ((BootstrapperConstants.TILE_WIDTH * drawnCell.getWidth()) * scale);
-		newTotalHeight = (int) ((BootstrapperConstants.TILE_HEIGHT * drawnCell.getHeight()) * scale);
-		
-		Point2D.Double postScaling = new Point2D.Double(sizePercentage.x * getMapWidth(), sizePercentage.y * getMapHeight());
-		DebugManagement.writeNotificationToLog("Post scaling " + sizePercentage.x + " " + sizePercentage.y);
-		Point2D.Double center = new Point2D.Double(offset.x + windowWidth / 2 , offset.y + windowHeight / 2);
-		Point2D.Double preciseCenter = getPreciseMapCenter();
-		Point2D.Double difference = new Point2D.Double(preciseCenter.x - center.x, preciseCenter.y - center.y);
-		Point mapCenter = getMapCenter();
-		Point oldOffset = offset;
-		difHeight = ((newTotalHeight - oldTotalHeight) / 2);
-		difWidth = (((newTotalWidth - oldTotalWidth) / 2));
-		finalWidth = difWidth + (int) (difWidth * (scale - 1));
-		finalHeight = difHeight + (int) (difHeight * (scale - 1));
-	
-		int newX = (int)(center.x*(scale - 3) + scale*offset.x);
-		 int newY = (int)(center.y*(scale - 3) + scale*offset.y);
-		 //offset = new Point(newX, newY);
-		//offset = new Point((int)(mapCenter.x - windowWidth / 2 - difWidth), (int) (mapCenter.y - windowHeight / 2 - difHeight));
-		//offsetToTile(pickTile(center.x, center.y), windowWidth, windowHeight);
-		//offset = new Point(oldOffset.x - mapCenter.x - windowWidth/2, oldOffset.y - mapCenter.y - windowHeight/2);
-	}
-	private Point tilesOnScreen(int windowWidth, int windowHeight) {
-		int lowerX = -1 + (int) Math.ceil(offset.x / (BootstrapperConstants.TILE_WIDTH * scale));
-		int lowerY = -1 + (int) Math.ceil(offset.y / (BootstrapperConstants.TILE_HEIGHT * scale));
-		int higherX = 1 + (int) (Math.ceil(offset.x + windowWidth) / (BootstrapperConstants.TILE_WIDTH * scale));
-		int higherY = 1 + (int) (Math.ceil(offset.y + windowHeight) / (BootstrapperConstants.TILE_HEIGHT * scale));
-		return new Point(higherX - lowerX, higherY - lowerY);
-	}
-	//Snaps the offset to a specified tile location.
-	private void offsetToTile(Point tile, int windowWidth, int windowHeight) {
-		Point pixelTileCoords = new Point((int)(tile.x * BootstrapperConstants.TILE_WIDTH * scale), (int)(tile.y * BootstrapperConstants.TILE_HEIGHT * scale));
-		Point adjusted = new Point(pixelTileCoords.x - windowWidth/2 , pixelTileCoords.y - windowHeight / 2);
-		offset = adjusted;
+		this.scale = scale;	
 	}
 	// Renders the tiles
 	public void renderTiles(Graphics g, int windowWidth, int windowHeight) {
@@ -170,7 +138,7 @@ public class CellRenderer {
 		g2d.setColor(new Color(128, 0, 0));
 		g2d.fillRect(0,0, windowWidth, windowHeight);
 	
-		//g2d.setRenderingHint(RenderingHints.KEY_INTERPOLATION, RenderingHints.VALUE_INTERPOLATION_BILINEAR);
+		g2d.setRenderingHint(RenderingHints.KEY_INTERPOLATION, RenderingHints.VALUE_INTERPOLATION_BILINEAR);
 		AffineTransform transformer = new AffineTransform();
 		transformer.translate(windowWidth/2, windowHeight/2);
 		
@@ -245,10 +213,19 @@ public class CellRenderer {
 	}
 
 	// Handles tile picking, which will then be passed to A*
-	public Point pickTile(int mouseX, int mouseY) {
-		int x = (int) (Math.round((mouseX + offset.x) / width)*scale);
-		int y = (int) (Math.round((mouseY + offset.y) / height)*scale);
-		return new Point(x, y);
+	public Point pickTile(int mouseX, int mouseY, int windowWidth, int windowHeight) {
+		AffineTransform transformer = new AffineTransform();
+		transformer.translate(windowWidth/2, windowHeight/2);
+		
+		transformer.scale(scale, scale);
+		transformer.translate(-windowWidth/2, -windowHeight/2);
+		transformer.translate(offset.x, offset.y);
+		Point2D result = transformer.transform(new Point2D.Float(mouseX, mouseY), null);
+		
+		int x = (int) (Math.round((mouseX - offset.x) / width)*scale);
+		int y = (int) (Math.round((mouseY - offset.y) / height)*scale);
+		DebugManagement.writeNotificationToLog("Translation result of pickTile " + result.getX() + " " + result.getY());
+		return new Point((int)result.getX()/width, (int)result.getY()/height);
 	}
 
 	public Tile getTile(int x, int y) {

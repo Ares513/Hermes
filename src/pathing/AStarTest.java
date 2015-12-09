@@ -116,21 +116,37 @@ public class AStarTest {
 		
 		EntryPoint ep2 = new EntryPoint("C", new Point(45,45));
 		EntryPoint ep22 = new EntryPoint("D", new Point(45,45));
+		EntryPoint ep222 = new EntryPoint("J", new Point(45,45));
 		ArrayList<EntryPoint> eps2 = new ArrayList<EntryPoint>();
 		eps2.add(ep2);
 		eps2.add(ep22);
+		eps2.add(ep222);
 		
 		EntryPointReference epr2 = new EntryPointReference("A","pc1", new Point(45,45));
 		EntryPointReference epr22 = new EntryPointReference("B","pc1", new Point(45,45));
+		EntryPointReference epr222 = new EntryPointReference("I","pc3", new Point(45,45));
 		ArrayList<EntryPointReference> eprs2 = new ArrayList<EntryPointReference>();
 		eprs2.add(epr2);
 		eprs2.add(epr22);
+		eprs2.add(epr222);
 		
 		PathCell pc2 = new PathCell("pc2", "pc2", 100, 100, hm1, eps2, new ArrayList<LocationNameInfo>(), eprs2);
+		
+		EntryPoint ep3 = new EntryPoint("I", new Point(45,45));
+		ArrayList<EntryPoint> eps3 = new ArrayList<EntryPoint>();
+		eps3.add(ep3);
+		
+		EntryPointReference epr3 = new EntryPointReference("J","pc2", new Point(45,45));
+		ArrayList<EntryPointReference> eprs3 = new ArrayList<EntryPointReference>();
+		eprs3.add(epr3);
+		
+		PathCell pc3 = new PathCell("pc3", "pc3", 100, 100, hm1, eps3, new ArrayList<LocationNameInfo>(), eprs3);
+		
 		
 		ArrayList<PathCell> pcs = new ArrayList<PathCell>();
 		pcs.add(pc1);
 		pcs.add(pc2);
+		pcs.add(pc3);
 		
 		AStar test = new AStar(pcs);
 		ArrayList<CellPoint> AStarOut = test.getPath(new CellPoint("pc2", new Point(50, 50)),
