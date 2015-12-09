@@ -29,6 +29,7 @@ import com.team1ofus.apollo.TILE_TYPE;
 
 import core.BootstrapperConstants;
 import core.DebugManagement;
+import javafx.scene.SceneAntialiasing;
 import pathing.PathCell;
 import tiles.Tile;
 
@@ -71,11 +72,13 @@ public class CellRenderer {
 	private HashMap<Point, TILE_TYPE> bufferedTiles = new HashMap<Point, TILE_TYPE>();
 	private Image campusMap;
 	private boolean isCampusMap;
+	private Image background;
 	public CellRenderer(PathCell inCell, int windowWidth, int windowHeight, Image campusMap) {
 		drawnCell = inCell;
 		if(campusMap != null) {
 			this.campusMap = campusMap;
 			isCampusMap = true;
+			
 		}
 		for(Point p : drawnCell.tiles.keySet()) {
 			bufferedTiles.put(p, drawnCell.tiles.get(p).getTileType());
@@ -123,8 +126,8 @@ public class CellRenderer {
 		Graphics2D g2d = (Graphics2D) g;
 		//Setting color of the World Background here
 		//Color backgroundColor = new Color(177, 215, 142);
-		g2d.setColor(new Color(255,255,255));
-		g2d.fillRect(0,0, windowWidth, windowHeight);
+		g2d.drawImage(background, 0, 0, BootstrapperConstants.FRAME_WIDTH,BootstrapperConstants.FRAME_HEIGHT, null);
+		
 		//g2d.setRenderingHint(RenderingHints.KEY_INTERPOLATION, RenderingHints.VALUE_INTERPOLATION_BILINEAR);
 		AffineTransform transformer = new AffineTransform();
 		transformer.translate(windowWidth/2, windowHeight/2);
@@ -139,7 +142,7 @@ public class CellRenderer {
 		Graphics2D g2d = (Graphics2D) g;
 		long startTime = System.nanoTime(); //measure time for each run
 		g2d.setColor(new Color(70, 70, 70));
-		g2d.fillRect(0,0, windowWidth, windowHeight);
+		g2d.drawImage(background, 0, 0, BootstrapperConstants.FRAME_WIDTH,BootstrapperConstants.FRAME_HEIGHT, null);
 	
 		g2d.setRenderingHint(RenderingHints.KEY_INTERPOLATION, RenderingHints.VALUE_INTERPOLATION_BILINEAR);
 		AffineTransform transformer = new AffineTransform();
@@ -149,7 +152,6 @@ public class CellRenderer {
 		transformer.translate(-windowWidth/2, -windowHeight/2);
 		transformer.translate(offset.x, offset.y);
 		g2d.setTransform(transformer);
-		System.out.println(bufferedTiles.entrySet().size());
 		Point2D scaled = null;
 		Point2D origin = null;
 		Point2D target = null;
@@ -176,8 +178,6 @@ public class CellRenderer {
 			
 				
 		}
-		System.out.println(scaled.toString() + " " + origin.toString() + target.toString());
-		System.out.println((System.nanoTime() - startTime)/1000000);
 	}
 	//TODO: make it happen
 	private void drawMiniMap(Graphics2D g2d, int windowWidth, int windowHeight, int mapWidth, int mapHeight) {
@@ -201,10 +201,8 @@ public class CellRenderer {
 		try {
 			BufferedImage spriteSheet = ImageIO
 					.read(HermesUI.class.getResource("/com/team1ofus/hermes/resources/Sprites.png"));
-			 GraphicsEnvironment env = GraphicsEnvironment.getLocalGraphicsEnvironment();
-			    GraphicsDevice device = env.getDefaultScreenDevice();
-			    GraphicsConfiguration config = device.getDefaultConfiguration();
-			    BufferedImage buffy = config.createCompatibleImage(width, height, Transparency.TRANSLUCENT);
+			
+			    background = ImageIO.read(HermesUI.class.getResource("/com/team1ofus/hermes/resources/background.png"));
 			for (int i = 0; i < rows; i++) {
 				for (int j = 0; j < cols; j++) {
 					spriteImages[(i * cols) + j] = spriteSheet.getSubimage(j * (width + 8), i * (height + 8), width,

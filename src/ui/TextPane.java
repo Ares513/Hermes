@@ -70,8 +70,8 @@ public class TextPane extends JPanel {
 					
 				}
 				g2d.setFont(new Font("TimesRoman", Font.PLAIN, 16));
-				int start = stringLength/2;
-				g2d.drawString(l.lines.get(i), (int)(l.location.x*BootstrapperConstants.TILE_WIDTH)-(int)(start+((BootstrapperConstants.TILE_WIDTH/2))), (int)(l.location.y*BootstrapperConstants.TILE_HEIGHT)+g.getFont().getSize()*i);
+				double start = stringLength/2;
+				g2d.drawString(l.lines.get(i), (int)(l.location.x*BootstrapperConstants.TILE_WIDTH)-(int)(start+((BootstrapperConstants.TILE_WIDTH))), (int)(l.location.y*BootstrapperConstants.TILE_HEIGHT)+g.getFont().getSize()*i);
 				
 			}
 		}
