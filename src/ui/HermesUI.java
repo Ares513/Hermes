@@ -329,7 +329,7 @@ public class HermesUI extends JPanel implements IHumanInteractionListener{
 		btnMinus = new JButton("Minus");
 		verticalBox_1.add(btnMinus);
 		JPanel interacactionpanel = new JPanel();
-		interacactionpanel.setBounds(0, 0, 315, 880);
+		interacactionpanel.setBounds(0, 0, BootstrapperConstants.PANEL_SIZE, BootstrapperConstants.FRAME_HEIGHT);
 		frameHermes.getContentPane().add(interacactionpanel);
 		interacactionpanel.setLayout(null);
 
