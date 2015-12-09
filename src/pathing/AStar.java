@@ -23,6 +23,7 @@ public class AStar {
 	ArrayList<CellPoint> frontier;
 	// Nodes that have already been explored
 	ArrayList<CellPoint> explored;
+	HashMap<String, Point> buildingLocations;
 	private boolean alreadyRan = false;
 
 	public AStar(ArrayList<PathCell> cells) {
@@ -31,23 +32,38 @@ public class AStar {
 		frontier = new ArrayList<CellPoint>(); 
 		explored = new ArrayList<CellPoint>();
 		cellMap = new HashMap<String, HashMap<Point,TileInfo>>();
+		buildingLocations = new HashMap<String, Point>(cells.size() - 1);
+		
+		for (PathCell candidate : accessedCells){
+			if (candidate.getName().equals("World")){
+				for (EntryPointReference erf : candidate.getEntryPointReferences()){
+					buildingLocations.put(erf.getTargetCell().substring(0, 2), erf.getLoc());
+				}
+			}
+		}
+		DebugManagement.writeNotificationToLog("*******************");
+		for(String buildingID: buildingLocations.keySet()){
+			DebugManagement.writeNotificationToLog(buildingID);
+			System.out.println(buildingLocations.get(buildingID));
+		}
+		DebugManagement.writeNotificationToLog("*******************");
 		
 		//Pyramid of Doom. Please prepare and make all human sacrifices here.
 		//TODO: refactor this so it's human readable.
 		for(PathCell cell: accessedCells){
-			DebugManagement.writeNotificationToLog("Created a new TileInfoArray for " + cell.getName());
+//			DebugManagement.writeNotificationToLog("Created a new TileInfoArray for " + cell.getName());
 			cellMap.put(cell.getName(), new HashMap<Point,TileInfo>());
 			
 			for(EntryPointReference ref : cell.getEntryPointReferences()){
 				for (PathCell pc: accessedCells){
-					DebugManagement.writeNotificationToLog("CellName " + pc.getName() + " compared to " + ref.getTargetCell());
+//					DebugManagement.writeNotificationToLog("CellName " + pc.getName() + " compared to " + ref.getTargetCell());
 					if ((pc.getName()).equals(ref.getTargetCell())){
-						DebugManagement.writeNotificationToLog("Matched " + pc.getName() + " to " + ref.getTargetCell());
+//						DebugManagement.writeNotificationToLog("Matched " + pc.getName() + " to " + ref.getTargetCell());
 						
 						for (EntryPoint ep : pc.getEntryPoints()){
-							DebugManagement.writeNotificationToLog(ep.getId() + " comparing to " + ref.getEntryPointID());
+//							DebugManagement.writeNotificationToLog(ep.getId() + " comparing to " + ref.getEntryPointID());
 							if ((ep.getId()).equals(ref.getEntryPointID())){
-								DebugManagement.writeNotificationToLog("EntryPoint " + ep.getId() + " linked to " + ref.getEntryPointID());
+//								DebugManagement.writeNotificationToLog("EntryPoint " + ep.getId() + " linked to " + ref.getEntryPointID());
 								TileInfo currentTileInfo = cellMap.get(cell.getName()).get(ref.getLoc());
 								if (currentTileInfo == null){
 									//DebugManagement.writeNotificationToLog("ref is null:" + String.valueOf(ref == null));
@@ -56,7 +72,7 @@ public class AStar {
 									
 									// stops shit from breaking if someone puts an off page connection in a wall
 									if(cell.getTile(ref.getLoc()) == null){
-										DebugManagement.writeLineToLog(SEVERITY_LEVEL.CORRUPTED, "someone stuck an off page connection in a wall");
+//										DebugManagement.writeLineToLog(SEVERITY_LEVEL.CORRUPTED, "someone stuck an off page connection in a wall");
 										continue;
 									}
 									currentTileInfo = new TileInfo(cell.getTile(ref.getLoc()).getTileType(), cell.getTile(ref.getLoc()).getTraverseCost());
@@ -391,27 +407,30 @@ public class AStar {
 
 
 		private int getHeuristic(CellPoint current, CellPoint end){
-		//	Point currentWorldCoords = getWorldCoords(current);
-		//	Point endWorldCoords = getWorldCoords(end);
-		//	double deltaX = endWorldCoords.getX() - currentWorldCoords.getX();
-		//	double deltaY = endWorldCoords.getY() - currentWorldCoords.getY();
-		//	return (int)Math.sqrt((deltaX*deltaX)+(deltaY*deltaY));
-			return 0;
-		}
-		
-		private Point getWorldCoords(CellPoint current) {
-			Point currentCoords = null;
-			if(current.getCellName().equals("CampusMap")){
-				currentCoords = current.getPoint();
-			}
-			else{
-				currentCoords = approxCoords(current.getCellName());
-			}
-			return currentCoords;
+			Point endCoords = getCoords(end);
+			DebugManagement.writeNotificationToLog(String.valueOf(getCoords(end)==null));
+			Point currentCoords = getCoords(current);
+			
+//			int delta x = endCoords.getX() - currentCoords.getY();
+			return (int)Math.sqrt((Math.pow((endCoords.getX() - currentCoords.getX()), 2) + Math.pow((endCoords.getY() - currentCoords.getY()), 2)));
 		}
 
-		private Point approxCoords(String cellName) {
-			
+		private Point getCoords(CellPoint aCP) {
+			String buildingName = aCP.getCellName().substring(0, 2);
+			DebugManagement.writeNotificationToLog(buildingName);
+			if(buildingName.equals("Wo")){
+				return aCP.getPoint();
+			}
+			return getCellCoords(buildingName);
+		}
+
+		private Point getCellCoords(String buildingName) {
+			for(String each: buildingLocations.keySet()){
+				if (each.equals(buildingName)){
+					return buildingLocations.get(buildingName);
+				}
+			}
+			DebugManagement.writeLineToLog(SEVERITY_LEVEL.CRITICAL, "Warning get cell Coords returned null");
 			return null;
 		}
 
