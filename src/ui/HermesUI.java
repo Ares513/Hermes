@@ -194,23 +194,29 @@ public class HermesUI extends JPanel implements IHumanInteractionListener{
 		Point lastPoint = path.get(size-1).getPoint(); 
 		tabbedPane.getSelectedTabPane().getSelectedTabPane().getPointPane().setFirst(null);
 		tabbedPane.getSelectedTabPane().getSelectedTabPane().getPointPane().setSecond(null);
+		//reset all tab colors
+		for(int i = 0; i < tabbedPane.getTabCount(); i++)
+			for(int j = 0; j < tabbedPane.getTabAt(i).getTabCount(); j++)
+				tabbedPane.getTabAt(i).setForegroundAt(j, null);
 
 		 splitPath(path);
 		 for(int i = 0; i < cellsInPath.size(); i++) {
-			 tabbedPane.setSelectedIndex(tabbedPane.getIndexOfTab(cellsInPath.get(i).substring(0, 2)));
-			 tabbedPane.getSelectedTabPane().setSelectedIndex(tabbedPane.getSelectedTabPane().getIndexOfTab(nameToDisplay.get(cellsInPath.get(i))));
-			 repaintPanel();
-			 tabbedPane.getSelectedTabPane().getSelectedTabPane().getPathPane().drawPath(segmentedPath.get(i), cellsInPath.get(i));			 
-			 //tabbedPane.getSelectedTabPane().getSelectedTabPane().setOffset(new Point(segmentedPath.get(i).get(0).getPoint().x * BootstrapperConstants.TILE_WIDTH, segmentedPath.get(i).get(0).getPoint().y * BootstrapperConstants.TILE_HEIGHT));
-			 
-			 if(i == 0){ 
-				 tabbedPane.getSelectedTabPane().getSelectedTabPane().getPointPane().setFirst(firstPoint);
-			 }
-			 if(i == cellsInPath.size() -1 ){
-			tabbedPane.getSelectedTabPane().getSelectedTabPane().getPointPane().setSecond(lastPoint);
-			 }
-			 
-			 
+			tabbedPane.setSelectedIndex(tabbedPane.getIndexOfTab(cellsInPath.get(i).substring(0, 2)));
+			System.out.println(nameToDisplay.get(cellsInPath.get(i)));
+			tabbedPane.getSelectedTabPane().setSelectedIndex(tabbedPane.getSelectedTabPane().getIndexOfTab(nameToDisplay.get(cellsInPath.get(i))));
+			repaintPanel();
+			tabbedPane.getSelectedTabPane().getSelectedTabPane().getPathPane().drawPath(segmentedPath.get(i), cellsInPath.get(i));			 
+			//tabbedPane.getSelectedTabPane().getSelectedTabPane().setOffset(new Point(segmentedPath.get(i).get(0).getPoint().x * BootstrapperConstants.TILE_WIDTH, segmentedPath.get(i).get(0).getPoint().y * BootstrapperConstants.TILE_HEIGHT));
+
+			if(i == 0){ 
+				tabbedPane.getSelectedTabPane().getSelectedTabPane().getPointPane().setFirst(firstPoint);
+			}
+			if(i == cellsInPath.size() - 1){
+				tabbedPane.getSelectedTabPane().getSelectedTabPane().getPointPane().setSecond(lastPoint);
+			}
+			tabbedPane.getSelectedTabPane().setForegroundAt(tabbedPane.getSelectedTabPane().getSelectedIndex(), new Color(153, 0, 80));
+			//tabbedPane.getSelectedTabPane().setFont(new Font("Tahoma", Font.BOLD, 9));
+			
 		}
 	 	first = null; 
 	 	second = null;
