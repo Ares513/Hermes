@@ -575,6 +575,7 @@ public class HermesUI extends JPanel implements IHumanInteractionListener{
 				tabbedPane.getSelectedTabPane().getSelectedTabPane().humanInteractive.addListener(this, "HermesUI to " + allCells.get(cellIterator).getName());
 				cellIterator++;
 			}
+			tabbedPane.getSelectedTabPane().setSelectedIndex(0);
 		}
 		
 		//frameHermes.getContentPane().add(zoomPanel);
