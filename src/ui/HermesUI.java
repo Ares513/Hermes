@@ -484,10 +484,10 @@ public class HermesUI extends JPanel implements IHumanInteractionListener{
 			public void actionPerformed(ActionEvent e) {
 				if(cellsInPath.size() > 0) {
 					mapIndex++;
-					System.out.println("Index " + tabbedPane.getSelectedIndex());
-					System.out.println("mapIndex " + mapIndex);
-					System.out.println("Building name " + buildingNames.get(cellsInPath.get(mapIndex).substring(0, 2)));
-					System.out.println("Index of tab we want " + tabbedPane.getIndexOfTab(buildingNames.get(cellsInPath.get(mapIndex).substring(0, 2))));
+					//System.out.println("Index " + tabbedPane.getSelectedIndex());
+					//System.out.println("mapIndex " + mapIndex);
+					//System.out.println("Building name " + buildingNames.get(cellsInPath.get(mapIndex).substring(0, 2)));
+					//System.out.println("Index of tab we want " + tabbedPane.getIndexOfTab(buildingNames.get(cellsInPath.get(mapIndex).substring(0, 2))));
 					tabbedPane.setSelectedIndex(tabbedPane.getIndexOfTab(buildingNames.get(cellsInPath.get(mapIndex).substring(0, 2))));
 					tabbedPane.getSelectedTabPane().setSelectedIndex(tabbedPane.getSelectedTabPane().getIndexOfTab(nameToDisplay.get(cellsInPath.get(mapIndex))));
 					if(mapIndex >= cellsInPath.size() - 1) {
@@ -624,10 +624,10 @@ public class HermesUI extends JPanel implements IHumanInteractionListener{
 			instructionsDoc.insertString(instructionsDoc.getLength(), direction, keyWord);
 			instructionsDoc.insertString(instructionsDoc.getLength(), "\n      ———————————————\n",lineBreak);
 			
-			System.out.println("tried to display instruction");
+			//System.out.println("tried to display instruction");
 			} 
 			catch(Exception e){ 
-				System.out.println(e);
+				//System.out.println(e);
 			}
 			
 			printer.printInstructions.add(direction);

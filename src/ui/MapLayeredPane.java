@@ -58,7 +58,7 @@ public class MapLayeredPane extends JLayeredPane {
 		//maxZoomOut = (maxZoomOutx < maxZoomOuty) ? maxZoomOutx : maxZoomOuty;
 		//maxZoomOut = (maxZoomOutF) * 10;// * 0.5;//An estimate for the max zoomout
 		
-		System.out.println(maxZoomOut);
+		//System.out.println(maxZoomOut);
 		
 		initialize();
 		buildControl();
@@ -237,7 +237,7 @@ public class MapLayeredPane extends JLayeredPane {
 			zoomScale = maxZoomIn;
 		}
 		else{
-			System.out.println(zoomScale);
+			//System.out.println(zoomScale);
 			zoomScale += addToScale;
 			mapPanel.render.zoom(zoomScale, mapPanel.getWidth(), mapPanel.getHeight());
 			//mapPanel.render.zoom(zoomScale, BootstrapperConstants.FRAME_WIDTH, BootstrapperConstants.FRAME_WIDTH);

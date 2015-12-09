@@ -72,7 +72,7 @@ public class PointPane extends JPanel {
 			first = null;
 		else
 			first = new Point((int)inPoint.getX(), (int) inPoint.getY());
-		System.out.println("First point:" + inPoint);
+		//System.out.println("First point:" + inPoint);
 		repaint();
 	}
 
@@ -82,7 +82,7 @@ public class PointPane extends JPanel {
 			second = null;
 		else
 			second = new Point((int) inPoint.getX(), (int) inPoint.getY());
-		System.out.println("Second point:" + inPoint);
+		//System.out.println("Second point:" + inPoint);
 		repaint();
 	}
 

@@ -47,7 +47,7 @@ public class AStar {
 		DebugManagement.writeNotificationToLog("*******************");
 		for(String buildingID: buildingLocations.keySet()){
 			DebugManagement.writeNotificationToLog(buildingID);
-			System.out.println(buildingLocations.get(buildingID));
+			//System.out.println(buildingLocations.get(buildingID));
 		}
 		DebugManagement.writeNotificationToLog("*******************");
 		
