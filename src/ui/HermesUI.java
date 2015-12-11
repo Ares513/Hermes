@@ -88,6 +88,8 @@ import javax.swing.ScrollPaneConstants;
 import javax.swing.JTabbedPane;
 import java.awt.print.*;
 import javax.swing.JTextPane;
+import javax.swing.JCheckBox;
+import java.awt.SystemColor;
 
 //Holds all of the UI elements for the project
 public class HermesUI extends JPanel implements IHumanInteractionListener{
@@ -148,6 +150,13 @@ public class HermesUI extends JPanel implements IHumanInteractionListener{
 	private JTextPane instructionsTextPane;
     private StyledDocument instructionsDoc;         
     private JScrollPane scrollPane;
+    private Box modeBox;
+    private JCheckBox handicapedMode;
+    private JCheckBox lateToClassMode;
+    private JCheckBox sillyUnitsMode;
+    private JLabel modeLabel;
+    private Component verticalStrut;
+    private Component verticalStrut_4;
 	public HermesUI(ArrayList<PathCell> viewCells, ArrayList<Record> locationNameInfoRecords) {
 		this.locationNameInfoRecords = locationNameInfoRecords;
 		
@@ -340,7 +349,7 @@ public class HermesUI extends JPanel implements IHumanInteractionListener{
 		interacactionpanel.setLayout(null);
 
 		verticalBox = Box.createVerticalBox();
-		verticalBox.setBounds(13, 5, 290, 537);
+		verticalBox.setBounds(13, 5, 290, 771);
 		interacactionpanel.add(verticalBox);
 
 		verticalStrut_1 = Box.createVerticalStrut(20);
@@ -517,6 +526,41 @@ public class HermesUI extends JPanel implements IHumanInteractionListener{
 		         }
 			}
 		});
+		
+		verticalStrut = Box.createVerticalStrut(20);
+		verticalBox.add(verticalStrut);
+		
+		modeBox = Box.createVerticalBox();
+		modeBox.setBorder(new LineBorder(new Color(192, 192, 192)));
+		modeBox.setAlignmentX(Component.CENTER_ALIGNMENT);
+		verticalBox.add(modeBox);
+		
+		modeLabel = new JLabel("Modes");
+		modeBox.add(modeLabel);
+		
+		handicapedMode = new JCheckBox("Handicapped");
+		handicapedMode.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+			}
+		});
+		modeBox.add(handicapedMode);
+		
+		lateToClassMode = new JCheckBox("Late to Class");
+		lateToClassMode.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+			}
+		});
+		modeBox.add(lateToClassMode);
+		
+		sillyUnitsMode = new JCheckBox("Silly Units");
+		sillyUnitsMode.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+			}
+		});
+		modeBox.add(sillyUnitsMode);
+		
+		verticalStrut_4 = Box.createVerticalStrut(20);
+		verticalBox.add(verticalStrut_4);
 		printButton.setAlignmentX(Component.CENTER_ALIGNMENT);
 		verticalBox.add(printButton);
 		
@@ -622,7 +666,7 @@ public class HermesUI extends JPanel implements IHumanInteractionListener{
 			try{ 
 			instructionsDoc.insertString(instructionsDoc.getLength(), " ",turnImage);
 			instructionsDoc.insertString(instructionsDoc.getLength(), direction, keyWord);
-			instructionsDoc.insertString(instructionsDoc.getLength(), "\n      ———————————————\n",lineBreak);
+			instructionsDoc.insertString(instructionsDoc.getLength(), "\n      ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½\n",lineBreak);
 			
 			//System.out.println("tried to display instruction");
 			} 
