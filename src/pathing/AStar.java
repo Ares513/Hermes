@@ -230,7 +230,7 @@ public class AStar {
 	 * end Cell and point.
 	 * Returns the fastest path between two points as an ordered list of Tiles
 	 */
-	public ArrayList<CellPoint> getPath(CellPoint startCellPoint, CellPoint endCellPoint, boolean isFiltering){
+	public ArrayList<CellPoint> getPath(CellPoint startCellPoint, CellPoint endCellPoint, boolean isFiltering, AStarConfigOptions configOptions){
 		if(alreadyRan == true){ // A* needs to be reinitialized each time it runs. this checks that
 			DebugManagement.writeLineToLog(SEVERITY_LEVEL.FATAL, "you done broke shit, A* already ran."
 					+ "\n A* will try to continue but it wont do anything");

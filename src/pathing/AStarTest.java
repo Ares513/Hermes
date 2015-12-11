@@ -20,7 +20,7 @@ public class AStarTest {
 		testCellList.add(testCell);
 		AStar test = new AStar(testCellList);
 		ArrayList<CellPoint> AStarOut = test.getPath(new CellPoint("a", new Point(2, 2)),
-				new CellPoint("a", new Point(2, 2)), false);
+				new CellPoint("a", new Point(2, 2)), false, new AStarConfigOptions());
 		if (AStarOut != null) {
 			for (CellPoint each : AStarOut) {
 				System.out.println(each.getPoint());
@@ -40,7 +40,7 @@ public class AStarTest {
 		AStar test = new AStar(testCellList);
 		System.out.println("Path:");
 		ArrayList<CellPoint> AStarOut = test.getPath(new CellPoint("b", new Point(50, 50)),
-				new CellPoint("b", new Point(55, 40)), false);
+				new CellPoint("b", new Point(55, 40)), false, new AStarConfigOptions());
 		if (AStarOut.isEmpty()) {
 			fail("A*.getPath() didnt return anything");
 		}
@@ -63,7 +63,7 @@ public class AStarTest {
 		testCellList.add(testCell);
 		AStar test = new AStar(testCellList);
 		ArrayList<CellPoint> AStarOut = test.getPath(new CellPoint("c", new Point(2, 2)),
-				new CellPoint("c", new Point(2, 3)), false);
+				new CellPoint("c", new Point(2, 3)), false, new AStarConfigOptions());
 		assertEquals(AStarOut, null);
 	}
 
@@ -80,7 +80,7 @@ public class AStarTest {
 		AStar test = new AStar(testCellList);
 		System.out.println("Path:");
 		ArrayList<CellPoint> AStarOut = test.getPath(new CellPoint("a", new Point(50, 50)),
-				new CellPoint("b", new Point(55, 40)), false);
+				new CellPoint("b", new Point(55, 40)), false, new AStarConfigOptions());
 		if (AStarOut.size() >= 5) {
 			System.out.println("getPath didnt break");
 			for (CellPoint each : AStarOut) {
@@ -150,7 +150,7 @@ public class AStarTest {
 		
 		AStar test = new AStar(pcs);
 		ArrayList<CellPoint> AStarOut = test.getPath(new CellPoint("pc2", new Point(50, 50)),
-				new CellPoint("pc1", new Point(55, 40)), false);
+				new CellPoint("pc1", new Point(55, 40)), false, new AStarConfigOptions());
 		if (AStarOut.size() >= 5) {
 			System.out.println("getPath didnt break");
 			for (CellPoint each : AStarOut) {

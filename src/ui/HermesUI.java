@@ -68,6 +68,7 @@ import core.DebugManagement;
 import events.HumanInteractionEventObject;
 import events.IHumanInteractionListener;
 import events.SearchReadyEventObject;
+import pathing.AStarConfigOptions;
 import pathing.CellPoint;
 import pathing.PathCell;
 
@@ -148,9 +149,10 @@ public class HermesUI extends JPanel implements IHumanInteractionListener{
 	private JTextPane instructionsTextPane;
     private StyledDocument instructionsDoc;         
     private JScrollPane scrollPane;
+    private AStarConfigOptions configs;
 	public HermesUI(ArrayList<PathCell> viewCells, ArrayList<Record> locationNameInfoRecords) {
 		this.locationNameInfoRecords = locationNameInfoRecords;
-		
+		this.configs = new AStarConfigOptions();
 		this.searchEvents = new SearchReadyEventObject(); 
 		this.humanInteractive = new HumanInteractionEventObject();
 		initialize(viewCells);
@@ -622,7 +624,7 @@ public class HermesUI extends JPanel implements IHumanInteractionListener{
 			try{ 
 			instructionsDoc.insertString(instructionsDoc.getLength(), " ",turnImage);
 			instructionsDoc.insertString(instructionsDoc.getLength(), direction, keyWord);
-			instructionsDoc.insertString(instructionsDoc.getLength(), "\n      ———————————————\n",lineBreak);
+			instructionsDoc.insertString(instructionsDoc.getLength(), "\n      ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½\n",lineBreak);
 			
 			//System.out.println("tried to display instruction");
 			} 
@@ -705,7 +707,7 @@ public class HermesUI extends JPanel implements IHumanInteractionListener{
 		    	}
 		    }
 
-			searchEvents.doSearchReady(searchStartRecord, searchEndRecord);
+			searchEvents.doSearchReady(searchStartRecord, searchEndRecord, configs);
 			repaintPanel();
 		}
 		
@@ -716,7 +718,7 @@ public class HermesUI extends JPanel implements IHumanInteractionListener{
 	}
 
 	@Override
-	public void findNearestLocation(CellPoint start, String filter) {
-		humanInteractive.findNearestLocation(start, filter);
+	public void findNearestLocation(CellPoint start, String filter, AStarConfigOptions configs) {
+		humanInteractive.findNearestLocation(start, filter, configs);
 	}
 }
