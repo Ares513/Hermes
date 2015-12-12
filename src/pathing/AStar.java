@@ -253,17 +253,17 @@ public class AStar {
 		/*The expected path cost from start to finish based on the best known 
 			path so far. Starts as just the heuristic from start to finish
 		 */
-		int estTotalCost = getHeuristic(currentPoint, endPoint);//
-		//this.frontier.add(currentTile); TODO Delete this? 
+		
 		//the only thing in the frontier to start is the start node
 		this.frontier.add(startCellPoint);
+		
 		/*So long as the frontier is not empty the tile we want to explore is the tile with 
 		 * For now its BFS so we just take the first element*/
 		DebugManagement.writeNotificationToLog("Entering A* main while loop");
 		int i = 0;
 		while(!frontier.isEmpty()) {
-			i++;
-			DebugManagement.writeNotificationToLog("Explored: " + String.valueOf(i));
+//			i++;
+//			DebugManagement.writeNotificationToLog("Explored: " + String.valueOf(i));
 			frontier = sortByCost(frontier);
 			currentPoint = frontier.get(0);
 //			DebugManagement.writeNotificationToLog(currentPoint.getCellName());
@@ -293,7 +293,7 @@ public class AStar {
 			double moveMultiplier;
 			for(CellPoint neighborPoint: getNeighbors(currentPoint)){
 				cellMap.get(neighborPoint.getCellName()).putIfAbsent(neighborPoint.getPoint(), buildTileInfo(neighborPoint));
-
+				
 				neighborTile = getTileInfo(neighborPoint);
 				if(neighborTile == null){
 					DebugManagement.writeNotificationToLog("****neighborTile is null****");
@@ -304,13 +304,16 @@ public class AStar {
 				if(/*neighborPoint.isIn(explored)*/ explored.contains(neighborPoint)){
 					continue;
 				}
-//				if(neighborTile.explored){
-//					continue;
-//				}
-
+				
 				moveMultiplier = 1;
 				if((curX != (int)neighborPoint.getPoint().getX()) && (curY != neighborPoint.getPoint().getY())){ 
 					moveMultiplier = 1.41; // sqrt(2)
+				}
+				for(CellPoint each: getNeighbors(neighborPoint)){
+					if(getTileInfo(each).getTileType() != TILE_TYPE.PEDESTRIAN_WALKWAY){
+						moveMultiplier = moveMultiplier*1.5;
+						break;
+					}
 				}
 				
 				tentativeCSF = (int) (currentTile.getCostSoFar() + (moveMultiplier*neighborTile.getTraverseCost()));
