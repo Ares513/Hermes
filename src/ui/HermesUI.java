@@ -151,9 +151,7 @@ public class HermesUI extends JPanel implements IHumanInteractionListener{
 	private JTextPane instructionsTextPane;
     private StyledDocument instructionsDoc;         
     private JScrollPane scrollPane;
-<<<<<<< HEAD
     private AStarConfigOptions configs;
-=======
     private Box modeBox;
     private JCheckBox handicapedMode;
     private JCheckBox lateToClassMode;
@@ -161,7 +159,6 @@ public class HermesUI extends JPanel implements IHumanInteractionListener{
     private JLabel modeLabel;
     private Component verticalStrut;
     private Component verticalStrut_4;
->>>>>>> 735a6363c9a611c00e2d2dc1fb9a291fbc41970b
 	public HermesUI(ArrayList<PathCell> viewCells, ArrayList<Record> locationNameInfoRecords) {
 		this.locationNameInfoRecords = locationNameInfoRecords;
 		this.configs = new AStarConfigOptions();
