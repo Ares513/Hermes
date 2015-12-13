@@ -207,7 +207,7 @@ public class PrintDirections {
 					currentDistance += getDistance(currentState); 
 				}
 				else{ 
-					dList.add(newDirection(previousState, currentDistance,current.getCellPoint(), null));
+					dList.add(newDirection(previousState, currentDistance,previous.getCellPoint(), null));
 					currentDistance = 0; 
 					currentDistance = getDistance(currentState); 
 				}
@@ -216,7 +216,9 @@ public class PrintDirections {
 				currentDistance += getDistance(currentState); 
 			}
 		}
-		return dList; 
+		ArrayList<Directions> straightenedList = straighten(dList); 
+		return straightenedList; 
+		
 	}
 	
 	boolean diffMap (CellPoint current, CellPoint previous){ 
@@ -227,6 +229,54 @@ public class PrintDirections {
 			return true;
 		} 
 	}
+	
+	
+	private ArrayList<Directions> straighten(ArrayList<Directions> states){ 
+		System.out.println("straightening");
+		for(int i =0; i+2 < states.size(); i++){
+		Directions current = states.get(i);
+		String cellName = current.getCellPoint().getCellName();
+		String currentHeading = current.getHeading(); 
+			if(cellName.contains("World")){ 
+				System.out.println("in world");
+				
+				String nextHeading = states.get(i+1).getHeading(); 
+				String onDeckHeading = states.get(i+2).getHeading(); 
+				int currentDegree = toDegrees(currentHeading); 
+				int nextDegree = toDegrees(nextHeading); 
+				int onDeckDegree = toDegrees(onDeckHeading); 
+				String nextTurn = toTurns(nextDegree, currentDegree);
+				String onDeckTurn = toTurns(onDeckDegree, nextDegree); 
+				if(nextTurn.contains("slight") && onDeckTurn.contains("slight")){ 
+					System.out.println("slight turn check");
+					if(nextTurn.contains("left") && onDeckTurn.contains("right")){ 
+						states.remove(i); 
+						System.out.println("left right take out");
+					}
+					else if(nextTurn.contains("right") && onDeckTurn.contains("left")) {
+						states.remove(i+1); 
+						System.out.println("right left take out");
+					}
+				}
+			}
+			else {
+				System.out.println("supposed to do nothing" );
+			} 
+		} 
+		return states; 
+	}
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
 	
 	private String diffMapInstruction(){ 
 		return null; 
@@ -257,6 +307,7 @@ public class PrintDirections {
 		}
 		return degree; 
 	}
+	
 	
 	/*
 	 * Takes 2 different headings, determines difference in angle 

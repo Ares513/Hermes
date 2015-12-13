@@ -58,6 +58,20 @@ public class UIManagement implements IHumanInteractionListener, IMapManagementIn
 		DebugManagement.writeNotificationToLog("Path received, contents "  + directions + " total cost " + Integer.toString(cost) + " units");
 		window.drawPath(directions);
 		ArrayList<Directions> listOfDirections = printList.parseDirections(directions);
+		ArrayList<CellPoint> parsedPath = new ArrayList<CellPoint>(); 
+		for(int i = 0; i < (listOfDirections.size()-1); i++){ 
+			CellPoint temp = listOfDirections.get(i).getCellPoint(); 
+			String name = temp.getCellName(); 
+			Point tempPoint = temp.getPoint(); 
+//			System.out.print(tempPoint.getX());
+//			System.out.print(tempPoint.getY()); 
+//			
+//			System.out.print(i-listOfDirections.size());
+//			System.out.println(name);
+			parsedPath.add(listOfDirections.get(i).getCellPoint());
+			
+		}
+		//window.drawPath(parsedPath);
 		window.directionText(listOfDirections);
 	}
 
