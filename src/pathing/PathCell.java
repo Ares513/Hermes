@@ -88,6 +88,9 @@ public class PathCell{
 		this.entryPointRefs = entryPointRefs;
 		for(Point p : dataTiles.keySet()) {
 			TILE_TYPE type = dataTiles.get(p);
+			if(type == null){
+				type = TILE_TYPE.WALL;
+			}
 			tiles.put(p, TileFactory.MakeTile(type, name, p));
 			if(type.equals(TILE_TYPE.MALE_BATHROOM)){
     			ArrayList<String> bathroomNames = new ArrayList<String>();
