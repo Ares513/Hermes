@@ -448,7 +448,7 @@ public class AStar {
 			Point currentCoords = getCoords(current);
 			
 //			int delta x = endCoords.getX() - currentCoords.getY();
-			return 10*(int)Math.sqrt((Math.pow((endCoords.getX() - currentCoords.getX()), 2) + Math.pow((endCoords.getY() - currentCoords.getY()), 2)));
+			return 7*(int)Math.sqrt((Math.pow((endCoords.getX() - currentCoords.getX()), 2) + Math.pow((endCoords.getY() - currentCoords.getY()), 2)));
 		}
 
 		private Point getCoords(CellPoint aCP) {
@@ -496,8 +496,28 @@ public class AStar {
 			return output;
 		}
 		private boolean isIllegalType(TILE_TYPE tileType) {
-			// TODO Auto-generated method stub
-			return false;
+			HashSet<TILE_TYPE> illegals = new HashSet<TILE_TYPE>();
+			illegals.add(TILE_TYPE.WALL);
+			illegals.add(TILE_TYPE.IMPASSABLE);
+			illegals.add(TILE_TYPE.UNPLOWED);
+			illegals.add(TILE_TYPE.TREE);
+			illegals.add(TILE_TYPE.GRASS);
+			
+			if(this.configs.getIsLateForClass()){
+				illegals.remove(TILE_TYPE.GRASS);
+			}
+
+			if(this.configs.getIsHandicapped()){
+				illegals.add(TILE_TYPE.HORIZONTAL_LEFT_STAIRS);
+				illegals.add(TILE_TYPE.HORIZONTAL_RIGHT_STAIRS);
+				illegals.add(TILE_TYPE.VERTICAL_DOWN_STAIRS);
+				illegals.add(TILE_TYPE.VERTICAL_UP_STAIRS);
+				if(!illegals.contains(TILE_TYPE.GRASS)){
+					illegals.add(TILE_TYPE.GRASS);
+				}
+			}
+			
+			return illegals.contains(tileType);
 		}
 		
 		/*utility function to get a particular path cell from accessed cells knowing only its name*/
