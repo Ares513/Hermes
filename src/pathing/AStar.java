@@ -27,8 +27,9 @@ public class AStar {
 	HashSet<CellPoint> explored;
 	HashMap<String, Point> buildingLocations;
 	private boolean alreadyRan = false;
-
-	public AStar(ArrayList<PathCell> cells) {
+	private String overworldName;
+	
+	public AStar(ArrayList<PathCell> cells, String overworldName){
 		events = new AStarInteractionEventObject();
 		accessedCells = cells;
 		frontier = new ArrayList<CellPoint>(); 
@@ -36,9 +37,16 @@ public class AStar {
 		explored = new HashSet<CellPoint>();
 		cellMap = new HashMap<String, HashMap<Point,TileInfo>>();
 		buildingLocations = new HashMap<String, Point>(cells.size() - 1);
+		if (overworldName.length() >= 2){
+			this.overworldName = overworldName;
+		}
+		else {
+			DebugManagement.writeLineToLog(SEVERITY_LEVEL.WARNING, "Insufficiently Long overworld map name supplied to A*. A* Will ignore it and use the default name 'World' instead.");
+			this.overworldName = "World";
+		}
 		
 		for (PathCell candidate : accessedCells){
-			if (candidate.getName().equals("World")){
+			if (candidate.getName().equals(overworldName)){
 				for (EntryPointReference erf : candidate.getEntryPointReferences()){
 					buildingLocations.put(erf.getTargetCell().substring(0, 2), erf.getLoc());
 				}
@@ -88,6 +96,9 @@ public class AStar {
 				}
 			}
 		}
+	}
+	public AStar(ArrayList<PathCell> cells) {
+		this(cells, "World");
 		
 	}
 	private class TileInfo implements Comparable<TileInfo> {
@@ -320,7 +331,7 @@ public class AStar {
 				if(!neighborPoint.isIn(frontier)){
 					neighborTile.setParent(currentPoint);
 					neighborTile.updateCostSoFarDebug(tentativeCSF);
-					neighborTile.setEstimatedTotalCost(tentativeCSF+ getHeuristic(neighborPoint,endPoint));
+					neighborTile.setEstimatedTotalCost(tentativeCSF + getHeuristic(neighborPoint,endPoint));
 					cellMap.get(neighborPoint.getCellName()).put(neighborPoint.getPoint(), neighborTile);
 					if(neighborPoint == null || neighborTile == null){
 						DebugManagement.writeNotificationToLog("before adding to frontier, neighborPoint is null");
@@ -441,7 +452,7 @@ public class AStar {
 		private Point getCoords(CellPoint aCP) {
 			String buildingName = aCP.getCellName().substring(0, 2);
 			DebugManagement.writeNotificationToLog(buildingName);
-			if(buildingName.equals("Wo")){
+			if(buildingName.equals(overworldName.substring(0, 2))){
 				return aCP.getPoint();
 			}
 			return getCellCoords(buildingName);
