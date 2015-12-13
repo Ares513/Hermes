@@ -358,17 +358,14 @@ public class HermesUI extends JPanel implements IHumanInteractionListener{
 	    for (Record r:locationNameInfoRecords){
 	    	//leave out bathroom, bench and autogen records
 	    	boolean keep = true;
-	    	for(String s : r.getFields()) {
-	    		if(s.contains("AutoGen")) {
-	    			keep = false;
-	    		}
+	    	if (r.getVal().contains("AutoGen")){
+	    		keep = false;
 	    	}
 	    	if(keep && r.getCellName() != "No Cell Ref") {
 	    		modelForStart.addElement(r.getVal());
 	    	    
 	    	}
 	    }
-	    
 	    startPoint = new JComboBox<String>();
 	    startPoint.setMaximumSize(new Dimension(32767, 50));
 	    startPoint.setModel(modelForStart);
@@ -391,12 +388,10 @@ public class HermesUI extends JPanel implements IHumanInteractionListener{
 	    for (Record r:locationNameInfoRecords){
 	    	//leave out auto generated values;
 	    	boolean keep = true;
-	    	for(String s : r.getFields()) {
-	    		if(s.contains("AutoGen")) {
-	    			keep = false;
-	    		}
+	    	if (r.getVal().contains("AutoGen")){
+	    		keep = false;
 	    	}
-	    	if(keep) {
+	    	if(keep && r.getCellName() != "No Cell Ref") {
 	    		modelForDestination.addElement(r.getVal());
 	    	    
 	    	}
@@ -622,7 +617,7 @@ public class HermesUI extends JPanel implements IHumanInteractionListener{
 			try{ 
 			instructionsDoc.insertString(instructionsDoc.getLength(), " ",turnImage);
 			instructionsDoc.insertString(instructionsDoc.getLength(), direction, keyWord);
-			instructionsDoc.insertString(instructionsDoc.getLength(), "\n      ———————————————\n",lineBreak);
+			instructionsDoc.insertString(instructionsDoc.getLength(), "\n      ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½\n",lineBreak);
 			
 			//System.out.println("tried to display instruction");
 			} 
