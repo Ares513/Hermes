@@ -2,6 +2,7 @@ package events;
 import java.util.*;
 
 import core.DebugManagement;
+import pathing.AStarConfigOptions;
 import pathing.CellPoint;
 
 //TODO Comments1
@@ -23,9 +24,9 @@ public class HumanInteractionEventObject {
 		}
 	
 	}
-	public void findNearestLocation(CellPoint start, String filter) {
+	public void findNearestLocation(CellPoint start, String filter, AStarConfigOptions configs) {
 		for(IHumanInteractionListener UL : listeners){
-			UL.findNearestLocation(start, filter);
+			UL.findNearestLocation(start, filter, configs);
 		}
 	}
 }

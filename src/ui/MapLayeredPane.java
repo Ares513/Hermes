@@ -124,7 +124,7 @@ public class MapLayeredPane extends JLayeredPane {
 				);
 				//This mouse event handles point selection
 				this.addMouseListener(new MouseAdapter() {
-					
+					/*
 					@Override
 					public void mouseClicked(MouseEvent e) {
 						Point picked = mapPanel.render.pickTile(e.getX() , e.getY(), getWidth(), getHeight());
@@ -133,6 +133,7 @@ public class MapLayeredPane extends JLayeredPane {
 							processClick(picked);
 						}  
 					}
+					*/
 					@Override
 					public void mouseReleased(MouseEvent e) {
 						//do the dragging here

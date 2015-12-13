@@ -12,6 +12,7 @@ import events.IHumanInteractionListener;
 import events.IMapManagementInteractionListener;
 import events.ISearchReadyListener;
 import events.UIManagementInteractionEventObject;
+import pathing.AStarConfigOptions;
 import pathing.CellPoint;
 import pathing.LocationNameInfo;
 import pathing.PathCell;
@@ -78,25 +79,11 @@ public class UIManagement implements IHumanInteractionListener, IMapManagementIn
 	@Override
 	public void onTileClicked(CellPoint input) {
 		DebugManagement.writeNotificationToLog("Click processed at " + input.getPoint().x + " , " + input.getPoint().y);
-		if(first == null) {
-			first = input;
-		//	window.directionsTextPane.setText(""); // clears directions pane after first click. 
-			DebugManagement.writeNotificationToLog("First point processed at " + input.getPoint().x + " , " + input.getPoint().y);
-			
-		} else if(second == null) {
-			DebugManagement.writeNotificationToLog("Second point processed at " +  input.getPoint().x + " , " + input.getPoint().y);
-			second = input;
-			DebugManagement.writeNotificationToLog("Two points selected. Sending doPath to listeners.");
-			DebugManagement.writeNotificationToLog("Path points" + first + " , " + second);
-			events.doPathReady(first, second);
-			first = null;
-			second = null;
-		}
 	}
 	
 	//runs when user picks a destination point using the search feature
 	@Override
-	public void onSearchReady(Record start, Record destination){
+	public void onSearchReady(Record start, Record destination, AStarConfigOptions configs){
 		first = null;
 		second = null;
 		DebugManagement.writeNotificationToLog("Entering function onSearchReady. \nStartRecord: " + start.getVal() + "\nDestRecord: " + destination.getVal());
@@ -113,21 +100,21 @@ public class UIManagement implements IHumanInteractionListener, IMapManagementIn
 		}
 		for (PathCell pc : allCells){
 			if(destination.getFields().contains(BootstrapperConstants.MALE_BATHROOM_IDENTIFIER)) {
-				findNearestLocation(startPoint, "Male Bathroom");
+				findNearestLocation(startPoint, "Male Bathroom", configs);
 				return; //we're done.
 			}
 			DebugManagement.writeNotificationToLog(destination.getFields().toString());
 			DebugManagement.writeNotificationToLog(Boolean.toString(destination.getFields().contains(BootstrapperConstants.FEMALE_BATHROOM_IDENTIFIER)));
 			if(destination.getFields().contains(BootstrapperConstants.FEMALE_BATHROOM_IDENTIFIER)) {
-				findNearestLocation(startPoint, "Female Bathroom");
+				findNearestLocation(startPoint, "Female Bathroom", configs);
 				return; //we're done.
 			}
 			if(destination.getFields().contains(BootstrapperConstants.UNISEX_BATHROOM_IDENTIFIER)) {
-				findNearestLocation(startPoint, "Unisex Bathroom");
+				findNearestLocation(startPoint, "Unisex Bathroom", configs);
 				return; //we're done.
 			}
 			if(destination.getFields().contains(BootstrapperConstants.BENCH_IDENTIFIER)) {
-				findNearestLocation(startPoint, "Bench");
+				findNearestLocation(startPoint, "Bench", configs);
 				return; //we're done.
 			}
 			if (pc.getName().equals(destination.getCellName())){
@@ -135,7 +122,7 @@ public class UIManagement implements IHumanInteractionListener, IMapManagementIn
 				//window.getPointPane().setSecond(destPoint.getPoint());
 			}
 		}
-		events.doPathReady(startPoint, destPoint);
+		events.doPathReady(startPoint, destPoint, configs);
 		first = null;
 		second = null;
 	}
@@ -153,7 +140,7 @@ public class UIManagement implements IHumanInteractionListener, IMapManagementIn
 	}
 
 	@Override
-	public void findNearestLocation(CellPoint start, String filter) {
-		events.findNearestLocation(start, filter);
+	public void findNearestLocation(CellPoint start, String filter, AStarConfigOptions configs) {
+		events.findNearestLocation(start, filter, configs);
 	}
 }
