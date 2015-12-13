@@ -15,12 +15,12 @@ public class AStarTest {
 	@Test // should return the 1 cell.(start and end are the same)
 	public void test1() {
 		System.out.println("Test1: should return a path with 1 tile (2,2)");
-		PathCell testCell = new PathCell("a", 5, 5, 16, TILE_TYPE.WALL);
+		PathCell testCell = new PathCell("aa", 5, 5, 16, TILE_TYPE.WALL);
 		ArrayList<PathCell> testCellList = new ArrayList<PathCell>();
 		testCellList.add(testCell);
-		AStar test = new AStar(testCellList);
-		ArrayList<CellPoint> AStarOut = test.getPath(new CellPoint("a", new Point(2, 2)),
-				new CellPoint("a", new Point(2, 2)), false);
+		AStar test = new AStar(testCellList, "aa", new AStarConfigOptions());
+		ArrayList<CellPoint> AStarOut = test.getPath(new CellPoint("aa", new Point(2, 2)),
+				new CellPoint("aa", new Point(2, 2)), false);
 		if (AStarOut != null) {
 			for (CellPoint each : AStarOut) {
 				System.out.println(each.getPoint());
@@ -34,21 +34,24 @@ public class AStarTest {
 	@Test
 	public void test2() { // should return path not found, all walls
 		System.out.println("test2: should return path from (50,50) to (55,40)");
-		PathCell testCell = new PathCell("b", 100, 100, 16, TILE_TYPE.PEDESTRIAN_WALKWAY);
+		PathCell testCell = new PathCell("bb", 100, 100, 16, TILE_TYPE.PEDESTRIAN_WALKWAY);
 		ArrayList<PathCell> testCellList = new ArrayList<PathCell>();
 		testCellList.add(testCell);
-		AStar test = new AStar(testCellList);
+		AStar test = new AStar(testCellList, "bb", new AStarConfigOptions());
 		System.out.println("Path:");
-		ArrayList<CellPoint> AStarOut = test.getPath(new CellPoint("b", new Point(50, 50)),
-				new CellPoint("b", new Point(55, 40)), false);
-		if (AStarOut.isEmpty()) {
-			fail("A*.getPath() didnt return anything");
-		}
+		ArrayList<CellPoint> AStarOut = test.getPath(new CellPoint("bb", new Point(50, 50)),
+				new CellPoint("bb", new Point(55, 40)), false);
+		
 		if (AStarOut != null) {
-			System.out.println(AStarOut.size());
-			System.out.println("getPath didnt break");
-			for (CellPoint each : AStarOut) {
-				System.out.println(each.getPoint());
+			if (AStarOut.isEmpty()) {
+				fail("A*.getPath() didnt return anything");
+			}
+			else {
+				System.out.println(AStarOut.size());
+				System.out.println("getPath didnt break");
+				for (CellPoint each : AStarOut) {
+					System.out.println(each.getPoint());
+				}
 			}
 		} else {
 			fail("A* returned null when it should not have");
@@ -58,29 +61,29 @@ public class AStarTest {
 	@Test
 	public void test3() { // should return path not found, all walls
 		System.out.println("Test 3: should return no path found");
-		PathCell testCell = new PathCell("c", 5, 5, 32, TILE_TYPE.WALL);
+		PathCell testCell = new PathCell("cc", 5, 5, 32, TILE_TYPE.WALL);
 		ArrayList<PathCell> testCellList = new ArrayList<PathCell>();
 		testCellList.add(testCell);
-		AStar test = new AStar(testCellList);
-		ArrayList<CellPoint> AStarOut = test.getPath(new CellPoint("c", new Point(2, 2)),
-				new CellPoint("c", new Point(2, 3)), false);
+		AStar test = new AStar(testCellList, new AStarConfigOptions());
+		ArrayList<CellPoint> AStarOut = test.getPath(new CellPoint("cc", new Point(2, 2)),
+				new CellPoint("cc", new Point(2, 3)), false);
 		assertEquals(AStarOut, null);
 	}
 
 	@Test
 	public void test4() { // should return path not found, all walls
 		System.out.println("test4: should return path across the two maps connected at (45,45)");
-		PathCell testCell = new PathCell("a", 100, 100, 16, TILE_TYPE.PEDESTRIAN_WALKWAY);
-		PathCell testCell2 = new PathCell("b", 100, 100, 16, TILE_TYPE.PEDESTRIAN_WALKWAY);
+		PathCell testCell = new PathCell("aa", 100, 100, 16, TILE_TYPE.PEDESTRIAN_WALKWAY);
+		PathCell testCell2 = new PathCell("bb", 100, 100, 16, TILE_TYPE.PEDESTRIAN_WALKWAY);
 		testCell2.addEntryPoint(new EntryPoint("someDoor", new Point(45, 45)));
-		testCell.addEntryPointReference(new EntryPointReference("someDoor", "b", new Point(45, 45)));
+		testCell.addEntryPointReference(new EntryPointReference("someDoor", "bb", new Point(45, 45)));
 		ArrayList<PathCell> testCellList = new ArrayList<PathCell>();
 		testCellList.add(testCell);
 		testCellList.add(testCell2);
-		AStar test = new AStar(testCellList);
+		AStar test = new AStar(testCellList, "aa", new AStarConfigOptions());
 		System.out.println("Path:");
-		ArrayList<CellPoint> AStarOut = test.getPath(new CellPoint("a", new Point(50, 50)),
-				new CellPoint("b", new Point(55, 40)), false);
+		ArrayList<CellPoint> AStarOut = test.getPath(new CellPoint("aa", new Point(50, 50)),
+				new CellPoint("bb", new Point(55, 40)), false);
 		if (AStarOut.size() >= 5) {
 			System.out.println("getPath didnt break");
 			for (CellPoint each : AStarOut) {
@@ -148,7 +151,7 @@ public class AStarTest {
 		pcs.add(pc2);
 		pcs.add(pc3);
 		
-		AStar test = new AStar(pcs);
+		AStar test = new AStar(pcs, "pc2", new AStarConfigOptions());
 		ArrayList<CellPoint> AStarOut = test.getPath(new CellPoint("pc2", new Point(50, 50)),
 				new CellPoint("pc1", new Point(55, 40)), false);
 		if (AStarOut.size() >= 5) {

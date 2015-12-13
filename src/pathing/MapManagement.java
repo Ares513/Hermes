@@ -35,7 +35,7 @@ public class MapManagement implements IUIManagementInteractionListener, IAStarIn
 	}
 
 	@Override
-	public void onPathReady(CellPoint first, CellPoint second) {
+	public void onPathReady(CellPoint first, CellPoint second, AStarConfigOptions configs) {
 		if(pathfindingSystem == null) {//how does this even happen?
 			assert(false);
 		}
@@ -47,7 +47,7 @@ public class MapManagement implements IUIManagementInteractionListener, IAStarIn
 				
 		}
 		DebugManagement.writeNotificationToLog("onPathReady event called in MapManagement. Values " + first.toString() + second.toString());
-		pathfindingSystem = new AStar(cells);
+		pathfindingSystem = new AStar(cells, configs);
 		pathfindingSystem.events.registerListener(this);
 		pathfindingSystem.getPath(first, second, false);
 	}
@@ -56,7 +56,7 @@ public class MapManagement implements IUIManagementInteractionListener, IAStarIn
 	}
 
 	@Override
-	public void onFindRequestReady(CellPoint first, String filter) {
+	public void onFindRequestReady(CellPoint first, String filter, AStarConfigOptions configs) {
 		//Finds the shortest path to the nearest bathroom.
 		DebugManagement.writeNotificationToLog(filter);
 		ArrayList<CellPoint> targets = new ArrayList<CellPoint>(); //build a list of points that contain the filter.
@@ -79,7 +79,7 @@ public class MapManagement implements IUIManagementInteractionListener, IAStarIn
 		//Generate a path for each of them, storing them in the handy dandy TempPathResult.
 		
 		for(CellPoint c : targets) {
-			pathfindingSystem = new AStar(cells);
+			pathfindingSystem = new AStar(cells, configs);
 			pathfindingSystem.events.registerListener(this);
 			pathfindingSystem.getPath(first, c, true);
 		}
