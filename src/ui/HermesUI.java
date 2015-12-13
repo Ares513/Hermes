@@ -153,12 +153,12 @@ public class HermesUI extends JPanel implements IHumanInteractionListener{
     private JScrollPane scrollPane;
     private AStarConfigOptions configs;
     private Box modeBox;
-    private JCheckBox handicapedMode;
     private JCheckBox lateToClassMode;
     private JCheckBox sillyUnitsMode;
     private JLabel modeLabel;
     private Component verticalStrut;
     private Component verticalStrut_4;
+    private JCheckBox handicapedMode;
 	public HermesUI(ArrayList<PathCell> viewCells, ArrayList<Record> locationNameInfoRecords) {
 		this.locationNameInfoRecords = locationNameInfoRecords;
 		this.configs = new AStarConfigOptions();
@@ -543,6 +543,12 @@ public class HermesUI extends JPanel implements IHumanInteractionListener{
 		handicapedMode = new JCheckBox("Handicapped");
 		handicapedMode.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
+				if(configs.getIsHandicapped() == false){
+					configs.setIsHandicapped(true);
+				}
+				else{
+					configs.setIsHandicapped(false);
+				}
 			}
 		});
 		modeBox.add(handicapedMode);
@@ -550,6 +556,12 @@ public class HermesUI extends JPanel implements IHumanInteractionListener{
 		lateToClassMode = new JCheckBox("Late to Class");
 		lateToClassMode.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
+				if(configs.getIsLateForClass() == false){
+					configs.setIsLateForClass(true);
+				}
+				else{
+					configs.setIsLateForClass(false);
+				}
 			}
 		});
 		modeBox.add(lateToClassMode);
@@ -557,6 +569,12 @@ public class HermesUI extends JPanel implements IHumanInteractionListener{
 		sillyUnitsMode = new JCheckBox("Silly Units");
 		sillyUnitsMode.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
+				if(configs.getIsStupidUnits() == false){
+					configs.setIsStupidUnits(true);
+				}
+				else{
+					configs.setIsStupidUnits(false);
+				}	
 			}
 		});
 		modeBox.add(sillyUnitsMode);
