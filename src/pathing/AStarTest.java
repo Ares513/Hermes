@@ -18,9 +18,9 @@ public class AStarTest {
 		PathCell testCell = new PathCell("aa", 5, 5, 16, TILE_TYPE.WALL);
 		ArrayList<PathCell> testCellList = new ArrayList<PathCell>();
 		testCellList.add(testCell);
-		AStar test = new AStar(testCellList, "aa");
+		AStar test = new AStar(testCellList, "aa", new AStarConfigOptions());
 		ArrayList<CellPoint> AStarOut = test.getPath(new CellPoint("aa", new Point(2, 2)),
-				new CellPoint("aa", new Point(2, 2)), false, new AStarConfigOptions());
+				new CellPoint("aa", new Point(2, 2)), false);
 		if (AStarOut != null) {
 			for (CellPoint each : AStarOut) {
 				System.out.println(each.getPoint());
@@ -37,10 +37,10 @@ public class AStarTest {
 		PathCell testCell = new PathCell("bb", 100, 100, 16, TILE_TYPE.PEDESTRIAN_WALKWAY);
 		ArrayList<PathCell> testCellList = new ArrayList<PathCell>();
 		testCellList.add(testCell);
-		AStar test = new AStar(testCellList, "bb");
+		AStar test = new AStar(testCellList, "bb", new AStarConfigOptions());
 		System.out.println("Path:");
 		ArrayList<CellPoint> AStarOut = test.getPath(new CellPoint("bb", new Point(50, 50)),
-				new CellPoint("bb", new Point(55, 40)), false, new AStarConfigOptions());
+				new CellPoint("bb", new Point(55, 40)), false);
 		
 		if (AStarOut != null) {
 			if (AStarOut.isEmpty()) {
@@ -64,9 +64,9 @@ public class AStarTest {
 		PathCell testCell = new PathCell("cc", 5, 5, 32, TILE_TYPE.WALL);
 		ArrayList<PathCell> testCellList = new ArrayList<PathCell>();
 		testCellList.add(testCell);
-		AStar test = new AStar(testCellList);
+		AStar test = new AStar(testCellList, new AStarConfigOptions());
 		ArrayList<CellPoint> AStarOut = test.getPath(new CellPoint("cc", new Point(2, 2)),
-				new CellPoint("cc", new Point(2, 3)), false, new AStarConfigOptions());
+				new CellPoint("cc", new Point(2, 3)), false);
 		assertEquals(AStarOut, null);
 	}
 
@@ -80,10 +80,10 @@ public class AStarTest {
 		ArrayList<PathCell> testCellList = new ArrayList<PathCell>();
 		testCellList.add(testCell);
 		testCellList.add(testCell2);
-		AStar test = new AStar(testCellList, "aa");
+		AStar test = new AStar(testCellList, "aa", new AStarConfigOptions());
 		System.out.println("Path:");
 		ArrayList<CellPoint> AStarOut = test.getPath(new CellPoint("aa", new Point(50, 50)),
-				new CellPoint("bb", new Point(55, 40)), false, new AStarConfigOptions());
+				new CellPoint("bb", new Point(55, 40)), false);
 		if (AStarOut.size() >= 5) {
 			System.out.println("getPath didnt break");
 			for (CellPoint each : AStarOut) {
@@ -151,9 +151,9 @@ public class AStarTest {
 		pcs.add(pc2);
 		pcs.add(pc3);
 		
-		AStar test = new AStar(pcs, "pc2");
+		AStar test = new AStar(pcs, "pc2", new AStarConfigOptions());
 		ArrayList<CellPoint> AStarOut = test.getPath(new CellPoint("pc2", new Point(50, 50)),
-				new CellPoint("pc1", new Point(55, 40)), false, new AStarConfigOptions());
+				new CellPoint("pc1", new Point(55, 40)), false);
 		if (AStarOut.size() >= 5) {
 			System.out.println("getPath didnt break");
 			for (CellPoint each : AStarOut) {

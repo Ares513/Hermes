@@ -28,8 +28,10 @@ public class AStar {
 	HashMap<String, Point> buildingLocations;
 	private boolean alreadyRan = false;
 	private String overworldName;
+	private AStarConfigOptions configs;
 	
-	public AStar(ArrayList<PathCell> cells, String overworldName){
+	public AStar(ArrayList<PathCell> cells, String overworldName, AStarConfigOptions configs){
+		this.configs = configs;
 		events = new AStarInteractionEventObject();
 		accessedCells = cells;
 		frontier = new ArrayList<CellPoint>(); 
@@ -97,8 +99,8 @@ public class AStar {
 			}
 		}
 	}
-	public AStar(ArrayList<PathCell> cells) {
-		this(cells, "World");
+	public AStar(ArrayList<PathCell> cells, AStarConfigOptions configs) {
+		this(cells, "World", configs);
 		
 	}
 	private class TileInfo implements Comparable<TileInfo> {
@@ -241,7 +243,7 @@ public class AStar {
 	 * end Cell and point.
 	 * Returns the fastest path between two points as an ordered list of Tiles
 	 */
-	public ArrayList<CellPoint> getPath(CellPoint startCellPoint, CellPoint endCellPoint, boolean isFiltering, AStarConfigOptions configOptions){
+	public ArrayList<CellPoint> getPath(CellPoint startCellPoint, CellPoint endCellPoint, boolean isFiltering){
 		if(alreadyRan == true){ // A* needs to be reinitialized each time it runs. this checks that
 			DebugManagement.writeLineToLog(SEVERITY_LEVEL.FATAL, "you done broke shit, A* already ran."
 					+ "\n A* will try to continue but it wont do anything");
@@ -478,9 +480,7 @@ public class AStar {
 					// This prevents impassables or trees from being pathed through.
 					TileInfo neighborTile = getTileInfo(neighbor);
 					
-					if((neighborTile == null) ||
-							(getTileInfo(neighbor).getTileType() == TILE_TYPE.IMPASSABLE) ||
-							(getTileInfo(neighbor).getTileType() == TILE_TYPE.TREE)){
+					if((neighborTile == null) || isIllegalType(neighborTile.getTileType())){
 						continue;
 					}
 					output.add(new CellPoint(currentPoint.getCellName(), new Point(neiX, neiY)));
@@ -494,6 +494,10 @@ public class AStar {
 			}
 			
 			return output;
+		}
+		private boolean isIllegalType(TILE_TYPE tileType) {
+			// TODO Auto-generated method stub
+			return false;
 		}
 		
 		/*utility function to get a particular path cell from accessed cells knowing only its name*/

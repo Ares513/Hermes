@@ -47,9 +47,9 @@ public class MapManagement implements IUIManagementInteractionListener, IAStarIn
 				
 		}
 		DebugManagement.writeNotificationToLog("onPathReady event called in MapManagement. Values " + first.toString() + second.toString());
-		pathfindingSystem = new AStar(cells);
+		pathfindingSystem = new AStar(cells, configs);
 		pathfindingSystem.events.registerListener(this);
-		pathfindingSystem.getPath(first, second, false, configs);
+		pathfindingSystem.getPath(first, second, false);
 	}
 	public void onWindowReady(ArrayList<PathCell> loaded) {
 		//dummy event, protecting future
@@ -79,9 +79,9 @@ public class MapManagement implements IUIManagementInteractionListener, IAStarIn
 		//Generate a path for each of them, storing them in the handy dandy TempPathResult.
 		
 		for(CellPoint c : targets) {
-			pathfindingSystem = new AStar(cells);
+			pathfindingSystem = new AStar(cells, configs);
 			pathfindingSystem.events.registerListener(this);
-			pathfindingSystem.getPath(first, c, true, configs);
+			pathfindingSystem.getPath(first, c, true);
 		}
 		Collections.sort(filterResults);
 		if(filterResults.size() > 0) {
