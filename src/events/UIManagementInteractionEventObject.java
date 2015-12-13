@@ -1,10 +1,10 @@
 package events;
 
-import java.awt.Point;
 import java.util.ArrayList;
 import java.util.List;
 
 import core.DebugManagement;
+import pathing.AStarConfigOptions;
 import pathing.CellPoint;
 import pathing.PathCell;
 
@@ -19,10 +19,10 @@ public void addManagementListener(IUIManagementInteractionListener toAdd) {
 
 	managementListeners.add(toAdd);
 	}
-public void doPathReady(CellPoint first, CellPoint second){
+public void doPathReady(CellPoint first, CellPoint second, AStarConfigOptions configs){
 	
 	for(IUIManagementInteractionListener UL : managementListeners){
-		UL.onPathReady(first, second);
+		UL.onPathReady(first, second, configs);
 		DebugManagement.writeNotificationToLog("both_Have_Been_Clicked");
 		}	
 
@@ -34,9 +34,9 @@ public void doWindowReady(ArrayList<PathCell> allCells){
 	}	
 
 }
-public void findNearestLocation(CellPoint start, String filter) {
+public void findNearestLocation(CellPoint start, String filter, AStarConfigOptions configs) {
 	for(IUIManagementInteractionListener UL : managementListeners){
-		 UL.onFindRequestReady(start, filter);
+		 UL.onFindRequestReady(start, filter, configs);
 	}	
 }
 }
