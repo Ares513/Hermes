@@ -304,6 +304,8 @@ public class HermesUI extends JPanel implements IHumanInteractionListener{
 			buildingNames.put(abbreviation, displayName.substring(0, displayName.length() - 2));
 		else if(abbreviation.equals("Wo"))
 			buildingNames.put(abbreviation, "Campus Map");
+		else
+			buildingNames.put(abbreviation, displayName);
 	}
 
 	//Allows us to paint the image within the JLabel	
@@ -708,17 +710,19 @@ public class HermesUI extends JPanel implements IHumanInteractionListener{
 			JLabel label = new JLabel(icon); 
 			
 			StyleConstants.setComponent(turnImage, label);
-			try{ 
-			instructionsDoc.insertString(instructionsDoc.getLength(), " ",turnImage);
-			instructionsDoc.insertString(instructionsDoc.getLength(), direction, keyWord);
-			instructionsDoc.insertString(instructionsDoc.getLength(), "\n      ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½\n",lineBreak);
+			if(direction != null){ 
 			
-			//System.out.println("tried to display instruction");
-			} 
-			catch(Exception e){ 
-				//System.out.println(e);
+				try{ 
+					instructionsDoc.insertString(instructionsDoc.getLength(), " ",turnImage);
+					instructionsDoc.insertString(instructionsDoc.getLength(), direction, keyWord);
+					instructionsDoc.insertString(instructionsDoc.getLength(), "\n     ———————————————\n",lineBreak);
+			
+				//System.out.println("tried to display instruction");
+				} 
+				catch(Exception e){ 
+					//System.out.println(e);
+				}
 			}
-			
 			printer.printInstructions.add(direction);
 			
 		} 

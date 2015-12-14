@@ -7,5 +7,6 @@
 	<classpathentry kind="lib" path="lib/completely-core-0.3.1.jar"/>
 	<classpathentry kind="lib" path="lib/swingx-core-1.6.2.jar"/>
 	<classpathentry kind="lib" path="lib/weblaf-complete-1.29.jar"/>
+	<classpathentry kind="lib" path="lib/svgSalamander.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
