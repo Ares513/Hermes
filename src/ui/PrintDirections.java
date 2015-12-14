@@ -20,7 +20,12 @@ public class PrintDirections {
 	public ArrayList<Directions> parseDirections(ArrayList<CellPoint> AStarDirections){
 		ArrayList<Directions> statesList = stateList(AStarDirections); 
 		ArrayList<Directions> directionsList = route(statesList);
-		ArrayList<Directions> finalList = routePrintOut(directionsList); 
+		return directionsList; 
+	}
+	
+	public ArrayList<Directions> printableList(ArrayList<Directions> directionsList){ 
+		ArrayList<Directions> printList = removeFalseTurns(directionsList);
+		ArrayList<Directions> finalList = routePrintOut(printList);
 		return finalList; 
 	}
 	
@@ -79,12 +84,25 @@ public class PrintDirections {
 				//dList.set(i, currentInstruction); 
 			}
 			/*  Format for all instructions that are not the first /special instruction. */
-			
+			else if(i == (dListSize-1)){ 
+				currentInstruction.setTurnInstructions(null);
+			}
+			else if(currentInstruction.getDistance() == 0){ 
+				currentInstruction.setTurnInstructions(null);
+			}
 			else if (currentInstruction.getTurnInstruction() == null){
+				
 				String newInstruction = "Take a ";  
 				String turnInstruction = toTurns(toDegrees(currentState),prevDegree); 
-				newInstruction += turnInstruction; 
-				newInstruction += " to head "; 
+				
+				if(turnInstruction != null){ 
+					newInstruction += turnInstruction; 
+					newInstruction += " to head ";
+				} 
+				else{ 
+					newInstruction = "Head "; 
+					currentInstruction.setTurnIcon("Forward");
+				}
 				newInstruction += toFullWord(currentState);;
 				newInstruction += " "; 
 				newInstruction += "\n       Walk "; 
@@ -92,7 +110,9 @@ public class PrintDirections {
 				newInstruction += " feet";
 				//newInstruction += "\n-------------";
 				currentInstruction.setTurnInstructions(newInstruction);
-				currentInstruction.setTurnIcon(turnInstruction);
+				if(currentInstruction.getIcon() == null) { 
+					currentInstruction.setTurnIcon(turnInstruction);
+				}
 				prevDegree = toDegrees(currentState); 
 			}
 			//humanReadableDirections.add(currentInstruction.getTurnInstruction()); 
@@ -106,6 +126,25 @@ public class PrintDirections {
 		return dList; 
 	}	
 	
+	private ArrayList<Directions> removeFalseTurns(ArrayList<Directions> directionsList){ 
+		int size = directionsList.size();
+		ArrayList<Directions> newList = new ArrayList<Directions>(); 
+		newList.add(directionsList.get(0));
+		int j =0; 
+		for(int i =1; i < size; i++ ){ 
+			Directions currentDirection = newList.get(j);
+			String heading = currentDirection.getHeading(); 
+			Directions nextDirection = directionsList.get(i);
+			String nextHeading = nextDirection.getHeading();
+			if(!heading.equals(nextHeading)){ 
+				newList.add(nextDirection);
+				j++;
+			}
+		}
+		newList.add(directionsList.get(size-1));
+		ArrayList<Directions> withDistances  =findDistances(newList);
+		return withDistances; 
+	}
 	
 	/* 
 	 * Finds the change in X between two coordinates 
@@ -156,18 +195,13 @@ public class PrintDirections {
 		return direction; 
 	}
 	
-	/* 
-	 * Given the "state" (direction) of a step, outputs the distance traveled.
-	 * Each tile is a 3x3 box, steps N,S,E,W all travel 3 feet 
-	 * Steps NE,NW,SE,SW travel 4.34 feet
-	 */
-	private double getDistance(String state){ 
-		if(state.length() == 1){ 
-		return 3; //1 tile = 3 feet
-		} 
-		else { 
-			return 4.24; //sqrt(3^2 + 3^2). distance of diagonal. 
-		}
+
+	private double getDistance(double xChange, double yChange){ 
+		double xSqr = xChange * xChange; // ^ is a bitwise operator maybe? figured I wouldnt take any chances... 
+		double ySqr = yChange * yChange; 
+		double sqrt = 3* Math.sqrt(xSqr + ySqr); //(multiply by 3 cause 1 tile = 3 feet. 
+		
+		return sqrt;
 	}
 	
 	/*
@@ -198,39 +232,94 @@ public class PrintDirections {
 			if(i > 0){ 
 				Directions previous = states.get(i-1);
 				String previousState = previous.getHeading();  
-				if(diffMap(current.getCellPoint(), previous.getCellPoint())){ 
-					
-					current.setTurnInstructions("New Map, Entering:");
+				if(diffMap(current.getCellPoint(), previous.getCellPoint())){  //when entering AK for the side entrance near 108 this statement does not recognize that it is entering a new cell.... wtf
+					String newMap = "New Map, Entering: ";
+					String name = current.getCellPoint().getCellName(); 
+					current.setTurnInstructions(newMap + name);
+					dList.add(previous);
 					dList.add(current); 
 				}
-				if(currentState.equals(previousState) && i!= (size-1)){ 
-					currentDistance += getDistance(currentState); 
+				else if (!currentState.equals(previousState)){ 
+					dList.add(newDirection(previousState, currentDistance,previous.getCellPoint(), null));
 				}
-				else{ 
-					dList.add(newDirection(previousState, currentDistance,current.getCellPoint(), null));
-					currentDistance = 0; 
-					currentDistance = getDistance(currentState); 
-				}
-			}
-			else{ 
-				currentDistance += getDistance(currentState); 
+				
 			}
 		}
-		return dList; 
+		ArrayList<Directions> straightenedList = straighten(dList); 
+		return straightenedList; 
 	}
 	
 	boolean diffMap (CellPoint current, CellPoint previous){ 
-		if(current.getCellName().equals(previous.getCellName())){ 
-			return false;
-		}
-		else{ 
-			return true;
-		} 
+		return!(current.getCellName().equals(previous.getCellName())); 	
 	}
 	
-	private String diffMapInstruction(){ 
-		return null; 
+	// takes out zigzag from a* in world map 
+	// looks for slight left and right turns that undo each other
+	private ArrayList<Directions> straighten(ArrayList<Directions> states){ 
+		for(int i =0; i+2 < states.size(); i++){
+		Directions current = states.get(i);
+		String cellName = current.getCellPoint().getCellName();
+		String currentHeading = current.getHeading(); 
+		String futureCellName = states.get(i+2).getCellPoint().getCellName();
+			if(cellName.contains("World") && futureCellName.contains("World")){ 
+				
+				
+				String nextHeading = states.get(i+1).getHeading(); 
+				String onDeckHeading = states.get(i+2).getHeading(); 
+				int currentDegree = toDegrees(currentHeading); 
+				int nextDegree = toDegrees(nextHeading); 
+				int onDeckDegree = toDegrees(onDeckHeading); 
+				String nextTurn = toTurns(nextDegree, currentDegree);
+				String onDeckTurn = toTurns(onDeckDegree, nextDegree); 
+
+					try{ 
+						if(nextTurn.contains("slight") && onDeckTurn.contains("slight")){ 
+							if(nextTurn.contains("left") && onDeckTurn.contains("right")){ 
+								states.remove(i); 
+							}
+							else if(nextTurn.contains("right") && onDeckTurn.contains("left")) {
+								states.remove(i+1); 
+							}
+						}
+					}catch(Exception e){ 
+						/*
+						System.out.println(e);
+						System.out.println(nextHeading);
+						System.out.println(onDeckHeading); 
+						System.out.println(current.getCellPoint().getCellName());
+						System.out.println(states.get(i+1).getCellPoint().getCellName());
+						System.out.println(states.get(i+2).getCellPoint().getCellName());
+						System.out.println(nextDegree);
+						System.out.println(onDeckDegree);
+						System.out.println(nextTurn);
+						*/
+					}
+				} 
+			} 
+		return states; 
 	}
+	
+	//Find the distances between all points. 
+	private ArrayList<Directions> findDistances(ArrayList<Directions> states){ 
+		int size = states.size();
+		for(int i = 0; i+1 < size; i++){ 
+			CellPoint currentLocation = states.get(i).getCellPoint();
+			CellPoint nextLocation = states.get(i+1).getCellPoint();
+			 double xDiff = getXDifference(nextLocation, currentLocation);
+			 double yDiff = getYDifference(nextLocation, currentLocation); 
+			 double distance = getDistance(xDiff, yDiff);
+			if(currentLocation.getCellName().equals(nextLocation.getCellName())){ 
+				 states.get(i).setDistance(distance);	 
+			 }
+			 
+			 currentLocation = nextLocation;
+		}
+		return states; 
+	}
+	
+	
+	
+	
 	/*
 	 * Takes Cardinal direction and converts to degrees. 
 	 * Degrees with respect to +Y Axis This way North is 0... 
@@ -258,6 +347,7 @@ public class PrintDirections {
 		return degree; 
 	}
 	
+	
 	/*
 	 * Takes 2 different headings, determines difference in angle 
 	 * Returns a colloquial term for what type of turn to make. 
@@ -282,6 +372,9 @@ public class PrintDirections {
 		}
 		else if(diff == -135 || diff == 225){ 
 			turn = "sharp left"; 
+		}
+		else {
+			return null;
 		}
 		return turn; 
 	}
