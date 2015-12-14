@@ -282,6 +282,7 @@ public class AStar {
 //			DebugManagement.writeNotificationToLog(currentPoint.getCellName());
 			if(currentPoint.equals(endPoint)){ //if we are at the end: 
 				ArrayList<CellPoint> FinalPath = buildPath(endPoint); 
+//				ArrayList<CellPoint> FinalPath = cleanPath(roughPath);
 				if(isFiltering) {
 					events.FilterStepComplete(FinalPath, getTileInfo(currentPoint).getCostSoFar());
 				} else {
@@ -357,6 +358,34 @@ public class AStar {
 		DebugManagement.writeLineToLog(SEVERITY_LEVEL.SEVERE, "No path found!");
 		return null;
 	}
+	
+	private ArrayList<CellPoint> cleanPath(ArrayList<CellPoint> roughPath) {
+		ArrayList<CellPoint> cleanPath = roughPath;
+		ArrayList<CellPoint> badTiles = new ArrayList<CellPoint>();
+		String currentCellName = roughPath.get(0).getCellName();
+		String aCellName = null;
+		ArrayList<CellPoint> tilesInCurCell = new ArrayList<CellPoint>();
+		for(CellPoint each: cleanPath){
+			aCellName = each.getCellName();
+			if(aCellName.equals(currentCellName)){
+				tilesInCurCell.add(each);
+			}
+			else{
+				currentCellName = aCellName;
+				if(tilesInCurCell.size() <= 2){
+//					cleanPath.removeAll(tilesInCurCell);
+					badTiles.addAll(tilesInCurCell);
+					}
+				tilesInCurCell = new ArrayList<CellPoint>();
+			}
+		}
+		DebugManagement.writeNotificationToLog(String.valueOf(cleanPath.size()));
+		DebugManagement.writeNotificationToLog(String.valueOf(badTiles.size()));
+		cleanPath.removeAll(badTiles);
+		DebugManagement.writeNotificationToLog(String.valueOf(cleanPath.size()));
+		return cleanPath;
+	}
+	
 	private TileInfo buildTileInfo(CellPoint currentPoint) {
 		PathCell currentCell = null;
 		Tile currentTile = null;
