@@ -60,10 +60,11 @@ public class UIManagement implements IHumanInteractionListener, IMapManagementIn
 			
 		ArrayList<Directions> listOfDirections = printList.parseDirections(directions);
 		ArrayList<CellPoint> parsedPath = new ArrayList<CellPoint>(); 
-		for(int i = 0; i < (listOfDirections.size()-1); i++){ 
+		for(int i = 0; i < (listOfDirections.size()); i++){ 
 			parsedPath.add(listOfDirections.get(i).getCellPoint());
 		}
 		
+		window.drawPath(directions);
 		window.drawPath(parsedPath);
 		window.directionText(printList.printableList(listOfDirections));
 	

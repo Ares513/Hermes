@@ -124,16 +124,9 @@ public class PrintDirections {
 			String heading = currentDirection.getHeading(); 
 			Directions nextDirection = directionsList.get(i);
 			String nextHeading = nextDirection.getHeading();
-			if(heading.equals(nextHeading) && nextDirection.getCellPoint().getCellName().equals("World")){ 
-//				double distance =  nextDirection.getDistance(); 
-//				double oldDistance = newList.get(j).getDistance(); 
-//				currentDirection.setDistance(distance + oldDistance);
-//				newList.set(j, currentDirection); 
-//				System.out.println("distance added");
-			}
-			else{ 
+			if(!heading.equals(nextHeading)){ 
 				newList.add(nextDirection);
-				j++; 
+				j++;
 			}
 		}
 		newList.add(directionsList.get(size-1));
@@ -262,7 +255,7 @@ public class PrintDirections {
 		}
 		ArrayList<Directions> straightenedList = straighten(dList); 
 		
-		return straighten(straightenedList); 
+		return straightenedList; 
 		
 	}
 	
@@ -319,7 +312,10 @@ public class PrintDirections {
 			 double xDiff = getXDifference(nextLocation, currentLocation);
 			 double yDiff = getYDifference(nextLocation, currentLocation); 
 			 double distance = getDistance(xDiff, yDiff);
-			 states.get(i).setDistance(distance);
+			 if(currentLocation.getCellName().equals(nextLocation.getCellName())){ 
+				 states.get(i).setDistance(distance);	 
+			 }
+			 
 			 currentLocation = nextLocation;
 		}
 		return states; 
