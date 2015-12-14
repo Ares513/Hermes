@@ -449,7 +449,14 @@ public class AStar {
 			DebugManagement.writeNotificationToLog(String.valueOf(getCoords(end)==null));
 			Point currentCoords = getCoords(current);
 			
-//			int delta x = endCoords.getX() - currentCoords.getY();
+			if((endCoords == null) || (currentCoords == null)){
+				
+				DebugManagement.writeNotificationToLog("A map is not connected to world. Its either:");
+				DebugManagement.writeNotificationToLog(current.getCellName());
+				DebugManagement.writeNotificationToLog(end.getCellName());
+				return 0;
+			}
+			
 			return 8*(int)Math.sqrt((Math.pow((endCoords.getX() - currentCoords.getX()), 2) + Math.pow((endCoords.getY() - currentCoords.getY()), 2)));
 		}
 

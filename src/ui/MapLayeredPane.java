@@ -79,6 +79,12 @@ public class MapLayeredPane extends JLayeredPane {
 		setComponentZOrder(pathPanel, 0);
 		setComponentZOrder(textPanel, 0);
 		setComponentZOrder(pointPanel, 0);
+		if(mapPanel.render.drawnCell.getName().contains("World")) {
+			setOffset(new Point(-21000, -12500));
+			doZoom(-(1 - 0.3125));
+		} else {
+			doZoom(-0.5);
+		}
 	}
 	
 	private void buildControl() {
