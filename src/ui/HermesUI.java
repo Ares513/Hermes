@@ -304,6 +304,8 @@ public class HermesUI extends JPanel implements IHumanInteractionListener{
 			buildingNames.put(abbreviation, displayName.substring(0, displayName.length() - 2));
 		else if(abbreviation.equals("Wo"))
 			buildingNames.put(abbreviation, "Campus Map");
+		else
+			buildingNames.put(abbreviation, displayName);
 	}
 
 	//Allows us to paint the image within the JLabel	
