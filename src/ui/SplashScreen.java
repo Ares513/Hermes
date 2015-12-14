@@ -10,13 +10,20 @@ import javax.swing.BorderFactory;
 import javax.swing.ImageIcon;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
+import javax.swing.JProgressBar;
 import javax.swing.JWindow;
 
 //This class creates splash screen that will be shown on application launch
 public class SplashScreen extends JWindow {
 	  private int duration;
+	  public JProgressBar progressBar;
 	  public SplashScreen(int d) {
-	    duration = d;
+	  	
+		  	progressBar = new JProgressBar(0, 100);
+		  	progressBar.setValue(0);
+		  	progressBar.setStringPainted(true);
+		  	getContentPane().add(progressBar, BorderLayout.SOUTH);
+		  	duration = d;
 	  }
 
 	  // A simple little method to show a title screen in the center
@@ -41,19 +48,20 @@ public class SplashScreen extends JWindow {
 	    content.add(label, BorderLayout.CENTER);
 	    content.add(copyrt, BorderLayout.SOUTH);
 	    Color oraRed = new Color(156, 20, 20,  255);
-	    //content.setBorder(BorderFactory.createLineBorder(oraRed, 10));
 
+	  	
+	    revalidate();
+	    repaint();
 	    // Display it
 	    setVisible(true);
-
 	    // Wait a little while, maybe while loading resources
-	    try { Thread.sleep(duration); } catch (Exception e) {}
-
-	    setVisible(false);
 	  }
-
-	  public void showSplashAndExit() {
-	    showSplash();
+	  public void setProgress(int min, int value, int max) {
+		  progressBar.setMinimum(min);
+		  progressBar.setValue(value);
+		  progressBar.setMaximum(max);
 	  }
-
+	  public void hideSplash() {
+		  setVisible(false);
+	  }
 	}
