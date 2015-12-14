@@ -704,7 +704,6 @@ public class HermesUI extends JPanel implements IHumanInteractionListener{
 			}
 			else { 
 				icon = new ImageIcon (iconName);
-				System.out.println(iconName);
 			}
 			JLabel label = new JLabel(icon); 
 			

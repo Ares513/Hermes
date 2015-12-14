@@ -94,7 +94,7 @@ public class PrintDirections {
 				
 				String newInstruction = "Take a ";  
 				String turnInstruction = toTurns(toDegrees(currentState),prevDegree); 
-				System.out.println(turnInstruction);
+				
 				if(turnInstruction != null){ 
 					newInstruction += turnInstruction; 
 					newInstruction += " to head ";
@@ -110,11 +110,9 @@ public class PrintDirections {
 				newInstruction += " feet";
 				//newInstruction += "\n-------------";
 				currentInstruction.setTurnInstructions(newInstruction);
-				System.out.println(currentInstruction.getIcon());
 				if(currentInstruction.getIcon() == null) { 
 					currentInstruction.setTurnIcon(turnInstruction);
 				}
-				System.out.println(currentInstruction.getIcon());
 				prevDegree = toDegrees(currentState); 
 			}
 			//humanReadableDirections.add(currentInstruction.getTurnInstruction()); 
@@ -129,7 +127,6 @@ public class PrintDirections {
 	}	
 	
 	private ArrayList<Directions> removeFalseTurns(ArrayList<Directions> directionsList){ 
-		System.out.println("fixing the list");
 		int size = directionsList.size();
 		ArrayList<Directions> newList = new ArrayList<Directions>(); 
 		newList.add(directionsList.get(0));
@@ -278,7 +275,6 @@ public class PrintDirections {
 	// takes out zigzag from a* in world map 
 	// looks for slight left and right turns that undo each other
 	private ArrayList<Directions> straighten(ArrayList<Directions> states){ 
-		System.out.println("straightening");
 		for(int i =0; i+2 < states.size(); i++){
 		Directions current = states.get(i);
 		String cellName = current.getCellPoint().getCellName();
@@ -293,8 +289,8 @@ public class PrintDirections {
 				int onDeckDegree = toDegrees(onDeckHeading); 
 				String nextTurn = toTurns(nextDegree, currentDegree);
 				String onDeckTurn = toTurns(onDeckDegree, nextDegree); 
+				try{ 
 				if(nextTurn.contains("slight") && onDeckTurn.contains("slight")){ 
-					System.out.println("slight turn check");
 					if(nextTurn.contains("left") && onDeckTurn.contains("right")){ 
 						states.remove(i); 
 					}
@@ -302,7 +298,11 @@ public class PrintDirections {
 						states.remove(i+1); 
 					}
 				}
+			}catch(Exception e){ 
+				System.out.println(e);
 			}
+			} 
+			
 			else {
 			} 
 		} 
