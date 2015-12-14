@@ -195,20 +195,7 @@ public class PrintDirections {
 		return direction; 
 	}
 	
-	/* 
-	 * Given the "state" (direction) of a step, outputs the distance traveled.
-	 * Each tile is a 3x3 box, steps N,S,E,W all travel 3 feet 
-	 * Steps NE,NW,SE,SW travel 4.34 feet
-	 */
-//	private double getDistance(String state){ 
-//		if(state.length() == 1){ 
-//		return 3; //1 tile = 3 feet
-//		} 
-//		else { 
-//			return 4.24; //sqrt(3^2 + 3^2). distance of diagonal. 
-//		}
-//	}
-//	
+
 	private double getDistance(double xChange, double yChange){ 
 		double xSqr = xChange * xChange; // ^ is a bitwise operator maybe? figured I wouldnt take any chances... 
 		double ySqr = yChange * yChange; 
@@ -245,8 +232,7 @@ public class PrintDirections {
 			if(i > 0){ 
 				Directions previous = states.get(i-1);
 				String previousState = previous.getHeading();  
-				if(diffMap(current.getCellPoint(), previous.getCellPoint())){ 
-					
+				if(diffMap(current.getCellPoint(), previous.getCellPoint())){  //when entering AK for the side entrance near 108 this statement does not recognize that it is entering a new cell.... wtf
 					String newMap = "New Map, Entering: ";
 					String name = current.getCellPoint().getCellName(); 
 					current.setTurnInstructions(newMap + name);
@@ -264,12 +250,7 @@ public class PrintDirections {
 	}
 	
 	boolean diffMap (CellPoint current, CellPoint previous){ 
-		if(current.getCellName().equals(previous.getCellName())){ 
-			return false;
-		}
-		else{ 
-			return true;
-		} 
+		return!(current.getCellName().equals(previous.getCellName())); 	
 	}
 	
 	// takes out zigzag from a* in world map 
@@ -279,8 +260,9 @@ public class PrintDirections {
 		Directions current = states.get(i);
 		String cellName = current.getCellPoint().getCellName();
 		String currentHeading = current.getHeading(); 
-			if(cellName.contains("World")){ 
-				System.out.println("in world");
+		String futureCellName = states.get(i+2).getCellPoint().getCellName();
+			if(cellName.contains("World") && futureCellName.contains("World")){ 
+				
 				
 				String nextHeading = states.get(i+1).getHeading(); 
 				String onDeckHeading = states.get(i+2).getHeading(); 
@@ -289,23 +271,31 @@ public class PrintDirections {
 				int onDeckDegree = toDegrees(onDeckHeading); 
 				String nextTurn = toTurns(nextDegree, currentDegree);
 				String onDeckTurn = toTurns(onDeckDegree, nextDegree); 
-				try{ 
-				if(nextTurn.contains("slight") && onDeckTurn.contains("slight")){ 
-					if(nextTurn.contains("left") && onDeckTurn.contains("right")){ 
-						states.remove(i); 
+
+					try{ 
+						if(nextTurn.contains("slight") && onDeckTurn.contains("slight")){ 
+							if(nextTurn.contains("left") && onDeckTurn.contains("right")){ 
+								states.remove(i); 
+							}
+							else if(nextTurn.contains("right") && onDeckTurn.contains("left")) {
+								states.remove(i+1); 
+							}
+						}
+					}catch(Exception e){ 
+						/*
+						System.out.println(e);
+						System.out.println(nextHeading);
+						System.out.println(onDeckHeading); 
+						System.out.println(current.getCellPoint().getCellName());
+						System.out.println(states.get(i+1).getCellPoint().getCellName());
+						System.out.println(states.get(i+2).getCellPoint().getCellName());
+						System.out.println(nextDegree);
+						System.out.println(onDeckDegree);
+						System.out.println(nextTurn);
+						*/
 					}
-					else if(nextTurn.contains("right") && onDeckTurn.contains("left")) {
-						states.remove(i+1); 
-					}
-				}
-			}catch(Exception e){ 
-				System.out.println(e);
-			}
+				} 
 			} 
-			
-			else {
-			} 
-		} 
 		return states; 
 	}
 	
