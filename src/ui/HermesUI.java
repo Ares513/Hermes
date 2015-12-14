@@ -371,17 +371,14 @@ public class HermesUI extends JPanel implements IHumanInteractionListener{
 	    for (Record r:locationNameInfoRecords){
 	    	//leave out bathroom, bench and autogen records
 	    	boolean keep = true;
-	    	for(String s : r.getFields()) {
-	    		if(s.contains("AutoGen")) {
-	    			keep = false;
-	    		}
+	    	if (r.getVal().contains("AutoGen")){
+	    		keep = false;
 	    	}
 	    	if(keep && r.getCellName() != "No Cell Ref") {
 	    		modelForStart.addElement(r.getVal());
 	    	    
 	    	}
 	    }
-	    
 	    startPoint = new JComboBox<String>();
 	    startPoint.setMaximumSize(new Dimension(32767, 50));
 	    startPoint.setModel(modelForStart);
@@ -404,12 +401,10 @@ public class HermesUI extends JPanel implements IHumanInteractionListener{
 	    for (Record r:locationNameInfoRecords){
 	    	//leave out auto generated values;
 	    	boolean keep = true;
-	    	for(String s : r.getFields()) {
-	    		if(s.contains("AutoGen")) {
-	    			keep = false;
-	    		}
+	    	if (r.getVal().contains("AutoGen")){
+	    		keep = false;
 	    	}
-	    	if(keep) {
+	    	if(keep && r.getCellName() != "No Cell Ref") {
 	    		modelForDestination.addElement(r.getVal());
 	    	    
 	    	}
@@ -782,12 +777,35 @@ public class HermesUI extends JPanel implements IHumanInteractionListener{
 		tabbedPane.getSelectedTabPane().getSelectedTabPane().humanInteractive.addListener(this, "HermesUI through addListenerToSelectedTab");
 	}
 	
+	String matchingLocation(String s){
+		HashMap<String, String> abb = new HashMap<String, String>();
+		abb.put("Campus Center", "CC");
+		abb.put("Atwater Kent Laboratories", "AK");
+		abb.put("Boynton Hall", "BH");
+		abb.put("Fuller Laboratories", "FL");
+		abb.put("Gordon Library", "GL");
+		abb.put("Higgin House", "HH");
+		abb.put("Project Center", "PC");
+		abb.put("Stratton Hall", "SH");
+		
+		for (String key:abb.keySet()){
+			if (s.contains(key)){
+				s = s.replace(key, abb.get(key));
+			}
+		}
+		System.out.println(s);
+		return s;
+	}
+	
 	class SearchListener implements ActionListener{
 		@Override
 		public void actionPerformed(ActionEvent e) {
 			String startLocation = (String) startPoint.getSelectedItem();
+			startLocation = matchingLocation(startLocation);
+
 			DebugManagement.writeNotificationToLog("start location is : " + startLocation);
 			String destLocation = (String) destination.getSelectedItem();
+			destLocation = matchingLocation(destLocation);
 			searchStartRecord = locationNameInfoRecords.get(0);
 			searchEndRecord = locationNameInfoRecords.get(0);
 		    for (Record r:locationNameInfoRecords){

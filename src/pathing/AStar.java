@@ -323,7 +323,9 @@ public class AStar {
 					moveMultiplier = 1.41; // sqrt(2)
 				}
 				for(CellPoint each: getNeighbors(neighborPoint)){
-					if(getTileInfo(each).getTileType() != TILE_TYPE.PEDESTRIAN_WALKWAY){
+					TILE_TYPE neighborType = getTileInfo(each).getTileType();
+					if((neighborType != TILE_TYPE.PEDESTRIAN_WALKWAY) ||
+							(neighborType != TILE_TYPE.DOOR)){
 						moveMultiplier = moveMultiplier*1.5;
 						break;
 					}
@@ -448,7 +450,7 @@ public class AStar {
 			Point currentCoords = getCoords(current);
 			
 //			int delta x = endCoords.getX() - currentCoords.getY();
-			return 7*(int)Math.sqrt((Math.pow((endCoords.getX() - currentCoords.getX()), 2) + Math.pow((endCoords.getY() - currentCoords.getY()), 2)));
+			return 8*(int)Math.sqrt((Math.pow((endCoords.getX() - currentCoords.getX()), 2) + Math.pow((endCoords.getY() - currentCoords.getY()), 2)));
 		}
 
 		private Point getCoords(CellPoint aCP) {
