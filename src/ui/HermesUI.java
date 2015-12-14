@@ -617,21 +617,7 @@ public class HermesUI extends JPanel implements IHumanInteractionListener{
 		infoBtn.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent e) {
-				JOptionPane.showMessageDialog(frameHermes, 
-						"Worcester Polytechnic Institute\n"
-						+ "CS3733 2015 B-Term\n"
-						+ "Team1OfUs\n"
-						+ "Nicolas Adami-Sampson: Iteration 1/2 - UI/HCI Lead, Iteration 3/4 - Project Manager\n"
-						+ "Will Barnard: Iteration 1/2 - Software Engineer, Iteration 3/4 - Product Owner\n"
-						+ "Matt Beader: Iteration 1/2 - Software Engineer, Iteration 3/4 - Documentation and Testing Lead\n"
-						+ "Forrest Cinelli: Iteration 1/2 - Software Engineer, Iteration 3/4 - Lead Engineer\n"
-						+ "Elijah Gonzalez: Iteration 1/2 - Documentation and Testing Lead, Iteration 3/4 - Software Engineer\n"
-						+ "Aaron Jaeger: Iteration 1/2 - Product Owner, Iteration 3/4 - Software Engineer\n"
-						+ "Evan King: Iteration 1/2 - Lead Engineer, Iteration 3/4 - Software Engineer\n"
-						+ "Cuong Nguyen: Iteration 1/2 - Software Engineer, Iteration 3/4 - UI/HCI Lead\n"
-						+ "Bryan Toribio: Iteration 1/2 - Project Manager, Iteration 3/4 - Software Engineer\n"
-						+ "Prof. Wilson Wong\n"
-						+ "Coach Caitlin Malone");
+				JOptionPane.showMessageDialog(frameHermes, BootstrapperConstants.INFO,"Info",JOptionPane.INFORMATION_MESSAGE);
 			}
 		});
 		infoBtn.setBounds(269, 937, 46, 42);
@@ -639,6 +625,13 @@ public class HermesUI extends JPanel implements IHumanInteractionListener{
 		infoBtn.setIcon(new ImageIcon(HermesUI.class.getResource("/com/team1ofus/hermes/resources/Infobox_info_icon.svgresized.png")));
 		
 		JButton helpBtn = new JButton("");
+		helpBtn.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseClicked(MouseEvent e) {
+				JOptionPane.showMessageDialog(frameHermes, "This will have things soon ", "Tutorial", JOptionPane.QUESTION_MESSAGE);
+				
+			}
+		});
 		helpBtn.setBounds(225, 937, 46, 42);
 		interacactionpanel.add(helpBtn);
 		helpBtn.setIcon(new ImageIcon(HermesUI.class.getResource("/com/team1ofus/hermes/resources/VisualEditor_-_Icon_-_Help.svg.png")));
