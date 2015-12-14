@@ -623,7 +623,7 @@ public class HermesUI extends JPanel implements IHumanInteractionListener{
 		helpBtn.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent e) {
-				JOptionPane.showMessageDialog(frameHermes, "This will have things soon ", "Tutorial", JOptionPane.QUESTION_MESSAGE);
+				JOptionPane.showMessageDialog(frameHermes, BootstrapperConstants.TUTORIAL, "Tutorial", JOptionPane.QUESTION_MESSAGE);
 				
 			}
 		});
