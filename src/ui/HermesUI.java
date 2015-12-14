@@ -156,7 +156,6 @@ public class HermesUI extends JPanel implements IHumanInteractionListener{
     private AStarConfigOptions configs;
     private Box modeBox;
     private JCheckBox lateToClassMode;
-    private JCheckBox sillyUnitsMode;
     private JLabel modeLabel;
     private Component verticalStrut;
     private Component verticalStrut_4;
@@ -565,19 +564,6 @@ public class HermesUI extends JPanel implements IHumanInteractionListener{
 		});
 		modeBox.add(lateToClassMode);
 		
-		sillyUnitsMode = new JCheckBox("Silly Units");
-		sillyUnitsMode.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				if(configs.getIsStupidUnits() == false){
-					configs.setIsStupidUnits(true);
-				}
-				else{
-					configs.setIsStupidUnits(false);
-				}	
-			}
-		});
-		modeBox.add(sillyUnitsMode);
-		
 		verticalStrut_4 = Box.createVerticalStrut(20);
 		verticalBox.add(verticalStrut_4);
 		printButton.setAlignmentX(Component.CENTER_ALIGNMENT);
@@ -715,7 +701,7 @@ public class HermesUI extends JPanel implements IHumanInteractionListener{
 				try{ 
 					instructionsDoc.insertString(instructionsDoc.getLength(), " ",turnImage);
 					instructionsDoc.insertString(instructionsDoc.getLength(), direction, keyWord);
-					instructionsDoc.insertString(instructionsDoc.getLength(), "\n     ———————————————\n",lineBreak);
+					instructionsDoc.insertString(instructionsDoc.getLength(), "\n     ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½\n",lineBreak);
 			
 				//System.out.println("tried to display instruction");
 				} 
