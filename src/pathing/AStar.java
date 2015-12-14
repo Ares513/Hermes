@@ -273,7 +273,7 @@ public class AStar {
 		/*So long as the frontier is not empty the tile we want to explore is the tile with 
 		 * For now its BFS so we just take the first element*/
 		DebugManagement.writeNotificationToLog("Entering A* main while loop");
-		int i = 0;
+//		int i = 0;
 		while(!frontier.isEmpty()) {
 //			i++;
 //			DebugManagement.writeNotificationToLog("Explored: " + String.valueOf(i));
@@ -281,8 +281,8 @@ public class AStar {
 			currentPoint = frontier.get(0);
 //			DebugManagement.writeNotificationToLog(currentPoint.getCellName());
 			if(currentPoint.equals(endPoint)){ //if we are at the end: 
-				ArrayList<CellPoint> FinalPath = buildPath(endPoint); 
-//				ArrayList<CellPoint> FinalPath = cleanPath(roughPath);
+				ArrayList<CellPoint> roughPath = buildPath(endPoint); 
+				ArrayList<CellPoint> FinalPath = cleanPath(roughPath);
 				if(isFiltering) {
 					events.FilterStepComplete(FinalPath, getTileInfo(currentPoint).getCostSoFar());
 				} else {
@@ -365,8 +365,8 @@ public class AStar {
 		String currentCellName = roughPath.get(0).getCellName();
 		String aCellName = null;
 		ArrayList<CellPoint> tilesInCurCell = new ArrayList<CellPoint>();
-		for(CellPoint each: cleanPath){
-			aCellName = each.getCellName();
+		for(CellPoint each: roughPath){
+			aCellName = each.getCellName(); 
 			if(aCellName.equals(currentCellName)){
 				tilesInCurCell.add(each);
 			}
@@ -375,7 +375,7 @@ public class AStar {
 				if(tilesInCurCell.size() <= 2){
 //					cleanPath.removeAll(tilesInCurCell);
 					badTiles.addAll(tilesInCurCell);
-					}
+				}
 				tilesInCurCell = new ArrayList<CellPoint>();
 			}
 		}
@@ -533,6 +533,7 @@ public class AStar {
 			
 			return output;
 		}
+		//generate a list of all known illegals
 		private boolean isIllegalType(TILE_TYPE tileType) {
 			HashSet<TILE_TYPE> illegals = new HashSet<TILE_TYPE>();
 			illegals.add(TILE_TYPE.WALL);

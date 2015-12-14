@@ -20,6 +20,6 @@ public class Grass extends Tile implements TileInterface {
 	//------------------------------------------------------------------------------
 	
 	public int getTraverseCost() {
-		return 8;
+		return 6;
 	}
 }
