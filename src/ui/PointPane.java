@@ -58,10 +58,10 @@ public class PointPane extends JPanel {
 		int newWidth = (int) (startMarker.getWidth());
 		int newHeight = (int) (startMarker.getHeight());
 		if (first != null) {
-			g2d.drawImage(startMarker, (int) ((Math.round(first.x*width))-(32/zoomScale*0.5))+10 , (int) (((Math.round(first.y*height)) -(32/zoomScale*0.5))-10/zoomScale), (int)(Math.round(newWidth/zoomScale)),(int) (Math.round(newHeight/zoomScale)), this);
+			g2d.drawImage(startMarker, (int) ((Math.round(first.x*width))-(32/zoomScale*0.5))+10 , (int) (((Math.round(first.y*height)) -(32/zoomScale*0.5))-8/zoomScale), (int)(Math.round(newWidth/zoomScale)),(int) (Math.round(newHeight/zoomScale)), this);
 		}
 		if (second != null) {
-			g2d.drawImage(finishMarker, (int) ((Math.round(second.x*width))-(32/zoomScale*0.5))+10, (int) (((Math.round(second.y*height))-(32/zoomScale*0.5))-10/zoomScale), (int)(Math.round(newWidth/zoomScale)), (int) (Math.round(newHeight/zoomScale)), this);
+			g2d.drawImage(finishMarker, (int) ((Math.round(second.x*width))-(32/zoomScale*0.5))+10, (int) (((Math.round(second.y*height))-(32/zoomScale*0.5))-8/zoomScale), (int)(Math.round(newWidth/zoomScale)), (int) (Math.round(newHeight/zoomScale)), this);
 		}
 	}
 
