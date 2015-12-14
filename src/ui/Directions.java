@@ -49,6 +49,6 @@ public class Directions {
 	}
 	
 	public void setTurnIcon(String turnInstruction){ 
-		this.iconType = turnInstruction + ".png"; 
+		this.iconType = turnInstruction + ".png";
 	}
 }
