@@ -19,5 +19,7 @@ public class BootstrapperConstants {
 	public static final String FEMALE_BATHROOM_IDENTIFIER = "Any Female Bathroom";
 	public static final String UNISEX_BATHROOM_IDENTIFIER = "Any Unisex Bathroom";
 	public static final String BENCH_IDENTIFIER = "Any Bench";
+	public static final String INFO = "Worcester Polytechnic Institute\n\nCS3733 2015 B-Term\n\nTeam1OfUs\n\nNicolas Adami-Sampson: Iteration 1&2 - UI/HCI Lead, Iteration 3&4 - Project Manager\nWill Barnard: Iteration 1&2 - Software Engineer, Iteration 3&4 - Product Owner\nMatt Beader: Iteration 1&2 - Software Engineer, Iteration 3&4 - Documentation and Testing Lead\nForrest Cinelli: Iteration 1&2 - Software Engineer, Iteration 3&4 - Lead Engineer\nElijah Gonzalez: Iteration 1&2 - Documentation and Testing Lead, Iteration 3&4 - Software Engineer\nAaron Jaeger: Iteration 1&2 - Product Owner, Iteration 3&4 - Software Engineer\nEvan King: Iteration 1&2 - Lead Engineer, Iteration 3&4 - Software Engineer\nCuong Nguyen: Iteration 1&2 - Software Engineer, Iteration 3&4 - UI/HCI Lead\nBryan Toribio: Iteration 1&2 - Project Manager, Iteration 3&4 - Software Engineer\n\nProf. Wilson Wong\nCoach Caitlin Malone";
+
 	
 }
