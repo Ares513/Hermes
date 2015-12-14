@@ -20,7 +20,9 @@ public class Bootstrapper {
 	public static void main(String[] args) {
 		WebLookAndFeel.install();
 		SplashScreen splash = new SplashScreen(1000); //X000 -> x seconds 
-		splash.showSplashAndExit();	
+		splash.showSplash();
+		
+		
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
 				try {				    
@@ -28,9 +30,10 @@ public class Bootstrapper {
 				    // But, since this is only a test...
 					UIManagement ui;
 					DataManagement data = new DataManagement();
+					
 					ArrayList<PathCell> pathCells = CellConverter.convertList(data.getCells());
 					MapManagement map;			
-					data = new DataManagement();
+					splash.hideSplash();
 					map = new MapManagement(pathCells);	
 					ui = new UIManagement(pathCells);
 					addEventHandlers(data, map, ui);

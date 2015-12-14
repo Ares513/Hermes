@@ -623,7 +623,7 @@ public class HermesUI extends JPanel implements IHumanInteractionListener{
 		helpBtn.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent e) {
-				JOptionPane.showMessageDialog(frameHermes, "This will have things soon ", "Tutorial", JOptionPane.QUESTION_MESSAGE);
+				JOptionPane.showMessageDialog(frameHermes, BootstrapperConstants.TUTORIAL, "Tutorial", JOptionPane.QUESTION_MESSAGE);
 				
 			}
 		});
@@ -790,13 +790,25 @@ public class HermesUI extends JPanel implements IHumanInteractionListener{
 		abb.put("Higgin House", "HH");
 		abb.put("Project Center", "PC");
 		abb.put("Stratton Hall", "SH");
-		
+		abb.put("Higgin Laboratories", "HL");
+		abb.put("Salisbury Laboratories", "SL");
+		abb.put("Morgan Hall", "MH");
+		abb.put("Daniels Hall", "DH");
+		abb.put("Riley Hall", "RH");
+		abb.put("Bartlett Center", "BC");
+		abb.put("Career Devlopment Center", "CDC");
+		abb.put("Olin Hall", "OH");
+		abb.put("Goddard Hall", "GH");
+		abb.put("Kaven Hall", "KH");
+		abb.put("Washburn Shops", "WS");
+		abb.put("Founder Hall", "FH");
+		abb.put("East Hall", "EH");
 		for (String key:abb.keySet()){
-			if (s.contains(key)){
+			if (s.contains(key) && s.length() > key.length()){
 				s = s.replace(key, abb.get(key));
+				return s;
 			}
 		}
-		System.out.println(s);
 		return s;
 	}
 	
