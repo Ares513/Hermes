@@ -87,11 +87,22 @@ public class PrintDirections {
 			else if(i == (dListSize-1)){ 
 				currentInstruction.setTurnInstructions(null);
 			}
+			else if(currentInstruction.getDistance() == 0){ 
+				currentInstruction.setTurnInstructions(null);
+			}
 			else if (currentInstruction.getTurnInstruction() == null){
+				
 				String newInstruction = "Take a ";  
 				String turnInstruction = toTurns(toDegrees(currentState),prevDegree); 
-				newInstruction += turnInstruction; 
-				newInstruction += " to head "; 
+				System.out.println(turnInstruction);
+				if(turnInstruction != null){ 
+					newInstruction += turnInstruction; 
+					newInstruction += " to head ";
+				} 
+				else{ 
+					newInstruction = "Head "; 
+					currentInstruction.setTurnIcon("Forward");
+				}
 				newInstruction += toFullWord(currentState);;
 				newInstruction += " "; 
 				newInstruction += "\n       Walk "; 
@@ -99,7 +110,11 @@ public class PrintDirections {
 				newInstruction += " feet";
 				//newInstruction += "\n-------------";
 				currentInstruction.setTurnInstructions(newInstruction);
-				currentInstruction.setTurnIcon(turnInstruction);
+				System.out.println(currentInstruction.getIcon());
+				if(currentInstruction.getIcon() == null) { 
+					currentInstruction.setTurnIcon(turnInstruction);
+				}
+				System.out.println(currentInstruction.getIcon());
 				prevDegree = toDegrees(currentState); 
 			}
 			//humanReadableDirections.add(currentInstruction.getTurnInstruction()); 
@@ -238,25 +253,17 @@ public class PrintDirections {
 					String newMap = "New Map, Entering: ";
 					String name = current.getCellPoint().getCellName(); 
 					current.setTurnInstructions(newMap + name);
+					dList.add(previous);
 					dList.add(current); 
 				}
-				if(currentState.equals(previousState) && i!= (size-1)){ 
-					//currentDistance += getDistance(currentState); 
-				}
-				else{ 
+				else if (!currentState.equals(previousState)){ 
 					dList.add(newDirection(previousState, currentDistance,previous.getCellPoint(), null));
-					//currentDistance = 0; 
-					//currentDistance = getDistance(currentState); 
 				}
-			}
-			else{ 
-				//currentDistance += getDistance(currentState); 
+				
 			}
 		}
 		ArrayList<Directions> straightenedList = straighten(dList); 
-		
 		return straightenedList; 
-		
 	}
 	
 	boolean diffMap (CellPoint current, CellPoint previous){ 
@@ -300,10 +307,9 @@ public class PrintDirections {
 			} 
 		} 
 		return states; 
-//		ArrayList<Directions> withDistances  =findDistances(states); 
-//		return withDistances; 
 	}
 	
+	//Find the distances between all points. 
 	private ArrayList<Directions> findDistances(ArrayList<Directions> states){ 
 		int size = states.size();
 		for(int i = 0; i+1 < size; i++){ 
@@ -312,7 +318,7 @@ public class PrintDirections {
 			 double xDiff = getXDifference(nextLocation, currentLocation);
 			 double yDiff = getYDifference(nextLocation, currentLocation); 
 			 double distance = getDistance(xDiff, yDiff);
-			 if(currentLocation.getCellName().equals(nextLocation.getCellName())){ 
+			if(currentLocation.getCellName().equals(nextLocation.getCellName())){ 
 				 states.get(i).setDistance(distance);	 
 			 }
 			 
@@ -376,6 +382,9 @@ public class PrintDirections {
 		}
 		else if(diff == -135 || diff == 225){ 
 			turn = "sharp left"; 
+		}
+		else {
+			return null;
 		}
 		return turn; 
 	}
