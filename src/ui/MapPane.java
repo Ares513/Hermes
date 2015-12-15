@@ -3,6 +3,7 @@ package ui;
 import java.awt.Graphics;
 import java.awt.Image;
 import java.awt.Point;
+import java.awt.Toolkit;
 import java.io.File;
 import java.io.IOException;
 
@@ -22,8 +23,17 @@ public class MapPane extends JPanel{
 	public CellRenderer render;
 	
 	public MapPane(PathCell inCell) {
+		long freeMem = Runtime.getRuntime().maxMemory() - (Runtime.getRuntime().totalMemory()-Runtime.getRuntime().freeMemory());
+		DebugManagement.writeNotificationToLog("Available memory: " + freeMem);
 		if(inCell.getName().contains("World")) {
-			File campusFile = new File("wpi_campus_map.png");
+			File campusFile;
+			if(freeMem > 130000000L) {
+				campusFile = new File("wpi_campus_map.png");
+				DebugManagement.writeNotificationToLog("Loaded full size map image");
+			} else {
+				campusFile = new File("wpi_campus_map_small.png");
+				DebugManagement.writeNotificationToLog("Loaded small map image");
+			}
 			Image img;
 			try {
 				img = ImageIO.read(campusFile);
