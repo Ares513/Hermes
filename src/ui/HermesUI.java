@@ -665,7 +665,7 @@ public class HermesUI extends JPanel implements IHumanInteractionListener{
 			}
 			tabbedPane.getSelectedTabPane().setSelectedIndex(0);
 		}
-		
+		tabbedPane.getSelectedTabPane().getSelectedTabPane().setOffset(new Point(-13163,-10936));
 		//frameHermes.getContentPane().add(zoomPanel);
 
 		/*
