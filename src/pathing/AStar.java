@@ -255,8 +255,8 @@ public class AStar {
 		CellPoint currentPoint = startCellPoint;
 		cellMap.get(currentPoint.getCellName()).put(currentPoint.getPoint(), buildTileInfo(currentPoint));
 		TileInfo currentTile = getTileInfo(startCellPoint);
-		if(currentTile.getTileType().equals(TILE_TYPE.WALL)){
-			DebugManagement.writeNotificationToLog("Starting Tile is a Wall, Return is Null");
+		if(isIllegalType(currentTile.getTileType())){
+			DebugManagement.writeNotificationToLog("Starting Tile is an illegal Type, Return is Null");
 			return null;
 		}
 		CellPoint endPoint = endCellPoint;
