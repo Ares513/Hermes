@@ -712,7 +712,6 @@ public class HermesUI extends JPanel implements IHumanInteractionListener{
 				iconName = newName;
 			}
 			
-			
 			/*
 			 *print stuff to the textPane; 
 			 */
@@ -725,7 +724,7 @@ public class HermesUI extends JPanel implements IHumanInteractionListener{
 					instructionsDoc.insertString(instructionsDoc.getLength(), " ",turnImage);
 					instructionsDoc.insertString(instructionsDoc.getLength(), direction, keyWord);
 					instructionsDoc.insertString(instructionsDoc.getLength(), "\n     ------------------------------------------------------\n",lineBreak);
-			
+					
 				//System.out.println("tried to display instruction");
 				} 
 				catch(Exception e){ 
