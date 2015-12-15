@@ -10,13 +10,7 @@ public abstract class Tile implements TileInterface{
 	
 	public static byte cellNum = 0;
 	public Point tilePoint = null;
-<<<<<<< HEAD:src/com/team1ofus/hermes/Tile.java
-
 	public TILE_TYPE tileType = TILE_TYPE.WALL;
-
-=======
-	public TILE_TYPE tileType = TILE_TYPE.WALL;
->>>>>>> HermesDev:src/tiles/Tile.java
 	public String cellName;
 	public Tile parent = null;
 	public int costSoFar = 0;
