@@ -23,11 +23,11 @@ public class MapPane extends JPanel{
 	public CellRenderer render;
 	
 	public MapPane(PathCell inCell) {
-		long freeMem = Runtime.getRuntime().maxMemory() - (Runtime.getRuntime().totalMemory()-Runtime.getRuntime().freeMemory());
-		DebugManagement.writeNotificationToLog("Available memory: " + freeMem);
+		long maxMem = Runtime.getRuntime().maxMemory();
+		DebugManagement.writeNotificationToLog("Max memory: " + maxMem);
 		if(inCell.getName().contains("World")) {
 			File campusFile;
-			if(freeMem > 130000000L) {
+			if(maxMem > 1000000000L) {
 				campusFile = new File("wpi_campus_map.png");
 				DebugManagement.writeNotificationToLog("Loaded full size map image");
 			} else {
