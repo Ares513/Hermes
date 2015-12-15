@@ -261,7 +261,6 @@ public class HermesUI extends JPanel implements IHumanInteractionListener{
 		
 		tabbedPane.setSelectedIndex(tabbedPane.getIndexOfTab(buildingNames.get(cellsInPath.get(0).substring(0, 2))));
 		tabbedPane.getSelectedTabPane().setSelectedIndex(tabbedPane.getSelectedTabPane().getIndexOfTab(nameToDisplay.get(cellsInPath.get(0))));
-		
 	}
 	
 	/*
@@ -284,12 +283,14 @@ public class HermesUI extends JPanel implements IHumanInteractionListener{
 				cellsInPath.add(path.get(i).getCellName());
 				subpathStart = i;
 			}
-	//		else if(cellsInPath.contains(path.get(i).getCellName()) /*&& !cellsInPath.get(i).equals(cellsInPath.get(i-1))*/) {
-	//			subpathFinish = i - 1;
-//				segmentedPath.add(populateSubpath(path, subpathStart, subpathFinish));
-	//			cellsInPath.add(path.get(i).getCellName());
-	//			subpathStart = i;
-	//		}
+			else {
+				if(cellsInPath.contains(path.get(i).getCellName()) && !path.get(i).getCellName().equals(path.get(i-1).getCellName())) {
+					subpathFinish = i - 1;
+					segmentedPath.add(populateSubpath(path, subpathStart, subpathFinish));
+					cellsInPath.add(path.get(i).getCellName());
+					subpathStart = i;
+				}
+			}
 		}
 		subpathFinish = path.size() - 1;
 		segmentedPath.add(populateSubpath(path, subpathStart, subpathFinish));
