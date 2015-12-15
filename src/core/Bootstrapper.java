@@ -38,7 +38,7 @@ public class Bootstrapper {
 					ui = new UIManagement(pathCells);
 					addEventHandlers(data, map, ui);
 				} catch (Exception e) {
-					e.printStackTrace();
+					//e.printStackTrace();
 				}
 			}
 			private void addEventHandlers(DataManagement data, MapManagement map, UIManagement ui) {
