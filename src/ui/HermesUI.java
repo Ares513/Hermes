@@ -223,9 +223,13 @@ public class HermesUI extends JPanel implements IHumanInteractionListener{
 		//reset all tab colors
 		for(int i = 0; i < tabbedPane.getTabCount(); i++) {
 			tabbedPane.setForegroundAt(i, null);
-			for(int j = 0; j < tabbedPane.getTabAt(i).getTabCount(); j++)
+			for(int j = 0; j < tabbedPane.getTabAt(i).getTabCount(); j++) {
 				tabbedPane.getTabAt(i).setForegroundAt(j, null);
+				tabbedPane.getTabAt(i).getTabAt(j).getPathPane().clearPath();
+				tabbedPane.getTabAt(i).getTabAt(j).getPointPane().setFirst(null);
+				tabbedPane.getTabAt(i).getTabAt(j).getPointPane().setSecond(null);
 			}
+		}
 
 		 splitPath(path);
 		 for(int i = 0; i < cellsInPath.size(); i++) {
@@ -257,7 +261,6 @@ public class HermesUI extends JPanel implements IHumanInteractionListener{
 		
 		tabbedPane.setSelectedIndex(tabbedPane.getIndexOfTab(buildingNames.get(cellsInPath.get(0).substring(0, 2))));
 		tabbedPane.getSelectedTabPane().setSelectedIndex(tabbedPane.getSelectedTabPane().getIndexOfTab(nameToDisplay.get(cellsInPath.get(0))));
-		
 	}
 	
 	/*
@@ -279,6 +282,14 @@ public class HermesUI extends JPanel implements IHumanInteractionListener{
 				segmentedPath.add(populateSubpath(path, subpathStart, subpathFinish));
 				cellsInPath.add(path.get(i).getCellName());
 				subpathStart = i;
+			}
+			else {
+				if(cellsInPath.contains(path.get(i).getCellName()) && !path.get(i).getCellName().equals(path.get(i-1).getCellName())) {
+					subpathFinish = i - 1;
+					segmentedPath.add(populateSubpath(path, subpathStart, subpathFinish));
+					cellsInPath.add(path.get(i).getCellName());
+					subpathStart = i;
+				}
 			}
 		}
 		subpathFinish = path.size() - 1;
@@ -701,7 +712,6 @@ public class HermesUI extends JPanel implements IHumanInteractionListener{
 				iconName = newName;
 			}
 			
-			
 			/*
 			 *print stuff to the textPane; 
 			 */
@@ -714,7 +724,7 @@ public class HermesUI extends JPanel implements IHumanInteractionListener{
 					instructionsDoc.insertString(instructionsDoc.getLength(), " ",turnImage);
 					instructionsDoc.insertString(instructionsDoc.getLength(), direction, keyWord);
 					instructionsDoc.insertString(instructionsDoc.getLength(), "\n     ------------------------------------------------------\n",lineBreak);
-			
+					
 				//System.out.println("tried to display instruction");
 				} 
 				catch(Exception e){ 

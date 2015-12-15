@@ -49,7 +49,7 @@ class PathPane extends JPanel {
 
 	//Creates the list of points that will be used to draw the path
 	void drawPath(ArrayList<CellPoint> path, String cellName){
-		pointsList.clear();
+		//pointsList.clear();
 		if(path == null) {
 			DebugManagement.writeLineToLog(SEVERITY_LEVEL.CRITICAL, "CellPoint path is empty! Not drawing path.");
 			return;
@@ -96,7 +96,10 @@ class PathPane extends JPanel {
 			Point p2 = pointsList.get(i+1);
 			if(cellName.equals("World"))
 				g2d.setStroke(new BasicStroke(40));
-			g2d.drawLine( (int)p1.x*tileWidth+tileWidth/2,  (int)p1.y*tileHeight+tileHeight/2, (int)(p2.x)*tileWidth+tileWidth/2, (int)(p2.y*tileHeight+tileHeight/2));
+			if(Math.sqrt(Math.pow(p1.getX()-p2.getX(), 2)+Math.pow(p1.getY()-p2.getY(), 2)) > 40)
+				i++;
+			else
+				g2d.drawLine( (int)p1.x*tileWidth+tileWidth/2,  (int)p1.y*tileHeight+tileHeight/2, (int)(p2.x)*tileWidth+tileWidth/2, (int)(p2.y*tileHeight+tileHeight/2));
 			
 		} 
 	}
