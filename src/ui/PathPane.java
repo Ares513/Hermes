@@ -56,15 +56,30 @@ class PathPane extends JPanel {
 		}
 		int tileWidth =  (int) ((int)BootstrapperConstants.TILE_WIDTH*zoomScale);
 		int tileHeight = (int) ((int)BootstrapperConstants.TILE_HEIGHT*zoomScale);
-		this.cellName = path.get(0).getCellName();
-		for(int c = 0; c < path.size(); c++) {
-			if(path.get(c).getCellName() == cellName) {
-				//matches, add it.
-				pointsList.add(new Point((int) path.get(c).getPoint().getX(), (int) path.get(c).getPoint().getY()));
-				//pointsList.get(c).move(pointsList.get(c).x*tileWidth+tileWidth/2, pointsList.get(c).y*tileHeight+tileHeight/2);
-			
+		if(path.get(0) == null) {
+			pointsList.add(null);
+			this.cellName = path.get(1).getCellName();
+			for(int c = 1; c < path.size(); c++) {
+				if(path.get(c).getCellName() == cellName) {
+					//matches, add it.
+					pointsList.add(new Point((int) path.get(c).getPoint().getX(), (int) path.get(c).getPoint().getY()));
+					//pointsList.get(c).move(pointsList.get(c).x*tileWidth+tileWidth/2, pointsList.get(c).y*tileHeight+tileHeight/2);
+				
+				}
 			}
 		}
+		else {
+			this.cellName = path.get(0).getCellName();
+			for(int c = 0; c < path.size(); c++) {
+				if(path.get(c).getCellName() == cellName) {
+					//matches, add it.
+					pointsList.add(new Point((int) path.get(c).getPoint().getX(), (int) path.get(c).getPoint().getY()));
+					//pointsList.get(c).move(pointsList.get(c).x*tileWidth+tileWidth/2, pointsList.get(c).y*tileHeight+tileHeight/2);
+				
+				}
+			}
+		}
+		
 		validate();
 		repaint();
 	}
@@ -96,7 +111,7 @@ class PathPane extends JPanel {
 			Point p2 = pointsList.get(i+1);
 			if(cellName.equals("World"))
 				g2d.setStroke(new BasicStroke(40));
-			if(Math.sqrt(Math.pow(p1.getX()-p2.getX(), 2)+Math.pow(p1.getY()-p2.getY(), 2)) > 40)
+			if(p1 == null || p2 == null)
 				i++;
 			else
 				g2d.drawLine( (int)p1.x*tileWidth+tileWidth/2,  (int)p1.y*tileHeight+tileHeight/2, (int)(p2.x)*tileWidth+tileWidth/2, (int)(p2.y*tileHeight+tileHeight/2));

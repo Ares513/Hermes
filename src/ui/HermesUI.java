@@ -274,33 +274,38 @@ public class HermesUI extends JPanel implements IHumanInteractionListener{
 		
 		int subpathStart = 0;
 		int subpathFinish = path.size();
+		boolean isMultiPath = false;
 		cellsInPath.add(path.get(0).getCellName());
 		
 		for(int i = 1; i < path.size(); i++){
 			if(!cellsInPath.contains(path.get(i).getCellName())) {
+				isMultiPath = false;
 				subpathFinish = i - 1;
-				segmentedPath.add(populateSubpath(path, subpathStart, subpathFinish));
+				segmentedPath.add(populateSubpath(path, subpathStart, subpathFinish, isMultiPath));
 				cellsInPath.add(path.get(i).getCellName());
 				subpathStart = i;
 			}
 			else {
 				if(cellsInPath.contains(path.get(i).getCellName()) && !path.get(i).getCellName().equals(path.get(i-1).getCellName())) {
+					isMultiPath = true;
 					subpathFinish = i - 1;
-					segmentedPath.add(populateSubpath(path, subpathStart, subpathFinish));
+					segmentedPath.add(populateSubpath(path, subpathStart, subpathFinish, isMultiPath));
 					cellsInPath.add(path.get(i).getCellName());
 					subpathStart = i;
 				}
 			}
 		}
 		subpathFinish = path.size() - 1;
-		segmentedPath.add(populateSubpath(path, subpathStart, subpathFinish));
+		segmentedPath.add(populateSubpath(path, subpathStart, subpathFinish, isMultiPath));
 	}
 	
 	/*
 	 * Just populates a subpath
 	 */
-	private ArrayList<CellPoint> populateSubpath(ArrayList<CellPoint> path, int start, int finish) {
+	private ArrayList<CellPoint> populateSubpath(ArrayList<CellPoint> path, int start, int finish, boolean isMultiPath) {
 		ArrayList<CellPoint> subpath = new ArrayList<CellPoint>();
+		if(isMultiPath)
+			subpath.add(null);
 		for(int i = start; i <= finish; i++)
 			subpath.add(path.get(i));
 		return subpath;
