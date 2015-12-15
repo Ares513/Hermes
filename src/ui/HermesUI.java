@@ -687,21 +687,33 @@ public class HermesUI extends JPanel implements IHumanInteractionListener{
 			String iconName = current.getIcon(); 
 			SimpleAttributeSet turnImage =new SimpleAttributeSet();
 			Icon icon;  
-			if(i == 0){ 
-				icon = new ImageIcon ("Forward.png");
+			/*
+			 * There is random edge case where there is a sharp turn... no turn icon for sharp turns, so I just manually change the icon name 
+			 */
+			if(iconName != null && iconName.contains("sharp")){
+				String newName =""; 
+				if(iconName.contains("right")){ 
+						newName = "right.png"; 
+				} 
+				else{
+					newName = "left.png";
+				}
+				iconName = newName;
 			}
-			else { 
-				icon = new ImageIcon (iconName);
-			}
-			JLabel label = new JLabel(icon); 
 			
+			
+			/*
+			 *print stuff to the textPane; 
+			 */
+			icon = new ImageIcon (iconName);
+			JLabel label = new JLabel(icon); 
 			StyleConstants.setComponent(turnImage, label);
 			if(direction != null){ 
 			
 				try{ 
 					instructionsDoc.insertString(instructionsDoc.getLength(), " ",turnImage);
 					instructionsDoc.insertString(instructionsDoc.getLength(), direction, keyWord);
-					instructionsDoc.insertString(instructionsDoc.getLength(), "\n     ���������������\n",lineBreak);
+					instructionsDoc.insertString(instructionsDoc.getLength(), "\n     ------------------------------------------------------\n",lineBreak);
 			
 				//System.out.println("tried to display instruction");
 				} 
