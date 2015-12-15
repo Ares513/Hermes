@@ -23,14 +23,14 @@ public class MapPane extends JPanel{
 	
 	public MapPane(PathCell inCell) {
 		if(inCell.getName().contains("World")) {
-			File campusFile = new File("wpi_campus_map.jpg");
+			File campusFile = new File("wpi_campus_map.png");
 			Image img;
 			try {
 				img = ImageIO.read(campusFile);
 				render = new CellRenderer(inCell, this.getWidth(), this.getHeight(), img);
 				
 			} catch (IOException e) {
-				DebugManagement.writeLineToLog(SEVERITY_LEVEL.CRITICAL, "Unable to load wpi_campus_map.jpg.");
+				DebugManagement.writeLineToLog(SEVERITY_LEVEL.CRITICAL, "Unable to load wpi_campus_map.png.");
 				render = new CellRenderer(inCell, this.getWidth(), this.getHeight(), null);
 			}
 			
