@@ -160,6 +160,7 @@ public class HermesUI extends JPanel implements IHumanInteractionListener{
     private Component verticalStrut;
     private Component verticalStrut_4;
     private JCheckBox handicapedMode;
+    private Component verticalStrut_5;
 	public HermesUI(ArrayList<PathCell> viewCells, ArrayList<Record> locationNameInfoRecords) {
 		this.locationNameInfoRecords = locationNameInfoRecords;
 		this.configs = new AStarConfigOptions();
@@ -601,24 +602,25 @@ public class HermesUI extends JPanel implements IHumanInteractionListener{
 		zoomOutBtn = new JButton("");
 		horizontalBox.add(zoomOutBtn);
 		zoomOutBtn.setIcon(new ImageIcon(HermesUI.class.getResource("/com/team1ofus/hermes/resources/zoomout25.png")));
-
 		
-		Box horizontalBox_1 = Box.createHorizontalBox();
-		horizontalBox_1.setBounds(0, 0, 1, 1);
-		interacactionpanel.add(horizontalBox_1);
+		verticalStrut_5 = Box.createVerticalStrut(20);
+		verticalBox.add(verticalStrut_5);
+		
+		Box horizontalBox_2 = Box.createHorizontalBox();
+		verticalBox.add(horizontalBox_2);
 		
 		JButton infoBtn = new JButton("");
+		horizontalBox_2.add(infoBtn);
 		infoBtn.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent e) {
 				JOptionPane.showMessageDialog(frameHermes, BootstrapperConstants.INFO,"Info",JOptionPane.INFORMATION_MESSAGE);
 			}
 		});
-		infoBtn.setBounds(269, 937, 46, 42);
-		interacactionpanel.add(infoBtn);
 		infoBtn.setIcon(new ImageIcon(HermesUI.class.getResource("/com/team1ofus/hermes/resources/Infobox_info_icon.svgresized.png")));
 		
 		JButton helpBtn = new JButton("");
+		horizontalBox_2.add(helpBtn);
 		helpBtn.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent e) {
@@ -626,9 +628,12 @@ public class HermesUI extends JPanel implements IHumanInteractionListener{
 				
 			}
 		});
-		helpBtn.setBounds(225, 937, 46, 42);
-		interacactionpanel.add(helpBtn);
 		helpBtn.setIcon(new ImageIcon(HermesUI.class.getResource("/com/team1ofus/hermes/resources/VisualEditor_-_Icon_-_Help.svg.png")));
+
+		
+		Box horizontalBox_1 = Box.createHorizontalBox();
+		horizontalBox_1.setBounds(0, 0, 1, 1);
+		interacactionpanel.add(horizontalBox_1);
 		zoomOutBtn.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
