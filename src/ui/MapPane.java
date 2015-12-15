@@ -3,6 +3,7 @@ package ui;
 import java.awt.Graphics;
 import java.awt.Image;
 import java.awt.Point;
+import java.awt.Toolkit;
 import java.io.File;
 import java.io.IOException;
 
@@ -22,15 +23,24 @@ public class MapPane extends JPanel{
 	public CellRenderer render;
 	
 	public MapPane(PathCell inCell) {
+		long maxMem = Runtime.getRuntime().maxMemory();
+		DebugManagement.writeNotificationToLog("Max memory: " + maxMem);
 		if(inCell.getName().contains("World")) {
-			File campusFile = new File("wpi_campus_map.jpg");
+			File campusFile;
+			if(maxMem > 1000000000L) {
+				campusFile = new File("wpi_campus_map.png");
+				DebugManagement.writeNotificationToLog("Loaded full size map image");
+			} else {
+				campusFile = new File("wpi_campus_map_small.png");
+				DebugManagement.writeNotificationToLog("Loaded small map image");
+			}
 			Image img;
 			try {
 				img = ImageIO.read(campusFile);
 				render = new CellRenderer(inCell, this.getWidth(), this.getHeight(), img);
 				
 			} catch (IOException e) {
-				DebugManagement.writeLineToLog(SEVERITY_LEVEL.CRITICAL, "Unable to load wpi_campus_map.jpg.");
+				DebugManagement.writeLineToLog(SEVERITY_LEVEL.CRITICAL, "Unable to load wpi_campus_map.png.");
 				render = new CellRenderer(inCell, this.getWidth(), this.getHeight(), null);
 			}
 			

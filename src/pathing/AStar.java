@@ -255,8 +255,8 @@ public class AStar {
 		CellPoint currentPoint = startCellPoint;
 		cellMap.get(currentPoint.getCellName()).put(currentPoint.getPoint(), buildTileInfo(currentPoint));
 		TileInfo currentTile = getTileInfo(startCellPoint);
-		if(currentTile.getTileType().equals(TILE_TYPE.WALL)){
-			DebugManagement.writeNotificationToLog("Starting Tile is a Wall, Return is Null");
+		if(isIllegalType(currentTile.getTileType())){
+			DebugManagement.writeNotificationToLog("Starting Tile is an illegal Type, Return is Null");
 			return null;
 		}
 		CellPoint endPoint = endCellPoint;
@@ -360,30 +360,38 @@ public class AStar {
 	}
 	
 	private ArrayList<CellPoint> cleanPath(ArrayList<CellPoint> roughPath) {
-		ArrayList<CellPoint> cleanPath = roughPath;
-		ArrayList<CellPoint> badTiles = new ArrayList<CellPoint>();
+		ArrayList<CellPoint> cleanPath = new ArrayList<CellPoint>();
 		String currentCellName = roughPath.get(0).getCellName();
 		String aCellName = null;
 		ArrayList<CellPoint> tilesInCurCell = new ArrayList<CellPoint>();
 		for(CellPoint each: roughPath){
 			aCellName = each.getCellName(); 
-			if(aCellName.equals(currentCellName)){
-				tilesInCurCell.add(each);
-			}
-			else{
+			if(!(aCellName.equals(currentCellName))){
 				currentCellName = aCellName;
-				if(tilesInCurCell.size() <= 2){
-//					cleanPath.removeAll(tilesInCurCell);
-					badTiles.addAll(tilesInCurCell);
+				if(tilesInCurCell.size() > 2){
+					cleanPath.addAll(tilesInCurCell);
 				}
 				tilesInCurCell = new ArrayList<CellPoint>();
-			}
+			} 
+			tilesInCurCell.add(each);
 		}
-		DebugManagement.writeNotificationToLog(String.valueOf(cleanPath.size()));
-		DebugManagement.writeNotificationToLog(String.valueOf(badTiles.size()));
-		cleanPath.removeAll(badTiles);
-		DebugManagement.writeNotificationToLog(String.valueOf(cleanPath.size()));
+		cleanPath.addAll(tilesInCurCell);
+//		DebugManagement.writeNotificationToLog(String.valueOf(cleanPath.size()));
 		return cleanPath;
+		
+		/*
+		aCellName = each.getCellName(); 
+		if(aCellName.equals(currentCellName)){
+			tilesInCurCell.add(each);
+		}
+		else{
+			currentCellName = aCellName;
+			if(tilesInCurCell.size() > 2){
+				cleanPath.addAll(tilesInCurCell);
+			}
+			tilesInCurCell = new ArrayList<CellPoint>();
+			tilesInCurCell.add(each);
+		} */
 	}
 	
 	private TileInfo buildTileInfo(CellPoint currentPoint) {
