@@ -156,11 +156,11 @@ public class HermesUI extends JPanel implements IHumanInteractionListener{
     private AStarConfigOptions configs;
     private Box modeBox;
     private JCheckBox lateToClassMode;
-    private JCheckBox sillyUnitsMode;
     private JLabel modeLabel;
     private Component verticalStrut;
     private Component verticalStrut_4;
     private JCheckBox handicapedMode;
+    private Component verticalStrut_5;
 	public HermesUI(ArrayList<PathCell> viewCells, ArrayList<Record> locationNameInfoRecords) {
 		this.locationNameInfoRecords = locationNameInfoRecords;
 		this.configs = new AStarConfigOptions();
@@ -224,9 +224,13 @@ public class HermesUI extends JPanel implements IHumanInteractionListener{
 		//reset all tab colors
 		for(int i = 0; i < tabbedPane.getTabCount(); i++) {
 			tabbedPane.setForegroundAt(i, null);
-			for(int j = 0; j < tabbedPane.getTabAt(i).getTabCount(); j++)
+			for(int j = 0; j < tabbedPane.getTabAt(i).getTabCount(); j++) {
 				tabbedPane.getTabAt(i).setForegroundAt(j, null);
+				tabbedPane.getTabAt(i).getTabAt(j).getPathPane().clearPath();
+				tabbedPane.getTabAt(i).getTabAt(j).getPointPane().setFirst(null);
+				tabbedPane.getTabAt(i).getTabAt(j).getPointPane().setSecond(null);
 			}
+		}
 
 		 splitPath(path);
 		 for(int i = 0; i < cellsInPath.size(); i++) {
@@ -258,7 +262,6 @@ public class HermesUI extends JPanel implements IHumanInteractionListener{
 		
 		tabbedPane.setSelectedIndex(tabbedPane.getIndexOfTab(buildingNames.get(cellsInPath.get(0).substring(0, 2))));
 		tabbedPane.getSelectedTabPane().setSelectedIndex(tabbedPane.getSelectedTabPane().getIndexOfTab(nameToDisplay.get(cellsInPath.get(0))));
-		
 	}
 	
 	/*
@@ -272,25 +275,38 @@ public class HermesUI extends JPanel implements IHumanInteractionListener{
 		
 		int subpathStart = 0;
 		int subpathFinish = path.size();
+		boolean isMultiPath = false;
 		cellsInPath.add(path.get(0).getCellName());
 		
 		for(int i = 1; i < path.size(); i++){
 			if(!cellsInPath.contains(path.get(i).getCellName())) {
+				isMultiPath = false;
 				subpathFinish = i - 1;
-				segmentedPath.add(populateSubpath(path, subpathStart, subpathFinish));
+				segmentedPath.add(populateSubpath(path, subpathStart, subpathFinish, isMultiPath));
 				cellsInPath.add(path.get(i).getCellName());
 				subpathStart = i;
 			}
+			else {
+				if(cellsInPath.contains(path.get(i).getCellName()) && !path.get(i).getCellName().equals(path.get(i-1).getCellName())) {
+					isMultiPath = true;
+					subpathFinish = i - 1;
+					segmentedPath.add(populateSubpath(path, subpathStart, subpathFinish, isMultiPath));
+					cellsInPath.add(path.get(i).getCellName());
+					subpathStart = i;
+				}
+			}
 		}
 		subpathFinish = path.size() - 1;
-		segmentedPath.add(populateSubpath(path, subpathStart, subpathFinish));
+		segmentedPath.add(populateSubpath(path, subpathStart, subpathFinish, isMultiPath));
 	}
 	
 	/*
 	 * Just populates a subpath
 	 */
-	private ArrayList<CellPoint> populateSubpath(ArrayList<CellPoint> path, int start, int finish) {
+	private ArrayList<CellPoint> populateSubpath(ArrayList<CellPoint> path, int start, int finish, boolean isMultiPath) {
 		ArrayList<CellPoint> subpath = new ArrayList<CellPoint>();
+		if(isMultiPath)
+			subpath.add(null);
 		for(int i = start; i <= finish; i++)
 			subpath.add(path.get(i));
 		return subpath;
@@ -565,19 +581,6 @@ public class HermesUI extends JPanel implements IHumanInteractionListener{
 		});
 		modeBox.add(lateToClassMode);
 		
-		sillyUnitsMode = new JCheckBox("Silly Units");
-		sillyUnitsMode.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				if(configs.getIsStupidUnits() == false){
-					configs.setIsStupidUnits(true);
-				}
-				else{
-					configs.setIsStupidUnits(false);
-				}	
-			}
-		});
-		modeBox.add(sillyUnitsMode);
-		
 		verticalStrut_4 = Box.createVerticalStrut(20);
 		verticalBox.add(verticalStrut_4);
 		printButton.setAlignmentX(Component.CENTER_ALIGNMENT);
@@ -604,24 +607,25 @@ public class HermesUI extends JPanel implements IHumanInteractionListener{
 		zoomOutBtn = new JButton("");
 		horizontalBox.add(zoomOutBtn);
 		zoomOutBtn.setIcon(new ImageIcon(HermesUI.class.getResource("/com/team1ofus/hermes/resources/zoomout25.png")));
-
 		
-		Box horizontalBox_1 = Box.createHorizontalBox();
-		horizontalBox_1.setBounds(0, 0, 1, 1);
-		interacactionpanel.add(horizontalBox_1);
+		verticalStrut_5 = Box.createVerticalStrut(20);
+		verticalBox.add(verticalStrut_5);
+		
+		Box horizontalBox_2 = Box.createHorizontalBox();
+		verticalBox.add(horizontalBox_2);
 		
 		JButton infoBtn = new JButton("");
+		horizontalBox_2.add(infoBtn);
 		infoBtn.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent e) {
 				JOptionPane.showMessageDialog(frameHermes, BootstrapperConstants.INFO,"Info",JOptionPane.INFORMATION_MESSAGE);
 			}
 		});
-		infoBtn.setBounds(269, 937, 46, 42);
-		interacactionpanel.add(infoBtn);
 		infoBtn.setIcon(new ImageIcon(HermesUI.class.getResource("/com/team1ofus/hermes/resources/Infobox_info_icon.svgresized.png")));
 		
 		JButton helpBtn = new JButton("");
+		horizontalBox_2.add(helpBtn);
 		helpBtn.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent e) {
@@ -629,9 +633,12 @@ public class HermesUI extends JPanel implements IHumanInteractionListener{
 				
 			}
 		});
-		helpBtn.setBounds(225, 937, 46, 42);
-		interacactionpanel.add(helpBtn);
 		helpBtn.setIcon(new ImageIcon(HermesUI.class.getResource("/com/team1ofus/hermes/resources/VisualEditor_-_Icon_-_Help.svg.png")));
+
+		
+		Box horizontalBox_1 = Box.createHorizontalBox();
+		horizontalBox_1.setBounds(0, 0, 1, 1);
+		interacactionpanel.add(horizontalBox_1);
 		zoomOutBtn.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
@@ -668,7 +675,7 @@ public class HermesUI extends JPanel implements IHumanInteractionListener{
 			}
 			tabbedPane.getSelectedTabPane().setSelectedIndex(0);
 		}
-		
+		tabbedPane.getSelectedTabPane().getSelectedTabPane().setOffset(new Point(-13163,-10936));
 		//frameHermes.getContentPane().add(zoomPanel);
 
 		/*
@@ -701,22 +708,33 @@ public class HermesUI extends JPanel implements IHumanInteractionListener{
 			String iconName = current.getIcon(); 
 			SimpleAttributeSet turnImage =new SimpleAttributeSet();
 			Icon icon;  
-			if(i == 0){ 
-				icon = new ImageIcon ("Forward.png");
+			/*
+			 * There is random edge case where there is a sharp turn... no turn icon for sharp turns, so I just manually change the icon name 
+			 */
+			if(iconName != null && iconName.contains("sharp")){
+				String newName =""; 
+				if(iconName.contains("right")){ 
+						newName = "right.png"; 
+				} 
+				else{
+					newName = "left.png";
+				}
+				iconName = newName;
 			}
-			else { 
-				icon = new ImageIcon (iconName);
-			}
-			JLabel label = new JLabel(icon); 
 			
+			/*
+			 *print stuff to the textPane; 
+			 */
+			icon = new ImageIcon (iconName);
+			JLabel label = new JLabel(icon); 
 			StyleConstants.setComponent(turnImage, label);
 			if(direction != null){ 
 			
 				try{ 
 					instructionsDoc.insertString(instructionsDoc.getLength(), " ",turnImage);
 					instructionsDoc.insertString(instructionsDoc.getLength(), direction, keyWord);
-					instructionsDoc.insertString(instructionsDoc.getLength(), "\n     ———————————————\n",lineBreak);
-			
+					instructionsDoc.insertString(instructionsDoc.getLength(), "\n     ------------------------------------------------------\n",lineBreak);
+					
 				//System.out.println("tried to display instruction");
 				} 
 				catch(Exception e){ 

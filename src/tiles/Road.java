@@ -18,6 +18,6 @@ public class Road extends Tile implements TileInterface {
 	//------------------------------------------------------------------------------
 	
 	public int getTraverseCost() {
-		return 10;
+		return 7;
 	}
 }

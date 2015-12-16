@@ -62,9 +62,12 @@ public class PrintToPrinter implements Printable, ActionListener {
         int printSize = this.printInstructions.size();
         int lineSpace = 16; 
         for(int i = 0; i < printSize; i++){ 
-        g.drawString(this.printInstructions.get(i), 100, (i*lineSpace)+160);
+        String printLine = this.printInstructions.get(i); 
+        if (printLine != null){ 
+        	String printLineFixed = printLine.replace("       ", ""); 
+        	g.drawString(printLineFixed, 100, (i*lineSpace)+160);
+        	} 
         } 
- 
         /* tell the caller that this page is part of the printed document */
         return PAGE_EXISTS;
     }

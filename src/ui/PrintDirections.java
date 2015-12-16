@@ -62,14 +62,17 @@ public class PrintDirections {
 		int dListSize = dList.size(); 
 		int prevDegree = 0;  
 		double totalDistance = 0; 
-		
-		for(int i = 0; i < dListSize; i++){ 
+		int newMap =0; 
+		for(int i = 0; i+1 < dListSize; i++){ 
 			Directions currentInstruction = dList.get(i); 
 			double currentDistance = currentInstruction.getDistance(); 
 			totalDistance += currentDistance; 
 			String currentState = currentInstruction.getHeading();
 			/* First instruction. provides user with initial instruction */
-			if(i==0){  
+			if (currentInstruction.getTurnInstruction()!= null){ 
+				newMap = i+1; 
+			}
+			if(i==0 || (newMap == i)){  
 				String startInstruction = "Head "; 
 				
 				startInstruction += toFullWord(currentState);
@@ -79,17 +82,22 @@ public class PrintDirections {
 				startInstruction += " feet";
 				//startInstruction += "\n-------------";
 				currentInstruction.setTurnInstructions(startInstruction);
+				currentInstruction.setTurnIcon("Forward");
 				
 				prevDegree = toDegrees(currentState); 
 				//dList.set(i, currentInstruction); 
 			}
 			/*  Format for all instructions that are not the first /special instruction. */
+			/*
 			else if(i == (dListSize-1)){ 
 				currentInstruction.setTurnInstructions(null);
-			}
+			}*/
 			else if(currentInstruction.getDistance() == 0){ 
 				currentInstruction.setTurnInstructions(null);
 			}
+			/*
+			 * if there is no previously set turn Instruction, then add a turn instruction 
+			 */
 			else if (currentInstruction.getTurnInstruction() == null){
 				
 				String newInstruction = "Take a ";  
